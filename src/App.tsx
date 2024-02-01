@@ -6,7 +6,7 @@ import FinanciamentoXAvista from "./pages/financiamentoxavista";
 export default function App() {
   const routes = [
     {
-      title: "Financiamento X Á Vista",
+      title: "Financiamento X A Vista",
       href: "/financiamentoxavista",
       description:
         "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",

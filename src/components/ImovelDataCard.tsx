@@ -163,7 +163,7 @@ export default function CardDadosImóvel() {
             </div>
 
             <div className="relative">
-              <Label htmlFor="taxarendimento">% Rendimento mensal:</Label>
+              <Label htmlFor="taxarendimento">Rendimento mensal:</Label>
               <Input
                 onChange={(e) =>
                   setImovelData("rendimentoMensal", Number(e.target.value))
@@ -174,12 +174,12 @@ export default function CardDadosImóvel() {
                 value={rendimentoMensal}
                 required
               />
-              <span className={`absolute top-[1.85rem] left-[2.1rem]`}>%</span>
+              <span className={`absolute top-[1.85rem] left-[2.5rem]`}>%</span>
             </div>
 
             <div className="relative">
               <Label htmlFor="valorizaçãoDoImóvel">
-                % Valorização anual do imóvel:
+                Valorização anual do imóvel:
               </Label>
               <Input
                 onChange={(e) =>
@@ -194,13 +194,11 @@ export default function CardDadosImóvel() {
                 value={taxaValorizaçãoDoImovel}
                 required
               />
-              <span className={`absolute top-[1.85rem] left-[2.1rem]`}>%</span>
+              <span className={`absolute top-[1.85rem] left-[2.5rem]`}>%</span>
             </div>
 
             <div className="relative">
-              <Label htmlFor="taxadejuros">
-                Taxa de juros anual financimento
-              </Label>
+              <Label htmlFor="taxadejuros">CET financiamento</Label>
               <Input
                 onChange={(e) => {
                   if (Number(e.target.value) > 0)
@@ -211,7 +209,7 @@ export default function CardDadosImóvel() {
                 type="number"
                 value={taxaDeJuros}
               />
-              <span className={`absolute top-[1.85rem] left-[2.1rem]`}>%</span>
+              <span className={`absolute top-[1.85rem] left-[2.5rem]`}>%</span>
             </div>
 
             <div>

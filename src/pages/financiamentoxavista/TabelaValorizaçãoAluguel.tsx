@@ -47,7 +47,7 @@ export default function TabelaValorizaçãoAluguel() {
         <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
       </CardTitle>
       <CardContent>
-        <Table className="w-full">
+        <Table className="w-full text-left">
           <TableHeader>
             <TableHead>Ano</TableHead>
             <TableHead>Valor do Aluguel</TableHead>

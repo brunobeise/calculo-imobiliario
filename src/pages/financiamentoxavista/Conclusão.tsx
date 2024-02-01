@@ -63,6 +63,7 @@ export default function Conclusão(props: ConclusãoProps) {
   const lucroNaOperação = () => {
     return (
       (calcPatrimônioTotal() / (calcCompraDoImovel() + calcTotalInvestido())) *
+        100 -
       100
     );
   };

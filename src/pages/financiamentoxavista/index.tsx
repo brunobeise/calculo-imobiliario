@@ -26,14 +26,6 @@ export default function FinanciamentoXAvista() {
       });
     }
 
-    if (imovelData.valorEntrada < imovelData.valorImovel * 0.2) {
-      newErrors.push({
-        title: "Valor da Parcela inválido.",
-        message:
-          "O valor da parcela deve ser pelo menos 20% do valor do imóvel",
-      });
-    }
-
     if (imovelData.anoFinal > 35) {
       newErrors.push({
         title: "Ano final inválido",

@@ -107,7 +107,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
         </p>
       </CardTitle>
       <CardContent>
-        <Table>
+        <Table className="text-left">
           <TableHeader className="flex">
             <TableHeadSticked className="w-12">Mês</TableHeadSticked>
             <TableHeadSticked className="w-[25%]">Capital</TableHeadSticked>
