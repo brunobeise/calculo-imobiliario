@@ -16,6 +16,7 @@ export type ImovelData = {
   rendimentoMensal: number;
   saldoPessoal: number;
   anoFinal: number;
+  anosFinanciamento: number;
   patrimonioInvestido: number;
   taxaValorizaçãoDoImovel: number;
   saldoDevedor: number;
@@ -38,6 +39,7 @@ export const ImovelDataProvider = ({ children }: { children: ReactNode }) => {
     valorInicialAluguel: 700,
     valorAluguel: [700, 756, 816.48, 881.79, 952.34, 1028.52],
     valorImóvelValorizado: 285637,
+    anosFinanciamento: 35,
     taxasFincancimento: 4000,
     rendimentoMensal: 1,
     saldoPessoal: 180000,

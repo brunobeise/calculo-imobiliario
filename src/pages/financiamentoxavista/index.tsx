@@ -26,9 +26,9 @@ export default function FinanciamentoXAvista() {
       });
     }
 
-    if (imovelData.anoFinal > 35) {
+    if (imovelData.anoFinal > 35 || imovelData.anosFinanciamento > 35) {
       newErrors.push({
-        title: "Ano final inválido",
+        title: "Ano final ou tempo de financiamento inválido.",
         message: "Prazo do financimaneto é de no máximo 35 anos",
       });
     }

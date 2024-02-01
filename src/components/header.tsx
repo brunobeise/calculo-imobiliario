@@ -1,7 +1,3 @@
-"use client";
-
-import * as React from "react";
-
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -13,6 +9,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
 import { ModeToggle } from "./mode-toggle";
+import { forwardRef } from "react";
 
 interface HeaderProps {
   routes: {
@@ -32,7 +29,9 @@ export default function Header(props: HeaderProps) {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Financiamento</NavigationMenuTrigger>
+            <NavigationMenuTrigger onMouseEnter={() => {}}>
+              Financiamento
+            </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
                 {props.routes.map((component) => (
@@ -63,7 +62,7 @@ export default function Header(props: HeaderProps) {
   );
 }
 
-const ListItem = React.forwardRef<
+const ListItem = forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {

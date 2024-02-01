@@ -40,8 +40,6 @@ const config: Config = {
       input: 'hsl(var(--input))',
       ring: 'hsl(var(--ring))',
       white: "#fafaf9"
-      // Não é uma cor, então não deve ser incluído aqui
-      // radius: 'var(--radius)',
     },
     extend: {
 

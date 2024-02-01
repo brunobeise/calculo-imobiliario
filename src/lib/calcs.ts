@@ -13,13 +13,13 @@ export function calcValorizaçãoImóvel(valorImovel: number, taxaDeJuros: numbe
     );
 }
 
-export function calcValorParcela(valorFinanciado: number, taxaDeJuros: number) {
+export function calcValorParcela(valorFinanciado: number, taxaDeJuros: number, anosFinanciamento: number) {
     const taxaMensal = taxaDeJuros / 100 / 12;
 
 
     return valorFinanciado *
-        (taxaMensal * Math.pow((1 + taxaMensal), 35 * 12)) /
-        (Math.pow((1 + taxaMensal), 35 * 12) - 1);
+        (taxaMensal * Math.pow((1 + taxaMensal), anosFinanciamento * 12)) /
+        (Math.pow((1 + taxaMensal), anosFinanciamento * 12) - 1);
 
 }
 
