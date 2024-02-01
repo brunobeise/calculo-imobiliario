@@ -53,7 +53,7 @@ export default function Header(props: HeaderProps) {
 
       <div className="absolute left-[50%] translate-x-[-50%] sm:mt-0  mt-10 text-center ">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-primary">
-          {title || "Calculo Imobiliário"}
+          {title || ""}
         </h1>
       </div>
 

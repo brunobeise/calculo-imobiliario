@@ -18,6 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "./ui/accordion";
+import { useLocation } from "react-router-dom";
 
 export default function CardDadosImóvel() {
   const { imovelData, setImovelData } = useContext(ImovelDataContext);
@@ -118,6 +119,9 @@ export default function CardDadosImóvel() {
     taxaValorizaçãoDoImovel,
     anosFinanciamento,
   ]);
+
+  const location = useLocation();
+  if (location.pathname === "/") return <BemVindo />;
 
   return (
     <>
@@ -367,4 +371,17 @@ export default function CardDadosImóvel() {
       </Accordion>
     </>
   );
+
+  function BemVindo() {
+    return (
+      <div className="absolute top-[50%] w-full left-[50%] text-center translate-y-[-50%] translate-x-[-50%]">
+        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+          Bem vindo ao sistema Cálculo imobiliário!
+        </h1>
+        <p className="leading-7 [&:not(:first-child)]:mt-6">
+          Selecione um contexto no canto superior esquerdo para continuar
+        </p>
+      </div>
+    );
+  }
 }

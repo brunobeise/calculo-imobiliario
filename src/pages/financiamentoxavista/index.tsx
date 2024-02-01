@@ -18,13 +18,13 @@ export default function FinanciamentoXAvista() {
   useEffect(() => {
     const newErrors: imovelDataError[] = [];
 
-    if (imovelData.saldoPessoal < imovelData.valorImovel) {
-      newErrors.push({
-        title: "Saldo Pessoal incorreto.",
-        message:
-          "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
-      });
-    }
+    // if (imovelData.saldoPessoal < imovelData.valorImovel) {
+    //   newErrors.push({
+    //     title: "Saldo Pessoal incorreto.",
+    //     message:
+    //       "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
+    //   });
+    // }
 
     if (imovelData.anoFinal > 35 || imovelData.anosFinanciamento > 35) {
       newErrors.push({
