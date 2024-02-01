@@ -10,46 +10,73 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { ModeToggle } from "./mode-toggle";
 import { forwardRef } from "react";
+import { Home } from "lucide-react";
+import { Button } from "./ui/button";
+import { Route } from "@/App";
 
 interface HeaderProps {
-  routes: {
-    title: string;
-    href: string;
-    description: string;
-    element: JSX.Element;
-  }[];
+  financiamentoRoutes: Route[];
+  auxiliarRoutes: Route[];
 }
 
 export default function Header(props: HeaderProps) {
   const location = useLocation();
+  const routes = [...props.financiamentoRoutes, ...props.auxiliarRoutes];
 
-  const title = props.routes.find((r) => r.href === location.pathname)?.title;
+  const title = routes.find((r) => r.href === location.pathname)?.title;
   return (
     <div className="flex justify-between">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger onMouseEnter={() => {}}>
-              Financiamento
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
-                {props.routes.map((component) => (
-                  <Link
-                    className="pg-primary"
-                    key={component.title}
-                    to={component.href}
-                  >
-                    <ListItem title={component.title}>
-                      {component.description}
-                    </ListItem>
-                  </Link>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <div className="flex">
+        <Link to={"/"}>
+          <Button variant="link" size="icon">
+            <Home className="h-[1.2rem] w-[1.2rem]" />
+          </Button>
+        </Link>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger onMouseEnter={() => {}}>
+                Financiamento
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
+                  {props.financiamentoRoutes.map((component) => (
+                    <Link
+                      className="pg-primary"
+                      key={component.title}
+                      to={component.href}
+                    >
+                      <ListItem title={component.title}>
+                        {component.description}
+                      </ListItem>
+                    </Link>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger onMouseEnter={() => {}}>
+                Auxiliares
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
+                  {props.auxiliarRoutes.map((component) => (
+                    <Link
+                      className="pg-primary"
+                      key={component.title}
+                      to={component.href}
+                    >
+                      <ListItem title={component.title}>
+                        {component.description}
+                      </ListItem>
+                    </Link>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
 
       <div className="absolute left-[50%] translate-x-[-50%] sm:mt-0  mt-10 text-center ">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-primary">

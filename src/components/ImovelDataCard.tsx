@@ -123,12 +123,18 @@ export default function CardDadosImóvel() {
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
 
+  const execptionRoutes = ["/juroscompostos"];
+  console.log(execptionRoutes.includes(location.pathname));
+
+  if (execptionRoutes.includes(location.pathname)) return <></>;
+
   return (
     <>
       <Accordion
         className="mt-24 sm:mt-10 md:p-2 lg:p-5"
         type="single"
         collapsible
+        defaultValue="item-1"
       >
         <AccordionItem value="item-1">
           <AccordionTrigger>Dados do imóvel e financiamento</AccordionTrigger>

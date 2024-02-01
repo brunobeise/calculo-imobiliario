@@ -1,10 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import ImovelDataCard from "./components/ImovelDataCard";
-import FinanciamentoXAvista from "./pages/financiamentoxavista";
+import FinanciamentoXAvista from "./pages/financiamento/financiamentoxavista";
+import JurosCompostos from "./pages/auxiliares/JurosCompostos";
+
+export interface Route {
+  title: string;
+  href: string;
+  description: string;
+  element: JSX.Element;
+}
 
 export default function App() {
-  const routes = [
+  const financiamentoRoutes = [
     {
       title: "Financiamento X A Vista",
       href: "/financiamentoxavista",
@@ -14,9 +22,23 @@ export default function App() {
     },
   ];
 
+  const auxiliarRoutes = [
+    {
+      title: "Juros Compostos",
+      href: "/juroscompostos",
+      description: "Cálculo de juros compostos com aporte mensal",
+      element: <JurosCompostos />,
+    },
+  ];
+
+  const routes = [...financiamentoRoutes, ...auxiliarRoutes];
+
   return (
     <BrowserRouter>
-      <Header routes={routes} />
+      <Header
+        financiamentoRoutes={financiamentoRoutes}
+        auxiliarRoutes={auxiliarRoutes}
+      />
       <ImovelDataCard />
 
       <Routes>
