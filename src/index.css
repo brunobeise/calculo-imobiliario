@@ -72,3 +72,23 @@ body {
     --ring: 221.2 83.2% 53.3%;
   }
 }
+
+/* Estilos específicos para impressão */
+@media print {
+  /* Oculta tudo que não for .printable */
+  * {
+    visibility: hidden;
+  }
+  /* Exibe apenas elementos com a classe .printable */
+  .printable,
+  .printable * {
+    visibility: visible;
+  }
+
+  /* Posiciona o .printable no topo da página para impressão */
+  .printable {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

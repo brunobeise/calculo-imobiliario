@@ -68,6 +68,12 @@ export default function Conclusão(props: ConclusãoProps) {
     );
   };
 
+  const lucroNaOperaçãoReais = () => {
+    return numeroParaReal(
+      calcPatrimônioTotal() - (calcCompraDoImovel()! + calcTotalInvestido()!)
+    );
+  };
+
   return (
     <Card
       id="conclusao"
@@ -80,7 +86,7 @@ export default function Conclusão(props: ConclusãoProps) {
         <Table>
           <TableHeader>
             <TableHead>Compra do imóvel</TableHead>
-            <TableHead>Investido</TableHead>
+            <TableHead>Aplicação</TableHead>
             <TableHead>Total</TableHead>
           </TableHeader>
           <TableBody>
@@ -101,7 +107,7 @@ export default function Conclusão(props: ConclusãoProps) {
         <Table>
           <TableHeader>
             <TableHead>Valor do imóvel</TableHead>
-            <TableHead>Valor investido</TableHead>
+            <TableHead>Total Aplicação</TableHead>
             <TableHead>Saldo Devedor</TableHead>
           </TableHeader>
           <TableBody>
@@ -125,7 +131,12 @@ export default function Conclusão(props: ConclusãoProps) {
                 {numeroParaReal(calcPatrimônioTotal())}
               </TableCell>
               <TableCell>{numeroParaReal(rendaMensal())}</TableCell>
-              <TableCell>{lucroNaOperação().toFixed(2) + "%"}</TableCell>
+              <TableCell>
+                {lucroNaOperaçãoReais() +
+                  "  (" +
+                  lucroNaOperação().toFixed(2) +
+                  "%)"}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

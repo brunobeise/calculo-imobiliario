@@ -139,7 +139,7 @@ export default function CardDadosImóvel() {
         <AccordionItem value="item-1">
           <AccordionTrigger>Dados do imóvel e financiamento</AccordionTrigger>
           <AccordionContent className="mt-2">
-            <form className="grid grid-cols-1 gap-8">
+            <form className="grid grid-cols-1 gap-3">
               <TypographyH3 text={"Informações do Imóvel"} />
               <div className="grid grid-cols-1 lg:grid-cols-3  gap-6">
                 <div>
