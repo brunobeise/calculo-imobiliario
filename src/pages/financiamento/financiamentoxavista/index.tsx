@@ -5,7 +5,6 @@ import TabelaRendimento from "./TabelaRendimento";
 import TabelaValorizaçãoAluguel from "./TabelaValorizaçãoAluguel";
 import Conclusão from "./Conclusão";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import "./index.css";
 import { ErrorAlert, imovelDataError } from "@/components/errorAlert";
 
 export default function FinanciamentoXAvista() {

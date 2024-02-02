@@ -73,6 +73,17 @@ body {
   }
 }
 
+#conclusao {
+  thead {
+    width: 100%;
+  }
+
+  th {
+    text-align: center;
+    width: 33.333%;
+  }
+}
+
 /* Estilos específicos para impressão */
 @media print {
   /* Oculta tudo que não for .printable */

@@ -11,7 +11,6 @@ import {
   calcValorizaçãoAluguel,
   calcValorizaçãoImóvel,
 } from "@/lib/calcs";
-import TypographyH3 from "./ui/typography";
 import {
   Accordion,
   AccordionContent,
@@ -19,6 +18,9 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 import { useLocation } from "react-router-dom";
+import { Card, CardContent, CardTitle } from "./ui/card";
+import InputPercent from "./ui/InputPercent";
+import InputYears from "./ui/inputYears";
 
 export default function CardDadosImóvel() {
   const { imovelData, setImovelData } = useContext(ImovelDataContext);
@@ -124,7 +126,6 @@ export default function CardDadosImóvel() {
   if (location.pathname === "/") return <BemVindo />;
 
   const execptionRoutes = ["/juroscompostos"];
-  console.log(execptionRoutes.includes(location.pathname));
 
   if (execptionRoutes.includes(location.pathname)) return <></>;
 
@@ -139,238 +140,264 @@ export default function CardDadosImóvel() {
         <AccordionItem value="item-1">
           <AccordionTrigger>Dados do imóvel e financiamento</AccordionTrigger>
           <AccordionContent className="mt-2">
-            <form className="grid grid-cols-1 gap-3">
-              <TypographyH3 text={"Informações do Imóvel"} />
-              <div className="grid grid-cols-1 lg:grid-cols-3  gap-6">
-                <div>
-                  <Label htmlFor="valorImovel">Saldo Disponível:</Label>
-                  <Input
-                    onChange={handleChangeReal}
-                    type="text"
-                    id="saldoPessoal"
-                    value={saldoPessoalField}
-                    required
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="valorImovel">Valor do imóvel:</Label>
-                  <Input
-                    onChange={handleChangeReal}
-                    type="text"
-                    id="valorImovel"
-                    value={valorImovelField}
-                    required
-                  />
-                </div>
-                <div className="relative">
-                  <Label htmlFor="valorizaçãoDoImóvel">
-                    Valorização anual do imóvel:
-                  </Label>
-                  <Input
-                    onChange={(e) =>
-                      setImovelData(
-                        "taxaValorizaçãoDoImovel",
-                        Number(e.target.value)
-                      )
-                    }
-                    type="number"
-                    step={0.1}
-                    id="valorizaçãoDoImóvel"
-                    value={taxaValorizaçãoDoImovel}
-                    required
-                  />
-                  <span className={`absolute top-[1.85rem] left-[2.5rem]`}>
-                    %
-                  </span>
-                </div>
+            <form className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-2">
+                <Card>
+                  <CardTitle>
+                    <h2 className="text-xl text-center my-3 ">
+                      Informações do Imóvel
+                    </h2>
+                  </CardTitle>
+
+                  <CardContent className="grid grid-cols-1  gap-6">
+                    <div>
+                      <Label htmlFor="valorImovel">Saldo Disponível:</Label>
+                      <Input
+                        onChange={handleChangeReal}
+                        type="text"
+                        id="saldoPessoal"
+                        value={saldoPessoalField}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="valorImovel">Valor do imóvel:</Label>
+                      <Input
+                        onChange={handleChangeReal}
+                        type="text"
+                        id="valorImovel"
+                        value={valorImovelField}
+                        required
+                      />
+                    </div>
+                    <div className="relative">
+                      <Label htmlFor="valorizaçãoDoImóvel">
+                        Valorização anual do imóvel:
+                      </Label>
+                      <InputPercent
+                        onChangeValue={(v) =>
+                          setImovelData("taxaValorizaçãoDoImovel", v)
+                        }
+                        type="number"
+                        step={0.1}
+                        id="valorizaçãoDoImóvel"
+                        value={taxaValorizaçãoDoImovel}
+                        required
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardTitle>
+                    <h2 className="text-xl text-center my-3 ">
+                      Rendimento e Aluguel
+                    </h2>
+                  </CardTitle>
+
+                  <CardContent className="grid grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="valorImovel">
+                        Valor Inicial Aluguel:
+                      </Label>
+                      <Input
+                        className=""
+                        onChange={handleChangeReal}
+                        type="text"
+                        id="valorInicialAluguel"
+                        value={valorInicialALuguelField}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="taxarendimento">Rendimento mensal:</Label>
+
+                      <InputPercent
+                        onChangeValue={(v) =>
+                          setImovelData("rendimentoMensal", v)
+                        }
+                        type="number"
+                        step={0.1}
+                        id="taxarendimento"
+                        value={rendimentoMensal}
+                        required
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
 
-              <TypographyH3 text={"Informações do Financiamento"} />
+              <Card>
+                <CardTitle>
+                  <h2 className="text-xl text-center my-3 ">
+                    Informações do Financiamento
+                  </h2>
+                </CardTitle>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3  gap-6">
-                <div>
-                  <Label htmlFor="valorImovel">Valor da Entrada:</Label>
-                  <div className="relative">
+                <CardContent className="grid grid-cols-1 h-[90%] justify-between gap-6">
+                  <div>
+                    <Label htmlFor="valorImovel">Valor da Entrada:</Label>
+                    <div className="relative">
+                      <Input
+                        onChange={handleChangeReal}
+                        type="text"
+                        id="valorEntrada"
+                        value={valorEntradaField}
+                        required
+                      />
+                      <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
+                        {((valorEntrada / valorImovel) * 100).toFixed(2) + "%"}
+                      </span>
+                    </div>
+
+                    <div className="relative mt-4">
+                      <Slider
+                        onValueChange={(e) => {
+                          setImovelData(
+                            "valorEntrada",
+                            (valorImovel * e[0]) / 10
+                          );
+                          setvalorEntradaField(
+                            formatterReal((valorImovel * 100 * e[0]) / 10)
+                          );
+                        }}
+                        id="labels-range-Input"
+                        defaultValue={[2]}
+                        value={[(valorEntrada / valorImovel) * 10]}
+                        min={0}
+                        max={10}
+                      />
+
+                      <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-0 ">
+                        0%
+                      </span>
+
+                      <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-[95%]">
+                        100%
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="taxasFincancimento">
+                      Taxas do fincancimento:
+                    </Label>
                     <Input
                       onChange={handleChangeReal}
                       type="text"
-                      id="valorEntrada"
-                      value={valorEntradaField}
+                      id="taxasFincancimento"
+                      value={taxasFincancimentoField}
                       required
                     />
-                    <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
-                      {((valorEntrada / valorImovel) * 100).toFixed(2) + "%"}
-                    </span>
                   </div>
 
-                  <div className="relative mb-5 mt-4">
-                    <Slider
-                      onValueChange={(e) => {
-                        setImovelData(
-                          "valorEntrada",
-                          (valorImovel * e[0]) / 10
-                        );
-                        setvalorEntradaField(
-                          formatterReal((valorImovel * 100 * e[0]) / 10)
-                        );
+                  <div className="relative">
+                    <Label htmlFor="taxadejuros">CET financiamento</Label>
+                    <InputPercent
+                      onChangeValue={(v) => {
+                        if (v > 0) setImovelData("taxaDeJuros", v);
                       }}
-                      id="labels-range-Input"
-                      defaultValue={[5]}
-                      min={0}
-                      max={10}
+                      step={0.1}
+                      id="taxadejuros"
+                      type="number"
+                      value={taxaDeJuros}
                     />
-
-                    <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-0 ">
-                      0%
-                    </span>
-
-                    <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-[95%]">
-                      100%
-                    </span>
                   </div>
-                </div>
 
-                <div>
-                  <Label htmlFor="taxasFincancimento">
-                    Taxas do fincancimento:
-                  </Label>
-                  <Input
-                    onChange={handleChangeReal}
-                    type="text"
-                    id="taxasFincancimento"
-                    value={taxasFincancimentoField}
-                    required
-                  />
-                </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="taxasFincancimento">
+                        Total Investido:
+                      </Label>
+                      <Input
+                        onChange={() => {}}
+                        type="text"
+                        id="taxasFincancimento"
+                        value={numeroParaReal(
+                          valorEntrada + taxasFincancimento
+                        )}
+                        required
+                      />
+                    </div>
 
-                <div className="relative">
-                  <Label htmlFor="taxadejuros">CET financiamento</Label>
-                  <Input
-                    onChange={(e) => {
-                      if (Number(e.target.value) > 0)
-                        setImovelData("taxaDeJuros", Number(e.target.value));
-                    }}
-                    step={0.1}
-                    id="taxadejuros"
-                    type="number"
-                    value={taxaDeJuros}
-                  />
-                  <span className={`absolute top-[1.85rem] left-[2.5rem]`}>
-                    %
-                  </span>
-                </div>
+                    <div>
+                      <Label htmlFor="taxasFincancimento">
+                        Total Financiado:
+                      </Label>
+                      <Input
+                        onChange={() => {}}
+                        type="text"
+                        id="taxasFincancimento"
+                        value={numeroParaReal(valorImovel - valorEntrada)}
+                        required
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-                <div>
-                  <Label htmlFor="saldoDevedor">
-                    Saldo devedor em {anoFinal} anos:
-                  </Label>
-                  <Input
-                    onChange={handleChangeReal}
-                    id="saldoDevedor"
-                    value={saldoDevedorField}
-                  />
-                </div>
+              <Card>
+                <CardTitle>
+                  <h2 className="text-xl text-center my-3 ">
+                    Cálculo do Financiamento
+                  </h2>
+                </CardTitle>
+                <CardContent className="grid grid-cols-1 h-[90%] gap-6">
+                  <div>
+                    <Label htmlFor="anos">Calcular até:</Label>
+                    <InputYears
+                      onChangeValue={(v) => {
+                        if (v > 0) setImovelData("anoFinal", v);
+                      }}
+                      step={1}
+                      id="anos"
+                      type="number"
+                      value={anoFinal}
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="taxasFincancimento">Total Investido:</Label>
-                  <Input
-                    onChange={() => {}}
-                    type="text"
-                    id="taxasFincancimento"
-                    value={numeroParaReal(valorEntrada + taxasFincancimento)}
-                    required
-                  />
-                </div>
+                  <div>
+                    <Label htmlFor="valorImovel">Valor Parcela:</Label>
+                    <Input
+                      onChange={handleChangeReal}
+                      type="text"
+                      id="valorParcela"
+                      value={valorParcelaField}
+                      required
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="taxasFincancimento">Total Financiado:</Label>
-                  <Input
-                    onChange={() => {}}
-                    type="text"
-                    id="taxasFincancimento"
-                    value={numeroParaReal(valorImovel - valorEntrada)}
-                    required
-                  />
-                </div>
-              </div>
+                  <div>
+                    <Label htmlFor="saldoDevedor">
+                      Saldo devedor em {anoFinal} anos:
+                    </Label>
+                    <Input
+                      onChange={handleChangeReal}
+                      id="saldoDevedor"
+                      value={saldoDevedorField}
+                    />
+                  </div>
 
-              <TypographyH3 text={"Cálculo do Financiamento"} />
-              <div className="grid grid-cols-1 lg:grid-cols-3  gap-6">
-                <div>
-                  <Label htmlFor="valorImovel">Valor Parcela:</Label>
-                  <Input
-                    onChange={handleChangeReal}
-                    type="text"
-                    id="valorParcela"
-                    value={valorParcelaField}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="anos">Calcular até ... anos:</Label>
-                  <Input
-                    onChange={(e) => {
-                      if (Number(e.target.value) > 0)
-                        setImovelData("anoFinal", Number(e.target.value));
-                    }}
-                    id="anos"
-                    type="number"
-                    value={anoFinal}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="anosfinanciamento">
-                    Tempo do financiamento
-                  </Label>
-                  <Input
-                    onChange={(e) => {
-                      if (Number(e.target.value))
-                        setImovelData(
-                          "anosFinanciamento",
-                          Number(e.target.value)
-                        );
-                    }}
-                    id="anosfinanciamento"
-                    type="number"
-                    value={anosFinanciamento}
-                  />
-                </div>
-              </div>
-
-              <TypographyH3 text={"Rendimento e Aluguel"} />
-
-              <div className="grid grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="valorImovel">Valor Inicial Aluguel:</Label>
-                  <Input
-                    className=""
-                    onChange={handleChangeReal}
-                    type="text"
-                    id="valorInicialAluguel"
-                    value={valorInicialALuguelField}
-                    required
-                  />
-                </div>
-
-                <div className="relative">
-                  <Label htmlFor="taxarendimento">Rendimento mensal:</Label>
-                  <Input
-                    onChange={(e) =>
-                      setImovelData("rendimentoMensal", Number(e.target.value))
-                    }
-                    type="number"
-                    step={0.1}
-                    id="taxarendimento"
-                    value={rendimentoMensal}
-                    required
-                  />
-                  <span className={`absolute top-[1.85rem] left-[2.5rem]`}>
-                    %
-                  </span>
-                </div>
-              </div>
+                  <div>
+                    <Label htmlFor="anosfinanciamento">
+                      Tempo do financiamento (anos)
+                    </Label>
+                    <Input
+                      onChange={(e) => {
+                        if (Number(e.target.value))
+                          setImovelData(
+                            "anosFinanciamento",
+                            Number(e.target.value)
+                          );
+                      }}
+                      id="anosfinanciamento"
+                      type="number"
+                      value={anosFinanciamento}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </form>
           </AccordionContent>
         </AccordionItem>
