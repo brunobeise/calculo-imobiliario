@@ -125,9 +125,13 @@ export default function CardDadosImóvel() {
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
 
-  const execptionRoutes = ["/juroscompostos"];
+  const execptionRoutes = ["/juroscompostos", "/relatorio"];
 
-  if (execptionRoutes.includes(location.pathname)) return <></>;
+  const isException = execptionRoutes.some((route) =>
+    location.pathname.includes(route)
+  );
+
+  if (isException) return <></>;
 
   return (
     <>

@@ -21,9 +21,6 @@ export default function JurosCompostos() {
     linhas: 60,
   });
 
-  console.log(data);
-  console.log(capitalInicial);
-
   return (
     <div className="grid grid-cols-12 mt-10 pt-10 px-10 printable">
       <div className="col-span-3 max-h-[350px] grid grid-flow-rows justify-end pe-10">

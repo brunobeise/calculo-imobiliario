@@ -6,6 +6,8 @@ import TabelaValorizaçãoAluguel from "./TabelaValorizaçãoAluguel";
 import Conclusão from "./Conclusão";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorAlert, imovelDataError } from "@/components/errorAlert";
+import { Button } from "@/components/ui/button";
+import { FileBarChart2 } from "lucide-react";
 
 export default function FinanciamentoXAvista() {
   const { imovelData } = useContext(ImovelDataContext);
@@ -53,11 +55,19 @@ export default function FinanciamentoXAvista() {
         </TabsList>
 
         {errors.length === 0 ? (
-          <div className="grid grid-cols-12 px-2 gap-3 justify-center mt-5">
-            <Conclusão context={context} />
-            <TabelaValorizaçãoAluguel />
-            <TabelaRendimento context={context} />
-          </div>
+          <>
+            <div className="grid grid-cols-12 px-2 gap-3 justify-center mt-5">
+              <Conclusão context={context} />
+              <TabelaValorizaçãoAluguel />
+              <TabelaRendimento context={context} />
+            </div>
+            <Button
+              href="/financiamentoxavista/relatorio"
+              className="my-5"
+              text="Gerar Relatório Completo"
+              Icon={FileBarChart2}
+            />
+          </>
         ) : (
           <div
             className={

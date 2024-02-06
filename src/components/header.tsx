@@ -12,16 +12,17 @@ import { ModeToggle } from "./mode-toggle";
 import { forwardRef } from "react";
 import { Home } from "lucide-react";
 import { Button } from "./ui/button";
-import { Route } from "@/App";
+import { relatorioRoutes } from "@/routes/relatorios";
+import { auxiliarRoutes } from "@/routes/auxiliar";
+import { financiamentoRoutes } from "@/routes/financiamento";
 
-interface HeaderProps {
-  financiamentoRoutes: Route[];
-  auxiliarRoutes: Route[];
-}
-
-export default function Header(props: HeaderProps) {
+export default function Header() {
   const location = useLocation();
-  const routes = [...props.financiamentoRoutes, ...props.auxiliarRoutes];
+  const routes = [
+    ...financiamentoRoutes,
+    ...auxiliarRoutes,
+    ...relatorioRoutes,
+  ];
 
   const title = routes.find((r) => r.href === location.pathname)?.title;
   return (
@@ -40,7 +41,7 @@ export default function Header(props: HeaderProps) {
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
-                  {props.financiamentoRoutes.map((component) => (
+                  {financiamentoRoutes.map((component) => (
                     <Link
                       className="pg-primary"
                       key={component.title}
@@ -60,7 +61,7 @@ export default function Header(props: HeaderProps) {
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
-                  {props.auxiliarRoutes.map((component) => (
+                  {auxiliarRoutes.map((component) => (
                     <Link
                       className="pg-primary"
                       key={component.title}
@@ -79,12 +80,12 @@ export default function Header(props: HeaderProps) {
       </div>
 
       <div className="absolute left-[50%] translate-x-[-50%] sm:mt-0  mt-10 text-center ">
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-primary">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary">
           {title || ""}
         </h1>
       </div>
 
-      <ModeToggle />
+      {/* <ModeToggle /> */}
     </div>
   );
 }

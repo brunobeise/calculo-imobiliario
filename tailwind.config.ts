@@ -9,14 +9,13 @@ const config: Config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
+
   prefix: "",
   theme: {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+
 
     },
     colors: {
@@ -26,7 +25,7 @@ const config: Config = {
       cardForeground: 'hsl(var(--card-foreground))',
       popover: 'hsl(var(--popover))',
       popoverForeground: 'hsl(var(--popover-foreground))',
-      primary: 'hsl(var(--primary))',
+      primary: 'rgb(var(--primary))',
       primaryForeground: 'hsl(var(--primary-foreground))',
       secondary: 'hsl(var(--secondary))',
       secondaryForeground: 'hsl(var(--secondary-foreground))',
@@ -38,11 +37,17 @@ const config: Config = {
       destructiveForeground: 'hsl(var(--destructive-foreground))',
       border: 'hsl(var(--border))',
       input: 'hsl(var(--input))',
-      ring: 'hsl(var(--ring))',
+      ring: 'rgb(var(--ring))',
       white: "#fafaf9"
     },
     extend: {
-
+      screens: {
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        'uw': '2000px',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -59,7 +64,10 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('postcss-nesting'),
+  ],
 }
 
 export default config;
