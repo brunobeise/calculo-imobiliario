@@ -8,7 +8,6 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
-import { ModeToggle } from "./mode-toggle";
 import { forwardRef } from "react";
 import { Home } from "lucide-react";
 import { Button } from "./ui/button";
