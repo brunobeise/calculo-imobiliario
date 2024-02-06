@@ -18,7 +18,7 @@ export default function Cover() {
   } = financeOrCashReportState;
 
   return (
-    <div className="text-center light">
+    <div className="text-center">
       {title.active && (
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary my-5">
           {title.content}

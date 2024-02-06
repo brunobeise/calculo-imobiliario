@@ -38,7 +38,9 @@ const config: Config = {
       border: 'hsl(var(--border))',
       input: 'hsl(var(--input))',
       ring: 'rgb(var(--ring))',
-      white: "#fafaf9"
+      white: "#fafaf9",
+      whitefull: '#ffff'
+
     },
     extend: {
       screens: {

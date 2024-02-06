@@ -8,7 +8,7 @@ import ConfigIntro from "./ConfigIntro";
 
 export default function ConfigReport() {
   return (
-    <div className="col-span-12 lg:col-span-5 uw:col-span-6 grid grid-flow-rows pe-10 justify-end">
+    <div className="uw:col-span-6 grid grid-flow-rows pe-10 justify-end">
       <Accordion
         type="single"
         collapsible
