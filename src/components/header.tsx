@@ -8,7 +8,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
-import { forwardRef } from "react";
+import { forwardRef, useEffect } from "react";
 import { Home } from "lucide-react";
 import { Button } from "./ui/button";
 import { relatorioRoutes } from "@/routes/relatorios";
@@ -22,6 +22,10 @@ export default function Header() {
     ...auxiliarRoutes,
     ...relatorioRoutes,
   ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
   const title = routes.find((r) => r.href === location.pathname)?.title;
   return (

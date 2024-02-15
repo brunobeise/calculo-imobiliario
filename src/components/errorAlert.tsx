@@ -2,12 +2,12 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-export interface imovelDataError {
+export interface propertyDataError {
   message: string;
   title: string;
 }
 
-export function ErrorAlert(props: imovelDataError) {
+export function ErrorAlert(props: propertyDataError) {
   return (
     <Alert className="max-w-[600px] block" variant="destructive">
       <ExclamationTriangleIcon className="!text-white h-4 w-4" />

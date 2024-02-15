@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
-import { ImovelData, ImovelDataContext } from "../imovelDataContext";
+import { propertyData, propertyDataContext } from "../PropertyDataContext";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
@@ -22,8 +22,8 @@ import { Card, CardContent, CardTitle } from "./ui/card";
 import InputPercent from "./ui/InputPercent";
 import InputYears from "./ui/inputYears";
 
-export default function CardDadosImóvel() {
-  const { imovelData, setImovelData } = useContext(ImovelDataContext);
+export default function PropertyDataCard() {
+  const { propertyData, setpropertyData } = useContext(propertyDataContext);
   const {
     anoFinal,
     rendimentoMensal,
@@ -37,7 +37,7 @@ export default function CardDadosImóvel() {
     valorParcela,
     taxaValorizaçãoDoImovel,
     anosFinanciamento,
-  } = imovelData;
+  } = propertyData;
 
   // const [lockMap, setLockMap] = useState({ saldoDevedor: false });
 
@@ -69,7 +69,7 @@ export default function CardDadosImóvel() {
     const id = event.target.id;
     const valorFormatado = formatterReal(valor);
 
-    setImovelData(id as keyof ImovelData, realParaNumero(valorFormatado));
+    setpropertyData(id as keyof propertyData, realParaNumero(valorFormatado));
     if (id === "valorImovel") setValorImovelField(valorFormatado);
     if (id === "valorEntrada") setvalorEntradaField(valorFormatado);
     if (id === "taxasFincancimento") settaxasFincancimentoField(valorFormatado);
@@ -105,10 +105,10 @@ export default function CardDadosImóvel() {
       12 * anoFinal
     );
 
-    setImovelData("valorAluguel", aluguelValorizado);
-    setImovelData("valorImóvelValorizado", valorImovelValorizado);
-    setImovelData("valorParcela", valorParcela);
-    setImovelData("saldoDevedor", saldoDevedor);
+    setpropertyData("valorAluguel", aluguelValorizado);
+    setpropertyData("valorImóvelValorizado", valorImovelValorizado);
+    setpropertyData("valorParcela", valorParcela);
+    setpropertyData("saldoDevedor", saldoDevedor);
 
     setValorParcelaField(numeroParaReal(valorParcela));
     setSaldoDevedorField(numeroParaReal(saldoDevedor));
@@ -141,10 +141,10 @@ export default function CardDadosImóvel() {
         collapsible
         defaultValue="item-1"
       >
-        <AccordionItem value="item-1">
+        <AccordionItem className="" value="item-1">
           <AccordionTrigger>Dados do imóvel e financiamento</AccordionTrigger>
-          <AccordionContent className="mt-2">
-            <form className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <AccordionContent className="!p-0">
+            <form className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:mb-[-1rem]">
               <div className="grid grid-cols-1 gap-2">
                 <Card>
                   <CardTitle>
@@ -180,7 +180,7 @@ export default function CardDadosImóvel() {
                       </Label>
                       <InputPercent
                         onChangeValue={(v) =>
-                          setImovelData("taxaValorizaçãoDoImovel", v)
+                          setpropertyData("taxaValorizaçãoDoImovel", v)
                         }
                         type="number"
                         step={0.1}
@@ -219,7 +219,7 @@ export default function CardDadosImóvel() {
 
                       <InputPercent
                         onChangeValue={(v) =>
-                          setImovelData("rendimentoMensal", v)
+                          setpropertyData("rendimentoMensal", v)
                         }
                         type="number"
                         step={0.1}
@@ -258,7 +258,7 @@ export default function CardDadosImóvel() {
                     <div className="relative mt-4">
                       <Slider
                         onValueChange={(e) => {
-                          setImovelData(
+                          setpropertyData(
                             "valorEntrada",
                             (valorImovel * e[0]) / 10
                           );
@@ -300,7 +300,7 @@ export default function CardDadosImóvel() {
                     <Label htmlFor="taxadejuros">CET financiamento</Label>
                     <InputPercent
                       onChangeValue={(v) => {
-                        if (v > 0) setImovelData("taxaDeJuros", v);
+                        if (v > 0) setpropertyData("taxaDeJuros", v);
                       }}
                       step={0.1}
                       id="taxadejuros"
@@ -352,7 +352,7 @@ export default function CardDadosImóvel() {
                     <Label htmlFor="anos">Calcular até:</Label>
                     <InputYears
                       onChangeValue={(v) => {
-                        if (v > 0) setImovelData("anoFinal", v);
+                        if (v > 0) setpropertyData("anoFinal", v);
                       }}
                       step={1}
                       id="anos"
@@ -390,7 +390,7 @@ export default function CardDadosImóvel() {
                     <Input
                       onChange={(e) => {
                         if (Number(e.target.value))
-                          setImovelData(
+                          setpropertyData(
                             "anosFinanciamento",
                             Number(e.target.value)
                           );

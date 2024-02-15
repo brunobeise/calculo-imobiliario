@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useState } from "react";
 
-export const ImovelDataContext = createContext<ImovelDataContextType>({
-  imovelData: {} as ImovelData,
-  setImovelData: () => {},
+export const propertyDataContext = createContext<propertyDataContextType>({
+  propertyData: {} as propertyData,
+  setpropertyData: () => {},
 });
 
-export type ImovelData = {
+export type propertyData = {
   valorImovel: number;
   valorEntrada: number;
   valorParcela: number;
@@ -23,16 +23,16 @@ export type ImovelData = {
   taxaDeJuros: number;
 };
 
-export type ImovelDataContextType = {
-  imovelData: ImovelData;
-  setImovelData: (
-    campo: keyof ImovelData,
-    valor: ImovelData[keyof ImovelData]
+export type propertyDataContextType = {
+  propertyData: propertyData;
+  setpropertyData: (
+    campo: keyof propertyData,
+    valor: propertyData[keyof propertyData]
   ) => void;
 };
 
-export const ImovelDataProvider = ({ children }: { children: ReactNode }) => {
-  const [imovelData, setImovelState] = useState<ImovelData>({
+export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
+  const [propertyData, setImovelState] = useState<propertyData>({
     valorImovel: 180000,
     valorEntrada: 36000,
     valorParcela: 763.89,
@@ -50,9 +50,9 @@ export const ImovelDataProvider = ({ children }: { children: ReactNode }) => {
     saldoDevedor: 133211.89,
   });
 
-  const setImovelData = (
-    campo: keyof ImovelData,
-    valor: ImovelData[keyof ImovelData]
+  const setpropertyData = (
+    campo: keyof propertyData,
+    valor: propertyData[keyof propertyData]
   ) => {
     setImovelState((prevState) => ({
       ...prevState,
@@ -61,8 +61,8 @@ export const ImovelDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <ImovelDataContext.Provider value={{ imovelData, setImovelData }}>
+    <propertyDataContext.Provider value={{ propertyData, setpropertyData }}>
       {children}
-    </ImovelDataContext.Provider>
+    </propertyDataContext.Provider>
   );
 };

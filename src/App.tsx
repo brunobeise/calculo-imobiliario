@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
-import ImovelDataCard from "./components/ImovelDataCard";
+import PropertyDataCard from "./components/ProperyDataCard";
 
 import { financiamentoRoutes } from "./routes/financiamento";
 import { auxiliarRoutes } from "./routes/auxiliar";
@@ -23,7 +23,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <ImovelDataCard />
+      <PropertyDataCard />
 
       <Routes>
         <Route path="/" element={<></>} />

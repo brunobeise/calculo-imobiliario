@@ -1,33 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { ImovelDataContext } from "@/imovelDataContext";
+import { propertyDataContext } from "@/PropertyDataContext";
 import TabelaRendimento from "./TabelaRendimento";
 import TabelaValorizaçãoAluguel from "./TabelaValorizaçãoAluguel";
 import Conclusão from "./Conclusão";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ErrorAlert, imovelDataError } from "@/components/errorAlert";
+import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { Button } from "@/components/ui/button";
 import { FileBarChart2 } from "lucide-react";
 
 export default function FinanciamentoXAvista() {
-  const { imovelData } = useContext(ImovelDataContext);
+  const { propertyData } = useContext(propertyDataContext);
   const [context, setContext] = useState<"financiamento" | "avista">(
     "financiamento"
   );
-  const [errors, setErrors] = useState<imovelDataError[]>([]);
+  const [errors, setErrors] = useState<propertyDataError[]>([]);
 
   useEffect(() => {
-    const newErrors: imovelDataError[] = [];
+    const newErrors: propertyDataError[] = [];
 
-    // if (imovelData.saldoPessoal < imovelData.valorImovel) {
-    //   newErrors.push({
-    //     title: "Saldo Pessoal incorreto.",
-    //     message:
-    //       "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
-    //   });
-    // }
+    if (propertyData.saldoPessoal < propertyData.valorImovel) {
+      newErrors.push({
+        title: "Saldo Pessoal incorreto.",
+        message:
+          "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
+      });
+    }
 
-    if (imovelData.anoFinal > 35 || imovelData.anosFinanciamento > 35) {
+    if (propertyData.anoFinal > 35 || propertyData.anosFinanciamento > 35) {
       newErrors.push({
         title: "Ano final ou tempo de financiamento inválido.",
         message: "Prazo do financimaneto é de no máximo 35 anos",
@@ -37,11 +37,11 @@ export default function FinanciamentoXAvista() {
     if (JSON.stringify(errors) !== JSON.stringify(newErrors)) {
       setErrors(newErrors);
     }
-  }, [imovelData]);
+  }, [propertyData]);
 
   return (
     <>
-      <Tabs defaultValue="Financiamento" className="w-full text-center mt-5">
+      <Tabs defaultValue="Financiamento" className="w-full text-center">
         <TabsList>
           <TabsTrigger
             onClick={() => setContext("financiamento")}

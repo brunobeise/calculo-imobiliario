@@ -1,8 +1,10 @@
+import dayjs from "dayjs";
 import { ReactNode, createContext, useState } from "react";
 
 export interface InputReportElement {
   active: boolean;
   content: string;
+  color?: string;
 }
 
 export type FinanceOrCashReportContextState = {
@@ -57,6 +59,7 @@ export const FinanceOrCashReportProvider = ({
       propertyName: {
         content: "Residencial Luxo Azul",
         active: true,
+        color: "#ffffff",
       },
       title: {
         content:
@@ -69,7 +72,7 @@ export const FinanceOrCashReportProvider = ({
         active: true,
       },
       createdAt: {
-        content: "05 de Fevereiro de 2024",
+        content: dayjs().format("YYYY-MM-DD"),
         active: true,
       },
       presentation: {

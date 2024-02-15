@@ -1,13 +1,28 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ConfigReport from "./Config/ConfigReport";
 import { FinanceOrCashReportProvider } from "./Context";
-import PreviewRelatorio from "./PreviewReport";
+
 import { useReactToPrint } from "react-to-print";
 import { Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { Label } from "@/components/ui/label";
+import PreviewReport from "./PreviewReport";
 
 export default function RelatorioFinanciamentoXAvista() {
   const componentRef = useRef<HTMLDivElement>(null);
+  const [viewMap, setViewMap] = useState({
+    cover: true,
+    propertyDetails: true,
+    finance: true,
+    inCash: true,
+    comparative: true,
+  });
+
+  const changeViewMap = (key: keyof typeof viewMap) => {
+    setViewMap({ ...viewMap, [key]: !viewMap[key] });
+  };
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -29,8 +44,49 @@ export default function RelatorioFinanciamentoXAvista() {
             />
           </div>
         </div>
-
-        <PreviewRelatorio ref={componentRef} />
+        <div className="!w-[210mm]">
+          <div>
+            <p className="text-center mb-2">Visualizar:</p>
+            <div className="flex justify-evenly mb-2">
+              <div>
+                <Checkbox
+                  checked={viewMap.cover}
+                  onCheckedChange={() => changeViewMap("cover")}
+                />
+                <Label className="ms-1">Capa</Label>
+              </div>
+              <div>
+                <Checkbox
+                  checked={viewMap.propertyDetails}
+                  onCheckedChange={() => changeViewMap("propertyDetails")}
+                />
+                <Label className="ms-1">Dados do imóvel e financiamento</Label>
+              </div>
+              <div>
+                <Checkbox
+                  checked={viewMap.finance}
+                  onCheckedChange={() => changeViewMap("finance")}
+                />
+                <Label className="ms-1">Financiamento</Label>
+              </div>
+              <div>
+                <Checkbox
+                  checked={viewMap.inCash}
+                  onCheckedChange={() => changeViewMap("inCash")}
+                />
+                <Label className="ms-1">À vista</Label>
+              </div>
+              <div>
+                <Checkbox
+                  checked={viewMap.comparative}
+                  onCheckedChange={() => changeViewMap("comparative")}
+                />
+                <Label className="ms-1">Comparativo</Label>
+              </div>
+            </div>
+          </div>
+          <PreviewReport viewMap={viewMap} ref={componentRef} />
+        </div>
       </div>
     </FinanceOrCashReportProvider>
   );

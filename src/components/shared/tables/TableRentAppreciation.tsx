@@ -13,7 +13,13 @@ import { propertyDataContext } from "@/PropertyDataContext";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 
-export default function TabelaValorizaçãoAluguel() {
+interface TableRentAppreciationProps {
+  annualCollection?: boolean;
+}
+
+export default function TableRentAppreciation(
+  props: TableRentAppreciationProps
+) {
   const { propertyData } = useContext(propertyDataContext);
   const [rows, setRows] = useState<
     {
@@ -41,24 +47,26 @@ export default function TabelaValorizaçãoAluguel() {
   ]);
 
   return (
-    <Card className="col-span-12 md:col-span-6 lg:col-span-4">
+    <Card className="w-full border-0">
       <CardTitle className="mt-2">
         <h2 className="text-xl text-center ">Valorização Aluguel</h2>
         <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
       </CardTitle>
       <CardContent>
-        <Table className="w-full text-left">
+        <Table className="w-full text-left text-center">
           <TableHeader>
-            <TableHead>Ano</TableHead>
-            <TableHead>Valor do Aluguel</TableHead>
-            <TableHead>Arrecadação Anual</TableHead>
+            <TableHead className="text-center">Ano</TableHead>
+            <TableHead className="text-center">Valor do Aluguel</TableHead>
+            {props.annualCollection && <TableHead>Arrecadação Anual</TableHead>}
           </TableHeader>
           <TableBody>
             {rows?.map((item) => (
               <TableRow key={item.ano}>
                 <TableCell>{item.ano}</TableCell>
                 <TableCell>{item.valorAluguel}</TableCell>
-                <TableCell>{item.arrecadacaoAnual}</TableCell>
+                {props.annualCollection && (
+                  <TableCell>{item.arrecadacaoAnual}</TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

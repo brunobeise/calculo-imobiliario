@@ -14,14 +14,18 @@ interface TextReportInputProps {
       });
   label: string;
   type?: React.HTMLInputTypeAttribute;
-  keyDefinite?: string;
+  keyName?: keyof InputReportElement;
+  checkbox?: boolean;
 }
 
-export default function TextReportInput(props: TextReportInputProps) {
+export default function TextReportInput({
+  checkbox = true,
+  ...props
+}: TextReportInputProps) {
   const handleFileChange = (e: any) => {
     props.onChange({
       ...props.value,
-      content: e.target.value,
+      [props.keyName || "content"]: e.target.value,
     });
   };
 
@@ -33,30 +37,32 @@ export default function TextReportInput(props: TextReportInputProps) {
           : "outline outline-border outline-1 shadow"
       }`}
     >
-      <Checkbox
-        checked={props.value.active}
-        onCheckedChange={(v) => {
-          props.onChange({
-            ...props.value,
-            active: v as boolean,
-          });
-        }}
-        className="block "
-      />
+      {checkbox && (
+        <Checkbox
+          checked={props.value.active}
+          onCheckedChange={(v) => {
+            props.onChange({
+              ...props.value,
+              active: v as boolean,
+            });
+          }}
+          className="block "
+        />
+      )}
 
-      <div className=" ms-4 w-full">
+      <div className={checkbox ? "ms-4 w-full " : "w-full"}>
         <Label htmlFor={props.label}>{props.label}</Label>
         {props.type === "textarea" ? (
           <Textarea
             className="w-full min-h-[100px]"
-            value={props.value.content}
+            value={props.value[props.keyName ?? "content"]?.toString()}
             onChange={handleFileChange}
             id={props.label}
           />
         ) : (
           <Input
             className="w-full"
-            value={props.value.content}
+            value={props.value[props.keyName ?? "content"]?.toString()}
             onChange={handleFileChange}
             id={props.label}
             type={props.type ?? "text"}

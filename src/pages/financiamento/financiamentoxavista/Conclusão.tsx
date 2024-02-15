@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ImovelDataContext } from "@/imovelDataContext";
+import { propertyDataContext } from "@/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
@@ -17,7 +17,7 @@ interface ConclusãoProps {
 }
 
 export default function Conclusão(props: ConclusãoProps) {
-  const { imovelData } = useContext(ImovelDataContext);
+  const { propertyData } = useContext(propertyDataContext);
 
   const {
     anoFinal,
@@ -30,7 +30,7 @@ export default function Conclusão(props: ConclusãoProps) {
     valorImóvelValorizado,
     patrimonioInvestido,
     valorAluguel,
-  } = imovelData;
+  } = propertyData;
 
   const calcCompraDoImovel = () => {
     if (props.context === "financiamento")

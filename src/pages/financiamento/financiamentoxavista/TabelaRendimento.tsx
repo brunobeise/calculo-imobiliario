@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ImovelDataContext } from "@/imovelDataContext";
+import { propertyDataContext } from "@/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 import { useContext, useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ interface TabelaRendimentoProps {
 }
 
 export default function TabelaRendimento(props: TabelaRendimentoProps) {
-  const { imovelData, setImovelData } = useContext(ImovelDataContext);
+  const { propertyData, setpropertyData } = useContext(propertyDataContext);
 
   const [rows, setRows] = useState<
     {
@@ -41,30 +41,30 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
 
     let capitalAcumulado =
       props.context === "financiamento"
-        ? imovelData.saldoPessoal -
-          imovelData.taxasFincancimento -
-          imovelData.valorEntrada
-        : imovelData.saldoPessoal - imovelData.valorImovel;
+        ? propertyData.saldoPessoal -
+          propertyData.taxasFincancimento -
+          propertyData.valorEntrada
+        : propertyData.saldoPessoal - propertyData.valorImovel;
 
     let patrimonioFinal = 0;
-    let valorAluguel = imovelData.valorInicialAluguel;
+    let valorAluguel = propertyData.valorInicialAluguel;
 
-    for (let mes = 1; mes <= imovelData.anoFinal * 12; mes++) {
+    for (let mes = 1; mes <= propertyData.anoFinal * 12; mes++) {
       const indiceAno = Math.floor((mes - 1) / 12);
 
       if (mes % 12 === 1 || mes === 1) {
-        valorAluguel = imovelData.valorAluguel![indiceAno];
+        valorAluguel = propertyData.valorAluguel![indiceAno];
       }
 
       const montanteAluguel =
         props.context === "financiamento"
-          ? Number((valorAluguel - imovelData.valorParcela).toFixed(2))
+          ? Number((valorAluguel - propertyData.valorParcela).toFixed(2))
           : Number(valorAluguel.toFixed(2));
 
       let lucroMensal = 0;
       if (capitalAcumulado >= 0 || props.context === "financiamento") {
         lucroMensal = Number(
-          ((capitalAcumulado * imovelData.rendimentoMensal) / 100).toFixed(2)
+          ((capitalAcumulado * propertyData.rendimentoMensal) / 100).toFixed(2)
         );
       }
 
@@ -72,7 +72,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
         (capitalAcumulado + lucroMensal + montanteAluguel).toFixed(2)
       );
 
-      if (mes === imovelData.anoFinal * 12) patrimonioFinal = valorFinal;
+      if (mes === propertyData.anoFinal * 12) patrimonioFinal = valorFinal;
 
       rows.push({
         mes,
@@ -85,16 +85,16 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
       capitalAcumulado = valorFinal;
     }
 
-    setImovelData("patrimonioInvestido", patrimonioFinal);
+    setpropertyData("patrimonioInvestido", patrimonioFinal);
     setRows(rows);
   }, [
-    imovelData.saldoPessoal,
-    imovelData.taxasFincancimento,
-    imovelData.valorEntrada,
-    imovelData.valorParcela,
-    imovelData.valorAluguel,
-    imovelData.rendimentoMensal,
-    imovelData.anoFinal,
+    propertyData.saldoPessoal,
+    propertyData.taxasFincancimento,
+    propertyData.valorEntrada,
+    propertyData.valorParcela,
+    propertyData.valorAluguel,
+    propertyData.rendimentoMensal,
+    propertyData.anoFinal,
     props.context,
   ]);
 
@@ -103,7 +103,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
       <CardTitle className="mt-2">
         <h2 className="text-xl text-center ">Investimento</h2>
         <p className="text-xs mb-5 text-center">
-          rendimento {imovelData.rendimentoMensal}% ao mês{" "}
+          rendimento {propertyData.rendimentoMensal}% ao mês{" "}
         </p>
       </CardTitle>
       <CardContent>

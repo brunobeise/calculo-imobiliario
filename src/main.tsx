@@ -3,14 +3,15 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { ThemeProvider } from "./theme.tsx";
-import { ImovelDataProvider } from "./imovelDataContext.tsx";
+import { PropertyDataProvider } from "./PropertyDataContext.tsx";
+import "@/assets/fonts/font.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <ImovelDataProvider>
+      <PropertyDataProvider>
         <App />
-      </ImovelDataProvider>
+      </PropertyDataProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

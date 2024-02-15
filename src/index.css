@@ -3,15 +3,22 @@
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 500;
-  font-family: "Raleway", sans-serif;
+  font-family: "Rawline Medium", sans-serif;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-family: "Rawline Bold", sans-serif;
+}
+
+.font-bold {
+  font-family: "Rawline ExtraBold", sans-serif;
+  color: #103759;
 }
 
 body {
@@ -37,7 +44,6 @@ body {
     --popover-foreground: 20 14.3% 4.1%;
     --primary: 16 55 89;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 60 4.8% 95.9%;
     --muted-foreground: 25 5.3% 44.7%;

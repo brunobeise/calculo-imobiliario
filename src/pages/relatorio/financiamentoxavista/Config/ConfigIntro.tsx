@@ -2,8 +2,6 @@ import PictureReportInput from "@/components/report/PictureReportInput";
 import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TextReportInput from "@/components/report/TextReportInput";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 
 export default function ConfigIntro() {
   const { financeOrCashReportState, setFinanceOrCashReportState } = useContext(
@@ -13,7 +11,7 @@ export default function ConfigIntro() {
   return (
     <div>
       <div className="grid grid-rows gap-5">
-        <div className="grid grid-cols-2 gap-2">
+        {/* <div className="grid grid-cols-2 gap-2">
           <RadioGroup
             onValueChange={(e) =>
               setFinanceOrCashReportState("coverType", Number(e))
@@ -40,17 +38,30 @@ export default function ConfigIntro() {
             value={financeOrCashReportState.companyLogo2}
             onChange={(v) => setFinanceOrCashReportState("companyLogo2", v)}
           />
-        </div>
+        </div> */}
         <PictureReportInput
           label="Foto do Imóvel"
           value={financeOrCashReportState.propertyPicture}
           onChange={(v) => setFinanceOrCashReportState("propertyPicture", v)}
         />
-        <TextReportInput
-          label="Nome do Imóvel"
-          value={financeOrCashReportState.propertyName}
-          onChange={(v) => setFinanceOrCashReportState("propertyName", v)}
-        />
+        <div className="grid grid-cols-3 gap-x-2">
+          <div className="col-span-2">
+            <TextReportInput
+              label="Nome do Imóvel"
+              value={financeOrCashReportState.propertyName}
+              onChange={(v) => setFinanceOrCashReportState("propertyName", v)}
+            />
+          </div>
+
+          <TextReportInput
+            checkbox={false}
+            label="Cor do texto"
+            value={financeOrCashReportState.propertyName}
+            onChange={(v) => setFinanceOrCashReportState("propertyName", v)}
+            type="color"
+            keyName="color"
+          />
+        </div>
         <TextReportInput
           label="Título"
           value={financeOrCashReportState.title}

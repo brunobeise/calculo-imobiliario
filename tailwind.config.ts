@@ -27,7 +27,7 @@ const config: Config = {
       popoverForeground: 'hsl(var(--popover-foreground))',
       primary: 'rgb(var(--primary))',
       primaryForeground: 'hsl(var(--primary-foreground))',
-      secondary: 'hsl(var(--secondary))',
+      secondary: 'rgb(241, 245, 249)',
       secondaryForeground: 'hsl(var(--secondary-foreground))',
       muted: 'hsl(var(--muted))',
       mutedForeground: 'hsl(var(--muted-foreground))',
