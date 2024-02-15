@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -23,17 +23,17 @@ export default function TableRentAppreciation(
   const { propertyData } = useContext(propertyDataContext);
   const [rows, setRows] = useState<
     {
-      valorAluguel: string;
+      rentValue: string;
       arrecadacaoAnual: string;
       ano: number;
     }[]
   >([]);
 
   useEffect(() => {
-    const newRows = propertyData.valorAluguel.map((valorAluguel, index) => {
-      const arrecadacaoAnual = valorAluguel * 12;
+    const newRows = propertyData.rentValue.map((rentValue, index) => {
+      const arrecadacaoAnual = rentValue * 12;
       return {
-        valorAluguel: numeroParaReal(valorAluguel),
+        rentValue: numeroParaReal(rentValue),
         arrecadacaoAnual: numeroParaReal(arrecadacaoAnual),
         ano: index + 1,
       };
@@ -41,17 +41,17 @@ export default function TableRentAppreciation(
 
     setRows(newRows);
   }, [
-    propertyData.anoFinal,
-    propertyData.valorInicialAluguel,
-    propertyData.valorAluguel,
+    propertyData.finalYear,
+    propertyData.initialRentValue,
+    propertyData.rentValue,
   ]);
 
   return (
     <Card className="w-full border-0">
-      <CardTitle className="mt-2">
+      {/* <CardTitle className="mt-2">
         <h2 className="text-xl text-center ">Valorização Aluguel</h2>
         <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
-      </CardTitle>
+      </CardTitle> */}
       <CardContent>
         <Table className="w-full text-left text-center">
           <TableHeader>
@@ -63,7 +63,7 @@ export default function TableRentAppreciation(
             {rows?.map((item) => (
               <TableRow key={item.ano}>
                 <TableCell>{item.ano}</TableCell>
-                <TableCell>{item.valorAluguel}</TableCell>
+                <TableCell>{item.rentValue}</TableCell>
                 {props.annualCollection && (
                   <TableCell>{item.arrecadacaoAnual}</TableCell>
                 )}

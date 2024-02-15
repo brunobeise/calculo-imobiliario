@@ -21,6 +21,10 @@ h1 {
   color: #103759;
 }
 
+strong {
+  font-family: "Rawline Bold", sans-serif;
+}
+
 body {
   padding: 1rem;
 }

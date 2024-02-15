@@ -1,58 +1,58 @@
 import { ReactNode, createContext, useState } from "react";
 
 export const propertyDataContext = createContext<propertyDataContextType>({
-  propertyData: {} as propertyData,
+  propertyData: {} as PropertyData,
   setpropertyData: () => {},
 });
 
-export type propertyData = {
-  valorImovel: number;
-  valorEntrada: number;
-  valorParcela: number;
-  valorInicialAluguel: number;
-  valorAluguel: number[];
-  valorImóvelValorizado: number;
-  taxasFincancimento: number;
-  rendimentoMensal: number;
-  saldoPessoal: number;
-  anoFinal: number;
-  anosFinanciamento: number;
-  patrimonioInvestido: number;
-  taxaValorizaçãoDoImovel: number;
-  saldoDevedor: number;
-  taxaDeJuros: number;
+export type PropertyData = {
+  propertyValue: number;
+  downPayment: number;
+  installmentValue: number;
+  initialRentValue: number;
+  rentValue: number[];
+  appreciatedPropertyValue: number;
+  financingFees: number;
+  monthlyIncome: number;
+  personalBalance: number;
+  finalYear: number;
+  financingYears: number;
+  investedEquity: number;
+  propertyAppreciationRate: number;
+  outstandingBalance: number;
+  interestRate: number;
 };
 
 export type propertyDataContextType = {
-  propertyData: propertyData;
+  propertyData: PropertyData;
   setpropertyData: (
-    campo: keyof propertyData,
-    valor: propertyData[keyof propertyData]
+    campo: keyof PropertyData,
+    valor: PropertyData[keyof PropertyData]
   ) => void;
 };
 
 export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
-  const [propertyData, setImovelState] = useState<propertyData>({
-    valorImovel: 180000,
-    valorEntrada: 36000,
-    valorParcela: 763.89,
-    valorInicialAluguel: 700,
-    valorAluguel: [700, 756, 816.48, 881.79, 952.34, 1028.52],
-    valorImóvelValorizado: 285637,
-    anosFinanciamento: 35,
-    taxasFincancimento: 4000,
-    rendimentoMensal: 1,
-    saldoPessoal: 180000,
-    anoFinal: 6,
-    patrimonioInvestido: 0,
-    taxaValorizaçãoDoImovel: 8,
-    taxaDeJuros: 5.4,
-    saldoDevedor: 133211.89,
+  const [propertyData, setImovelState] = useState<PropertyData>({
+    propertyValue: 180000,
+    downPayment: 36000,
+    installmentValue: 763.89,
+    initialRentValue: 700,
+    rentValue: [700, 756, 816.48, 881.79, 952.34, 1028.52],
+    appreciatedPropertyValue: 285637,
+    financingYears: 35,
+    financingFees: 4000,
+    monthlyIncome: 1,
+    personalBalance: 180000,
+    finalYear: 6,
+    investedEquity: 0,
+    propertyAppreciationRate: 8,
+    interestRate: 5.4,
+    outstandingBalance: 133211.89,
   });
 
   const setpropertyData = (
-    campo: keyof propertyData,
-    valor: propertyData[keyof propertyData]
+    campo: keyof PropertyData,
+    valor: PropertyData[keyof PropertyData]
   ) => {
     setImovelState((prevState) => ({
       ...prevState,

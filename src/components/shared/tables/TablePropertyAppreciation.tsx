@@ -1,4 +1,4 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ export default function TablePropertyAppreciation() {
   const { propertyData } = useContext(propertyDataContext);
   const [rows, setRows] = useState<
     {
-      valorImovel: string;
+      propertyValue: string;
       ano: number;
     }[]
   >([]);
@@ -25,15 +25,15 @@ export default function TablePropertyAppreciation() {
   useEffect(() => {
     const rows = [];
 
-    let capitalAcumulado = propertyData.valorImovel;
+    let capitalAcumulado = propertyData.propertyValue;
 
-    for (let linha = 1; linha <= propertyData.anoFinal; linha++) {
-      const lucroMensal = (capitalAcumulado * propertyData.taxaDeJuros) / 100;
+    for (let linha = 1; linha <= propertyData.finalYear; linha++) {
+      const lucroMensal = (capitalAcumulado * propertyData.interestRate) / 100;
       const valorFinal = capitalAcumulado + lucroMensal;
 
       rows.push({
         ano: linha,
-        valorImovel: numeroParaReal(capitalAcumulado),
+        propertyValue: numeroParaReal(capitalAcumulado),
       });
 
       capitalAcumulado = valorFinal;
@@ -41,19 +41,19 @@ export default function TablePropertyAppreciation() {
 
     setRows(rows);
   }, [
-    propertyData.anoFinal,
-    propertyData.taxaDeJuros,
-    propertyData.valorImovel,
+    propertyData.finalYear,
+    propertyData.interestRate,
+    propertyData.propertyValue,
   ]);
 
   return (
     <Card className="w-full border-0">
-      <CardTitle className="mt-2">
+      {/* <CardTitle className="mt-2">
         <h2 className="text-xl text-center ">Valorização do Imóvel</h2>
         <p className="text-xs mb-5 text-center">
-          ({propertyData.taxaValorizaçãoDoImovel}% ao ano)
+          ({propertyData.propertyAppreciationRate}% ao ano)
         </p>
-      </CardTitle>
+      </CardTitle> */}
       <CardContent>
         <Table className="w-full text-center">
           <TableHeader>
@@ -64,7 +64,7 @@ export default function TablePropertyAppreciation() {
             {rows?.map((item) => (
               <TableRow key={item.ano}>
                 <TableCell>{item.ano}</TableCell>
-                <TableCell>{item.valorImovel}</TableCell>
+                <TableCell>{item.propertyValue}</TableCell>
               </TableRow>
             ))}
           </TableBody>

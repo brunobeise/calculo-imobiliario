@@ -20,43 +20,42 @@ export default function Conclusão(props: ConclusãoProps) {
   const { propertyData } = useContext(propertyDataContext);
 
   const {
-    anoFinal,
-    rendimentoMensal,
-    saldoDevedor,
-    saldoPessoal,
-    taxasFincancimento,
-    valorEntrada,
-    valorImovel,
-    valorImóvelValorizado,
-    patrimonioInvestido,
-    valorAluguel,
+    finalYear,
+    monthlyIncome,
+    outstandingBalance,
+    personalBalance,
+    financingFees,
+    downPayment,
+    propertyValue,
+    appreciatedPropertyValue,
+    investedEquity,
+    rentValue,
   } = propertyData;
 
   const calcCompraDoImovel = () => {
-    if (props.context === "financiamento")
-      return valorEntrada + taxasFincancimento;
-    else return valorImovel;
+    if (props.context === "financiamento") return downPayment + financingFees;
+    else return propertyValue;
   };
 
   const calcTotalInvestido = () => {
     if (props.context === "financiamento")
-      return saldoPessoal - (valorEntrada + taxasFincancimento);
-    else return saldoPessoal - valorImovel;
+      return personalBalance - (downPayment + financingFees);
+    else return personalBalance - propertyValue;
   };
 
   const calcSaldoDevedor = () => {
-    if (props.context === "financiamento") return saldoDevedor;
+    if (props.context === "financiamento") return outstandingBalance;
     else return 0;
   };
 
   const calcPatrimônioTotal = () => {
-    return valorImóvelValorizado + patrimonioInvestido - calcSaldoDevedor();
+    return appreciatedPropertyValue + investedEquity - calcSaldoDevedor();
   };
 
   const rendaMensal = () => {
     return (
-      valorAluguel[valorAluguel.length - 1] * 1.08 +
-      (patrimonioInvestido * rendimentoMensal) / 100
+      rentValue[rentValue.length - 1] * 1.08 +
+      (investedEquity * monthlyIncome) / 100
     );
   };
 
@@ -101,7 +100,7 @@ export default function Conclusão(props: ConclusãoProps) {
         </Table>
 
         <p className="text-md my-2 text-center">
-          Resultado após {anoFinal} anos:
+          Resultado após {finalYear} anos:
         </p>
 
         <Table>
@@ -112,8 +111,8 @@ export default function Conclusão(props: ConclusãoProps) {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell>{numeroParaReal(valorImóvelValorizado)}</TableCell>
-              <TableCell>{numeroParaReal(patrimonioInvestido)}</TableCell>
+              <TableCell>{numeroParaReal(appreciatedPropertyValue)}</TableCell>
+              <TableCell>{numeroParaReal(investedEquity)}</TableCell>
               <TableCell>{numeroParaReal(calcSaldoDevedor())}</TableCell>
             </TableRow>
           </TableBody>

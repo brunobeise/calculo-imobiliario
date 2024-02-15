@@ -2,6 +2,7 @@ import PictureReportInput from "@/components/report/PictureReportInput";
 import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TextReportInput from "@/components/report/TextReportInput";
+import { Card } from "@/components/ui/card";
 
 export default function ConfigIntro() {
   const { financeOrCashReportState, setFinanceOrCashReportState } = useContext(
@@ -10,7 +11,7 @@ export default function ConfigIntro() {
 
   return (
     <div>
-      <div className="grid grid-rows gap-5">
+      <Card className="grid grid-rows gap-5 p-5">
         {/* <div className="grid grid-cols-2 gap-2">
           <RadioGroup
             onValueChange={(e) =>
@@ -99,7 +100,7 @@ export default function ConfigIntro() {
           onChange={(v) => setFinanceOrCashReportState("createdAt", v)}
           type="date"
         />
-      </div>
+      </Card>
     </div>
   );
 }

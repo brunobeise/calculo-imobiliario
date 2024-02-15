@@ -3,6 +3,7 @@ import { ReactNode, createContext, useState } from "react";
 
 export interface InputReportElement {
   active: boolean;
+  activeSecondary?: boolean;
   content: string;
   color?: string;
 }
@@ -33,6 +34,9 @@ export type FinanceOrCashReportContextType = {
   presentation: InputReportElement;
   agentName: InputReportElement;
   agentCRECI: InputReportElement;
+  propertyDetails: InputReportElement;
+  preconditionsScenarios: InputReportElement;
+  appreciationOfRent: InputReportElement;
 };
 
 export const FinanceOrCashReportProvider = ({
@@ -87,6 +91,24 @@ export const FinanceOrCashReportProvider = ({
       agentCRECI: {
         active: true,
         content: "123871623",
+      },
+      propertyDetails: {
+        active: true,
+        content: "",
+      },
+      preconditionsScenarios: {
+        active: true,
+        content: `Reinvestimento Integral dos Rendimentos: Todos os rendimentos do aluguel e os retornos gerados serão completamente reinvestidos em produtos de renda fixa, sem exceções para despesas ou novos investimentos.
+
+Uniformidade das Taxas de Rendimento: As taxas de rendimento, valorização do aluguel e valorização do imóvel serão as mesmas em ambos os cenários para garantir uma comparação equitativa.
+
+Dedicação Exclusiva do Saldo para Investimento: Qualquer saldo remanescente será exclusivamente investido em renda fixa, mantendo os valores comparáveis e focados na análise.`,
+      },
+      appreciationOfRent: {
+        active: true,
+        activeSecondary: true,
+        content:
+          "À medida que o tempo passa, o valor do aluguel aumenta devido às tendências econômicas, e o valor de mercado do imóvel também valoriza no mesmo percentual do aluguel. Essa evolução é crucial para os cálculos em tabelas futuras, permitindo uma avaliação precisa do impacto financeiro ao longo do tempo.",
       },
     });
 

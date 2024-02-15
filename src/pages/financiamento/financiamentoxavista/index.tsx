@@ -19,7 +19,7 @@ export default function FinanciamentoXAvista() {
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
 
-    if (propertyData.saldoPessoal < propertyData.valorImovel) {
+    if (propertyData.personalBalance < propertyData.propertyValue) {
       newErrors.push({
         title: "Saldo Pessoal incorreto.",
         message:
@@ -27,7 +27,7 @@ export default function FinanciamentoXAvista() {
       });
     }
 
-    if (propertyData.anoFinal > 35 || propertyData.anosFinanciamento > 35) {
+    if (propertyData.finalYear > 35 || propertyData.financingYears > 35) {
       newErrors.push({
         title: "Ano final ou tempo de financiamento inválido.",
         message: "Prazo do financimaneto é de no máximo 35 anos",

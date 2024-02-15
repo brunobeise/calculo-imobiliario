@@ -3,23 +3,25 @@ import TableRentAppreciation from "@/components/shared/tables/TableRentAppreciat
 import { numeroParaReal } from "@/lib/formatter";
 import { propertyDataContext } from "@/PropertyDataContext";
 import { useContext } from "react";
+import { FinanceOrCashReportContext } from "../Context";
 
 export default function PropertyDetails() {
   const { propertyData } = useContext(propertyDataContext);
+  const { financeOrCashReportState } = useContext(FinanceOrCashReportContext);
 
   const {
-    anoFinal,
-    rendimentoMensal,
-    saldoDevedor,
-    saldoPessoal,
-    taxaDeJuros,
-    taxasFincancimento,
-    valorEntrada,
-    valorImovel,
-    valorInicialAluguel,
-    valorParcela,
-    taxaValorizaçãoDoImovel,
-    anosFinanciamento,
+    finalYear,
+    monthlyIncome,
+    outstandingBalance,
+    personalBalance,
+    interestRate,
+    financingFees,
+    downPayment,
+    propertyValue,
+    initialRentValue,
+    installmentValue,
+    propertyAppreciationRate,
+    financingYears,
   } = propertyData;
 
   const InfoItemReais = ({ text, value }: { text: string; value: number }) => (
@@ -52,89 +54,112 @@ export default function PropertyDetails() {
     </p>
   );
 
+  const preconditionsItems =
+    financeOrCashReportState.preconditionsScenarios.content
+      .split("\n")
+      .filter((item) => item);
+
   return (
     <div className=" px-12">
-      <h3 className="text-xl font-bold text-center leading-7 mb-5">
-        Dados considerados para o comparativo:
-      </h3>
-      <div className="grid grid-cols-2 gap-10">
-        <div>
-          <InfoItemReais text="Saldo inicial:" value={saldoPessoal} />
-          <InfoItemReais text="Valor do imóvel:" value={valorImovel} />
+      {financeOrCashReportState.propertyDetails.active && (
+        <>
+          <h3 className="text-xl font-bold text-center leading-7 mb-5">
+            Dados considerados para o comparativo:
+          </h3>
 
-          <InfoItemReais
-            text="Valor inicial do Aluguel:"
-            value={valorInicialAluguel}
-          />
+          <div className="grid grid-cols-2 gap-10">
+            <div>
+              <InfoItemReais text="Saldo inicial:" value={personalBalance} />
+              <InfoItemReais text="Valor do imóvel:" value={propertyValue} />
 
-          <InfoItemPercent
-            text="Valorização anual do imóvel:"
-            value={taxaValorizaçãoDoImovel}
-          />
+              <InfoItemReais
+                text="Valor inicial do Aluguel:"
+                value={initialRentValue}
+              />
 
-          <InfoItemPercent
-            text="Rendimento médio mensal:"
-            value={rendimentoMensal}
-          />
+              <InfoItemPercent
+                text="Valorização anual do imóvel:"
+                value={propertyAppreciationRate}
+              />
 
-          <InfoItemYears text="Cálculo feito em:" value={anoFinal} />
-        </div>
-        <div>
-          <InfoItemReais text="Valor da entrada:" value={valorEntrada} />
-          <InfoItemReais
-            text="Taxas do financiamento:"
-            value={taxasFincancimento}
-          />
-          <InfoItemPercent text="CET do financiamento:" value={taxaDeJuros} />
-          <InfoItemYears
-            text="Tempo do financiamento:"
-            value={anosFinanciamento}
-          />
+              <InfoItemPercent
+                text="Rendimento médio mensal:"
+                value={monthlyIncome}
+              />
 
-          <InfoItemReais text="Valor da Parcela:" value={valorParcela} />
+              <InfoItemYears text="Cálculo feito em:" value={finalYear} />
+            </div>
+            <div>
+              <InfoItemReais text="Valor da entrada:" value={downPayment} />
+              <InfoItemReais
+                text="Taxas do financiamento:"
+                value={financingFees}
+              />
+              <InfoItemPercent
+                text="CET do financiamento:"
+                value={interestRate}
+              />
+              <InfoItemYears
+                text="Tempo do financiamento:"
+                value={financingYears}
+              />
 
-          <InfoItemReais
-            text={`Saldo devedor em ${anoFinal} Anos:`}
-            value={saldoDevedor}
-          />
-        </div>
-      </div>
-      <h3 className="text-xl font-bold text-center leading-7 mt-10 mb-5">
-        Precondições para comparação dos cenários:
-      </h3>
-      <ul className="list-decimal">
-        <li>
-          <strong>Reinvestimento Integral dos Rendimentos:</strong> Todos os
-          rendimentos do aluguel e os retornos gerados serão completamente
-          reinvestidos em produtos de renda fixa, sem exceções para despesas ou
-          novos investimentos.
-        </li>
-        <li>
-          <strong>Uniformidade das Taxas de Rendimento:</strong> As taxas de
-          rendimento, valorização do aluguel e valorização do imóvel serão as
-          mesmas em ambos os cenários para garantir uma comparação equitativa.
-        </li>
-        <li>
-          <strong>Dedicação Exclusiva do Saldo para Investimento:</strong>{" "}
-          Qualquer saldo remanescente será exclusivamente investido em renda
-          fixa, mantendo os valores comparáveis e focados na análise.
-        </li>
-      </ul>
-      <h3 className="text-xl font-bold text-center leading-7 mb-5">
-        Valorização do aluguel e do imóvel:
-      </h3>
-      <p>
-        À medida que o tempo avança, observa-se um incremento no valor do
-        aluguel, refletindo as tendências econômicas. O valor de mercado do
-        imóvel também experimenta uma valorização, seguindo o mesmo percentual
-        estabelecido para o aluguel. Essa progressão é fundamental para os
-        cálculos apresentados nas tabelas subsequentes, garantindo uma avaliação
-        precisa do impacto financeiro ao longo do tempo.
-      </p>
-      <div className="grid grid-cols-2 gap-2 mt-2">
-        <TablePropertyAppreciation />
-        <TableRentAppreciation />
-      </div>
+              <InfoItemReais
+                text="Valor da Parcela:"
+                value={installmentValue}
+              />
+
+              <InfoItemReais
+                text={`Saldo devedor em ${finalYear} Anos:`}
+                value={outstandingBalance}
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {financeOrCashReportState.preconditionsScenarios.active && (
+        <>
+          <h3 className="text-xl font-bold text-center leading-7 mt-5 my-4">
+            Precondições para comparação dos cenários:
+          </h3>
+
+          <ul className="list-decimal">
+            {preconditionsItems.map((item, index) => {
+              const splitIndex = item.indexOf(":");
+              const title = item.substring(0, splitIndex);
+              const content = item.substring(splitIndex + 1);
+
+              return (
+                <li key={index}>
+                  <strong>{title}:</strong>
+                  {content}
+                </li>
+              );
+            })}
+          </ul>
+        </>
+      )}
+      {financeOrCashReportState.appreciationOfRent.active && (
+        <>
+          <h3 className="text-xl font-bold text-center leading-7 mb-2 my-2">
+            Valorização do aluguel e do imóvel:
+          </h3>
+          <p>
+            À medida que o tempo passa, o valor do aluguel aumenta devido às
+            tendências econômicas, e o valor de mercado do imóvel também
+            valoriza no mesmo percentual do aluguel. Essa evolução é crucial
+            para os cálculos em tabelas futuras, permitindo uma avaliação
+            precisa do impacto financeiro ao longo do tempo.
+          </p>
+          {financeOrCashReportState.appreciationOfRent.activeSecondary && (
+            <div className="grid grid-cols-2 gap-2 mt-5">
+              <TablePropertyAppreciation />
+              <TableRentAppreciation />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }

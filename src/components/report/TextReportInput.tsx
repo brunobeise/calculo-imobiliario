@@ -16,10 +16,12 @@ interface TextReportInputProps {
   type?: React.HTMLInputTypeAttribute;
   keyName?: keyof InputReportElement;
   checkbox?: boolean;
+  showInput?: boolean;
 }
 
 export default function TextReportInput({
   checkbox = true,
+  showInput = true,
   ...props
 }: TextReportInputProps) {
   const handleFileChange = (e: any) => {
@@ -49,26 +51,32 @@ export default function TextReportInput({
           className="block "
         />
       )}
-
-      <div className={checkbox ? "ms-4 w-full " : "w-full"}>
-        <Label htmlFor={props.label}>{props.label}</Label>
-        {props.type === "textarea" ? (
-          <Textarea
-            className="w-full min-h-[100px]"
-            value={props.value[props.keyName ?? "content"]?.toString()}
-            onChange={handleFileChange}
-            id={props.label}
-          />
-        ) : (
-          <Input
-            className="w-full"
-            value={props.value[props.keyName ?? "content"]?.toString()}
-            onChange={handleFileChange}
-            id={props.label}
-            type={props.type ?? "text"}
-          />
-        )}
-      </div>
+      {showInput && (
+        <div className={checkbox ? "ms-4 w-full " : "w-full"}>
+          <Label htmlFor={props.label}>{props.label}</Label>
+          {props.type === "textarea" ? (
+            <Textarea
+              className="w-full min-h-[100px]"
+              value={props.value[props.keyName ?? "content"]?.toString()}
+              onChange={handleFileChange}
+              id={props.label}
+            />
+          ) : (
+            <Input
+              className="w-full"
+              value={props.value[props.keyName ?? "content"]?.toString()}
+              onChange={handleFileChange}
+              id={props.label}
+              type={props.type ?? "text"}
+            />
+          )}
+        </div>
+      )}
+      {!showInput && (
+        <Label className="ms-5 w-full" htmlFor={props.label}>
+          {props.label}
+        </Label>
+      )}
     </div>
   );
 }

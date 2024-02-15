@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import ConfigIntro from "./ConfigIntro";
+import ConfigPropertyDetails from "./ConfigPropertyDetails";
 
 export default function ConfigReport() {
   return (
@@ -23,8 +24,7 @@ export default function ConfigReport() {
         <AccordionItem value="item-2">
           <AccordionTrigger>Detalhes do Imóvel</AccordionTrigger>
           <AccordionContent>
-            Yes. It comes with default styles that matches the other
-            components&apos; aesthetic.
+            <ConfigPropertyDetails />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">

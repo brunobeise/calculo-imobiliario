@@ -17,7 +17,7 @@ export default function TabelaJurosCompostos({
 }: {
   data: {
     capitalInicial: number;
-    taxaDeJuros: number;
+    interestRate: number;
     aporteMensal: number;
     linhas: number;
   };
@@ -39,7 +39,7 @@ export default function TabelaJurosCompostos({
     let capitalAcumulado = data.capitalInicial;
 
     for (let linha = 1; linha <= data.linhas; linha++) {
-      const lucroMensal = (capitalAcumulado * data.taxaDeJuros) / 100;
+      const lucroMensal = (capitalAcumulado * data.interestRate) / 100;
       const valorFinal = capitalAcumulado + lucroMensal + data.aporteMensal;
       if (linha === data.linhas) setCapitalFinal(numeroParaReal(valorFinal));
       rows.push({
@@ -54,7 +54,7 @@ export default function TabelaJurosCompostos({
     }
 
     setRows(rows);
-  }, [data.capitalInicial, data.taxaDeJuros, data.aporteMensal, data.linhas]);
+  }, [data.capitalInicial, data.interestRate, data.aporteMensal, data.linhas]);
 
   return (
     <Card className="col-span-9">

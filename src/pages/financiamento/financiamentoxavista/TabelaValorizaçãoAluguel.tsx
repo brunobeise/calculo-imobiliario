@@ -17,17 +17,17 @@ export default function TabelaValorizaçãoAluguel() {
   const { propertyData } = useContext(propertyDataContext);
   const [rows, setRows] = useState<
     {
-      valorAluguel: string;
+      rentValue: string;
       arrecadacaoAnual: string;
       ano: number;
     }[]
   >([]);
 
   useEffect(() => {
-    const newRows = propertyData.valorAluguel.map((valorAluguel, index) => {
-      const arrecadacaoAnual = valorAluguel * 12;
+    const newRows = propertyData.rentValue.map((rentValue, index) => {
+      const arrecadacaoAnual = rentValue * 12;
       return {
-        valorAluguel: numeroParaReal(valorAluguel),
+        rentValue: numeroParaReal(rentValue),
         arrecadacaoAnual: numeroParaReal(arrecadacaoAnual),
         ano: index + 1,
       };
@@ -35,9 +35,9 @@ export default function TabelaValorizaçãoAluguel() {
 
     setRows(newRows);
   }, [
-    propertyData.anoFinal,
-    propertyData.valorInicialAluguel,
-    propertyData.valorAluguel,
+    propertyData.finalYear,
+    propertyData.initialRentValue,
+    propertyData.rentValue,
   ]);
 
   return (
@@ -57,7 +57,7 @@ export default function TabelaValorizaçãoAluguel() {
             {rows?.map((item) => (
               <TableRow key={item.ano}>
                 <TableCell>{item.ano}</TableCell>
-                <TableCell>{item.valorAluguel}</TableCell>
+                <TableCell>{item.rentValue}</TableCell>
                 <TableCell>{item.arrecadacaoAnual}</TableCell>
               </TableRow>
             ))}

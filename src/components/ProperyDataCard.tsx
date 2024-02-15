@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
-import { propertyData, propertyDataContext } from "../PropertyDataContext";
+import { PropertyData, propertyDataContext } from "../PropertyDataContext";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import {
   calcSaldoDevedor,
-  calcValorParcela,
+  calcinstallmentValue,
   calcValorizaçãoAluguel,
   calcValorizaçãoImóvel,
 } from "@/lib/calcs";
@@ -25,43 +25,43 @@ import InputYears from "./ui/inputYears";
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
   const {
-    anoFinal,
-    rendimentoMensal,
-    saldoDevedor,
-    saldoPessoal,
-    taxaDeJuros,
-    taxasFincancimento,
-    valorEntrada,
-    valorImovel,
-    valorInicialAluguel,
-    valorParcela,
-    taxaValorizaçãoDoImovel,
-    anosFinanciamento,
+    finalYear,
+    monthlyIncome,
+    outstandingBalance,
+    personalBalance,
+    interestRate,
+    financingFees,
+    downPayment,
+    propertyValue,
+    initialRentValue,
+    installmentValue,
+    propertyAppreciationRate,
+    financingYears,
   } = propertyData;
 
-  // const [lockMap, setLockMap] = useState({ saldoDevedor: false });
+  // const [lockMap, setLockMap] = useState({ outstandingBalance: false });
 
-  const [valorImovelField, setValorImovelField] = useState(
-    numeroParaReal(valorImovel)
+  const [propertyValueField, setpropertyValueField] = useState(
+    numeroParaReal(propertyValue)
   );
-  const [valorEntradaField, setvalorEntradaField] = useState(
-    numeroParaReal(valorEntrada)
+  const [downPaymentField, setdownPaymentField] = useState(
+    numeroParaReal(downPayment)
   );
   const [taxasFincancimentoField, settaxasFincancimentoField] = useState(
-    numeroParaReal(taxasFincancimento)
+    numeroParaReal(financingFees)
   );
   const [saldoPessoalField, setSaldoPessoalField] = useState(
-    numeroParaReal(saldoPessoal)
+    numeroParaReal(personalBalance)
   );
-  const [valorParcelaField, setValorParcelaField] = useState(
-    numeroParaReal(valorParcela)
+  const [installmentValueField, setinstallmentValueField] = useState(
+    numeroParaReal(installmentValue)
   );
-  const [valorInicialALuguelField, setValorInicialALuguelField] = useState(
-    numeroParaReal(valorInicialAluguel)
+  const [initialRentValueField, setinitialRentValueField] = useState(
+    numeroParaReal(initialRentValue)
   );
 
   const [saldoDevedorField, setSaldoDevedorField] = useState(
-    numeroParaReal(saldoDevedor)
+    numeroParaReal(outstandingBalance)
   );
 
   const handleChangeReal = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,57 +69,56 @@ export default function PropertyDataCard() {
     const id = event.target.id;
     const valorFormatado = formatterReal(valor);
 
-    setpropertyData(id as keyof propertyData, realParaNumero(valorFormatado));
-    if (id === "valorImovel") setValorImovelField(valorFormatado);
-    if (id === "valorEntrada") setvalorEntradaField(valorFormatado);
-    if (id === "taxasFincancimento") settaxasFincancimentoField(valorFormatado);
-    if (id === "saldoPessoal") setSaldoPessoalField(valorFormatado);
-    if (id === "valorParcela") setValorParcelaField(valorFormatado);
-    if (id === "valorInicialAluguel")
-      setValorInicialALuguelField(valorFormatado);
-    if (id === "saldoDevedor") setSaldoDevedorField(valorFormatado);
+    setpropertyData(id as keyof PropertyData, realParaNumero(valorFormatado));
+    if (id === "propertyValue") setpropertyValueField(valorFormatado);
+    if (id === "downPayment") setdownPaymentField(valorFormatado);
+    if (id === "financingFees") settaxasFincancimentoField(valorFormatado);
+    if (id === "personalBalance") setSaldoPessoalField(valorFormatado);
+    if (id === "installmentValue") setinstallmentValueField(valorFormatado);
+    if (id === "initialRentValue") setinitialRentValueField(valorFormatado);
+    if (id === "outstandingBalance") setSaldoDevedorField(valorFormatado);
   };
 
   useEffect(() => {
     const aluguelValorizado = calcValorizaçãoAluguel(
-      valorInicialAluguel,
-      anoFinal
+      initialRentValue,
+      finalYear
     );
 
-    const valorImovelValorizado = calcValorizaçãoImóvel(
-      valorImovel,
-      taxaValorizaçãoDoImovel,
-      anoFinal
+    const propertyValueValorizado = calcValorizaçãoImóvel(
+      propertyValue,
+      propertyAppreciationRate,
+      finalYear
     );
 
-    const valorParcela = calcValorParcela(
-      valorImovel - valorEntrada,
-      taxaDeJuros,
-      anosFinanciamento
+    const installmentValue = calcinstallmentValue(
+      propertyValue - downPayment,
+      interestRate,
+      financingYears
     );
 
-    const saldoDevedor = calcSaldoDevedor(
-      valorImovel - valorEntrada,
-      taxaDeJuros,
-      anosFinanciamento,
-      12 * anoFinal
+    const outstandingBalance = calcSaldoDevedor(
+      propertyValue - downPayment,
+      interestRate,
+      financingYears,
+      12 * finalYear
     );
 
-    setpropertyData("valorAluguel", aluguelValorizado);
-    setpropertyData("valorImóvelValorizado", valorImovelValorizado);
-    setpropertyData("valorParcela", valorParcela);
-    setpropertyData("saldoDevedor", saldoDevedor);
+    setpropertyData("rentValue", aluguelValorizado);
+    setpropertyData("appreciatedPropertyValue", propertyValueValorizado);
+    setpropertyData("installmentValue", installmentValue);
+    setpropertyData("outstandingBalance", outstandingBalance);
 
-    setValorParcelaField(numeroParaReal(valorParcela));
-    setSaldoDevedorField(numeroParaReal(saldoDevedor));
+    setinstallmentValueField(numeroParaReal(installmentValue));
+    setSaldoDevedorField(numeroParaReal(outstandingBalance));
   }, [
-    anoFinal,
-    valorInicialAluguel,
-    valorImovel,
-    valorEntrada,
-    taxaDeJuros,
-    taxaValorizaçãoDoImovel,
-    anosFinanciamento,
+    finalYear,
+    initialRentValue,
+    propertyValue,
+    downPayment,
+    interestRate,
+    propertyAppreciationRate,
+    financingYears,
   ]);
 
   const location = useLocation();
@@ -155,22 +154,22 @@ export default function PropertyDataCard() {
 
                   <CardContent className="grid grid-cols-1  gap-6">
                     <div>
-                      <Label htmlFor="valorImovel">Saldo Disponível:</Label>
+                      <Label htmlFor="propertyValue">Saldo Disponível:</Label>
                       <Input
                         onChange={handleChangeReal}
                         type="text"
-                        id="saldoPessoal"
+                        id="personalBalance"
                         value={saldoPessoalField}
                         required
                       />
                     </div>
                     <div>
-                      <Label htmlFor="valorImovel">Valor do imóvel:</Label>
+                      <Label htmlFor="propertyValue">Valor do imóvel:</Label>
                       <Input
                         onChange={handleChangeReal}
                         type="text"
-                        id="valorImovel"
-                        value={valorImovelField}
+                        id="propertyValue"
+                        value={propertyValueField}
                         required
                       />
                     </div>
@@ -180,12 +179,12 @@ export default function PropertyDataCard() {
                       </Label>
                       <InputPercent
                         onChangeValue={(v) =>
-                          setpropertyData("taxaValorizaçãoDoImovel", v)
+                          setpropertyData("propertyAppreciationRate", v)
                         }
                         type="number"
                         step={0.1}
                         id="valorizaçãoDoImóvel"
-                        value={taxaValorizaçãoDoImovel}
+                        value={propertyAppreciationRate}
                         required
                       />
                     </div>
@@ -201,15 +200,15 @@ export default function PropertyDataCard() {
 
                   <CardContent className="grid grid-cols-2 gap-6">
                     <div>
-                      <Label htmlFor="valorImovel">
+                      <Label htmlFor="propertyValue">
                         Valor Inicial Aluguel:
                       </Label>
                       <Input
                         className=""
                         onChange={handleChangeReal}
                         type="text"
-                        id="valorInicialAluguel"
-                        value={valorInicialALuguelField}
+                        id="initialRentValue"
+                        value={initialRentValueField}
                         required
                       />
                     </div>
@@ -219,12 +218,12 @@ export default function PropertyDataCard() {
 
                       <InputPercent
                         onChangeValue={(v) =>
-                          setpropertyData("rendimentoMensal", v)
+                          setpropertyData("monthlyIncome", v)
                         }
                         type="number"
                         step={0.1}
                         id="taxarendimento"
-                        value={rendimentoMensal}
+                        value={monthlyIncome}
                         required
                       />
                     </div>
@@ -241,17 +240,17 @@ export default function PropertyDataCard() {
 
                 <CardContent className="grid grid-cols-1 h-[90%] justify-between gap-6">
                   <div>
-                    <Label htmlFor="valorImovel">Valor da Entrada:</Label>
+                    <Label htmlFor="propertyValue">Valor da Entrada:</Label>
                     <div className="relative">
                       <Input
                         onChange={handleChangeReal}
                         type="text"
-                        id="valorEntrada"
-                        value={valorEntradaField}
+                        id="downPayment"
+                        value={downPaymentField}
                         required
                       />
                       <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
-                        {((valorEntrada / valorImovel) * 100).toFixed(2) + "%"}
+                        {((downPayment / propertyValue) * 100).toFixed(2) + "%"}
                       </span>
                     </div>
 
@@ -259,16 +258,16 @@ export default function PropertyDataCard() {
                       <Slider
                         onValueChange={(e) => {
                           setpropertyData(
-                            "valorEntrada",
-                            (valorImovel * e[0]) / 10
+                            "downPayment",
+                            (propertyValue * e[0]) / 10
                           );
-                          setvalorEntradaField(
-                            formatterReal((valorImovel * 100 * e[0]) / 10)
+                          setdownPaymentField(
+                            formatterReal((propertyValue * 100 * e[0]) / 10)
                           );
                         }}
                         id="labels-range-Input"
                         defaultValue={[2]}
-                        value={[(valorEntrada / valorImovel) * 10]}
+                        value={[(downPayment / propertyValue) * 10]}
                         min={0}
                         max={10}
                       />
@@ -284,56 +283,50 @@ export default function PropertyDataCard() {
                   </div>
 
                   <div>
-                    <Label htmlFor="taxasFincancimento">
+                    <Label htmlFor="financingFees">
                       Taxas do fincancimento:
                     </Label>
                     <Input
                       onChange={handleChangeReal}
                       type="text"
-                      id="taxasFincancimento"
+                      id="financingFees"
                       value={taxasFincancimentoField}
                       required
                     />
                   </div>
 
                   <div className="relative">
-                    <Label htmlFor="taxadejuros">CET financiamento</Label>
+                    <Label htmlFor="interestRate">CET financiamento</Label>
                     <InputPercent
                       onChangeValue={(v) => {
-                        if (v > 0) setpropertyData("taxaDeJuros", v);
+                        if (v > 0) setpropertyData("interestRate", v);
                       }}
                       step={0.1}
-                      id="taxadejuros"
+                      id="interestRate"
                       type="number"
-                      value={taxaDeJuros}
+                      value={interestRate}
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label htmlFor="taxasFincancimento">
-                        Total Investido:
-                      </Label>
+                      <Label htmlFor="financingFees">Total Investido:</Label>
                       <Input
                         onChange={() => {}}
                         type="text"
-                        id="taxasFincancimento"
-                        value={numeroParaReal(
-                          valorEntrada + taxasFincancimento
-                        )}
+                        id="financingFees"
+                        value={numeroParaReal(downPayment + financingFees)}
                         required
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="taxasFincancimento">
-                        Total Financiado:
-                      </Label>
+                      <Label htmlFor="financingFees">Total Financiado:</Label>
                       <Input
                         onChange={() => {}}
                         type="text"
-                        id="taxasFincancimento"
-                        value={numeroParaReal(valorImovel - valorEntrada)}
+                        id="financingFees"
+                        value={numeroParaReal(propertyValue - downPayment)}
                         required
                       />
                     </div>
@@ -352,33 +345,33 @@ export default function PropertyDataCard() {
                     <Label htmlFor="anos">Calcular até:</Label>
                     <InputYears
                       onChangeValue={(v) => {
-                        if (v > 0) setpropertyData("anoFinal", v);
+                        if (v > 0) setpropertyData("finalYear", v);
                       }}
                       step={1}
                       id="anos"
                       type="number"
-                      value={anoFinal}
+                      value={finalYear}
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="valorImovel">Valor Parcela:</Label>
+                    <Label htmlFor="propertyValue">Valor Parcela:</Label>
                     <Input
                       onChange={handleChangeReal}
                       type="text"
-                      id="valorParcela"
-                      value={valorParcelaField}
+                      id="installmentValue"
+                      value={installmentValueField}
                       required
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="saldoDevedor">
-                      Saldo devedor em {anoFinal} anos:
+                    <Label htmlFor="outstandingBalance">
+                      Saldo devedor em {finalYear} anos:
                     </Label>
                     <Input
                       onChange={handleChangeReal}
-                      id="saldoDevedor"
+                      id="outstandingBalance"
                       value={saldoDevedorField}
                     />
                   </div>
@@ -391,13 +384,13 @@ export default function PropertyDataCard() {
                       onChange={(e) => {
                         if (Number(e.target.value))
                           setpropertyData(
-                            "anosFinanciamento",
+                            "financingYears",
                             Number(e.target.value)
                           );
                       }}
                       id="anosfinanciamento"
                       type="number"
-                      value={anosFinanciamento}
+                      value={financingYears}
                     />
                   </div>
                 </CardContent>

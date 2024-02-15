@@ -11,12 +11,12 @@ export default function JurosCompostos() {
 
   const [data, setData] = useState<{
     capitalInicial: number;
-    taxaDeJuros: number;
+    interestRate: number;
     aporteMensal: number;
     linhas: number;
   }>({
     capitalInicial: 10000,
-    taxaDeJuros: 1,
+    interestRate: 1,
     aporteMensal: 500,
     linhas: 60,
   });
@@ -49,11 +49,11 @@ export default function JurosCompostos() {
             onChange={(e) => {
               setData({
                 ...data,
-                taxaDeJuros: Number(e.target.value),
+                interestRate: Number(e.target.value),
               });
             }}
             type="number"
-            value={data.taxaDeJuros}
+            value={data.interestRate}
           />
         </div>
         <div>
