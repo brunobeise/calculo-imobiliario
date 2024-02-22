@@ -10,18 +10,10 @@ export default function FinancingAnalysis() {
   const { propertyData } = useContext(propertyDataContext);
 
   const {
-    finalYear,
-    monthlyIncome,
     outstandingBalance,
     personalBalance,
-    interestRate,
     financingFees,
     downPayment,
-    propertyValue,
-    initialRentValue,
-    installmentValue,
-    propertyAppreciationRate,
-    financingYears,
     appreciatedPropertyValue,
   } = propertyData;
 
