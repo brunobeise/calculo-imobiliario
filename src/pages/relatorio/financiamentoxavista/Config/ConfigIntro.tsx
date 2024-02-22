@@ -12,34 +12,6 @@ export default function ConfigIntro() {
   return (
     <div>
       <Card className="grid grid-rows gap-5 p-5">
-        {/* <div className="grid grid-cols-2 gap-2">
-          <RadioGroup
-            onValueChange={(e) =>
-              setFinanceOrCashReportState("coverType", Number(e))
-            }
-            className="col-span-2 flex justify-evenly my-2"
-            defaultValue={financeOrCashReportState.coverType.toString()}
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="1" id="r1" />
-              <Label htmlFor="r1">Normal</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="2" id="r2" />
-              <Label htmlFor="r2">Sobreposto</Label>
-            </div>
-          </RadioGroup>
-          <PictureReportInput
-            label="Logo da Empresa 1"
-            value={financeOrCashReportState.companyLogo1}
-            onChange={(v) => setFinanceOrCashReportState("companyLogo1", v)}
-          />
-          <PictureReportInput
-            label="Logo da Empresa 2"
-            value={financeOrCashReportState.companyLogo2}
-            onChange={(v) => setFinanceOrCashReportState("companyLogo2", v)}
-          />
-        </div> */}
         <PictureReportInput
           label="Foto do Imóvel"
           value={financeOrCashReportState.propertyPicture}
@@ -68,16 +40,19 @@ export default function ConfigIntro() {
           value={financeOrCashReportState.title}
           onChange={(v) => setFinanceOrCashReportState("title", v)}
         />
-        <TextReportInput
-          label="Subtitulo"
-          value={financeOrCashReportState.subtitle}
-          onChange={(v) => setFinanceOrCashReportState("subtitle", v)}
-        />
+
         <TextReportInput
           label="Apresentação"
           value={financeOrCashReportState.presentation}
           onChange={(v) => setFinanceOrCashReportState("presentation", v)}
           type="textarea"
+        />
+
+        <TextReportInput
+          label="Cálculo"
+          value={financeOrCashReportState.calculation}
+          onChange={(v) => setFinanceOrCashReportState("calculation", v)}
+          showInput={false}
         />
 
         <div className="grid grid-cols-2">

@@ -11,18 +11,20 @@ import { propertyDataContext } from "@/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
+import { caseDataContext } from "./Context";
 
 interface ConclusãoProps {
-  context: "financiamento" | "avista";
+  context: "financing" | "inCash";
 }
 
 export default function Conclusão(props: ConclusãoProps) {
   const { propertyData } = useContext(propertyDataContext);
+  const { caseData } = useContext(caseDataContext);
 
   const {
     finalYear,
     monthlyIncome,
-    outstandingBalance,
+
     personalBalance,
     financingFees,
     downPayment,
@@ -33,23 +35,14 @@ export default function Conclusão(props: ConclusãoProps) {
   } = propertyData;
 
   const calcCompraDoImovel = () => {
-    if (props.context === "financiamento") return downPayment + financingFees;
+    if (props.context === "financing") return downPayment + financingFees;
     else return propertyValue;
   };
 
   const calcTotalInvestido = () => {
-    if (props.context === "financiamento")
+    if (props.context === "financing")
       return personalBalance - (downPayment + financingFees);
     else return personalBalance - propertyValue;
-  };
-
-  const calcSaldoDevedor = () => {
-    if (props.context === "financiamento") return outstandingBalance;
-    else return 0;
-  };
-
-  const calcPatrimônioTotal = () => {
-    return appreciatedPropertyValue + investedEquity - calcSaldoDevedor();
   };
 
   const rendaMensal = () => {
@@ -59,26 +52,12 @@ export default function Conclusão(props: ConclusãoProps) {
     );
   };
 
-  const lucroNaOperação = () => {
-    return (
-      (calcPatrimônioTotal() / (calcCompraDoImovel() + calcTotalInvestido())) *
-        100 -
-      100
-    );
-  };
-
-  const lucroNaOperaçãoReais = () => {
-    return numeroParaReal(
-      calcPatrimônioTotal() - (calcCompraDoImovel()! + calcTotalInvestido()!)
-    );
-  };
-
   return (
     <Card
       id="conclusao"
       className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none"
     >
-      <CardTitle className="mt-2">
+      <CardTitle className="mt-5">
         <h2 className="text-xl text-center mb-2">Conclusão</h2>
       </CardTitle>
       <CardContent className="grid grid-rows gap-5">
@@ -112,29 +91,47 @@ export default function Conclusão(props: ConclusãoProps) {
           <TableBody>
             <TableRow>
               <TableCell>{numeroParaReal(appreciatedPropertyValue)}</TableCell>
-              <TableCell>{numeroParaReal(investedEquity)}</TableCell>
-              <TableCell>{numeroParaReal(calcSaldoDevedor())}</TableCell>
+              <TableCell>
+                {props.context === "financing"
+                  ? numeroParaReal(caseData.financing.investedEquityFinal)
+                  : numeroParaReal(caseData.inCash.investedEquityFinal)}
+              </TableCell>
+              <TableCell>
+                {props.context === "financing"
+                  ? numeroParaReal(propertyData.outstandingBalance)
+                  : numeroParaReal(0)}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
 
         <Table>
           <TableHeader>
-            <TableHead>Patrimônio Total</TableHead>
+            <TableHead>Patrimônio Final</TableHead>
             <TableHead>Renda Mensal</TableHead>
             <TableHead>Lucro na operação</TableHead>
           </TableHeader>
           <TableBody>
             <TableRow>
               <TableCell className="text-black font-bold">
-                {numeroParaReal(calcPatrimônioTotal())}
+                {props.context === "financing"
+                  ? numeroParaReal(caseData.financing.totalFinalEquity)
+                  : numeroParaReal(caseData.inCash.totalFinalEquity)}
               </TableCell>
               <TableCell>{numeroParaReal(rendaMensal())}</TableCell>
               <TableCell>
-                {lucroNaOperaçãoReais() +
-                  "  (" +
-                  lucroNaOperação().toFixed(2) +
-                  "%)"}
+                {props.context === "financing"
+                  ? numeroParaReal(caseData.financing.totalProfit)
+                  : numeroParaReal(caseData.inCash.totalProfit)}
+                <p>
+                  {props.context === "financing"
+                    ? "(" +
+                      caseData.financing.totalProfitPercent.toFixed(2) +
+                      "%)"
+                    : "(" +
+                      caseData.inCash.totalProfitPercent.toFixed(2) +
+                      "%)"}
+                </p>
               </TableCell>
             </TableRow>
           </TableBody>

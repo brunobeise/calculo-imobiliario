@@ -1,4 +1,5 @@
 import FinanciamentoXAvista from "@/pages/financiamento/financiamentoxavista";
+import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoxavista/Context";
 
 export const financiamentoRoutes = [
   {
@@ -6,6 +7,10 @@ export const financiamentoRoutes = [
     href: "/financiamentoxavista",
     description:
       "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
-    element: <FinanciamentoXAvista />,
+    element: (
+      <FinanceOrInCashCaseDataProvider>
+        <FinanciamentoXAvista />
+      </FinanceOrInCashCaseDataProvider>
+    ),
   },
 ];

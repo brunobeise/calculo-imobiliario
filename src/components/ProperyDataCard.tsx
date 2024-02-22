@@ -6,10 +6,10 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import {
-  calcSaldoDevedor,
+  calcOutsadingBalance,
   calcinstallmentValue,
   calcValorizaçãoAluguel,
-  calcValorizaçãoImóvel,
+  calcPropertyValuation,
 } from "@/lib/calcs";
 import {
   Accordion,
@@ -24,6 +24,7 @@ import InputYears from "./ui/inputYears";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
+
   const {
     finalYear,
     monthlyIncome,
@@ -38,8 +39,6 @@ export default function PropertyDataCard() {
     propertyAppreciationRate,
     financingYears,
   } = propertyData;
-
-  // const [lockMap, setLockMap] = useState({ outstandingBalance: false });
 
   const [propertyValueField, setpropertyValueField] = useState(
     numeroParaReal(propertyValue)
@@ -85,7 +84,7 @@ export default function PropertyDataCard() {
       finalYear
     );
 
-    const propertyValueValorizado = calcValorizaçãoImóvel(
+    const propertyValueValorizado = calcPropertyValuation(
       propertyValue,
       propertyAppreciationRate,
       finalYear
@@ -97,7 +96,7 @@ export default function PropertyDataCard() {
       financingYears
     );
 
-    const outstandingBalance = calcSaldoDevedor(
+    const outstandingBalance = calcOutsadingBalance(
       propertyValue - downPayment,
       interestRate,
       financingYears,

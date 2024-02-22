@@ -1,4 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -15,6 +16,11 @@ import { useContext } from "react";
 
 interface TableRentAppreciationProps {
   annualCollection?: boolean;
+  title?: boolean;
+  colspan?: number;
+  text: "left" | "right" | "center";
+  border?: boolean;
+  maxHeight?: number;
 }
 
 export default function TableRentAppreciation(
@@ -47,30 +53,48 @@ export default function TableRentAppreciation(
   ]);
 
   return (
-    <Card className="w-full border-0">
-      {/* <CardTitle className="mt-2">
-        <h2 className="text-xl text-center ">Valorização Aluguel</h2>
-        <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
-      </CardTitle> */}
+    <Card
+      className={
+        `w-full ${
+          props.colspan
+            ? ` col-span-${props.colspan} md:col-span-${
+                props.colspan / 2
+              } lg:col-span-${Math.ceil(props.colspan / 3)} 
+           `
+            : ""
+        }` + ` ${props.border ? `` : ` border-0 `}`
+      }
+    >
+      {props.title && (
+        <CardTitle className="mt-5">
+          <h2 className="text-xl text-center ">Valorização Aluguel</h2>
+          <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
+        </CardTitle>
+      )}
       <CardContent>
-        <Table className="w-full text-left text-center">
-          <TableHeader>
-            <TableHead className="text-center">Ano</TableHead>
-            <TableHead className="text-center">Valor do Aluguel</TableHead>
-            {props.annualCollection && <TableHead>Arrecadação Anual</TableHead>}
-          </TableHeader>
-          <TableBody>
-            {rows?.map((item) => (
-              <TableRow key={item.ano}>
-                <TableCell>{item.ano}</TableCell>
-                <TableCell>{item.rentValue}</TableCell>
-                {props.annualCollection && (
-                  <TableCell>{item.arrecadacaoAnual}</TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <ScrollArea className={`h-[${props.maxHeight}px]`}>
+          <Table className={`w-full text-${props.text}`}>
+            <TableHeader>
+              <TableHead>Ano</TableHead>
+              <TableHead>Valor do Aluguel</TableHead>
+              {props.annualCollection && (
+                <TableHead>Arrecadação Anual</TableHead>
+              )}
+            </TableHeader>
+
+            <TableBody>
+              {rows?.map((item) => (
+                <TableRow key={item.ano}>
+                  <TableCell>{item.ano}</TableCell>
+                  <TableCell>{item.rentValue}</TableCell>
+                  {props.annualCollection && (
+                    <TableCell>{item.arrecadacaoAnual}</TableCell>
+                  )}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

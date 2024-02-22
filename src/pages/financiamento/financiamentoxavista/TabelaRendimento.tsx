@@ -5,7 +5,7 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHeadSticked,
+  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -14,7 +14,7 @@ import { numeroParaReal } from "@/lib/formatter";
 import { useContext, useEffect, useState } from "react";
 
 interface TabelaRendimentoProps {
-  context: "financiamento" | "avista";
+  context: "financing" | "inCash";
 }
 
 export default function TabelaRendimento(props: TabelaRendimentoProps) {
@@ -40,7 +40,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
     }[] = [];
 
     let capitalAcumulado =
-      props.context === "financiamento"
+      props.context === "financing"
         ? propertyData.personalBalance -
           propertyData.financingFees -
           propertyData.downPayment
@@ -57,12 +57,12 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
       }
 
       const montanteAluguel =
-        props.context === "financiamento"
+        props.context === "financing"
           ? Number((rentValue - propertyData.installmentValue).toFixed(2))
           : Number(rentValue.toFixed(2));
 
       let lucroMensal = 0;
-      if (capitalAcumulado >= 0 || props.context === "financiamento") {
+      if (capitalAcumulado >= 0 || props.context === "financing") {
         lucroMensal = Number(
           ((capitalAcumulado * propertyData.monthlyIncome) / 100).toFixed(2)
         );
@@ -100,37 +100,38 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
 
   return (
     <Card className="col-span-12 md:col-span-6 lg:col-span-4">
-      <CardTitle className="mt-2">
+      <CardTitle className="mt-5">
         <h2 className="text-xl text-center ">Investimento</h2>
         <p className="text-xs mb-5 text-center">
           rendimento {propertyData.monthlyIncome}% ao mês{" "}
         </p>
       </CardTitle>
       <CardContent>
-        <Table className="text-left">
-          <TableHeader className="flex">
-            <TableHeadSticked className="w-12">Mês</TableHeadSticked>
-            <TableHeadSticked className="w-[25%]">Capital</TableHeadSticked>
-            <TableHeadSticked className="w-[25%]">Rendimento</TableHeadSticked>
-            <TableHeadSticked className="w-[25%]">Aluguel</TableHeadSticked>
-            <TableHeadSticked className="w-[25%]">Valor FInal</TableHeadSticked>
-          </TableHeader>
-          <ScrollArea className="h-[300px]">
+        <ScrollArea className="h-[300px]">
+          <Table className="text-left">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Mês</TableHead>
+                <TableHead>Capital</TableHead>
+                <TableHead>Rendimento</TableHead>
+                <TableHead>Aporte</TableHead>
+                <TableHead>Valor FInal</TableHead>
+              </TableRow>
+            </TableHeader>
+
             <TableBody>
               {rows.map((item) => (
-                <TableRow className="flex" key={item.mes}>
-                  <TableCell className="w-12">{item.mes}</TableCell>
-                  <TableCell className="w-[25%]">{item.capital}</TableCell>
-                  <TableCell className="w-[25%]">{item.lucroMensal}</TableCell>
-                  <TableCell className="w-[25%]">
-                    {item.montanteAluguel}
-                  </TableCell>
-                  <TableCell className="w-[25%]">{item.valorFinal}</TableCell>
+                <TableRow key={item.mes}>
+                  <TableCell>{item.mes}</TableCell>
+                  <TableCell>{item.capital}</TableCell>
+                  <TableCell>{item.lucroMensal}</TableCell>
+                  <TableCell>{item.montanteAluguel}</TableCell>
+                  <TableCell>{item.valorFinal}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
-          </ScrollArea>
-        </Table>
+          </Table>
+        </ScrollArea>
       </CardContent>
     </Card>
   );

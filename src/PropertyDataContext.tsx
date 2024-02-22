@@ -21,6 +21,8 @@ export type PropertyData = {
   propertyAppreciationRate: number;
   outstandingBalance: number;
   interestRate: number;
+  totalProfit: number;
+  totalProfitPercent: number;
 };
 
 export type propertyDataContextType = {
@@ -44,10 +46,12 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
     monthlyIncome: 1,
     personalBalance: 180000,
     finalYear: 6,
-    investedEquity: 0,
+    investedEquity: 293863.08,
     propertyAppreciationRate: 8,
     interestRate: 5.4,
     outstandingBalance: 133211.89,
+    totalProfit: 265328.91,
+    totalProfitPercent: 147.4,
   });
 
   const setpropertyData = (

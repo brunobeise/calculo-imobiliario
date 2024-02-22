@@ -2,19 +2,20 @@
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/PropertyDataContext";
 import TabelaRendimento from "./TabelaRendimento";
-import TabelaValorizaçãoAluguel from "./TabelaValorizaçãoAluguel";
 import Conclusão from "./Conclusão";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { Button } from "@/components/ui/button";
 import { FileBarChart2 } from "lucide-react";
+import { caseDataContext } from "./Context";
+import { calcCaseData } from "./Calculator";
+import TableRentAppreciation from "@/components/shared/tables/TableRentAppreciation";
 
 export default function FinanciamentoXAvista() {
   const { propertyData } = useContext(propertyDataContext);
-  const [context, setContext] = useState<"financiamento" | "avista">(
-    "financiamento"
-  );
+  const [context, setContext] = useState<"financing" | "inCash">("financing");
   const [errors, setErrors] = useState<propertyDataError[]>([]);
+  const { caseData, setCaseData } = useContext(caseDataContext);
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
@@ -34,6 +35,9 @@ export default function FinanciamentoXAvista() {
       });
     }
 
+    setCaseData("inCash", calcCaseData("inCash", propertyData));
+    setCaseData("financing", calcCaseData("financing", propertyData));
+
     if (JSON.stringify(errors) !== JSON.stringify(newErrors)) {
       setErrors(newErrors);
     }
@@ -44,24 +48,38 @@ export default function FinanciamentoXAvista() {
       <Tabs defaultValue="Financiamento" className="w-full text-center">
         <TabsList>
           <TabsTrigger
-            onClick={() => setContext("financiamento")}
+            onClick={() => setContext("financing")}
             value="Financiamento"
           >
             Financiamento
           </TabsTrigger>
-          <TabsTrigger onClick={() => setContext("avista")} value="A Vista">
+          <TabsTrigger onClick={() => setContext("inCash")} value="A Vista">
             A Vista
           </TabsTrigger>
         </TabsList>
 
         {errors.length === 0 ? (
           <>
-            <div className="grid grid-cols-12 px-2 gap-3 justify-center mt-5">
+            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5">
               <Conclusão context={context} />
-              <TabelaValorizaçãoAluguel />
+
+              <TableRentAppreciation
+                maxHeight={300}
+                border
+                text="left"
+                annualCollection={true}
+                title={true}
+                colspan={12}
+              />
               <TabelaRendimento context={context} />
             </div>
             <Button
+              onClick={() =>
+                localStorage.setItem(
+                  "financingOrInCashCaseData",
+                  JSON.stringify(caseData)
+                )
+              }
               href="/financiamentoxavista/relatorio"
               className="my-5"
               text="Gerar Relatório Completo"

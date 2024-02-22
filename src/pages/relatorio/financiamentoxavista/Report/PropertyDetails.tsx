@@ -60,7 +60,7 @@ export default function PropertyDetails() {
       .filter((item) => item);
 
   return (
-    <div className=" px-12">
+    <div className=" px-12 min-h-[285mm]">
       {financeOrCashReportState.propertyDetails.active && (
         <>
           <h3 className="text-xl font-bold text-center leading-7 mb-5">
@@ -155,7 +155,7 @@ export default function PropertyDetails() {
           {financeOrCashReportState.appreciationOfRent.activeSecondary && (
             <div className="grid grid-cols-2 gap-2 mt-5">
               <TablePropertyAppreciation />
-              <TableRentAppreciation />
+              <TableRentAppreciation border={false} text="left" />
             </div>
           )}
         </>

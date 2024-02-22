@@ -2,6 +2,9 @@ import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
+import { numeroParaReal } from "@/lib/formatter";
+import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/Context";
+
 dayjs.locale("pt-br");
 
 export default function Cover() {
@@ -13,13 +16,17 @@ export default function Cover() {
     title,
     companyLogo1,
     createdAt,
-    subtitle,
     presentation,
     agentCRECI,
     agentName,
+    calculation,
     companyLogo2,
     coverType,
   } = financeOrCashReportState;
+
+  const caseData: FinanceOrCashData = JSON.parse(
+    localStorage.getItem("financingOrInCashCaseData") || ""
+  );
 
   return (
     <div className="text-center relative min-h-[297mm]">
@@ -28,9 +35,7 @@ export default function Cover() {
           {title.content}
         </h1>
       )}
-      {subtitle.active && title.active && (
-        <p className="leading-7 mb-10">{subtitle.content}</p>
-      )}
+
       {propertyPicture.active && coverType === 1 && (
         <div className="relative h-[500px] overflow-hidden">
           <img
@@ -58,6 +63,33 @@ export default function Cover() {
 
       {presentation.active && (
         <p className="text-lg leading-7 my-10">{presentation.content}</p>
+      )}
+
+      {calculation.active && (
+        <div className="grid grid-cols-2 my-10">
+          <div>
+            <p className="font-bold mb-2">Financiamento:</p>
+            <p> Lucro na operação: </p>
+            <p>
+              <span className="font-bold">
+                {numeroParaReal(caseData.financing.totalProfit)}
+              </span>
+
+              {" (" + caseData.financing.totalProfitPercent.toFixed(2) + "%)"}
+            </p>
+          </div>
+          <div>
+            <p className="font-bold">Á Vista:</p>
+            <p> Lucro na operação: </p>
+            <p>
+              <span className="font-bold">
+                {numeroParaReal(caseData.inCash.totalProfit)}
+              </span>
+
+              {" (" + caseData.inCash.totalProfitPercent.toFixed(2) + "%)"}
+            </p>
+          </div>
+        </div>
       )}
       {agentName.active && agentCRECI.active && (
         <>

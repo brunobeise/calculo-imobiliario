@@ -47,12 +47,15 @@ export default function TabelaValorizaçãoAluguel() {
         <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
       </CardTitle>
       <CardContent>
-        <Table className="w-full text-left">
+        <Table className="text-left">
           <TableHeader>
-            <TableHead>Ano</TableHead>
-            <TableHead>Valor do Aluguel</TableHead>
-            <TableHead>Arrecadação Anual</TableHead>
+            <TableRow>
+              <TableHead>Ano</TableHead>
+              <TableHead>Valor do Aluguel</TableHead>
+              <TableHead>Arrecadação Anual</TableHead>
+            </TableRow>
           </TableHeader>
+
           <TableBody>
             {rows?.map((item) => (
               <TableRow key={item.ano}>

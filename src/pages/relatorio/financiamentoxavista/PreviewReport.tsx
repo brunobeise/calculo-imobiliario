@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { Card } from "@/components/ui/card";
 import Cover from "./Report/Cover";
 import PropertyDetails from "./Report/PropertyDetails";
+import FinancingAnalysis from "./Report/FinancingAnalysis";
 
 interface PreviewReportProps {
   viewMap: {
@@ -20,6 +21,7 @@ const PreviewReport = forwardRef<HTMLDivElement, PreviewReportProps>(
         <div className="!bg-whitefull" ref={ref}>
           {viewMap.cover && <Cover />}
           {viewMap.propertyDetails && <PropertyDetails />}
+          {viewMap.finance && <FinancingAnalysis />}
         </div>
       </Card>
     );

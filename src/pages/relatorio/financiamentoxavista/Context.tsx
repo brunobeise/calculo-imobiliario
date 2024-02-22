@@ -32,6 +32,7 @@ export type FinanceOrCashReportContextType = {
   subtitle: InputReportElement;
   createdAt: InputReportElement;
   presentation: InputReportElement;
+  calculation: InputReportElement;
   agentName: InputReportElement;
   agentCRECI: InputReportElement;
   propertyDetails: InputReportElement;
@@ -81,8 +82,12 @@ export const FinanceOrCashReportProvider = ({
       },
       presentation: {
         content:
-          "Este documento foi meticulosamente preparado com o intuito de avaliar e comparar os impactos financeiros e os benefícios de longo prazo entre as duas principais abordagens de aquisição de um imóvel: financiamento e compra à vista.",
+          "A análise revela que, com foco no lucro final, o financiamento do imóvel se mostra a opção mais vantajosa em comparação com a compra à vista. Observa-se um retorno significativamente maior no cenário de financiamento. Esse resultado enfatiza a importância de considerar estratégias de financiamento como uma alternativa eficaz para maximizar os retornos financeiros em investimentos imobiliários.",
         active: true,
+      },
+      calculation: {
+        active: true,
+        content: "",
       },
       agentName: {
         active: true,
@@ -98,11 +103,8 @@ export const FinanceOrCashReportProvider = ({
       },
       preconditionsScenarios: {
         active: true,
-        content: `Reinvestimento Integral dos Rendimentos: Todos os rendimentos do aluguel e os retornos gerados serão completamente reinvestidos em produtos de renda fixa, sem exceções para despesas ou novos investimentos.
-
-Uniformidade das Taxas de Rendimento: As taxas de rendimento, valorização do aluguel e valorização do imóvel serão as mesmas em ambos os cenários para garantir uma comparação equitativa.
-
-Dedicação Exclusiva do Saldo para Investimento: Qualquer saldo remanescente será exclusivamente investido em renda fixa, mantendo os valores comparáveis e focados na análise.`,
+        content: `
+Reinvestimento Integral dos Rendimentos e Dedicação Exclusiva do Saldo para Investimento: Todos os rendimentos do aluguel e os retornos gerados serão completamente reinvestidos em produtos de renda fixa, sem exceções para despesas ou novos investimentos. Adicionalmente, qualquer saldo remanescente será exclusivamente dedicado ao investimento em renda fixa, mantendo os valores comparáveis e focados na análise.`,
       },
       appreciationOfRent: {
         active: true,

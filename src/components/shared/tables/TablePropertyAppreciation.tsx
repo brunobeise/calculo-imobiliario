@@ -27,16 +27,17 @@ export default function TablePropertyAppreciation() {
 
     let capitalAcumulado = propertyData.propertyValue;
 
-    for (let linha = 1; linha <= propertyData.finalYear; linha++) {
-      const lucroMensal = (capitalAcumulado * propertyData.interestRate) / 100;
-      const valorFinal = capitalAcumulado + lucroMensal;
+    for (let mes = 1; mes <= propertyData.finalYear * 12; mes++) {
+      const lucroMensal =
+        (capitalAcumulado * (propertyData.interestRate / 12)) / 100;
+      capitalAcumulado += lucroMensal;
 
-      rows.push({
-        ano: linha,
-        propertyValue: numeroParaReal(capitalAcumulado),
-      });
-
-      capitalAcumulado = valorFinal;
+      if (mes % 12 === 0) {
+        rows.push({
+          ano: mes / 12,
+          propertyValue: numeroParaReal(capitalAcumulado),
+        });
+      }
     }
 
     setRows(rows);
@@ -55,10 +56,12 @@ export default function TablePropertyAppreciation() {
         </p>
       </CardTitle> */}
       <CardContent>
-        <Table className="w-full text-center">
+        <Table className="w-full">
           <TableHeader>
-            <TableHead className="text-center">Ano</TableHead>
-            <TableHead className="text-center">Valor do Imóvel</TableHead>
+            <TableRow>
+              <TableHead>Ano</TableHead>
+              <TableHead>Valor do Imóvel</TableHead>
+            </TableRow>
           </TableHeader>
           <TableBody>
             {rows?.map((item) => (
