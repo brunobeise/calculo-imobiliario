@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import {
-  calcOutsadingBalance,
+  calcOutstandingBalance,
   calcinstallmentValue,
   calcValorizaçãoAluguel,
   calcPropertyValuation,
@@ -96,7 +96,7 @@ export default function PropertyDataCard() {
       financingYears
     );
 
-    const outstandingBalance = calcOutsadingBalance(
+    const outstandingBalance = calcOutstandingBalance(
       propertyValue - downPayment,
       interestRate,
       financingYears,

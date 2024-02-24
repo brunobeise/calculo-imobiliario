@@ -1,5 +1,5 @@
 import { PropertyData } from "@/PropertyDataContext";
-import { calcOutsadingBalance, calcPropertyValuation } from "@/lib/calcs";
+import { calcOutstandingBalance, calcPropertyValuation } from "@/lib/calcs";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -66,12 +66,15 @@ export default function CompleteAnalysisChart(props: {
       (capitalAcumulado + lucroMensal + montanteAluguel).toFixed(2)
     );
 
-    const outsadingBalance = calcOutsadingBalance(
-      propertyData.propertyValue - propertyData.downPayment,
-      propertyData.interestRate,
-      propertyData.financingYears,
-      i
-    );
+    const outsadingBalance =
+      props.context === "financing"
+        ? calcOutstandingBalance(
+            propertyData.propertyValue - propertyData.downPayment,
+            propertyData.interestRate,
+            propertyData.financingYears,
+            i
+          )
+        : 0;
 
     const propertyValue = calcPropertyValuation(
       propertyData.propertyValue,

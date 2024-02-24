@@ -26,19 +26,19 @@ export function calcTotalProfit(context: 'inCash' | 'financing', propertyData: P
     };
 
     const calcTotalInvestido = () => {
-        if (context === "financing")
-            return propertyData.personalBalance - (propertyData.downPayment + propertyData.financingFees);
-        else return 0;
+
+        return propertyData.personalBalance - calcCompraDoImovel()
+
     };
 
-    const calcOutsadingBalance = () => {
+    const calcOutstandingBalance = () => {
         if (context === "financing") return propertyData.outstandingBalance;
         else return 0;
     };
 
     const calcPatrimônioTotal = () => {
         if (context === "financing")
-            return propertyData.appreciatedPropertyValue + calcInvestedEquityFinal(context, propertyData) - calcOutsadingBalance();
+            return propertyData.appreciatedPropertyValue + calcInvestedEquityFinal(context, propertyData) - calcOutstandingBalance();
         else return propertyData.appreciatedPropertyValue + calcInvestedEquityFinal(context, propertyData)
     };
 
@@ -55,6 +55,13 @@ export function calcTotalProfit(context: 'inCash' | 'financing', propertyData: P
             calcPatrimônioTotal() - (calcCompraDoImovel() + calcTotalInvestido())
         );
     };
+
+    if (context === 'inCash') {
+        console.log('total investido: ' + calcTotalInvestido());
+        console.log('compra do imovel: ' + calcCompraDoImovel());
+        console.log((calcCompraDoImovel() + calcTotalInvestido()));
+
+    }
 
     return {
         value: lucroNaOperaçãoReais(),

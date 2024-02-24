@@ -23,7 +23,7 @@ export function calcinstallmentValue(valorFinanciado: number, interestRate: numb
 
 }
 
-export function calcOutsadingBalance(valorFinanciado: number, interestRate: number, totalAnosFinanciamento: number, pagamentosRealizados: number): number {
+export function calcOutstandingBalance(valorFinanciado: number, interestRate: number, totalAnosFinanciamento: number, pagamentosRealizados: number): number {
     const taxaMensal = interestRate / 100 / 12;
     const totalParcelas = totalAnosFinanciamento * 12;
 

@@ -40,16 +40,18 @@ export default function InitialEquityDivisionChart({
             let label = context.label || "";
 
             if (label === "Taxas") {
-              label = "Taxas do Financiamento: ";
+              label = "Taxas do Financiamento";
             }
 
             if (label === "Renda Fixa") {
-              label = "Valor investido em renda fixa: ";
+              label = "Valor investido em renda fixa";
             }
 
             if (label === "Entrada") {
-              label = "Entarda do Financiamento: ";
+              label = "Entarda do Financiamento";
             }
+
+            label += ": ";
 
             if (context.parsed.y !== null) {
               label += new Intl.NumberFormat("pt-BR", {

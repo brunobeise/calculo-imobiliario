@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import Cover from "./Report/Cover";
 import PropertyDetails from "./Report/PropertyDetails";
 import FinancingAnalysis from "./Report/FinancingAnalysis";
+import InCashAnalysis from "./Report/InCashAnalysis";
+import Comparative from "./Report/Comparative";
 
 interface PreviewReportProps {
   viewMap: {
@@ -22,6 +24,8 @@ const PreviewReport = forwardRef<HTMLDivElement, PreviewReportProps>(
           {viewMap.cover && <Cover />}
           {viewMap.propertyDetails && <PropertyDetails />}
           {viewMap.finance && <FinancingAnalysis />}
+          {viewMap.inCash && <InCashAnalysis />}
+          {viewMap.comparative && <Comparative />}
         </div>
       </Card>
     );
