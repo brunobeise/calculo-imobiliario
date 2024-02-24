@@ -16,7 +16,7 @@ export default function InCashAnalysis() {
   );
 
   return (
-    <div className="px-10">
+    <div className="px-10 min-h-[297mm]">
       <h3 className="text-2xl font-bold text-center leading-7 mb-5">
         Análise de Compra Á Vista:
       </h3>

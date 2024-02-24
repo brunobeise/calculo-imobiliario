@@ -20,7 +20,7 @@ const PreviewReport = forwardRef<HTMLDivElement, PreviewReportProps>(
   ({ viewMap }, ref) => {
     return (
       <Card className="lg:col-span-7 uw:col-span-6 border border-border !w-[210mm] !min-h-[297mm] w-full shadow p-5 light relative justify-content-start !bg-whitefull">
-        <div className="!bg-whitefull" ref={ref}>
+        <div className="!bg-whitefull grid grid-rows gap-y-2" ref={ref}>
           {viewMap.cover && <Cover />}
           {viewMap.propertyDetails && <PropertyDetails />}
           {viewMap.finance && <FinancingAnalysis />}

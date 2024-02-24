@@ -22,13 +22,13 @@ export default function FinancingAnalysis() {
   );
 
   return (
-    <div className="px-10">
+    <div className="px-10 min-h-[297mm]">
       <h3 className="text-2xl font-bold text-center leading-7 mb-5">
         Análise do Financiamento:
       </h3>
       <div className="grid grid-cols-2 mb-5 px-12">
         <div>
-          <p className="text-center">Divião incial do capital:</p>
+          <p className="text-center">Divisão incial do capital:</p>
           <InitialEquityDivisionChart
             labels={["Renda Fixa", "Entrada", "Taxas"]}
             values={[
@@ -39,7 +39,7 @@ export default function FinancingAnalysis() {
           />
         </div>
         <div>
-          <p className="text-center">Divião final do capital:</p>
+          <p className="text-center">Divisão final do capital:</p>
           <FinalEquityDivisionChart
             labels={["Valor do Imóvel", "Renda Fixa", "Saldo Devedor"]}
             values={[
