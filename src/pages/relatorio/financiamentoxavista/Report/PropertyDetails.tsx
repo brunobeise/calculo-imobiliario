@@ -60,7 +60,7 @@ export default function PropertyDetails() {
       .filter((item) => item);
 
   return (
-    <div className=" px-12 min-h-[285mm]">
+    <div className=" px-12 min-h-[283mm]">
       {financeOrCashReportState.propertyDetails.active && (
         <>
           <h3 className="text-xl font-bold text-center leading-7 mb-5">
@@ -142,7 +142,7 @@ export default function PropertyDetails() {
       )}
       {financeOrCashReportState.appreciationOfRent.active && (
         <>
-          <h3 className="text-xl font-bold text-center leading-7 mb-2 my-2">
+          <h3 className="text-xl font-bold text-center leading-7 mt-2">
             Valorização do aluguel e do imóvel:
           </h3>
           <p>
