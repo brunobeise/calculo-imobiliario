@@ -1,9 +1,9 @@
-import TablePropertyAppreciation from "@/components/shared/tables/TablePropertyAppreciation";
-import TableRentAppreciation from "@/components/shared/tables/TableRentAppreciation";
 import { numeroParaReal } from "@/lib/formatter";
 import { propertyDataContext } from "@/PropertyDataContext";
 import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
+import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
+import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 
 export default function PropertyDetails() {
   const { propertyData } = useContext(propertyDataContext);

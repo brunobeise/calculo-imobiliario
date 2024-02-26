@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/PropertyDataContext";
-import TabelaRendimento from "./TabelaRendimento";
 import Conclusão from "./Conclusão";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
@@ -10,8 +9,9 @@ import { FileBarChart2 } from "lucide-react";
 import { caseDataContext } from "./Context";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
+import TableMonthlyInvestment from "@/components/tables/TableMonthlyInvestment";
 
-export default function FinancingOrCash() {
+export default function IsolatedFinancingOrCash() {
   const { propertyData } = useContext(propertyDataContext);
   const [context, setContext] = useState<"financing" | "inCash">("financing");
   const [errors, setErrors] = useState<propertyDataError[]>([]);
@@ -19,6 +19,14 @@ export default function FinancingOrCash() {
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
+
+    if (propertyData.personalBalance < propertyData.propertyValue) {
+      newErrors.push({
+        title: "Saldo Pessoal incorreto.",
+        message:
+          "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
+      });
+    }
 
     if (propertyData.finalYear > 35 || propertyData.financingYears > 35) {
       newErrors.push({
@@ -63,7 +71,8 @@ export default function FinancingOrCash() {
                 title={true}
                 colspan={12}
               />
-              <TabelaRendimento context={context} />
+
+              <TableMonthlyInvestment context={context} border colspan={12} />
             </div>
             <Button
               onClick={() =>

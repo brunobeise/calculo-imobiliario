@@ -1,12 +1,8 @@
 import { PropertyData } from "@/PropertyDataContext";
 import { calcOutstandingBalance } from "@/lib/calcs";
 
-
 export function calcCaseData(context: 'inCash' | 'financing', propertyData: PropertyData) {
     const totalProfit = calcTotalProfit(context, propertyData)
-
-    console.log(calcBreakEvenPoint('inCash', propertyData));
-
 
     return {
         investedEquity: calcInvestedEquity(context, propertyData),
@@ -14,7 +10,7 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
         totalProfitPercent: totalProfit.percent,
         totalFinalEquity: totalProfit.finalEquity,
         investedEquityFinal: calcInvestedEquityFinal(context, propertyData),
-        breakEven: calcBreakEvenPoint(context, propertyData)
+        breakEven: 0
     };
 }
 
@@ -61,7 +57,6 @@ export function calcTotalProfit(context: 'inCash' | 'financing', propertyData: P
             calcPatrimônioTotal() - (calcCompraDoImovel() + calcTotalInvestido())
         );
     };
-
 
 
     return {
@@ -165,4 +160,7 @@ export function calcBreakEvenPoint(context: 'inCash' | 'financing', propertyData
 
 
 }
+
+
+
 

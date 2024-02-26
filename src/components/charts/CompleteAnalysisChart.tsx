@@ -103,8 +103,6 @@ export default function CompleteAnalysisChart(props: {
     },
   };
 
-  console.log(values.map((v) => v.propertyValue));
-
   const data = {
     labels: values.map((_v, i) => i),
     datasets: [

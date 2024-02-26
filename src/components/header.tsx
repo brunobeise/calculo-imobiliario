@@ -11,17 +11,13 @@ import { Link, useLocation } from "react-router-dom";
 import { forwardRef, useEffect } from "react";
 import { Home } from "lucide-react";
 import { Button } from "./ui/button";
-import { relatorioRoutes } from "@/routes/relatorios";
-import { auxiliarRoutes } from "@/routes/auxiliar";
-import { financiamentoRoutes } from "@/routes/financiamento";
+import { financingRoutes } from "@/routes/Financiamento";
+import { auxiliarRoutes } from "@/routes/Auxiliar";
+import { relatorioRoutes } from "@/routes/Relatorios";
 
 export default function Header() {
   const location = useLocation();
-  const routes = [
-    ...financiamentoRoutes,
-    ...auxiliarRoutes,
-    ...relatorioRoutes,
-  ];
+  const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -44,7 +40,7 @@ export default function Header() {
               </NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-1 ">
-                  {financiamentoRoutes.map((component) => (
+                  {financingRoutes.map((component) => (
                     <Link
                       className="pg-primary"
                       key={component.title}

@@ -2,9 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import PropertyDataCard from "./components/ProperyDataCard";
 
-import { financiamentoRoutes } from "./routes/financiamento";
-import { auxiliarRoutes } from "./routes/auxiliar";
-import { relatorioRoutes } from "./routes/relatorios";
+import { financingRoutes } from "./routes/Financiamento";
+import { auxiliarRoutes } from "./routes/Auxiliar";
+import { relatorioRoutes } from "./routes/Relatorios";
 
 export interface Route {
   title: string;
@@ -14,11 +14,7 @@ export interface Route {
 }
 
 export default function App() {
-  const routes = [
-    ...financiamentoRoutes,
-    ...auxiliarRoutes,
-    ...relatorioRoutes,
-  ];
+  const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
 
   return (
     <BrowserRouter>

@@ -1,4 +1,4 @@
-import RelatorioFinanciamentoXAvista from "@/pages/relatorio/financiamentoxavista";
+import RelatorioFinanciamentoXAvista from "@/pages/financiamento/financiamentoxavista/report";
 
 export const relatorioRoutes = [
   {

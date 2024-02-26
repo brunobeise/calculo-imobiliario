@@ -20,7 +20,7 @@ export type FinanceOrCashData = {
     totalProfitPercent: number;
     investedEquity: number;
     totalFinalEquity: number;
-    breakEven?: number;
+    breakEven: number;
   };
 };
 
@@ -32,7 +32,7 @@ export type caseDataContextType = {
   ) => void;
 };
 
-export const FinanceOrInCashCaseDataProvider = ({
+export const IsolatedFinanceOrInCashCaseDataProvider = ({
   children,
 }: {
   children: ReactNode;
@@ -44,7 +44,7 @@ export const FinanceOrInCashCaseDataProvider = ({
       investedEquity: 87255.99,
       investedEquityFinal: 0,
       totalFinalEquity: 372892,
-      breakEven: 66,
+      breakEven: 38,
     },
     financing: {
       investedEquity: 293863.08,
@@ -52,7 +52,7 @@ export const FinanceOrInCashCaseDataProvider = ({
       totalProfitPercent: 147.4,
       investedEquityFinal: 0,
       totalFinalEquity: 425637,
-      breakEven: 66,
+      breakEven: 38,
     },
   });
 

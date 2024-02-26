@@ -1,10 +1,10 @@
 import { forwardRef } from "react";
 import { Card } from "@/components/ui/card";
-import Cover from "./Report/Cover";
-import PropertyDetails from "./Report/PropertyDetails";
-import FinancingAnalysis from "./Report/FinancingAnalysis";
-import InCashAnalysis from "./Report/InCashAnalysis";
-import Comparative from "./Report/Comparative";
+import Cover from "./preview/Cover";
+import PropertyDetails from "./preview/PropertyDetails";
+import FinancingAnalysis from "./preview/FinancingAnalysis";
+import InCashAnalysis from "./preview/InCashAnalysis";
+import Comparative from "./preview/Comparative";
 
 interface PreviewReportProps {
   viewMap: {

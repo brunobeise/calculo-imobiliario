@@ -53,7 +53,10 @@ export default function Conclusão(props: ConclusãoProps) {
   };
 
   return (
-    <Card className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center">
+    <Card
+      id="conclusao"
+      className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none"
+    >
       <CardTitle className="mt-5">
         <h2 className="text-xl text-center mb-2">Conclusão</h2>
       </CardTitle>
@@ -61,9 +64,9 @@ export default function Conclusão(props: ConclusãoProps) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center">Compra do imóvel</TableHead>
-              <TableHead className="text-center">Aplicação</TableHead>
-              <TableHead className="text-center">Total</TableHead>
+              <TableHead>Compra do imóvel</TableHead>
+              <TableHead>Aplicação</TableHead>
+              <TableHead>Total</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -83,9 +86,9 @@ export default function Conclusão(props: ConclusãoProps) {
 
         <Table>
           <TableHeader>
-            <TableHead className="text-center">Valor do imóvel</TableHead>
-            <TableHead className="text-center">Total Aplicação</TableHead>
-            <TableHead className="text-center">Saldo Devedor</TableHead>
+            <TableHead>Valor do imóvel</TableHead>
+            <TableHead>Total Aplicação</TableHead>
+            <TableHead>Saldo Devedor</TableHead>
           </TableHeader>
           <TableBody>
             <TableRow>
@@ -106,9 +109,9 @@ export default function Conclusão(props: ConclusãoProps) {
 
         <Table>
           <TableHeader>
-            <TableHead className="text-center">Patrimônio Final</TableHead>
-            <TableHead className="text-center">Renda Mensal</TableHead>
-            <TableHead className="text-center">Lucro na operação</TableHead>
+            <TableHead>Patrimônio Final</TableHead>
+            <TableHead>Renda Mensal</TableHead>
+            <TableHead>Lucro na operação</TableHead>
           </TableHeader>
           <TableBody>
             <TableRow>
@@ -135,13 +138,6 @@ export default function Conclusão(props: ConclusãoProps) {
             </TableRow>
           </TableBody>
         </Table>
-
-        {caseData[props.context].breakEven && (
-          <p className="text-xs">
-            *Break-even no mes{" "}
-            <strong> {caseData[props.context].breakEven} </strong>
-          </p>
-        )}
       </CardContent>
     </Card>
   );

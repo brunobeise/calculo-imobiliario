@@ -131,6 +131,10 @@ export default function PropertyDataCard() {
 
   if (isException) return <></>;
 
+  const excludeInputByRoute = (routes: string[]) => {
+    return !location.pathname.includes(routes.join(" "));
+  };
+
   return (
     <>
       <Accordion
@@ -152,16 +156,19 @@ export default function PropertyDataCard() {
                   </CardTitle>
 
                   <CardContent className="grid grid-cols-1  gap-6">
-                    <div>
-                      <Label htmlFor="propertyValue">Saldo Disponível:</Label>
-                      <Input
-                        onChange={handleChangeReal}
-                        type="text"
-                        id="personalBalance"
-                        value={saldoPessoalField}
-                        required
-                      />
-                    </div>
+                    {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
+                      <div>
+                        <Label htmlFor="propertyValue">Saldo Disponível:</Label>
+                        <Input
+                          onChange={handleChangeReal}
+                          type="text"
+                          id="personalBalance"
+                          value={saldoPessoalField}
+                          required
+                        />
+                      </div>
+                    )}
+
                     <div>
                       <Label htmlFor="propertyValue">Valor do imóvel:</Label>
                       <Input

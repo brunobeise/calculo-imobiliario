@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import ConfigReport from "./Config/ConfigReport";
 import { FinanceOrCashReportProvider } from "./Context";
 
 import { useReactToPrint } from "react-to-print";
@@ -10,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import PreviewReport from "./PreviewReport";
 import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoxavista/Context";
+import ConfigReport from "./config/ConfigReport";
 
 export default function RelatorioFinanciamentoXAvista() {
   const componentRef = useRef<HTMLDivElement>(null);
