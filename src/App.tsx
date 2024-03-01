@@ -1,7 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import PropertyDataCard from "./components/ProperyDataCard";
-
 import { financingRoutes } from "./routes/Financiamento";
 import { auxiliarRoutes } from "./routes/Auxiliar";
 import { relatorioRoutes } from "./routes/Relatorios";

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InputReportElement } from "@/pages/relatorio/financiamentoxavista/Context";
+import { InputReportElement } from "@/pages/financiamento/financiamentoxavista/report/Context";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
