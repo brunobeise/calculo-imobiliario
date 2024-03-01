@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import PropertyDataCard from "./components/ProperyDataCard";
-import { financingRoutes } from "./routes/Financiamento";
-import { auxiliarRoutes } from "./routes/Auxiliar";
-import { relatorioRoutes } from "./routes/Relatorios";
+import { financingRoutes } from "./routes/financiamento";
+import { auxiliarRoutes } from "./routes/auxiliar";
+import { relatorioRoutes } from "./routes/relatorios";
 
 export interface Route {
   title: string;

@@ -11,9 +11,10 @@ import { Link, useLocation } from "react-router-dom";
 import { forwardRef, useEffect } from "react";
 import { Home } from "lucide-react";
 import { Button } from "./ui/button";
-import { financingRoutes } from "@/routes/Financiamento";
-import { auxiliarRoutes } from "@/routes/Auxiliar";
-import { relatorioRoutes } from "@/routes/Relatorios";
+import { financingRoutes } from "@/routes/financiamento";
+import { auxiliarRoutes } from "@/routes/auxiliar";
+import { relatorioRoutes } from "@/routes/relatorios";
+
 
 export default function Header() {
   const location = useLocation();
