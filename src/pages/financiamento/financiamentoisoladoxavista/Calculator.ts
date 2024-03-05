@@ -10,7 +10,7 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
         totalProfitPercent: totalProfit.percent,
         totalFinalEquity: totalProfit.finalEquity,
         investedEquityFinal: calcInvestedEquityFinal(context, propertyData),
-        breakEven: 0
+        breakEven: calcBreakEvenPoint(context, propertyData)
     };
 }
 
@@ -110,53 +110,54 @@ export function calcInvestedEquityFinal(context: 'inCash' | 'financing', propert
 }
 
 export function calcBreakEvenPoint(context: 'inCash' | 'financing', propertyData: PropertyData) {
-    const capitalInicial = context === "financing"
+    const initialCapital = context === "financing"
         ? propertyData.personalBalance -
         propertyData.financingFees -
         propertyData.downPayment
         : propertyData.personalBalance - propertyData.propertyValue;
 
-    let capitalAcumulado = capitalInicial
+    let accumulatedCapital = initialCapital;
 
     let rentValue = propertyData.initialRentValue;
 
-    for (let mes = 1; mes <= propertyData.finalYear * 12; mes++) {
-        const indiceAno = Math.floor((mes - 1) / 12);
+    for (let month = 1; month <= propertyData.finalYear * 12; month++) {
+        const yearIndex = Math.floor((month - 1) / 12);
 
-        if (mes % 12 === 1 || mes === 1) {
-            rentValue = propertyData.rentValue![indiceAno];
+        if (month % 12 === 1 || month === 1) {
+            rentValue = propertyData.rentValue![yearIndex];
         }
 
-        const montanteAluguel =
+        const rentalAmount =
             context === "financing"
                 ? Number((rentValue - propertyData.installmentValue))
                 : Number(rentValue);
 
-        let lucroMensal = 0;
-        if (capitalAcumulado >= 0 || context === "financing") {
-            lucroMensal = Number(
-                ((capitalAcumulado * propertyData.monthlyIncome) / 100)
+        let monthlyProfit = 0;
+        if (accumulatedCapital >= 0 || context === "financing") {
+            monthlyProfit = Number(
+                ((accumulatedCapital * propertyData.monthlyIncome) / 100)
             );
         }
 
-        const valorFinal = Number(
-            (capitalAcumulado + lucroMensal + montanteAluguel)
+        const finalValue = Number(
+            (accumulatedCapital + monthlyProfit + rentalAmount)
         );
 
-        const saldoDevedor = calcOutstandingBalance(
-            propertyData.propertyValue - propertyData.downPayment, // valor financiado
+        const outstandingBalance = calcOutstandingBalance(
+            propertyData.propertyValue - propertyData.downPayment, // financed amount
             propertyData.interestRate,
             propertyData.financingYears,
-            mes - 1
+            month - 1
         );
 
-        if ((valorFinal - capitalInicial) > saldoDevedor) {
-            return mes
+        if ((finalValue - initialCapital) > outstandingBalance) {
+            return month;
         }
 
 
-        capitalAcumulado = valorFinal;
+        accumulatedCapital = finalValue;
     }
+
 
 
 }

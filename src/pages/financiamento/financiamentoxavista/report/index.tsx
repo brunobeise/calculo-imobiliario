@@ -14,11 +14,12 @@ import ConfigReport from "./config/ConfigReport";
 export default function RelatorioFinanciamentoXAvista() {
   const componentRef = useRef<HTMLDivElement>(null);
   const [viewMap, setViewMap] = useState({
-    cover: true,
-    propertyDetails: true,
-    finance: true,
-    inCash: true,
-    comparative: true,
+    cover: false,
+    propertyDetails: false,
+    finance: false,
+    inCash: false,
+    comparative: false,
+    conclusion: true,
   });
 
   const changeViewMap = (key: keyof typeof viewMap) => {
@@ -83,6 +84,13 @@ export default function RelatorioFinanciamentoXAvista() {
                     onCheckedChange={() => changeViewMap("comparative")}
                   />
                   <Label className="ms-1">Comparativo</Label>
+                </div>
+                <div>
+                  <Checkbox
+                    checked={viewMap.conclusion}
+                    onCheckedChange={() => changeViewMap("conclusion")}
+                  />
+                  <Label className="ms-1">Conclusão</Label>
                 </div>
               </div>
             </div>
