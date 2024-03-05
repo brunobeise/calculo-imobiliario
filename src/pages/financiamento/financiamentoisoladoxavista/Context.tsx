@@ -12,7 +12,7 @@ export type FinanceOrCashData = {
     investedEquity: number;
     investedEquityFinal: number;
     totalFinalEquity: number;
-    breakEven: number;
+    breakEven?: number;
   };
   financing: {
     investedEquityFinal: number;
@@ -20,7 +20,7 @@ export type FinanceOrCashData = {
     totalProfitPercent: number;
     investedEquity: number;
     totalFinalEquity: number;
-    breakEven: number;
+    breakEven?: number;
   };
 };
 
