@@ -1,6 +1,5 @@
 import { PropertyData } from "@/PropertyDataContext";
 import { calcOutstandingBalance } from "@/lib/calcs";
-import { numeroParaReal } from "@/lib/formatter";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -105,14 +104,6 @@ export function BreakEvenChart({
       },
       legend: {
         position: "top" as const,
-      },
-      tooltip: {
-        callbacks: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          label: function (context: any) {
-            return "Montante do mês: " + numeroParaReal(context.parsed.y);
-          },
-        },
       },
     },
   };

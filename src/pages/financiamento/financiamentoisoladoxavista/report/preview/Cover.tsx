@@ -79,7 +79,7 @@ export default function Cover() {
             </p>
           </div>
           <div>
-            <p className="font-bold">Á Vista:</p>
+            <p className="font-bold">À Vista:</p>
             <p> Lucro na operação: </p>
             <p>
               <span className="font-bold">

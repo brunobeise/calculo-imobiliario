@@ -62,7 +62,9 @@ export default function Cover() {
       )}
 
       {presentation.active && (
-        <p className="text-lg leading-7 my-10">{presentation.content}</p>
+        <p className=" text-justify px-10 leading-7 my-10">
+          {presentation.content}
+        </p>
       )}
 
       {calculation.active && (
@@ -79,7 +81,7 @@ export default function Cover() {
             </p>
           </div>
           <div>
-            <p className="font-bold">Á Vista:</p>
+            <p className="font-bold mb-2">À Vista:</p>
             <p> Lucro na operação: </p>
             <p>
               <span className="font-bold">
@@ -101,9 +103,7 @@ export default function Cover() {
               CRECI: <span className="font-bold"> {agentCRECI.content} </span>{" "}
             </p>
             {createdAt.active && (
-              <p className="mt-2">
-                {dayjs(createdAt.content).format("DD [de] MMMM [de] YYYY")}
-              </p>
+              <p>{dayjs(createdAt.content).format("DD [de] MMMM [de] YYYY")}</p>
             )}
           </div>
         </>

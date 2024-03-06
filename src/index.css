@@ -21,6 +21,10 @@ h1 {
   color: #103759;
 }
 
+.font-light {
+  font-family: "Rawline Light", sans-serif;
+}
+
 strong {
   font-family: "Rawline Bold", sans-serif;
 }

@@ -122,7 +122,7 @@ export function ComparativeMonthlyInvestmentGrowthChart({
     ),
     datasets: [
       {
-        label: "Aluguel + Rendimento - Parcela (Á Vista)",
+        label: "Aluguel + Rendimento - Parcela (À Vista)",
         data: inCashValues,
         borderColor: "#0067c2",
         backgroundColor: "#0067c2",

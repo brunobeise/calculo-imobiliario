@@ -127,7 +127,7 @@ export default function ComparativeTotalEquityGrowth({
     ),
     datasets: [
       {
-        label: "Patrimônio (Á Vista)",
+        label: "Patrimônio (À Vista)",
         data: inCashValues,
         borderColor: "#0073d7",
         backgroundColor: "#0073d7",

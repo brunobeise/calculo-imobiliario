@@ -46,20 +46,23 @@ export default function Comparative() {
         </div>
         <div className="min-h-[280mm]">
           <div>
-            <h3 className="text-xl font-bold text-center leading-7 mb-5">
+            <h3 className="text-2xl font-bold text-center leading-7 mb-5">
               Ponto de equilíbrio:
             </h3>
-            <p>
-              O ponto de equilíbrio é como um marco financeiro onde você não
-              está mais perdendo nem ganhando dinheiro - está no zero a zero. No
-              caso de um imóvel, é quando o lucro obtido, seja por aluguel ou
-              por investimento do dinheiro que poderia ter ido para uma compra à
-              vista, iguala exatamente o valor que foi gasto ou ainda se deve
-              pelo imóvel. A partir desse ponto, você começa a ganhar dinheiro.
+            <p className="text-justify">
+              O ponto de equilíbrio é alcançado quando seus ganhos, seja do
+              aluguel ou de investimentos, cobrem totalmente o montante
+              investido ou devido no financiamento do imóvel. Este marco indica
+              que você não tem mais prejuízo; qualquer rendimento adicional é
+              considerado lucro. Na prática, no financiamento, isso acontece
+              quando o lucro do aluguel mais os rendimentos acumulados são
+              suficientes para liquidar as parcelas pendentes do empréstimo,
+              fazendo com que todo ganho subsequente contribua diretamente para
+              o aumento do seu patrimônio.
             </p>
           </div>
           <div className="relative my-10">
-            <h3 className="text-2xl font-bold text-center leading-7 mt-3 mb-1">
+            <h3 className="text-xl font-bold text-center leading-7 mt-3 mb-1">
               Ponto de equilíbrio do financiamento:
             </h3>
             <BreakEvenChart context="financing" propertyData={propertyData} />
@@ -69,12 +72,11 @@ export default function Comparative() {
               )}
             </p>
           </div>
-          <p>
-            No financiamento, esse ponto chega quando o dinheiro que você recebe
-            de aluguel do imóvel que você comprou com financiamento é suficiente
-            para pagar todas as parcelas restantes. Você alcança um equilíbrio
-            entre o custo do empréstimo e o retorno, e cada centavo a partir daí
-            é lucro.
+          <p className="text-justify">
+            Ao chegar no mês 66, os rendimentos obtidos a partir do seu
+            investimento inicial, juntamente com os lucros acumulados do
+            aluguel, atingiram um ponto crucial: eles são agora suficientes para
+            quitar completamente o saldo devedor do seu financiamento.
           </p>
         </div>
       </div>

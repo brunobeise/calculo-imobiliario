@@ -51,7 +51,7 @@ export default function FinancingAnalysis() {
         </div>
       </div>
       <div className="px-3">
-        <p className="text-center text-sm">
+        <p className="text-justify text-sm ">
           Todo mês, somamos o aluguel e os rendimentos da renda fixa para pagar
           as parcelas. O que sobra é reinvestido. Com o aumento periódico do
           aluguel e parcelas fixas, o montante na renda fixa tende a crescer ao
@@ -63,7 +63,7 @@ export default function FinancingAnalysis() {
             context="financing"
           />
         </div>
-        <p className="text-center text-sm mt-5">Análise completa:</p>
+        <p className="text-justify text-sm mt-5">Análise completa:</p>
         <div className="px-8">
           <CompleteAnalysisChart
             propertyData={propertyData}
