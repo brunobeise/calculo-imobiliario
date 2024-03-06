@@ -22,7 +22,7 @@ export default function FinancingAnalysis() {
   );
 
   return (
-    <div className="px-10 min-h-[297mm]">
+    <div className="px-10 pageBreakAfter">
       <h3 className="text-2xl font-bold text-center leading-7 mb-5">
         Análise do Financiamento:
       </h3>

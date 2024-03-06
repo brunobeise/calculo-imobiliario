@@ -29,7 +29,7 @@ export default function Cover() {
   );
 
   return (
-    <div className="text-center relative min-h-[297mm]">
+    <div className="text-center relative pageBreakAfter">
       {title.active && (
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary my-5">
           {title.content}

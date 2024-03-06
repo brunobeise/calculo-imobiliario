@@ -60,10 +60,10 @@ export default function PropertyDetails() {
       .filter((item) => item);
 
   return (
-    <div className=" px-12 min-h-[283mm]">
+    <div className="px-12 pageBreakAfter">
       {financeOrCashReportState.propertyDetails.active && (
         <>
-          <h3 className="text-xl font-bold text-center leading-7 mb-2">
+          <h3 className="text-xl font-bold text-center leading-7 mb-2 mt-5">
             Dados considerados para o comparativo:
           </h3>
 
@@ -153,7 +153,7 @@ export default function PropertyDetails() {
             precisa do impacto financeiro ao longo do tempo.
           </p>
           {financeOrCashReportState.appreciationOfRent.activeSecondary && (
-            <div className="grid grid-cols-2 gap-2 mt-5">
+            <div className="grid grid-cols-2 gap-2 mt-5 ">
               <TablePropertyAppreciation />
               <TableRentAppreciation border={false} text="left" />
             </div>

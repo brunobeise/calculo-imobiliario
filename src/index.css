@@ -25,6 +25,14 @@ h1 {
   font-family: "Rawline Light", sans-serif;
 }
 
+.pageBreakAfter {
+  padding-left: 50px;
+  padding-right: 50px;
+  page-break-after: always;
+  height: 290mm !important;
+  overflow: hidden;
+}
+
 strong {
   font-family: "Rawline Bold", sans-serif;
 }

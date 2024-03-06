@@ -49,8 +49,7 @@ export const FinanceOrCashReportProvider = ({
     useState<FinanceOrCashReportContextType>({
       coverType: 1,
       propertyPicture: {
-        content:
-          "https://k1planejamento.com.br/wp-content/uploads/2023/04/7.jpg",
+        content: "https://i.imgur.com/gyLifQC.jpg",
         active: true,
       },
       companyLogo1: {

@@ -16,20 +16,20 @@ export default function InCashAnalysis() {
   );
 
   return (
-    <div className="px-10 min-h-[297mm]">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+    <div className="px-10 pageBreakAfter">
+      <h3 className="text-2xl font-bold text-center leading-7 my-5">
         Análise de Compra À Vista:
       </h3>
-      <div className="grid grid-cols-2 mb-5 px-12">
+      <div className="grid grid-cols-2 mb-5 px-16">
         <div>
-          <p className="text-center">Divião incial do capital:</p>
+          <p className="text-center">Divisão incial do capital:</p>
           <InitialEquityDivisionChart
             labels={["Compra do Imóvel"]}
             values={[propertyValue]}
           />
         </div>
         <div>
-          <p className="text-center">Divião final do capital:</p>
+          <p className="text-center">Divisão final do capital:</p>
           <FinalEquityDivisionChart
             labels={["Valor do Imóvel", "Renda Fixa"]}
             values={[

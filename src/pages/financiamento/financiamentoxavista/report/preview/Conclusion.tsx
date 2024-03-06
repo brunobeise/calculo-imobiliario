@@ -18,8 +18,8 @@ export default function Conclusion() {
   );
 
   return (
-    <div className="px-12 min-h-[280mm]">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+    <div className="px-12 pageBreakAfter">
+      <h3 className="text-2xl font-bold text-center leading-7 my-5">
         Conclusão
       </h3>
       <div className="text-justify">
@@ -149,7 +149,7 @@ export default function Conclusion() {
           caminho para um patrimônio maior.
         </p>
       </div>
-      <div className="absolute bottom-[4rem] left-[50%] translate-x-[-50%] text-primary ">
+      <div className=" mt-72 text-primary ">
         <div className="flex items-center gap-x-5">
           <div className="w-[80px] h-[80px]">
             <img

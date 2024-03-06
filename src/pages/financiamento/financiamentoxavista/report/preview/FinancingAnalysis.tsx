@@ -22,8 +22,8 @@ export default function FinancingAnalysis() {
   );
 
   return (
-    <div className="px-10 min-h-[297mm]">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+    <div className="px-10 pageBreakAfter">
+      <h3 className="text-2xl font-bold text-center leading-7 mb-5 mt-5">
         Análise do Financiamento:
       </h3>
       <div className="grid grid-cols-2 mb-5 px-12">
@@ -63,7 +63,9 @@ export default function FinancingAnalysis() {
             context="financing"
           />
         </div>
-        <p className="text-justify text-sm mt-5">Análise completa:</p>
+        <p className="text-justify text-center text-sm mt-5">
+          Análise completa:
+        </p>
         <div className="px-8">
           <CompleteAnalysisChart
             propertyData={propertyData}

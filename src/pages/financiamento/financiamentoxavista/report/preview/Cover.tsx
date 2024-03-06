@@ -29,9 +29,9 @@ export default function Cover() {
   );
 
   return (
-    <div className="text-center relative min-h-[297mm]">
+    <div className="text-center relative pageBreakAfter">
       {title.active && (
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary my-5">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary">
           {title.content}
         </h1>
       )}
@@ -43,16 +43,16 @@ export default function Cover() {
             src={propertyPicture.content}
           />
           <img
-            className="absolute top-[1rem] right-[1rem] w-24"
+            className="absolute top-[4rem] right-[1rem] w-24"
             src={companyLogo1.content}
           />
           {propertyName.active && (
             <div
-              className={"absolute top-[1rem] left-[1rem] w-[10rem] text-left"}
+              className={"absolute top-[3rem] left-[1rem] w-[10rem] text-left"}
             >
               <h1
                 style={{ color: propertyName.color }}
-                className="scroll-m-20 text-3xl font-extrabold tracking-tight "
+                className="text-3xl font-extrabold tracking-tight "
               >
                 {propertyName.content}
               </h1>
@@ -62,9 +62,7 @@ export default function Cover() {
       )}
 
       {presentation.active && (
-        <p className=" text-justify px-10 leading-7 my-10">
-          {presentation.content}
-        </p>
+        <p className=" text-justify leading-7">{presentation.content}</p>
       )}
 
       {calculation.active && (
@@ -109,7 +107,7 @@ export default function Cover() {
         </>
       )}
       <img
-        className="w-[20%] ms-[50%] translate-x-[-50%] mt-20 absolute bottom-[5rem]"
+        className="w-[20%] ms-[50%] translate-x-[-50%] mt-16"
         src={companyLogo2.content}
       />
     </div>

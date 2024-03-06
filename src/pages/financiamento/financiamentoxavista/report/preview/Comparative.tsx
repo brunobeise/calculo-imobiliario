@@ -14,7 +14,7 @@ export default function Comparative() {
 
   return (
     <div className="px-12 text-center">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+      <h3 className="text-2xl font-bold text-center leading-7 my-5">
         Comparativo:
       </h3>
       <div className="">
@@ -46,7 +46,7 @@ export default function Comparative() {
         </div>
         <div className="min-h-[280mm]">
           <div>
-            <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+            <h3 className="text-2xl font-bold text-center leading-7 my-5">
               Ponto de equilíbrio:
             </h3>
             <p className="text-justify">
@@ -62,9 +62,6 @@ export default function Comparative() {
             </p>
           </div>
           <div className="relative my-10">
-            <h3 className="text-xl font-bold text-center leading-7 mt-3 mb-1">
-              Ponto de equilíbrio do financiamento:
-            </h3>
             <BreakEvenChart context="financing" propertyData={propertyData} />
             <p className="absolute bottom-[10%] right-[5%] font-bold text-xl">
               {caseData.financing.breakEven && (
