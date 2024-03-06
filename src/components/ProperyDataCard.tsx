@@ -7,7 +7,7 @@ import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import {
   calcOutstandingBalance,
-  calcinstallmentValue,
+  calcInstallmentValue,
   calcValorizaçãoAluguel,
   calcPropertyValuation,
 } from "@/lib/calcs";
@@ -90,7 +90,7 @@ export default function PropertyDataCard() {
       finalYear
     );
 
-    const installmentValue = calcinstallmentValue(
+    const installmentValue = calcInstallmentValue(
       propertyValue - downPayment,
       interestRate,
       financingYears
@@ -302,7 +302,7 @@ export default function PropertyDataCard() {
                   </div>
 
                   <div className="relative">
-                    <Label htmlFor="interestRate">CET financiamento</Label>
+                    <Label htmlFor="interestRate">Juros financiamento</Label>
                     <InputPercent
                       onChangeValue={(v) => {
                         if (v > 0) setpropertyData("interestRate", v);

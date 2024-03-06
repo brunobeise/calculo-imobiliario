@@ -5,9 +5,6 @@ import { calcOutstandingBalance } from "@/lib/calcs";
 export function calcCaseData(context: 'inCash' | 'financing', propertyData: PropertyData) {
     const totalProfit = calcTotalProfit(context, propertyData)
 
-    console.log(calcBreakEvenPoint('inCash', propertyData));
-
-
     return {
         investedEquity: calcInvestedEquity(context, propertyData),
         totalProfit: totalProfit.value,

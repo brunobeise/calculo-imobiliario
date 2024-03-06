@@ -42,12 +42,6 @@ export default function Conclusion() {
               <li className="font-bold mb-2">Financiamento: </li>
 
               <li>
-                Valor do imóvel:{" "}
-                <span>
-                  {numeroParaReal(propertyData.appreciatedPropertyValue)}
-                </span>
-              </li>
-              <li>
                 Aplicação inicial:{" "}
                 <span>{numeroParaReal(caseData.financing.investedEquity)}</span>
               </li>
@@ -62,6 +56,12 @@ export default function Conclusion() {
               <li>
                 Saldo devedor:{" "}
                 <span>{numeroParaReal(propertyData.outstandingBalance)}</span>
+              </li>
+              <li>
+                Valor do imóvel:{" "}
+                <span>
+                  {numeroParaReal(propertyData.appreciatedPropertyValue)}
+                </span>
               </li>
               <li>
                 Total aplicado final:{" "}
@@ -89,12 +89,6 @@ export default function Conclusion() {
               <li className="font-bold mb-2">À Vista:</li>
 
               <li>
-                Valor do imóvel:{" "}
-                <span>
-                  {numeroParaReal(propertyData.appreciatedPropertyValue)}
-                </span>
-              </li>
-              <li>
                 Aplicação inicial:{" "}
                 <span>{numeroParaReal(caseData.financing.investedEquity)}</span>
               </li>
@@ -104,6 +98,12 @@ export default function Conclusion() {
               </li>
               <li>
                 Saldo devedor: <span>{numeroParaReal(0)}</span>
+              </li>
+              <li>
+                Valor do imóvel:{" "}
+                <span>
+                  {numeroParaReal(propertyData.appreciatedPropertyValue)}
+                </span>
               </li>
               <li>
                 Total aplicado final:{" "}

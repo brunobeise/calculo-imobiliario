@@ -13,18 +13,17 @@ export function calcPropertyValuation(propertyValue: number, interestRate: numbe
     );
 }
 
-export function calcinstallmentValue(valorFinanciado: number, interestRate: number, financingYears: number) {
-    const taxaMensal = interestRate / 100 / 12;
+export function calcInstallmentValue(valorFinanciado: number, interestRate: number, financingYears: number) {
+    const taxaMensal = Math.pow(1 + interestRate / 100, 1 / 12) - 1;
 
 
     return valorFinanciado *
         (taxaMensal * Math.pow((1 + taxaMensal), financingYears * 12)) /
         (Math.pow((1 + taxaMensal), financingYears * 12) - 1);
-
 }
 
 export function calcOutstandingBalance(valorFinanciado: number, interestRate: number, totalAnosFinanciamento: number, pagamentosRealizados: number): number {
-    const taxaMensal = interestRate / 100 / 12;
+    const taxaMensal = Math.pow(1 + interestRate / 100, 1 / 12) - 1;
     const totalParcelas = totalAnosFinanciamento * 12;
 
     const outstandingBalance = valorFinanciado *
