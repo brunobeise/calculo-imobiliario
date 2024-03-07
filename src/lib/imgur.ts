@@ -1,16 +1,4 @@
 
-import { Cloudinary } from "@cloudinary/url-gen";
-
-// Return "https" URLs by setting secure: true
-const cld = new Cloudinary({
-    cloud: {
-        cloudName: 'dpegpgjpr',
-        apiKey: '565159121244273',
-        apiSecret: 'wJDT64oQ7D1lnmwkv6CdeLjgsok',
-    }
-});
-
-
 export const uploadImage = async (imageBase64: string) => {
     const formData = new FormData();
     formData.append('file', imageBase64);
