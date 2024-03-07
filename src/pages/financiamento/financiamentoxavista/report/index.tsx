@@ -14,11 +14,11 @@ import ConfigReport from "./config/ConfigReport";
 export default function RelatorioFinanciamentoXAvista() {
   const componentRef = useRef<HTMLDivElement>(null);
   const [viewMap, setViewMap] = useState({
-    cover: false,
-    propertyDetails: false,
-    finance: false,
-    inCash: false,
-    comparative: false,
+    cover: true,
+    propertyDetails: true,
+    finance: true,
+    inCash: true,
+    comparative: true,
     conclusion: true,
   });
 

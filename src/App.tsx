@@ -4,6 +4,7 @@ import PropertyDataCard from "./components/ProperyDataCard";
 import { financingRoutes } from "./routes/financiamento";
 import { auxiliarRoutes } from "./routes/auxiliar";
 import { relatorioRoutes } from "./routes/relatorios";
+import UserConfig from "./pages/userConfig";
 
 export interface Route {
   title: string;
@@ -21,7 +22,7 @@ export default function App() {
       <PropertyDataCard />
 
       <Routes>
-        <Route path="/" element={<></>} />
+        <Route path="/user" element={<UserConfig />} />
         {routes.map((r) => (
           <Route key={r.title} element={r.element} path={r.href} />
         ))}

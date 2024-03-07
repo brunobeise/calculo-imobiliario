@@ -1,0 +1,216 @@
+import UserSignature from "@/components/UserSignature";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import React, { useState } from "react";
+import {
+  FaFacebookSquare,
+  FaInstagram,
+  FaLinkedin,
+  FaSave,
+  FaWhatsapp,
+} from "react-icons/fa";
+
+export interface UserData {
+  name?: string;
+  logo?: string;
+  office?: string;
+  creci?: string;
+  address?: string;
+  telephone?: string;
+  whatsapp?: string;
+  instagram?: string;
+  facebook?: string;
+  linkedin?: string;
+}
+
+export default function UserConfig() {
+  const userSaved = localStorage.getItem("userData")
+    ? JSON.parse(localStorage.getItem("userData")!)
+    : {};
+
+  const [form, setForm] = useState<UserData>(userSaved);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    console.log(id, value);
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      [id]: value,
+    }));
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, type, files, value } = e.target;
+
+    if (type === "file" && files) {
+      const file = files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Use reader.result
+        setForm((prevForm) => ({
+          ...prevForm,
+          [id]: reader.result, // Isso será uma string base64 que representa o arquivo
+        }));
+      };
+      reader.readAsDataURL(file); // Converte o arquivo para Data URL
+    } else {
+      // Trata outros tipos de input normalmente
+      setForm((prevForm) => ({
+        ...prevForm,
+        [id]: value,
+      }));
+    }
+  };
+
+  const handleSave = () => {
+    console.log("handle save");
+  };
+
+  return (
+    <div className="grid grid-cols-2 px-10 mt-10 gap-x-5">
+      <div>
+        <form>
+          <Card>
+            <CardContent className="grid grid-cols-6 mt-5 gap-x-5 gap-y-4">
+              <div className="col-span-6">
+                <Label htmlFor="name">Nome:</Label>
+                <Input
+                  onChange={handleChange}
+                  type="text"
+                  id="name"
+                  value={form.name || ""}
+                  required
+                />
+              </div>
+              <div className="col-span-4">
+                <Label htmlFor="office">Cargo:</Label>
+                <Input
+                  onChange={handleChange}
+                  type="text"
+                  id="office"
+                  value={form.office}
+                  required
+                />
+              </div>
+              <div className="col-span-2">
+                <Label htmlFor="creci">CRECI:</Label>
+                <Input
+                  onChange={handleChange}
+                  type="text"
+                  id="creci"
+                  value={form.creci}
+                  required
+                />
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="address">Endereço:</Label>
+                <Input
+                  onChange={handleChange}
+                  type="text"
+                  id="address"
+                  value={form.address}
+                  required
+                />
+              </div>
+              <div className="col-span-3">
+                <Label htmlFor="logo">Logo da imobiliária:</Label>
+                <Input
+                  onChange={handleFileChange}
+                  type="file"
+                  id="logo"
+                  required
+                />
+              </div>
+              <div className="col-span-3">
+                <Label htmlFor="telephone">Telefone</Label>
+                <Input
+                  onChange={handleChange}
+                  type="text"
+                  id="telephone"
+                  value={form.telephone}
+                  required
+                />
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="whatsapp">Link Whatsapp:</Label>
+                <div className="flex items-center">
+                  <FaWhatsapp className="text-xl" />
+
+                  <Input
+                    className="ms-2"
+                    onChange={handleChange}
+                    type="text"
+                    id="whatsapp"
+                    value={form.whatsapp}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="instagram">Link Instagram:</Label>
+                <div className="flex items-center">
+                  <FaInstagram className="text-xl" />
+
+                  <Input
+                    className="ms-2"
+                    onChange={handleChange}
+                    type="text"
+                    id="instagram"
+                    value={form.instagram}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="facebook">Link Facebook:</Label>
+                <div className="flex items-center">
+                  <FaFacebookSquare className="text-xl" />
+
+                  <Input
+                    className="ms-2"
+                    onChange={handleChange}
+                    type="text"
+                    id="facebook"
+                    value={form.facebook}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="linkedin">Link Linkedin:</Label>
+                <div className="flex items-center">
+                  <FaLinkedin className="text-xl" />
+
+                  <Input
+                    className="ms-2"
+                    onChange={handleChange}
+                    type="text"
+                    id="linkedin"
+                    value={form.linkedin}
+                    required
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </form>
+      </div>
+      <Card className="h-[200px]">
+        <CardContent className="mt-4">
+          <div className="flex justify-center">
+            <UserSignature userData={form} />
+          </div>
+          <div className="mt-10 text-center">
+            <Button onClick={handleSave} className="px-10">
+              <FaSave className="me-2" /> Salvar
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

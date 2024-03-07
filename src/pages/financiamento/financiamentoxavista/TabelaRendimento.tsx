@@ -115,7 +115,6 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
                 <TableHead>Capital</TableHead>
                 <TableHead>Rendimento</TableHead>
                 <TableHead>Aporte</TableHead>
-                <TableHead>Valor FInal</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -126,7 +125,6 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
                   <TableCell>{item.capital}</TableCell>
                   <TableCell>{item.lucroMensal}</TableCell>
                   <TableCell>{item.montanteAluguel}</TableCell>
-                  <TableCell>{item.valorFinal}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

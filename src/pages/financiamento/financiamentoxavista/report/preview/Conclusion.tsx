@@ -2,16 +2,9 @@ import { numeroParaReal } from "@/lib/formatter";
 import { FinanceOrCashData } from "../../Context";
 import { useContext } from "react";
 import { propertyDataContext } from "@/PropertyDataContext";
-import { FinanceOrCashReportContext } from "../Context";
-import { Button } from "@/components/ui/button";
-import { FaWhatsapp } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
-import { FaFacebookSquare } from "react-icons/fa";
-import { FaLinkedin } from "react-icons/fa";
 
 export default function Conclusion() {
   const { propertyData } = useContext(propertyDataContext);
-  const { financeOrCashReportState } = useContext(FinanceOrCashReportContext);
 
   const caseData: FinanceOrCashData = JSON.parse(
     localStorage.getItem("financingOrInCashCaseData") || ""
@@ -148,50 +141,6 @@ export default function Conclusion() {
           dinheiro trabalhou para você, e o imóvel financiado se tornou o
           caminho para um patrimônio maior.
         </p>
-      </div>
-      <div className=" mt-72 text-primary ">
-        <div className="flex items-center gap-x-5">
-          <div className="w-[80px] h-[80px]">
-            <img
-              className="w-full h-full"
-              src="https://i.imgur.com/28D2lqk.png"
-              alt=""
-            />
-          </div>
-          <div className="w-[400px]">
-            <div className="grid grid-rows">
-              <h3 className="text-2xl font-bold"> PEDRO REGERT</h3>
-              <p>
-                <span className="text-sm font-bold"> CORRETOR DE IMÓVEIS</span>{" "}
-                <span className="font-light">
-                  CRECI {financeOrCashReportState.agentCRECI.content}
-                </span>
-                <div className="bg-primary w-full h-[1.2px] mt-1"></div>
-              </p>
-              <p className="font-light mt-1">
-                Rua Carlos Trein Filho 448A, Santa Cruz do Sul-RS
-              </p>
-            </div>
-          </div>
-          <div className="mt-5">
-            <div className="flex ga-x-3">
-              <Button variant="link" className="text-2xl" size="icon">
-                <FaWhatsapp />
-              </Button>
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaInstagram />
-              </Button>
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaFacebookSquare />
-              </Button>
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaLinkedin />
-              </Button>
-            </div>
-            <div className="bg-primary w-full h-[1.2px] mt-1"></div>
-            <p className="text-center">(51) 99525-8051</p>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import { financingRoutes } from "@/routes/financiamento";
 import { auxiliarRoutes } from "@/routes/auxiliar";
 import { relatorioRoutes } from "@/routes/relatorios";
-
+import { FaUser } from "react-icons/fa";
 
 export default function Header() {
   const location = useLocation();
@@ -84,8 +84,11 @@ export default function Header() {
           {title || ""}
         </h1>
       </div>
-
-      {/* <ModeToggle /> */}
+      <Link to={"/user"}>
+        <Button variant="link" size="icon">
+          <FaUser className="h-[1.2rem] w-[1.2rem]" />
+        </Button>
+      </Link>
     </div>
   );
 }

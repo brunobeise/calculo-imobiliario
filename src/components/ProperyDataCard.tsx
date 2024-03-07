@@ -123,7 +123,7 @@ export default function PropertyDataCard() {
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
 
-  const execptionRoutes = ["/juroscompostos", "/relatorio"];
+  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user"];
 
   const isException = execptionRoutes.some((route) =>
     location.pathname.includes(route)
