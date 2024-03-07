@@ -2,6 +2,7 @@ import { numeroParaReal } from "@/lib/formatter";
 import { FinanceOrCashData } from "../../Context";
 import { useContext } from "react";
 import { propertyDataContext } from "@/PropertyDataContext";
+import UserSignature from "@/components/UserSignature";
 
 export default function Conclusion() {
   const { propertyData } = useContext(propertyDataContext);
@@ -141,6 +142,9 @@ export default function Conclusion() {
           dinheiro trabalhou para você, e o imóvel financiado se tornou o
           caminho para um patrimônio maior.
         </p>
+        <div className="mt-72">
+          <UserSignature />
+        </div>
       </div>
     </div>
   );

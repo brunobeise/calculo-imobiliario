@@ -48,7 +48,10 @@ export default function UserSignature(props: UserSignatureProps) {
         <div className="w-[80px] h-[80px]">
           <img
             className="w-full h-full"
-            src="https://i.imgur.com/28D2lqk.png"
+            src={
+              data.logo ||
+              "https://res.cloudinary.com/dpegpgjpr/image/upload/v1709820101/n8rcav0jndwk8j3yr6sm.png"
+            }
             alt=""
           />
         </div>

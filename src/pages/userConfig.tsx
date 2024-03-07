@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import axios from "axios";
+import ReactLoading from "react-loading";
 import {
   FaFacebookSquare,
   FaInstagram,
@@ -12,6 +12,7 @@ import {
   FaSave,
   FaWhatsapp,
 } from "react-icons/fa";
+import { uploadImage } from "@/lib/imgur";
 
 export interface UserData {
   name?: string;
@@ -32,11 +33,11 @@ export default function UserConfig() {
     : {};
 
   const [form, setForm] = useState<UserData>(userSaved);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;
     const value = e.target.value;
-    console.log(id, value);
 
     setForm((prevForm) => ({
       ...prevForm,
@@ -66,13 +67,14 @@ export default function UserConfig() {
   };
 
   const handleSave = async () => {
-    const response = await axios.post(
-      "https://calculo-imobiliario.vercel.app/api/hello",
-      {
-        image: form.logo,
-      }
+    setUploadLoading(true);
+    const imageUrl = await uploadImage(form.logo!);
+    setUploadLoading(false);
+    setForm({ ...form, logo: imageUrl });
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ ...form, logo: imageUrl })
     );
-    console.log(response);
   };
 
   return (
@@ -210,8 +212,18 @@ export default function UserConfig() {
             <UserSignature userData={form} />
           </div>
           <div className="mt-10 text-center">
-            <Button onClick={handleSave} className="px-10">
-              <FaSave className="me-2" /> Salvar
+            <Button
+              disabled={uploadLoading}
+              onClick={handleSave}
+              className="w-32"
+            >
+              {uploadLoading ? (
+                <ReactLoading type="spin" width={20} height={20} />
+              ) : (
+                <>
+                  <FaSave className="me-2" /> Salvar
+                </>
+              )}
             </Button>
           </div>
         </CardContent>
