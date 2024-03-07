@@ -31,12 +31,12 @@ export default function Cover() {
   return (
     <div className="text-center relative pageBreakAfter">
       {title.active && (
-        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary">
+        <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight text-primary mt-5">
           {title.content}
         </h1>
       )}
 
-      {propertyPicture.active && coverType === 1 && (
+      {propertyPicture.active && coverType === 1 ? (
         <div className="relative h-[500px] overflow-hidden">
           <img
             className="absolute w-full top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] shadow-lg"
@@ -59,6 +59,8 @@ export default function Cover() {
             </div>
           )}
         </div>
+      ) : (
+        <div className="relative h-[50px] overflow-hidden"> </div>
       )}
 
       {presentation.active && (
@@ -92,8 +94,8 @@ export default function Cover() {
         </div>
       )}
       {agentName.active && agentCRECI.active && (
-        <>
-          <div className="grid grid-cols-3 flex justify-center items-center">
+        <div className="absolute bottom-[12%] left-[50%] translate-x-[-50%] w-full px-10">
+          <div className="grid grid-cols-3 flex justify-center items-center ">
             <p>
               Corretor: <span className="font-bold"> {agentName.content} </span>{" "}
             </p>
@@ -104,10 +106,10 @@ export default function Cover() {
               <p>{dayjs(createdAt.content).format("DD [de] MMMM [de] YYYY")}</p>
             )}
           </div>
-        </>
+        </div>
       )}
       <img
-        className="w-[20%] ms-[50%] translate-x-[-50%] mt-16"
+        className="w-[20%] left-[50%] translate-x-[-50%] bottom-[5%] absolute"
         src={companyLogo2.content}
       />
     </div>
