@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
 import {
   FaFacebookSquare,
   FaInstagram,
@@ -50,15 +51,13 @@ export default function UserConfig() {
       const file = files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Use reader.result
         setForm((prevForm) => ({
           ...prevForm,
-          [id]: reader.result, // Isso será uma string base64 que representa o arquivo
+          [id]: reader.result,
         }));
       };
-      reader.readAsDataURL(file); // Converte o arquivo para Data URL
+      reader.readAsDataURL(file);
     } else {
-      // Trata outros tipos de input normalmente
       setForm((prevForm) => ({
         ...prevForm,
         [id]: value,
@@ -66,8 +65,11 @@ export default function UserConfig() {
     }
   };
 
-  const handleSave = () => {
-    console.log("handle save");
+  const handleSave = async () => {
+    const response = await axios.post("http://localhost:3000/api/hello", {
+      image: form.logo,
+    });
+    console.log(response);
   };
 
   return (
