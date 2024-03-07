@@ -66,9 +66,12 @@ export default function UserConfig() {
   };
 
   const handleSave = async () => {
-    const response = await axios.post("http://localhost:3000/api/hello", {
-      image: form.logo,
-    });
+    const response = await axios.post(
+      "https://calculo-imobiliario.vercel.app/api/hello",
+      {
+        image: form.logo,
+      }
+    );
     console.log(response);
   };
 
