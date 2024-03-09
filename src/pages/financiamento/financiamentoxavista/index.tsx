@@ -10,6 +10,7 @@ import { FileBarChart2 } from "lucide-react";
 import { caseDataContext } from "./Context";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
+import TableCaseDetailed from "@/components/tables/TableCaseDetailed";
 
 export default function FinancingOrCash() {
   const { propertyData } = useContext(propertyDataContext);
@@ -64,6 +65,9 @@ export default function FinancingOrCash() {
                 colspan={12}
               />
               <TabelaRendimento context={context} />
+              <TableCaseDetailed
+                detailedTable={caseData[context].detailedTable}
+              />
             </div>
             <Button
               onClick={() =>

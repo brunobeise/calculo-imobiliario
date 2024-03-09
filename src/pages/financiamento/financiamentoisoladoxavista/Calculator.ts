@@ -93,7 +93,7 @@ export function calcInvestedEquityFinal(context: 'inCash' | 'financing', propert
         let lucroMensal = 0;
         if (capitalAcumulado >= 0 || context === "financing") {
             lucroMensal = Number(
-                ((capitalAcumulado * propertyData.monthlyIncome) / 100)
+                ((capitalAcumulado * propertyData.monthlyYieldRate) / 100)
             );
         }
 
@@ -135,7 +135,7 @@ export function calcBreakEvenPoint(context: 'inCash' | 'financing', propertyData
         let monthlyProfit = 0;
         if (accumulatedCapital >= 0 || context === "financing") {
             monthlyProfit = Number(
-                ((accumulatedCapital * propertyData.monthlyIncome) / 100)
+                ((accumulatedCapital * propertyData.monthlyYieldRate) / 100)
             );
         }
 

@@ -24,7 +24,7 @@ export default function TextReportInput({
   showInput = true,
   ...props
 }: TextReportInputProps) {
-  const handleFileChange = (e: any) => {
+  const handleChange = (e: any) => {
     props.onChange({
       ...props.value,
       [props.keyName || "content"]: e.target.value,
@@ -58,14 +58,14 @@ export default function TextReportInput({
             <Textarea
               className="w-full min-h-[100px]"
               value={props.value[props.keyName ?? "content"]?.toString()}
-              onChange={handleFileChange}
+              onChange={handleChange}
               id={props.label}
             />
           ) : (
             <Input
               className="w-full"
               value={props.value[props.keyName ?? "content"]?.toString()}
-              onChange={handleFileChange}
+              onChange={handleChange}
               id={props.label}
               type={props.type ?? "text"}
             />

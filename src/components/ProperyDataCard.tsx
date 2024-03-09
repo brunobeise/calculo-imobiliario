@@ -27,7 +27,7 @@ export default function PropertyDataCard() {
 
   const {
     finalYear,
-    monthlyIncome,
+    monthlyYieldRate,
     outstandingBalance,
     personalBalance,
     interestRate,
@@ -38,6 +38,7 @@ export default function PropertyDataCard() {
     installmentValue,
     propertyAppreciationRate,
     financingYears,
+    rentMonthlyYieldRate,
   } = propertyData;
 
   const [propertyValueField, setpropertyValueField] = useState(
@@ -205,7 +206,7 @@ export default function PropertyDataCard() {
                   </CardTitle>
 
                   <CardContent className="grid grid-cols-2 gap-6">
-                    <div>
+                    <div className="col-span-2">
                       <Label htmlFor="propertyValue">
                         Valor Inicial Aluguel:
                       </Label>
@@ -220,16 +221,35 @@ export default function PropertyDataCard() {
                     </div>
 
                     <div>
-                      <Label htmlFor="taxarendimento">Rendimento mensal:</Label>
+                      <Label htmlFor="taxarendimento">
+                        Rendimento aplicação:
+                      </Label>
 
                       <InputPercent
                         onChangeValue={(v) =>
-                          setpropertyData("monthlyIncome", v)
+                          setpropertyData("monthlyYieldRate", v)
                         }
                         type="number"
                         step={0.1}
                         id="taxarendimento"
-                        value={monthlyIncome}
+                        value={monthlyYieldRate}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label className="text-xs" htmlFor="taxarendimento">
+                        Rendimento montante do aluguel:
+                      </Label>
+
+                      <InputPercent
+                        onChangeValue={(v) =>
+                          setpropertyData("rentMonthlyYieldRate", v)
+                        }
+                        type="number"
+                        step={0.1}
+                        id="taxarendimento"
+                        value={rentMonthlyYieldRate}
                         required
                       />
                     </div>

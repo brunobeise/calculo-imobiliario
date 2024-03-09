@@ -56,7 +56,7 @@ export function MonthlyInvestmentGrowthChart(props: {
     let lucroMensal = 0;
     if (capitalAcumulado >= 0 || props.context === "financing") {
       lucroMensal = Number(
-        ((capitalAcumulado * propertyData.monthlyIncome) / 100).toFixed(2)
+        ((capitalAcumulado * propertyData.monthlyYieldRate) / 100).toFixed(2)
       );
     }
 

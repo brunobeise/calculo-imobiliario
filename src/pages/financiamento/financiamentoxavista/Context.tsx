@@ -5,6 +5,19 @@ export const caseDataContext = createContext<caseDataContextType>({
   setCaseData: () => {},
 });
 
+export interface FinancingOrCashDetailedTable {
+  totalCapital: number; // A soma dos dois capitais: capital inicial e capital de renda de aluguel
+  initialCapital: number; // Capital inicial investido ou restante após a compra
+  initialCapitalYield: number; // Rendimento gerado a partir do capital inicial
+  rentValue: number; // Valor do aluguel para o período
+  rentalAmount: number; // Total gerado a partir do aluguel
+  outstandingBalance: number; // Saldo devedor no caso de financiamento
+  finalValue: number; // Valor final após adicionar os rendimentos ao capital
+  rentalIncomeCapital: number; // Capital gerado a partir da renda de aluguel
+  rentalIncomeYield: number; // Rendimento gerado a partir do capital de renda de aluguel
+  monthlyProfit: number;
+}
+
 export type FinanceOrCashData = {
   inCash: {
     totalProfit: number;
@@ -13,6 +26,7 @@ export type FinanceOrCashData = {
     investedEquityFinal: number;
     totalFinalEquity: number;
     breakEven: number;
+    detailedTable: FinancingOrCashDetailedTable[];
   };
   financing: {
     investedEquityFinal: number;
@@ -21,6 +35,7 @@ export type FinanceOrCashData = {
     investedEquity: number;
     totalFinalEquity: number;
     breakEven?: number;
+    detailedTable: FinancingOrCashDetailedTable[];
   };
 };
 
@@ -45,6 +60,7 @@ export const FinanceOrInCashCaseDataProvider = ({
       investedEquityFinal: 0,
       totalFinalEquity: 372892,
       breakEven: 66,
+      detailedTable: [],
     },
     financing: {
       investedEquity: 293863.08,
@@ -53,6 +69,7 @@ export const FinanceOrInCashCaseDataProvider = ({
       investedEquityFinal: 0,
       totalFinalEquity: 425637,
       breakEven: 66,
+      detailedTable: [],
     },
   });
 

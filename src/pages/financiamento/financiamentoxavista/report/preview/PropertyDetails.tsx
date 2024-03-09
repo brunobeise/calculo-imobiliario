@@ -11,7 +11,7 @@ export default function PropertyDetails() {
 
   const {
     finalYear,
-    monthlyIncome,
+    monthlyYieldRate,
     outstandingBalance,
     personalBalance,
     interestRate,
@@ -84,7 +84,7 @@ export default function PropertyDetails() {
 
               <InfoItemPercent
                 text="Rendimento médio mensal:"
-                value={monthlyIncome}
+                value={monthlyYieldRate}
               />
 
               <InfoItemYears text="Cálculo feito em:" value={finalYear} />

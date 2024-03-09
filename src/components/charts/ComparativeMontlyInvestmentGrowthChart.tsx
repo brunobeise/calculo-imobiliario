@@ -53,9 +53,10 @@ export function ComparativeMonthlyInvestmentGrowthChart({
     let inCashMonthlyProfit = 0;
     if (accumulatedCapitalInCash >= 0) {
       inCashMonthlyProfit = Number(
-        ((accumulatedCapitalInCash * propertyData.monthlyIncome) / 100).toFixed(
-          2
-        )
+        (
+          (accumulatedCapitalInCash * propertyData.monthlyYieldRate) /
+          100
+        ).toFixed(2)
       );
     }
     const finalValueInCash = Number(
@@ -76,7 +77,7 @@ export function ComparativeMonthlyInvestmentGrowthChart({
     if (accumulatedCapitalFinancing >= 0) {
       financingMonthlyProfit = Number(
         (
-          (accumulatedCapitalFinancing * propertyData.monthlyIncome) /
+          (accumulatedCapitalFinancing * propertyData.monthlyYieldRate) /
           100
         ).toFixed(2)
       );

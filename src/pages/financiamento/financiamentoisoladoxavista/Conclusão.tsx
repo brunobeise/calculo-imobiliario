@@ -23,7 +23,7 @@ export default function Conclusão(props: ConclusãoProps) {
 
   const {
     finalYear,
-    monthlyIncome,
+    monthlyYieldRate,
 
     personalBalance,
     financingFees,
@@ -48,7 +48,7 @@ export default function Conclusão(props: ConclusãoProps) {
   const rendaMensal = () => {
     return (
       rentValue[rentValue.length - 1] * 1.08 +
-      (investedEquity * monthlyIncome) / 100
+      (investedEquity * monthlyYieldRate) / 100
     );
   };
 

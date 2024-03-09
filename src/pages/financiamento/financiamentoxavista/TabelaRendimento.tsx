@@ -64,7 +64,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
       let lucroMensal = 0;
       if (capitalAcumulado >= 0 || props.context === "financing") {
         lucroMensal = Number(
-          ((capitalAcumulado * propertyData.monthlyIncome) / 100).toFixed(2)
+          ((capitalAcumulado * propertyData.monthlyYieldRate) / 100).toFixed(2)
         );
       }
 
@@ -93,7 +93,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
     propertyData.downPayment,
     propertyData.installmentValue,
     propertyData.rentValue,
-    propertyData.monthlyIncome,
+    propertyData.monthlyYieldRate,
     propertyData.finalYear,
     props.context,
   ]);
@@ -103,7 +103,7 @@ export default function TabelaRendimento(props: TabelaRendimentoProps) {
       <CardTitle className="mt-5">
         <h2 className="text-xl text-center ">Investimento</h2>
         <p className="text-xs mb-5 text-center">
-          rendimento {propertyData.monthlyIncome}% ao mês{" "}
+          rendimento {propertyData.monthlyYieldRate}% ao mês{" "}
         </p>
       </CardTitle>
       <CardContent>

@@ -55,20 +55,6 @@ export default function ConfigIntro() {
           showInput={false}
         />
 
-        <div className="grid grid-cols-2">
-          <TextReportInput
-            label="Nome do Corretor"
-            value={financeOrCashReportState.agentName}
-            onChange={(v) => {
-              setFinanceOrCashReportState("agentName", v);
-            }}
-          />
-          <TextReportInput
-            label="CRECI"
-            value={financeOrCashReportState.agentCRECI}
-            onChange={(v) => setFinanceOrCashReportState("agentCRECI", v)}
-          />
-        </div>
         <TextReportInput
           label="Data da elaboração"
           value={financeOrCashReportState.createdAt}

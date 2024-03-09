@@ -66,7 +66,7 @@ export function BreakEvenChart({
       let monthlyProfit = 0;
       if (accumulatedCapital >= 0 || context === "financing") {
         monthlyProfit = Number(
-          (accumulatedCapital * propertyData.monthlyIncome) / 100
+          (accumulatedCapital * propertyData.monthlyYieldRate) / 100
         );
       }
 

@@ -13,7 +13,8 @@ export type PropertyData = {
   rentValue: number[];
   appreciatedPropertyValue: number;
   financingFees: number;
-  monthlyIncome: number;
+  monthlyYieldRate: number;
+  rentMonthlyYieldRate: number;
   personalBalance: number;
   finalYear: number;
   financingYears: number;
@@ -43,7 +44,8 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
     appreciatedPropertyValue: 285637,
     financingYears: 35,
     financingFees: 4000,
-    monthlyIncome: 1,
+    monthlyYieldRate: 1,
+    rentMonthlyYieldRate: 0.8,
     personalBalance: 180000,
     finalYear: 6,
     investedEquity: 293863.08,
