@@ -1,5 +1,5 @@
 import { PropertyData } from "@/PropertyDataContext";
-import { calcOutstandingBalance } from "@/lib/calcs";
+import { calcOutstandingBalance, calcPropertyValuation } from "@/lib/calcs";
 import { FinancingOrCashDetailedTable } from "./Context";
 
 
@@ -208,6 +208,8 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
             month - 1
         );
 
+        const propertyValue = calcPropertyValuation(propertyData.propertyValue, propertyData.interestRate, Math.ceil((month / 12) - 1))
+
         const monthlyProfit = finalValue - outstandingBalance;
 
 
@@ -215,13 +217,16 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
             totalCapital: initialCapital + rentalIncomeCapital,
             initialCapital: initialCapital,
             initialCapitalYield: capitalYield,
+            propertyValue: propertyValue,
             rentValue: rentValue,
             rentalAmount: rentalAmount,
             outstandingBalance: outstandingBalance,
-            finalValue: finalValue,
+
+            finalValue: finalValue + propertyValue - outstandingBalance,
             rentalIncomeCapital: rentalIncomeCapital,
             rentalIncomeYield: rentalIncomeYield,
             monthlyProfit: monthlyProfit
+
         });
 
         // Atualizando os capitais para a próxima iteração

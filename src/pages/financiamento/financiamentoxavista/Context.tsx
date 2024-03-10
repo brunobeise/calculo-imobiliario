@@ -16,6 +16,7 @@ export interface FinancingOrCashDetailedTable {
   rentalIncomeCapital: number; // Capital gerado a partir da renda de aluguel
   rentalIncomeYield: number; // Rendimento gerado a partir do capital de renda de aluguel
   monthlyProfit: number;
+  propertyValue: number;
 }
 
 export type FinanceOrCashData = {

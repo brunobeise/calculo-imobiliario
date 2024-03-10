@@ -40,10 +40,11 @@ export default function TableCaseDetailed(props: TabelaRendimentoProps) {
                 <TableHead>Capital Inicial</TableHead>
                 <TableHead>Capital do Aluguel</TableHead>
                 <TableHead>Valor do Aluguel</TableHead>
+                <TableHead>Valor do Imóvel</TableHead>
                 <TableHead>Rendimento do Capital</TableHead>
                 <TableHead>Rendimento do Aluguel</TableHead>
-                <TableHead>Valor Final</TableHead>
                 <TableHead>Saldo Devedor</TableHead>
+                <TableHead>Patrimônio</TableHead>
                 <TableHead>Lucro</TableHead>
               </TableRow>
             </TableHeader>
@@ -53,20 +54,22 @@ export default function TableCaseDetailed(props: TabelaRendimentoProps) {
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{numeroParaReal(item.initialCapital)}</TableCell>
-                  <TableCell>{numeroParaReal(item.rentValue)}</TableCell>
                   <TableCell>
                     {numeroParaReal(item.rentalIncomeCapital)}
                   </TableCell>
+                  <TableCell>{numeroParaReal(item.rentValue)}</TableCell>
+
+                  <TableCell>{numeroParaReal(item.propertyValue)}</TableCell>
                   <TableCell>
                     {numeroParaReal(item.initialCapitalYield)}
                   </TableCell>
                   <TableCell>
                     {numeroParaReal(item.rentalIncomeYield)}
                   </TableCell>
-                  <TableCell>{numeroParaReal(item.finalValue)}</TableCell>
                   <TableCell>
                     {numeroParaReal(item.outstandingBalance)}
                   </TableCell>
+                  <TableCell>{numeroParaReal(item.finalValue)}</TableCell>
 
                   <TableCell>{numeroParaReal(item.monthlyProfit)}</TableCell>
                 </TableRow>
