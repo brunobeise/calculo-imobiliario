@@ -6,15 +6,12 @@ export function calcValorizaçãoAluguel(valorInicial: number, finalYear: number
 }
 
 export function calcPropertyValuation(propertyValue: number, interestRate: number, finalYear: number): number {
-    return Number(
-        (
-            propertyValue * Math.pow(1 + interestRate / 100, finalYear)
-        ).toFixed(0)
-    );
+    return propertyValue * Math.pow(1 + interestRate / 100, finalYear)
 }
 
 export function calcInstallmentValue(valorFinanciado: number, interestRate: number, financingYears: number) {
     const taxaMensal = interestRate / 100 / 12;
+    // const taxaMensal = Math.pow(1 + interestRate / 100, 1 / 12) - 1;
 
 
     return valorFinanciado *
@@ -30,7 +27,7 @@ export function calcOutstandingBalance(valorFinanciado: number, interestRate: nu
         ((Math.pow(1 + taxaMensal, totalParcelas) - Math.pow(1 + taxaMensal, pagamentosRealizados)) /
             (Math.pow(1 + taxaMensal, totalParcelas) - 1));
 
-    return Number(outstandingBalance.toFixed(2));
+    return outstandingBalance
 }
 
 

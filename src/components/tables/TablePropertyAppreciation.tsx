@@ -47,6 +47,8 @@ export default function TablePropertyAppreciation() {
     propertyData.propertyValue,
   ]);
 
+  console.log(rows);
+
   return (
     <Card className="w-full border-0">
       {/* <CardTitle className="mt-2">
