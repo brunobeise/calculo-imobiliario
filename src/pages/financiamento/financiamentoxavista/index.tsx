@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/PropertyDataContext";
-import TabelaRendimento from "./TabelaRendimento";
 import Conclusão from "./Conclusão";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
-import { Button } from "@/components/ui/button";
-import { FileBarChart2 } from "lucide-react";
 import { caseDataContext } from "./Context";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import TableCaseDetailed from "@/components/tables/TableCaseDetailed";
+import DetailedTable from "@/pages/financiamento/financiamentoxavista/DetailedTable";
+import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
+import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
+import { FaFile } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function FinancingOrCash() {
   const { propertyData } = useContext(propertyDataContext);
@@ -36,27 +36,48 @@ export default function FinancingOrCash() {
     }
   }, [propertyData]);
 
+  console.log(context);
+  
+
   return (
     <>
-      <Tabs defaultValue="Financiamento" className="w-full text-center">
-        <TabsList>
-          <TabsTrigger
-            onClick={() => setContext("financing")}
-            value="Financiamento"
+      <div className="w-full text-center">
+        <Tabs
+          defaultValue={"financing"}
+          aria-label="tabs"
+          sx={{ bgcolor: "transparent" }}
+        >
+          <TabList
+            onChange={(e) => console.log(e?.target)}
+            disableUnderline
+            sx={{
+              justifyContent: "center",
+              p: 0.5,
+              gap: 0.5,
+              borderRadius: "xl",
+              bgcolor: "transparent",
+              [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                boxShadow: "sm",
+                bgcolor: "background.surface",
+              },
+            }}
           >
-            Financiamento
-          </TabsTrigger>
-          <TabsTrigger onClick={() => setContext("inCash")} value="A Vista">
-            A Vista
-          </TabsTrigger>
-        </TabsList>
+            <div onClick={() => setContext("financing")}>
+              <Tab value="financing">Financiamennto</Tab>
+            </div>
+            <div onClick={() => setContext("inCash")}>
+              <Tab value="inCash">Á Vista</Tab>
+            </div>
+          </TabList>
+        </Tabs>
 
         {errors.length === 0 ? (
           <>
-            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5">
+            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5">
               <Conclusão context={context} />
 
               <TableRentAppreciation
+                data={caseData[context].detailedTable.map((i) => i.rentValue)}
                 maxHeight={300}
                 border
                 text="left"
@@ -64,23 +85,36 @@ export default function FinancingOrCash() {
                 title={true}
                 colspan={12}
               />
-              <TabelaRendimento context={context} />
-              <TableCaseDetailed
-                detailedTable={caseData[context].detailedTable}
+              <TablePropertyAppreciation
+                data={caseData[context].detailedTable.map(
+                  (i) => i.propertyValue
+                )}
+                totalValorization
+                maxHeight={300}
+                border
+                text="left"
+                annualCollection={true}
+                title={true}
+                colspan={12}
               />
+              {/* <TabelaRendimento context={context} /> */}
+              <DetailedTable detailedTable={caseData[context].detailedTable} />
             </div>
-            <Button
-              onClick={() =>
-                localStorage.setItem(
-                  "financingOrInCashCaseData",
-                  JSON.stringify(caseData)
-                )
-              }
-              href="/financiamentoxavista/relatorio"
-              className="my-5"
-              text="Gerar Relatório Completo"
-              Icon={FileBarChart2}
-            />
+            <Link to={"/financiamentoxavista/relatorio"}>
+              <Button
+                startDecorator={<FaFile />}
+                onClick={() =>
+                  localStorage.setItem(
+                    "financingOrInCashCaseData",
+                    JSON.stringify(caseData)
+                  )
+                }
+                
+                className="my-5"
+              >
+                Gerar Relatório Completo
+              </Button>
+            </Link>
           </>
         ) : (
           <div
@@ -94,7 +128,7 @@ export default function FinancingOrCash() {
             ))}
           </div>
         )}
-      </Tabs>
+      </div>
     </>
   );
 }

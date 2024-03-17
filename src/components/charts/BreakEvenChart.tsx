@@ -1,98 +1,13 @@
-import { PropertyData } from "@/PropertyDataContext";
-import { calcOutstandingBalance } from "@/lib/calcs";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend,
-} from "chart.js";
+
 import { Line } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend
-);
-
 export function BreakEvenChart({
-  propertyData,
-  context,
+  profitValues,
+  outstandingBalanceValues,
 }: {
-  propertyData: PropertyData;
-  context: "inCash" | "financing";
+  profitValues: number[];
+  outstandingBalanceValues: number[];
 }) {
-  const financingValues = breakEvenRows();
-
-  function breakEvenRows() {
-    const rows: {
-      month: number;
-      profit: number;
-      outstandingBalance: number;
-    }[] = [];
-
-    const initialCapital =
-      context === "financing"
-        ? propertyData.personalBalance -
-          propertyData.financingFees -
-          propertyData.downPayment
-        : propertyData.personalBalance - propertyData.propertyValue;
-
-    let accumulatedCapital = initialCapital;
-
-    let rentValue = propertyData.initialRentValue;
-
-    for (let month = 1; month <= propertyData.finalYear * 12; month++) {
-      const yearIndex = Math.floor((month - 1) / 12);
-
-      if (month % 12 === 1 || month === 1) {
-        rentValue = propertyData.rentValue![yearIndex];
-      }
-
-      const rentalAmount =
-        context === "financing"
-          ? Number(rentValue - propertyData.installmentValue)
-          : Number(rentValue);
-
-      let monthlyProfit = 0;
-      if (accumulatedCapital >= 0 || context === "financing") {
-        monthlyProfit = Number(
-          (accumulatedCapital * propertyData.monthlyYieldRate) / 100
-        );
-      }
-
-      const finalValue = Number(
-        accumulatedCapital + monthlyProfit + rentalAmount
-      );
-
-      const outstandingBalance = calcOutstandingBalance(
-        propertyData.propertyValue - propertyData.downPayment, // financed amount
-        propertyData.interestRate,
-        propertyData.financingYears,
-        month - 1
-      );
-
-      rows.push({
-        month,
-        profit: finalValue - initialCapital,
-        outstandingBalance,
-      });
-
-      accumulatedCapital = finalValue;
-    }
-
-    return rows;
-  }
-
   const options = {
     responsive: true,
     labels: {
@@ -109,18 +24,18 @@ export function BreakEvenChart({
   };
 
   const data = {
-    labels: financingValues.map((_v, i) => i),
+    labels: profitValues.map((_v, i) => i),
     datasets: [
       {
         label: "Lucro acumulado",
-        data: financingValues.map((v) => v.profit),
+        data: profitValues,
         borderColor: "#0067c2",
         backgroundColor: "#0067c2",
         pointRadius: 0,
       },
       {
         label: "Saldo Devedor",
-        data: financingValues.map((v) => v.outstandingBalance),
+        data: outstandingBalanceValues,
         borderColor: "#1e476b",
         backgroundColor: "#1e476b",
         pointRadius: 0,

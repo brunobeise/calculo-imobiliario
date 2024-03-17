@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { InputReportElement } from "@/pages/financiamento/financiamentoxavista/report/Context";
-import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { Checkbox } from "@mui/joy";
 
 interface TextReportInputProps {
   onChange: (value: InputReportElement) => void;
@@ -41,11 +41,12 @@ export default function TextReportInput({
     >
       {checkbox && (
         <Checkbox
+          size="sm"
           checked={props.value.active}
-          onCheckedChange={(v) => {
+          onChange={(v) => {
             props.onChange({
               ...props.value,
-              active: v as boolean,
+              active: v.target.checked,
             });
           }}
           className="block "

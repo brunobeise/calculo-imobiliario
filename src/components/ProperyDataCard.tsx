@@ -3,24 +3,16 @@ import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
 import { PropertyData, propertyDataContext } from "../PropertyDataContext";
 import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Slider } from "./ui/slider";
 import {
   calcOutstandingBalance,
   calcInstallmentValue,
-  calcValorizaçãoAluguel,
   calcPropertyValuation,
 } from "@/lib/calcs";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
+
 import { useLocation } from "react-router-dom";
-import { Card, CardContent, CardTitle } from "./ui/card";
 import InputPercent from "./ui/InputPercent";
 import InputYears from "./ui/inputYears";
+import { Input, Sheet, Slider } from "@mui/joy";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -32,6 +24,7 @@ export default function PropertyDataCard() {
     personalBalance,
     interestRate,
     financingFees,
+    inCashFees,
     downPayment,
     propertyValue,
     initialRentValue,
@@ -49,6 +42,9 @@ export default function PropertyDataCard() {
   );
   const [taxasFincancimentoField, settaxasFincancimentoField] = useState(
     numeroParaReal(financingFees)
+  );
+  const [taxasAVistaField, settaxasAVistaField] = useState(
+    numeroParaReal(inCashFees)
   );
   const [saldoPessoalField, setSaldoPessoalField] = useState(
     numeroParaReal(personalBalance)
@@ -73,6 +69,7 @@ export default function PropertyDataCard() {
     if (id === "propertyValue") setpropertyValueField(valorFormatado);
     if (id === "downPayment") setdownPaymentField(valorFormatado);
     if (id === "financingFees") settaxasFincancimentoField(valorFormatado);
+    if (id === "inCashFees") settaxasAVistaField(valorFormatado);
     if (id === "personalBalance") setSaldoPessoalField(valorFormatado);
     if (id === "installmentValue") setinstallmentValueField(valorFormatado);
     if (id === "initialRentValue") setinitialRentValueField(valorFormatado);
@@ -80,10 +77,7 @@ export default function PropertyDataCard() {
   };
 
   useEffect(() => {
-    const aluguelValorizado = calcValorizaçãoAluguel(
-      initialRentValue,
-      finalYear
-    );
+
 
     const propertyValueValorizado = calcPropertyValuation(
       propertyValue,
@@ -104,7 +98,6 @@ export default function PropertyDataCard() {
       12 * finalYear
     );
 
-    setpropertyData("rentValue", aluguelValorizado);
     setpropertyData("appreciatedPropertyValue", propertyValueValorizado);
     setpropertyData("installmentValue", installmentValue);
     setpropertyData("outstandingBalance", outstandingBalance);
@@ -138,293 +131,283 @@ export default function PropertyDataCard() {
 
   return (
     <>
-      <Accordion
-        className="mt-24 sm:mt-10 md:p-2 lg:p-5"
-        type="single"
-        collapsible
-        defaultValue="item-1"
-      >
-        <AccordionItem className="" value="item-1">
-          <AccordionTrigger>Dados do imóvel e financiamento</AccordionTrigger>
-          <AccordionContent className="!p-0">
-            <form className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:mb-[-1rem]">
-              <div className="grid grid-cols-1 gap-2">
-                <Card>
-                  <CardTitle>
-                    <h2 className="text-xl text-center my-3 ">
-                      Informações do Imóvel
-                    </h2>
-                  </CardTitle>
+      <form className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
+        <Sheet
+          variant="outlined"
+          color="neutral"
+          className="grid grid-cols-1 gap-2 p-5"
+        >
+          <Sheet>
+            <h2 className="text-xl text-center mb-3 font-bold">
+              Informações do Imóvel
+            </h2>
 
-                  <CardContent className="grid grid-cols-1  gap-6">
-                    {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
-                      <div>
-                        <Label htmlFor="propertyValue">Saldo Disponível:</Label>
-                        <Input
-                          onChange={handleChangeReal}
-                          type="text"
-                          id="personalBalance"
-                          value={saldoPessoalField}
-                          required
-                        />
-                      </div>
-                    )}
+            <div className="grid grid-cols-1  gap-6">
+              {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
+                <div>
+                  <Label htmlFor="propertyValue">Saldo Disponível:</Label>
+                  <Input
+                    variant="outlined"
+                    onChange={handleChangeReal}
+                    type="text"
+                    id="personalBalance"
+                    value={saldoPessoalField}
+                    required
+                  />
+                </div>
+              )}
 
-                    <div>
-                      <Label htmlFor="propertyValue">Valor do imóvel:</Label>
-                      <Input
-                        onChange={handleChangeReal}
-                        type="text"
-                        id="propertyValue"
-                        value={propertyValueField}
-                        required
-                      />
-                    </div>
-                    <div className="relative">
-                      <Label htmlFor="valorizaçãoDoImóvel">
-                        Valorização anual do imóvel:
-                      </Label>
-                      <InputPercent
-                        onChangeValue={(v) =>
-                          setpropertyData("propertyAppreciationRate", v)
-                        }
-                        type="number"
-                        step={0.1}
-                        id="valorizaçãoDoImóvel"
-                        value={propertyAppreciationRate}
-                        required
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+              <div>
+                <Label htmlFor="propertyValue">Valor do imóvel:</Label>
+                <Input
+                  variant="outlined"
+                  onChange={handleChangeReal}
+                  type="text"
+                  id="propertyValue"
+                  value={propertyValueField}
+                  required
+                />
+              </div>
+              <div className="relative">
+                <Label htmlFor="valorizaçãoDoImóvel">
+                  Valorização anual do imóvel:
+                </Label>
+                <InputPercent
+                  onChangeValue={(v) =>
+                    setpropertyData("propertyAppreciationRate", v)
+                  }
+                  type="number"
+                  step={0.1}
+                  id="valorizaçãoDoImóvel"
+                  value={propertyAppreciationRate}
+                  required
+                />
+              </div>
+            </div>
+          </Sheet>
 
-                <Card>
-                  <CardTitle>
-                    <h2 className="text-xl text-center my-3 ">
-                      Rendimento e Aluguel
-                    </h2>
-                  </CardTitle>
+          <Sheet>
+            <h2 className="text-xl text-center my-3 font-bold ">
+              Rendimento e Aluguel
+            </h2>
 
-                  <CardContent className="grid grid-cols-2 gap-6">
-                    <div className="col-span-2">
-                      <Label htmlFor="propertyValue">
-                        Valor Inicial Aluguel:
-                      </Label>
-                      <Input
-                        className=""
-                        onChange={handleChangeReal}
-                        type="text"
-                        id="initialRentValue"
-                        value={initialRentValueField}
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="taxarendimento">
-                        Rendimento aplicação:
-                      </Label>
-
-                      <InputPercent
-                        onChangeValue={(v) =>
-                          setpropertyData("monthlyYieldRate", v)
-                        }
-                        type="number"
-                        step={0.1}
-                        id="taxarendimento"
-                        value={monthlyYieldRate}
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <Label className="text-xs" htmlFor="taxarendimento">
-                        Rendimento montante do aluguel:
-                      </Label>
-
-                      <InputPercent
-                        onChangeValue={(v) =>
-                          setpropertyData("rentMonthlyYieldRate", v)
-                        }
-                        type="number"
-                        step={0.1}
-                        id="taxarendimento"
-                        value={rentMonthlyYieldRate}
-                        required
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="col-span-2">
+                <Label htmlFor="propertyValue">Valor Inicial Aluguel:</Label>
+                <Input
+                  variant="outlined"
+                  className=""
+                  onChange={handleChangeReal}
+                  type="text"
+                  id="initialRentValue"
+                  value={initialRentValueField}
+                  required
+                />
               </div>
 
-              <Card>
-                <CardTitle>
-                  <h2 className="text-xl text-center my-3 ">
-                    Informações do Financiamento
-                  </h2>
-                </CardTitle>
+              <div>
+                <Label htmlFor="taxarendimento">Rendimento aplicação:</Label>
 
-                <CardContent className="grid grid-cols-1 h-[90%] justify-between gap-6">
-                  <div>
-                    <Label htmlFor="propertyValue">Valor da Entrada:</Label>
-                    <div className="relative">
-                      <Input
-                        onChange={handleChangeReal}
-                        type="text"
-                        id="downPayment"
-                        value={downPaymentField}
-                        required
-                      />
-                      <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
-                        {((downPayment / propertyValue) * 100).toFixed(2) + "%"}
-                      </span>
-                    </div>
+                <InputPercent
+                  onChangeValue={(v) => setpropertyData("monthlyYieldRate", v)}
+                  type="number"
+                  step={0.1}
+                  id="taxarendimento"
+                  value={monthlyYieldRate}
+                  required
+                />
+              </div>
 
-                    <div className="relative mt-4">
-                      <Slider
-                        onValueChange={(e) => {
-                          setpropertyData(
-                            "downPayment",
-                            (propertyValue * e[0]) / 10
-                          );
-                          setdownPaymentField(
-                            formatterReal((propertyValue * 100 * e[0]) / 10)
-                          );
-                        }}
-                        id="labels-range-Input"
-                        defaultValue={[2]}
-                        value={[(downPayment / propertyValue) * 10]}
-                        min={0}
-                        max={10}
-                      />
+              <div>
+                <Label className="text-xs" htmlFor="taxarendimento">
+                  Rendimento montante do aluguel:
+                </Label>
 
-                      <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-0 ">
-                        0%
-                      </span>
+                <InputPercent
+                  onChangeValue={(v) =>
+                    setpropertyData("rentMonthlyYieldRate", v)
+                  }
+                  type="number"
+                  step={0.1}
+                  id="taxarendimento"
+                  value={rentMonthlyYieldRate}
+                  required
+                />
+              </div>
+            </div>
+          </Sheet>
+        </Sheet>
 
-                      <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-[95%]">
-                        100%
-                      </span>
-                    </div>
-                  </div>
+        <Sheet variant="outlined" color="neutral" className="p-5">
+          <h2 className="text-xl text-center mb-3 font-bold ">
+            Informações do Financiamento
+          </h2>
 
-                  <div>
-                    <Label htmlFor="financingFees">
-                      Taxas do fincancimento:
-                    </Label>
-                    <Input
-                      onChange={handleChangeReal}
-                      type="text"
-                      id="financingFees"
-                      value={taxasFincancimentoField}
-                      required
-                    />
-                  </div>
+          <div className="grid grid-cols-1 h-[90%] justify-between gap-4">
+            <div>
+              <Label htmlFor="propertyValue">Valor da Entrada:</Label>
+              <div className="relative">
+                <Input
+                  variant="outlined"
+                  onChange={handleChangeReal}
+                  type="text"
+                  id="downPayment"
+                  value={downPaymentField}
+                  required
+                />
+                <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
+                  {((downPayment / propertyValue) * 100).toFixed(2) + "%"}
+                </span>
+              </div>
 
-                  <div className="relative">
-                    <Label htmlFor="interestRate">Juros financiamento</Label>
-                    <InputPercent
-                      onChangeValue={(v) => {
-                        if (v > 0) setpropertyData("interestRate", v);
-                      }}
-                      step={0.1}
-                      id="interestRate"
-                      type="number"
-                      value={interestRate}
-                    />
-                  </div>
+              <div className="relative mt-2">
+                <Slider
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  onChange={(e: any) => {
+                    const v = e.target?.value;
+                    setpropertyData("downPayment", (propertyValue * v) / 10);
+                    setdownPaymentField(
+                      formatterReal((propertyValue * 100 * v) / 10)
+                    );
+                  }}
+                  defaultValue={2}
+                  min={0}
+                  max={10}
+                />
 
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label htmlFor="financingFees">Total Investido:</Label>
-                      <Input
-                        onChange={() => {}}
-                        type="text"
-                        id="financingFees"
-                        value={numeroParaReal(downPayment + financingFees)}
-                        required
-                      />
-                    </div>
+                <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-0 ">
+                  0%
+                </span>
 
-                    <div>
-                      <Label htmlFor="financingFees">Total Financiado:</Label>
-                      <Input
-                        onChange={() => {}}
-                        type="text"
-                        id="financingFees"
-                        value={numeroParaReal(propertyValue - downPayment)}
-                        required
-                      />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-[95%]">
+                  100%
+                </span>
+              </div>
+            </div>
 
-              <Card>
-                <CardTitle>
-                  <h2 className="text-xl text-center my-3 ">
-                    Cálculo do Financiamento
-                  </h2>
-                </CardTitle>
-                <CardContent className="grid grid-cols-1 h-[90%] gap-6">
-                  <div>
-                    <Label htmlFor="anos">Calcular até:</Label>
-                    <InputYears
-                      onChangeValue={(v) => {
-                        if (v > 0) setpropertyData("finalYear", v);
-                      }}
-                      step={1}
-                      id="anos"
-                      type="number"
-                      value={finalYear}
-                    />
-                  </div>
+            <div>
+              <Label htmlFor="financingFees">Taxas do fincancimento:</Label>
+              <Input
+                variant="outlined"
+                onChange={handleChangeReal}
+                type="text"
+                id="financingFees"
+                value={taxasFincancimentoField}
+                required
+              />
+            </div>
 
-                  <div>
-                    <Label htmlFor="propertyValue">Valor Parcela:</Label>
-                    <Input
-                      onChange={handleChangeReal}
-                      type="text"
-                      id="installmentValue"
-                      value={installmentValueField}
-                      required
-                    />
-                  </div>
+            <div>
+              <Label htmlFor="inCashFees">Taxas á vista:</Label>
+              <Input
+                variant="outlined"
+                onChange={handleChangeReal}
+                type="text"
+                id="inCashFees"
+                value={taxasAVistaField}
+                required
+              />
+            </div>
 
-                  <div>
-                    <Label htmlFor="outstandingBalance">
-                      Saldo devedor em {finalYear} anos:
-                    </Label>
-                    <Input
-                      onChange={handleChangeReal}
-                      id="outstandingBalance"
-                      value={saldoDevedorField}
-                    />
-                  </div>
+            <div className="relative">
+              <Label htmlFor="interestRate">Juros financiamento:</Label>
+              <InputPercent
+                onChangeValue={(v) => {
+                  setpropertyData("interestRate", v);
+                }}
+                step={0.1}
+                id="interestRate"
+                type="number"
+                value={interestRate}
+              />
+            </div>
 
-                  <div>
-                    <Label htmlFor="anosfinanciamento">
-                      Tempo do financiamento (anos)
-                    </Label>
-                    <Input
-                      onChange={(e) => {
-                        if (Number(e.target.value))
-                          setpropertyData(
-                            "financingYears",
-                            Number(e.target.value)
-                          );
-                      }}
-                      id="anosfinanciamento"
-                      type="number"
-                      value={financingYears}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
-            </form>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+            <div>
+              <Label htmlFor="financingFees">Total Investido:</Label>
+              <Input
+                disabled
+                variant="outlined"
+                onChange={() => {}}
+                type="text"
+                id="financingFees"
+                value={numeroParaReal(downPayment + financingFees)}
+                required
+              />
+            </div>
+          </div>
+        </Sheet>
+
+        <Sheet variant="outlined" color="neutral" className="p-5">
+          <h2 className="text-xl text-center mb-3 font-bold ">
+            Cálculo do Financiamento
+          </h2>
+
+          <div className="grid grid-cols-1 h-[90%] gap-6">
+            <div>
+              <Label htmlFor="anos">Calcular até:</Label>
+              <InputYears
+                onChangeValue={(v) => {
+                  if (v > 0) setpropertyData("finalYear", v);
+                }}
+                step={1}
+                id="anos"
+                type="number"
+                value={finalYear}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="propertyValue">Valor da Parcela:</Label>
+              <Input
+                variant="outlined"
+                onChange={handleChangeReal}
+                type="text"
+                id="installmentValue"
+                value={installmentValueField}
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="outstandingBalance">
+                Saldo devedor em {finalYear} anos:
+              </Label>
+              <Input
+                variant="outlined"
+                onChange={handleChangeReal}
+                id="outstandingBalance"
+                value={saldoDevedorField}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="anosfinanciamento">Tempo do financiamento:</Label>
+              <InputYears
+                onChangeValue={(value) => {
+                  if (Number(value))
+                    setpropertyData("financingYears", Number(value));
+                }}
+                id="anosfinanciamento"
+                type="number"
+                value={financingYears}
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="financingFees">Total Financiado:</Label>
+              <Input
+                disabled
+                variant="outlined"
+                onChange={() => {}}
+                type="text"
+                id="financingFees"
+                value={numeroParaReal(propertyValue - downPayment)}
+                required
+              />
+            </div>
+          </div>
+        </Sheet>
+      </form>
     </>
   );
 

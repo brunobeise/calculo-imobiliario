@@ -1,5 +1,5 @@
+import { Input } from "@mui/joy";
 import React, { useRef, useState, useEffect } from "react";
-import { Input } from "./input";
 
 interface InputPercentProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -23,29 +23,27 @@ export default function InputPercent({
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    let newValue = e.target.value;
 
-    if (/^\d*\.?\d*$/.test(newValue) || newValue === "") {
+    if (newValue.trim() === "") {
+      newValue = "0";
+    }
+
+    if (/^\d*\.?\d*$/.test(newValue)) {
       let displayValue = newValue;
-      if (displayValue !== "0" && !displayValue.startsWith("0.")) {
-        displayValue = displayValue.replace(/^0+(\d)/, "$1");
-      }
 
       if (displayValue === ".") {
         displayValue = "0.";
       }
 
-      if (displayValue.includes(".") && displayValue.endsWith("0")) {
-        displayValue = displayValue.slice(0, -1);
+      if (displayValue !== "0" && !displayValue.startsWith("0.")) {
+        displayValue = displayValue.replace(/^0+(\d)/, "$1");
       }
 
       setValueSpan(displayValue);
 
-      if (displayValue === "" || displayValue === "0.") {
-        onChangeValue(0);
-      } else {
-        onChangeValue(Number(displayValue));
-      }
+      const numericValue = displayValue === "0." ? 0 : parseFloat(displayValue);
+      onChangeValue(numericValue);
     }
   };
 
@@ -62,11 +60,16 @@ export default function InputPercent({
   return (
     <div className="relative">
       <Input
+        color="neutral"
+        variant="outlined"
         onChange={handleChange}
-        type="text"
-        step={0.1}
+        type="number"
+        slotProps={{
+          input: {
+            step: rest.step || 1,
+          },
+        }}
         value={value.toString()}
-        {...rest}
       />
 
       <span

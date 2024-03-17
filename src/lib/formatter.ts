@@ -15,6 +15,6 @@ export const realParaNumero = (valor: string) => {
     return valorNumerico;
 };
 
-export const numeroParaReal = (value: number) => {
+export const numeroParaReal = (value: number = 0) => {
     return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }

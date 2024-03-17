@@ -1,73 +1,45 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { extendTheme } from "@mui/joy/styles";
 
-type Theme = "dark" | "light" | "system";
-
-type ThemeProviderProps = {
-  children: React.ReactNode;
-  defaultTheme?: Theme;
-  storageKey?: string;
-};
-
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: "light",
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
-
-export function ThemeProvider({
-  children,
-  defaultTheme = "light",
-  storageKey = "vite-ui-theme",
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
-  );
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
-  }, [theme]);
-
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
-  };
-
-  return (
-    <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
-    </ThemeProviderContext.Provider>
-  );
+declare module "@mui/joy/styles" {
+  // No custom tokens found, you can skip the theme augmentation.
 }
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
+const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          "50": "#e3f2fd",
+          "100": "#bbdefb",
+          "200": "#90caf9",
+          "300": "#64b5f6",
+          "400": "#004e93",
+          "500": "#002f57",
+          "600": "#004e93",
+          "700": "#004e93",
+          "800": "#1565c0",
+          "900": "#0d47a1",
+        },
+        neutral: {
+          "50": "#ffffff",
+          "300": "#e7e5e4",
+          "100": "#ffffff",
+        },
+      },
+    },
+    dark: {
+      palette: {},
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 640, // Tailwind's 'sm'
+      md: 768, // Tailwind's 'md'
+      lg: 1024, // Tailwind's 'lg'
+      xl: 1280, // Tailwind's 'xl'
+    },
+  },
+});
 
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
-  return context;
-};
+export default theme;

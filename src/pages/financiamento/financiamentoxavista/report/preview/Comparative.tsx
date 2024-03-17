@@ -30,7 +30,21 @@ export default function Comparative() {
             </p>
 
             <ComparativeMonthlyInvestmentGrowthChart
-              propertyData={propertyData}
+              finalYear={propertyData.finalYear}
+              financingValues={caseData.financing.detailedTable.map(
+                (r) =>
+                  r.rentValue +
+                  r.initialCapitalYield +
+                  r.rentalIncomeYield -
+                  propertyData.installmentValue
+              )}
+              inCashValues={caseData.inCash.detailedTable.map(
+                (r) =>
+                  r.rentValue +
+                  r.initialCapitalYield +
+                  r.rentalIncomeYield -
+                  propertyData.installmentValue
+              )}
             />
           </div>
           <div className="mt-10">
@@ -41,7 +55,15 @@ export default function Comparative() {
               imobiliário ao longo do tempo.
             </p>
 
-            <ComparativeTotalEquityGrowth propertyData={propertyData} />
+            <ComparativeTotalEquityGrowth
+              finalYear={propertyData.finalYear}
+              financingValues={caseData.financing.detailedTable.map(
+                (r) => r.finalValue
+              )}
+              inCashValues={caseData.inCash.detailedTable.map(
+                (r) => r.finalValue
+              )}
+            />
           </div>
         </div>
         <div className="min-h-[280mm]">
@@ -62,18 +84,26 @@ export default function Comparative() {
             </p>
           </div>
           <div className="relative my-10">
-            <BreakEvenChart context="financing" propertyData={propertyData} />
-            <p className="absolute bottom-[10%] right-[5%] font-bold text-xl">
+            <BreakEvenChart
+              profitValues={caseData.financing.detailedTable.map(
+                (i, _i, arr) => i.initialCapital - arr[0].initialCapital
+              )}
+              outstandingBalanceValues={caseData.financing.detailedTable.map(
+                (i) => i.outstandingBalance
+              )}
+            />
+            <p className="absolute bottom-[12%] right-[5%] font-bold text-xl">
               {caseData.financing.breakEven && (
                 <> Ponto de equilíbrio no mês {caseData.financing.breakEven}</>
               )}
             </p>
           </div>
           <p className="text-justify">
-            Ao chegar no mês 66, os rendimentos obtidos a partir do seu
-            investimento inicial, juntamente com os lucros acumulados do
-            aluguel, atingiram um ponto crucial: eles são agora suficientes para
-            quitar completamente o saldo devedor do seu financiamento.
+            Ao chegar no mês {caseData.financing.breakEven}, os rendimentos
+            obtidos a partir do seu investimento inicial, juntamente com os
+            lucros acumulados do aluguel, atingiram um ponto crucial: eles são
+            agora suficientes para quitar completamente o saldo devedor do seu
+            financiamento.
           </p>
         </div>
       </div>

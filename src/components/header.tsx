@@ -9,12 +9,11 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
 import { forwardRef, useEffect } from "react";
-import { Home } from "lucide-react";
-import { Button } from "./ui/button";
 import { financingRoutes } from "@/routes/financiamento";
 import { auxiliarRoutes } from "@/routes/auxiliar";
 import { relatorioRoutes } from "@/routes/relatorios";
-import { FaUser } from "react-icons/fa";
+import { FaHome, FaUser } from "react-icons/fa";
+import { IconButton } from "@mui/joy";
 
 export default function Header() {
   const location = useLocation();
@@ -29,9 +28,9 @@ export default function Header() {
     <div className="flex justify-between">
       <div className="flex">
         <Link to={"/"}>
-          <Button variant="link" size="icon">
-            <Home className="h-[1.2rem] w-[1.2rem]" />
-          </Button>
+          <IconButton size="lg">
+            <FaHome />
+          </IconButton>
         </Link>
         <NavigationMenu>
           <NavigationMenuList>
@@ -85,9 +84,9 @@ export default function Header() {
         </h1>
       </div>
       <Link to={"/user"}>
-        <Button variant="link" size="icon">
+        <IconButton size="lg">
           <FaUser className="h-[1.2rem] w-[1.2rem]" />
-        </Button>
+        </IconButton>
       </Link>
     </div>
   );

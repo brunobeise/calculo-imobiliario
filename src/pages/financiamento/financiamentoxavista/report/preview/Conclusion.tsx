@@ -82,17 +82,12 @@ export default function Conclusion() {
             <ul className="text-left">
               <li className="font-bold mb-2">À Vista:</li>
 
-              <li>
-                Aplicação inicial:{" "}
-                <span>{numeroParaReal(caseData.financing.investedEquity)}</span>
-              </li>
+          
               <li>
                 Compra do imóvel:{" "}
                 <span>{numeroParaReal(propertyData.propertyValue)}</span>
               </li>
-              <li>
-                Saldo devedor: <span>{numeroParaReal(0)}</span>
-              </li>
+            
               <li>
                 Valor do imóvel:{" "}
                 <span>

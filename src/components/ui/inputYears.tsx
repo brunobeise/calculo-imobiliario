@@ -1,5 +1,5 @@
+import { Input } from "@mui/joy";
 import React, { useRef, useState, useEffect } from "react";
-import { Input } from "./input";
 
 interface InputYearsProps extends React.InputHTMLAttributes<HTMLInputElement> {
   value: number;
@@ -44,10 +44,15 @@ export default function InputYears({
   return (
     <div className="relative">
       <Input
+        variant="outlined"
         onChange={handleChange}
-        type="text" // Usar "text" para evitar controles de número nativos
+        type="number"
         value={value.toString()}
-        {...rest}
+        slotProps={{
+          input: {
+            step: rest.step,
+          },
+        }}
       />
 
       <span

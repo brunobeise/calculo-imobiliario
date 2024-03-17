@@ -1,18 +1,6 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { numeroParaReal } from "@/lib/formatter";
-import { propertyDataContext } from "@/PropertyDataContext";
-
-import { useEffect, useState } from "react";
-import { useContext } from "react";
+import { Sheet, Table } from "@mui/joy";
+import { useMemo } from "react";
 
 interface TableRentAppreciationProps {
   annualCollection?: boolean;
@@ -21,81 +9,80 @@ interface TableRentAppreciationProps {
   text: "left" | "right" | "center";
   border?: boolean;
   maxHeight?: number;
+  data: number[];
 }
 
 export default function TableRentAppreciation(
   props: TableRentAppreciationProps
 ) {
-  const { propertyData } = useContext(propertyDataContext);
-  const [rows, setRows] = useState<
-    {
-      rentValue: string;
-      arrecadacaoAnual: string;
-      ano: number;
-    }[]
-  >([]);
-
-  useEffect(() => {
-    const newRows = propertyData.rentValue.map((rentValue, index) => {
-      const arrecadacaoAnual = rentValue * 12;
-      return {
-        rentValue: numeroParaReal(rentValue),
-        arrecadacaoAnual: numeroParaReal(arrecadacaoAnual),
-        ano: index + 1,
-      };
-    });
-
-    setRows(newRows);
-  }, [
-    propertyData.finalYear,
-    propertyData.initialRentValue,
-    propertyData.rentValue,
-  ]);
+  const rows = useMemo(() => {
+    let actualRentValue = props.data[0] || 0;
+    return props.data.reduce(
+      (acc, item, i) => {
+        if (i === 0 || item !== actualRentValue) {
+          acc.push({
+            ano: i === 0 ? 1 : i / 12 + 1,
+            rentValue: numeroParaReal(item),
+            arrecadacaoAnual: numeroParaReal(item * 12),
+          });
+          actualRentValue = item;
+        }
+        return acc;
+      },
+      [] as {
+        rentValue: string;
+        arrecadacaoAnual: string;
+        ano: number;
+      }[]
+    );
+  }, [props.data]);
 
   return (
-    <Card
+    <Sheet
+      variant="outlined"
       className={
-        `w-full ${
+        `w-full p-2 ${
           props.colspan
             ? ` col-span-${props.colspan} md:col-span-${
                 props.colspan / 2
               } lg:col-span-${Math.ceil(props.colspan / 3)} 
            `
             : ""
-        }` + ` ${props.border ? `` : ` border-0 `}`
+        }` + ` ${props.border ? `` : ` border-0`}`
       }
     >
       {props.title && (
-        <CardTitle className="mt-5">
-          <h2 className="text-xl text-center ">Valorização Aluguel</h2>
-          <p className="text-xs mb-5 text-center">(inflação 8% ao ano)</p>
-        </CardTitle>
+        <div className="mt-2">
+          <h2 className="text-xl text-center font-bold ">
+            Valorização do Aluguel
+          </h2>
+          <p className="text-xs mb-3 text-center">(inflação 8% ao ano)</p>
+        </div>
       )}
-      <CardContent>
-        <ScrollArea className={`h-[${props.maxHeight}px]`}>
-          <Table className={`w-full text-${props.text}`}>
-            <TableHeader>
-              <TableHead>Ano</TableHead>
-              <TableHead>Valor do Aluguel</TableHead>
-              {props.annualCollection && (
-                <TableHead>Arrecadação Anual</TableHead>
-              )}
-            </TableHeader>
 
-            <TableBody>
-              {rows?.map((item) => (
-                <TableRow key={item.ano}>
-                  <TableCell>{item.ano}</TableCell>
-                  <TableCell>{item.rentValue}</TableCell>
-                  {props.annualCollection && (
-                    <TableCell>{item.arrecadacaoAnual}</TableCell>
-                  )}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </ScrollArea>
-      </CardContent>
-    </Card>
+      <Sheet
+        sx={{ height: 380, overflow: "auto", backgroundColor: "transparent" }}
+      >
+        <Table stickyHeader={true} className={`w-full text-${props.text}`}>
+          <thead>
+            <tr>
+              <th className="w-24">Ano</th>
+              <th>Valor do Aluguel</th>
+              {props.annualCollection && <th>Arrecadação Anual</th>}
+            </tr>
+          </thead>
+
+          <tbody>
+            {rows?.map((item) => (
+              <tr key={item.ano}>
+                <td>{item.ano}</td>
+                <td>{item.rentValue}</td>
+                {props.annualCollection && <td>{item.arrecadacaoAnual}</td>}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </Sheet>
+    </Sheet>
   );
 }

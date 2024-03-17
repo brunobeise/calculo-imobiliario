@@ -59,8 +59,13 @@ export default function FinancingAnalysis() {
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart
-            propertyData={propertyData}
-            context="financing"
+            data={caseData.financing.detailedTable.map(
+              (i) =>
+                i.rentValue +
+                i.initialCapitalYield +
+                i.rentalIncomeYield -
+                propertyData.installmentValue
+            )}
           />
         </div>
         <p className="text-justify text-center text-sm mt-5">
@@ -68,8 +73,10 @@ export default function FinancingAnalysis() {
         </p>
         <div className="px-8">
           <CompleteAnalysisChart
-            propertyData={propertyData}
-            context="financing"
+            investedEquityValues={caseData.financing.detailedTable.map(i => i.totalCapital)}
+            outstandingBalanceValues={caseData.financing.detailedTable.map(i => i.outstandingBalance)}
+            propertyValues={caseData.financing.detailedTable.map(i => i.propertyValue)}
+           
           />
         </div>
       </div>

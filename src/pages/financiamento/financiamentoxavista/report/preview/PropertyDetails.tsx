@@ -4,10 +4,15 @@ import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
+import { FinanceOrCashData } from "../../Context";
 
 export default function PropertyDetails() {
   const { propertyData } = useContext(propertyDataContext);
   const { financeOrCashReportState } = useContext(FinanceOrCashReportContext);
+
+   const caseData: FinanceOrCashData = JSON.parse(
+     localStorage.getItem("financingOrInCashCaseData") || ""
+   );
 
   const {
     finalYear,
@@ -154,8 +159,18 @@ export default function PropertyDetails() {
           </p>
           {financeOrCashReportState.appreciationOfRent.activeSecondary && (
             <div className="grid grid-cols-2 gap-2 mt-5 ">
-              <TablePropertyAppreciation />
-              <TableRentAppreciation border={false} text="left" />
+              <TablePropertyAppreciation
+                data={caseData["financing"].detailedTable.map(
+                  (i) => i.propertyValue
+                )}
+                text="left"
+              />
+              <TableRentAppreciation
+                text="left"
+                data={caseData["financing"].detailedTable.map(
+                  (i) => i.rentValue
+                )}
+              />
             </div>
           )}
         </>

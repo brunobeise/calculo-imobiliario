@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
-import ChartDataLabels from "chartjs-plugin-datalabels";
 import { numeroParaReal } from "@/lib/formatter";
-
-ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 interface InitialEquityDivisionChharProps {
   labels: string[];

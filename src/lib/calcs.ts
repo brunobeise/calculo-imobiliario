@@ -1,9 +1,7 @@
-export function calcValorizaçãoAluguel(valorInicial: number, finalYear: number): number[] {
-    return Array.from({ length: finalYear }, (_, index) => {
-        const ano = index + 1;
-        return Number((valorInicial * Math.pow(1 + 0.08, ano - 1)).toFixed(2));
-    });
+export function calcRentValue(valorInicial: number, ano: number): number {
+    return Number((valorInicial * Math.pow(1 + 0.08, ano - 1)).toFixed(2));
 }
+
 
 export function calcPropertyValuation(propertyValue: number, interestRate: number, finalYear: number): number {
     return propertyValue * Math.pow(1 + interestRate / 100, finalYear)

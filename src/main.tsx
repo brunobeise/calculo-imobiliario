@@ -2,16 +2,42 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { ThemeProvider } from "./theme.tsx";
 import { PropertyDataProvider } from "./PropertyDataContext.tsx";
 import "@/assets/fonts/font.css";
+import { CssVarsProvider } from "@mui/joy/styles";
+import theme from "./theme.tsx";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels,
+  ArcElement
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <CssVarsProvider  theme={theme}>
       <PropertyDataProvider>
         <App />
       </PropertyDataProvider>
-    </ThemeProvider>
+    </CssVarsProvider >
   </React.StrictMode>
 );

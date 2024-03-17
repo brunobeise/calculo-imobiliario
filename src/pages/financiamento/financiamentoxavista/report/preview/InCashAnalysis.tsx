@@ -20,7 +20,7 @@ export default function InCashAnalysis() {
       <h3 className="text-2xl font-bold text-center leading-7 my-5">
         Análise de Compra À Vista:
       </h3>
-      <div className="grid grid-cols-2 mb-5 px-16">
+      <div className="grid grid-cols-2 mb-5 px-14">
         <div>
           <p className="text-center">Divisão incial do capital:</p>
           <InitialEquityDivisionChart
@@ -48,13 +48,23 @@ export default function InCashAnalysis() {
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart
-            propertyData={propertyData}
-            context="inCash"
+            data={caseData.inCash.detailedTable.map(
+              (i) => i.rentValue + i.initialCapitalYield + i.rentalIncomeYield
+            )}
           />
         </div>
         <p className="text-center text-sm mt-5">Análise completa:</p>
         <div className="px-8">
-          <CompleteAnalysisChart propertyData={propertyData} context="inCash" />
+          <CompleteAnalysisChart
+            investedEquityValues={caseData.inCash.detailedTable.map(
+              (i) => i.totalCapital
+            )}
+           
+            propertyValues={caseData.inCash.detailedTable.map(
+              (i) => i.propertyValue
+            )}
+            
+          />
         </div>
       </div>
     </div>

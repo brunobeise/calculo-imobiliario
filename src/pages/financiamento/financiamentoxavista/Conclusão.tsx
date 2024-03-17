@@ -1,16 +1,8 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Sheet, Table } from "@mui/joy";
 import { propertyDataContext } from "@/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { caseDataContext } from "./Context";
 
 interface ConclusãoProps {
@@ -24,14 +16,11 @@ export default function Conclusão(props: ConclusãoProps) {
   const {
     finalYear,
     monthlyYieldRate,
-
     personalBalance,
     financingFees,
     downPayment,
     propertyValue,
     appreciatedPropertyValue,
-    investedEquity,
-    rentValue,
   } = propertyData;
 
   const calcCompraDoImovel = () => {
@@ -45,80 +34,132 @@ export default function Conclusão(props: ConclusãoProps) {
     else return personalBalance - propertyValue;
   };
 
-  const rendaMensal = () => {
-    return (
-      rentValue[rentValue.length - 1] * 1.08 +
-      (investedEquity * monthlyYieldRate) / 100
-    );
-  };
+  const rendaMensal = useMemo(() => {
+    // Verifica se os dados necessários estão disponíveis
+    if (caseData[props.context].detailedTable.length > 0) {
+      const ultimoRegistro =
+        caseData[props.context].detailedTable[
+          caseData[props.context].detailedTable.length - 1
+        ];
+
+      // Verifica se rentValue e finalValue existem
+      if (
+        typeof ultimoRegistro.rentValue !== "undefined" &&
+        typeof ultimoRegistro.finalValue !== "undefined"
+      ) {
+        return (
+          ultimoRegistro.rentValue * 1.08 +
+          (ultimoRegistro.finalValue * monthlyYieldRate) / 100
+        );
+      }
+    }
+
+    // Retorna 0 se os dados necessários não estiverem disponíveis
+    return 0;
+  }, [caseData, monthlyYieldRate, props.context]);
+
 
   return (
-    <Card className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center">
-      <CardTitle className="mt-5">
-        <h2 className="text-xl text-center mb-2">Conclusão</h2>
-      </CardTitle>
-      <CardContent className="grid grid-rows gap-5">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-center">Compra do imóvel</TableHead>
-              <TableHead className="text-center">Aplicação</TableHead>
-              <TableHead className="text-center">Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>{numeroParaReal(calcCompraDoImovel()!)}</TableCell>
-              <TableCell>{numeroParaReal(calcTotalInvestido()!)}</TableCell>
-              <TableCell>
+    <Sheet
+      variant="outlined"
+      className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center p-5"
+    >
+      <h2 className="text-xl text-center my-2 font-bold">Conclusão</h2>
+      <p className="text-xs mb-7 text-center"></p>
+
+      <Sheet>
+        <Table
+          color="neutral"
+          size={"md"}
+          sx={{
+            "& thead th": {
+              textAlign: "center",
+            },
+            "& tbody td": {
+              textAlign: "center",
+            },
+            "& tbody tr": {
+              backgroundColor: "white",
+            },
+          }}
+        >
+          <thead>
+            <tr>
+              <th>Compra do imóvel</th>
+              <th>Aplicação</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{numeroParaReal(calcCompraDoImovel()!)}</td>
+              <td>{numeroParaReal(calcTotalInvestido()!)}</td>
+              <td>
                 {numeroParaReal(calcCompraDoImovel()! + calcTotalInvestido()!)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </td>
+            </tr>
+          </tbody>
         </Table>
+      </Sheet>
 
-        <p className="text-md my-2 text-center">
-          Resultado após {finalYear} anos:
-        </p>
+      <h2 className="text-md text-center my-2 mt-5 font-bold">
+        Resultado após {finalYear} anos:
+      </h2>
 
-        <Table>
-          <TableHeader>
-            <TableHead className="text-center">Valor do imóvel</TableHead>
-            <TableHead className="text-center">Total Aplicação</TableHead>
-            <TableHead className="text-center">Saldo Devedor</TableHead>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>{numeroParaReal(appreciatedPropertyValue)}</TableCell>
-              <TableCell>
+      <Sheet>
+        <Table
+          className="text-center"
+          sx={{
+            "& thead th": {
+              textAlign: "center",
+            },
+            "& tbody td": {
+              textAlign: "center",
+            },
+            "& tbody tr": {
+              backgroundColor: "white",
+            },
+          }}
+          size="md"
+        >
+          <thead>
+            <tr>
+              <th>Valor do imóvel</th>
+              <th>Total Aplicação</th>
+              <th>Saldo Devedor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{numeroParaReal(appreciatedPropertyValue)}</td>
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.investedEquityFinal)
                   : numeroParaReal(caseData.inCash.investedEquityFinal)}
-              </TableCell>
-              <TableCell>
+              </td>
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(propertyData.outstandingBalance)
                   : numeroParaReal(0)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-
-        <Table>
-          <TableHeader>
-            <TableHead className="text-center">Patrimônio Final</TableHead>
-            <TableHead className="text-center">Renda Mensal</TableHead>
-            <TableHead className="text-center">Lucro na operação</TableHead>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="text-black font-bold">
+              </td>
+            </tr>
+          </tbody>
+          <thead>
+            <tr>
+              <th>Patrimônio Final</th>
+              <th>Renda Mensal</th>
+              <th>Lucro na operação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="text-black font-bold">
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalFinalEquity)
                   : numeroParaReal(caseData.inCash.totalFinalEquity)}
-              </TableCell>
-              <TableCell>{numeroParaReal(rendaMensal())}</TableCell>
-              <TableCell>
+              </td>
+              <td>{numeroParaReal(rendaMensal)}</td>
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalProfit)
                   : numeroParaReal(caseData.inCash.totalProfit)}
@@ -131,18 +172,18 @@ export default function Conclusão(props: ConclusãoProps) {
                       caseData.inCash.totalProfitPercent.toFixed(2) +
                       "%)"}
                 </p>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </td>
+            </tr>
+          </tbody>
         </Table>
+      </Sheet>
 
-        {caseData[props.context].breakEven && (
-          <p className="text-xs">
-            *Break-even no mes{" "}
-            <strong> {caseData[props.context].breakEven} </strong>
-          </p>
-        )}
-      </CardContent>
-    </Card>
+      {caseData[props.context].breakEven && (
+        <p className="text-xs mt-5">
+          *Break-even no mes{" "}
+          <strong> {caseData[props.context].breakEven} </strong>
+        </p>
+      )}
+    </Sheet>
   );
 }
