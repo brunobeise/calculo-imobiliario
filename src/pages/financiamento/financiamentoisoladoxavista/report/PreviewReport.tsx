@@ -5,6 +5,7 @@ import PropertyDetails from "./preview/PropertyDetails";
 import FinancingAnalysis from "./preview/FinancingAnalysis";
 import InCashAnalysis from "./preview/InCashAnalysis";
 import Comparative from "./preview/Comparative";
+import Conclusion from "./preview/Conclusion";
 
 interface PreviewReportProps {
   viewMap: {
@@ -13,6 +14,7 @@ interface PreviewReportProps {
     finance: boolean;
     inCash: boolean;
     comparative: boolean;
+    conclusion: boolean;
   };
 }
 
@@ -26,6 +28,7 @@ const PreviewReport = forwardRef<HTMLDivElement, PreviewReportProps>(
           {viewMap.finance && <FinancingAnalysis />}
           {viewMap.inCash && <InCashAnalysis />}
           {viewMap.comparative && <Comparative />}
+          {viewMap.conclusion && <Conclusion />}
         </div>
       </Card>
     );

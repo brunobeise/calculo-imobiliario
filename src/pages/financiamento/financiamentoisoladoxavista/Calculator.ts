@@ -1,167 +1,134 @@
-import { PropertyData } from "@/PropertyDataContext";
-import { calcOutstandingBalance } from "@/lib/calcs";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
+import { calcOutstandingBalance, calcPropertyValuation, calcRentValue } from "@/lib/calcs";
+import { IsolatedFinancingOrCashDetailedTable } from "./Context";
+
 
 export function calcCaseData(context: 'inCash' | 'financing', propertyData: PropertyData) {
-    const totalProfit = calcTotalProfit(context, propertyData)
+    const detailedTable = calcDetailedTable(context, propertyData)
+    const initialInvestment = context === 'financing' ?
+        propertyData.downPayment + propertyData.financingFees
+        : propertyData.inCashFees + propertyData.propertyValue
+    const totalProfit = calcTotalProfit(detailedTable, initialInvestment)
 
     return {
-        investedEquity: calcInvestedEquity(context, propertyData),
+        investedEquity: 0,
         totalProfit: totalProfit.value,
         totalProfitPercent: totalProfit.percent,
         totalFinalEquity: totalProfit.finalEquity,
-        investedEquityFinal: calcInvestedEquityFinal(context, propertyData),
-        breakEven: calcBreakEvenPoint(context, propertyData)
+        investedEquityFinal: calcInvestedEquityFinal(detailedTable, propertyData),
+        breakEven: calcBreakEvenPoint(detailedTable),
+        detailedTable
+
     };
 }
 
 
-export function calcInvestedEquity(context: 'inCash' | 'financing', propertyData: PropertyData) {
-    if (context === "financing")
-        return propertyData.personalBalance - (propertyData.downPayment + propertyData.financingFees);
-    else return propertyData.personalBalance - propertyData.propertyValue;
-}
+export function calcTotalProfit(detailedTable: IsolatedFinancingOrCashDetailedTable[], personalBalance: number, row?: number) {
 
-export function calcTotalProfit(context: 'inCash' | 'financing', propertyData: PropertyData) {
-    const calcCompraDoImovel = () => {
-        if (context === "financing") return propertyData.downPayment + propertyData.financingFees;
-        else return propertyData.propertyValue;
-    };
-
-    const calcTotalInvestido = () => {
-
-        return propertyData.personalBalance - calcCompraDoImovel()
-
-    };
-
-    const calcOutstandingBalance = () => {
-        if (context === "financing") return propertyData.outstandingBalance;
-        else return 0;
-    };
-
-    const calcPatrimônioTotal = () => {
-        if (context === "financing")
-            return propertyData.appreciatedPropertyValue + calcInvestedEquityFinal(context, propertyData) - calcOutstandingBalance();
-        else return propertyData.appreciatedPropertyValue + calcInvestedEquityFinal(context, propertyData)
-    };
-
-    const lucroNaOperação = () => {
-        return (
-            (calcPatrimônioTotal() / (calcCompraDoImovel() + calcTotalInvestido())) *
-            100 -
-            100
-        );
-    };
-
-    const lucroNaOperaçãoReais = () => {
-        return (
-            calcPatrimônioTotal() - (calcCompraDoImovel() + calcTotalInvestido())
-        );
-    };
-
+    const finalRow = row ? detailedTable[row] : detailedTable[detailedTable.length - 1];
+    const totalEquity = finalRow.finalValue
+    const operationProfitAmount = finalRow.monthlyProfit
+    const operationProfitPercent = ((finalRow.monthlyProfit / personalBalance) * 100);
 
     return {
-        value: lucroNaOperaçãoReais(),
-        percent: lucroNaOperação(),
-        finalEquity: calcPatrimônioTotal()
+        value: operationProfitAmount,
+        percent: operationProfitPercent,
+        finalEquity: totalEquity
+    };
+}
+
+export function calcInvestedEquityFinal(detailedTable: IsolatedFinancingOrCashDetailedTable[], propertyData: PropertyData, month = propertyData.finalYear * 12) {
+
+    if (month > 0 && month <= detailedTable.length) {
+
+        const rowForMonth = detailedTable[month - 1];
+
+        return rowForMonth.finalValue - rowForMonth.propertyValue + rowForMonth.outstandingBalance;
+    } else {
+
+        console.error("Month specified is out of range.");
+        return 0;
     }
 }
 
-export function calcInvestedEquityFinal(context: 'inCash' | 'financing', propertyData: PropertyData) {
+export function calcBreakEvenPoint(detailedTable: IsolatedFinancingOrCashDetailedTable[]) {
 
-    let capitalAcumulado =
-        context === "financing"
-            ? propertyData.personalBalance -
-            propertyData.financingFees -
-            propertyData.downPayment
-            : propertyData.personalBalance - propertyData.propertyValue;
+    let breakEvenPoint = 0;
+    const initialCapital = detailedTable[0].initialCapital
 
-    let patrimonioFinal = 0;
-    let rentValue = propertyData.initialRentValue;
+    for (const [index, row] of detailedTable.entries()) {
+        if ((row.initialCapital - initialCapital) > row.outstandingBalance) {
 
-    for (let mes = 1; mes <= propertyData.finalYear * 12; mes++) {
-        const indiceAno = Math.floor((mes - 1) / 12);
-
-        if (mes % 12 === 1 || mes === 1) {
-            rentValue = propertyData.rentValue![indiceAno];
+            breakEvenPoint = index + 1;
+            break;
         }
-
-        const montanteAluguel =
-            context === "financing"
-                ? Number((rentValue - propertyData.installmentValue))
-                : Number(rentValue);
-
-        let lucroMensal = 0;
-        if (capitalAcumulado >= 0 || context === "financing") {
-            lucroMensal = Number(
-                ((capitalAcumulado * propertyData.monthlyYieldRate) / 100)
-            );
-        }
-
-        const valorFinal = Number(
-            (capitalAcumulado + lucroMensal + montanteAluguel)
-        );
-
-        if (mes === propertyData.finalYear * 12) patrimonioFinal = valorFinal;
-        capitalAcumulado = valorFinal;
     }
 
-    return patrimonioFinal
+    return breakEvenPoint;
 
 }
 
-export function calcBreakEvenPoint(context: 'inCash' | 'financing', propertyData: PropertyData) {
-    const initialCapital = context === "financing"
-        ? propertyData.personalBalance -
-        propertyData.financingFees -
-        propertyData.downPayment
-        : propertyData.personalBalance - propertyData.propertyValue;
-
-    let accumulatedCapital = initialCapital;
+export function calcDetailedTable(context: 'inCash' | 'financing', propertyData: PropertyData) {
+    const rows: IsolatedFinancingOrCashDetailedTable[] = [];
+    
+    let initialCapital = 0
+    const initialInvestment = context === 'financing' ? 
+    propertyData.downPayment + propertyData.financingFees
+    : propertyData.inCashFees + propertyData.propertyValue
 
     let rentValue = propertyData.initialRentValue;
 
     for (let month = 1; month <= propertyData.finalYear * 12; month++) {
-        const yearIndex = Math.floor((month - 1) / 12);
+        const yearIndex = Math.floor((month ) / 12);
 
         if (month % 12 === 1 || month === 1) {
-            rentValue = propertyData.rentValue![yearIndex];
+            rentValue = calcRentValue(propertyData.initialRentValue, yearIndex)
         }
 
         const rentalAmount =
-            context === "financing"
-                ? Number((rentValue - propertyData.installmentValue))
-                : Number(rentValue);
+            context === 'financing'
+                ? ((rentValue - propertyData.installmentValue))
+                : (rentValue);
 
-        let monthlyProfit = 0;
-        if (accumulatedCapital >= 0 || context === "financing") {
-            monthlyProfit = Number(
-                ((accumulatedCapital * propertyData.monthlyYieldRate) / 100)
+       
+        const capitalYield = initialCapital >= 0
+            ? (((initialCapital * propertyData.monthlyYieldRate) / 100))
+            : 0;
+
+        const propertyValue = calcPropertyValuation(propertyData.propertyValue, propertyData.propertyAppreciationRate, Math.floor(month / 12))
+
+        let outstandingBalance = 0;
+        if (context === 'financing') {
+            outstandingBalance = calcOutstandingBalance(
+                propertyData.propertyValue - propertyData.downPayment,
+                propertyData.interestRate,
+                propertyData.financingYears,
+                month
             );
         }
 
-        const finalValue = Number(
-            (accumulatedCapital + monthlyProfit + rentalAmount)
-        );
+        const finalValue = initialCapital + capitalYield + rentalAmount + propertyValue - outstandingBalance;
 
-        const outstandingBalance = calcOutstandingBalance(
-            propertyData.propertyValue - propertyData.downPayment, // financed amount
-            propertyData.interestRate,
-            propertyData.financingYears,
-            month - 1
-        );
+        const monthlyProfit = finalValue - initialInvestment
 
-        if ((finalValue - initialCapital) > outstandingBalance) {
-            return month;
-        }
+        rows.push({
+            totalCapital: initialCapital,
+            initialCapital: initialCapital,
+            initialCapitalYield: capitalYield,
+            propertyValue: propertyValue,
+            rentValue: rentValue,
+            rentalAmount: rentalAmount,
+            outstandingBalance: outstandingBalance,
+            finalValue: finalValue,
+            monthlyProfit: monthlyProfit
+        });
 
 
-        accumulatedCapital = finalValue;
+        initialCapital += capitalYield + rentalAmount;
+
     }
 
-
-
+    return rows;
 }
-
-
 
 

@@ -1,4 +1,4 @@
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { BreakEvenChart } from "@/components/charts/BreakEvenChart";
 import { ComparativeMonthlyInvestmentGrowthChart } from "@/components/charts/ComparativeMontlyInvestmentGrowthChart";
 import ComparativeTotalEquityGrowth from "@/components/charts/ComparativeTotalEquityGrowth";

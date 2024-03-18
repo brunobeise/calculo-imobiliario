@@ -1,12 +1,12 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financiamentoxavista/Context";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { IsolatedFinancingOrCashDetailedTable } from "../financiamentoisoladoxavista/Context";
 
 interface TabelaRendimentoProps {
-  detailedTable: FinancingOrCashDetailedTable[];
+  detailedTable: IsolatedFinancingOrCashDetailedTable[];
 }
 
 export default function DetailedTable(props: TabelaRendimentoProps) {
@@ -28,7 +28,10 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
         <div style={{ minWidth: 600 }}>
           <Table
             className="text-left"
-            sx={{ "& thead th:nth-child-of-type(1)": { width: "50px" }, minWidth: 1000 }}
+            sx={{
+              "& thead th:nth-child-of-type(1)": { width: "50px" },
+              minWidth: 1000,
+            }}
             borderAxis="x"
             color="neutral"
             size={matchesLG ? "md" : "sm"}
@@ -38,13 +41,12 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
           >
             <thead>
               <tr>
-                <th style={{width: '60px'}}>Mês </th>
+                <th style={{ width: "60px" }}>Mês </th>
                 <th>Capital</th>
-                <th>Capital do Aluguel</th>
                 <th>Valor do Aluguel</th>
+                <th>Aluguel - Parcela</th>
                 <th>Valor do Imóvel</th>
                 <th>Rendimento do Capital</th>
-                <th>Rendimento do Aluguel</th>
                 <th>Saldo Devedor</th>
                 <th>Patrimônio Líquido</th>
                 <th>Lucro</th>
@@ -55,12 +57,10 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>{numeroParaReal(item.initialCapital)}</td>
-                  <td>{numeroParaReal(item.rentalIncomeCapital)}</td>
                   <td>{numeroParaReal(item.rentValue)}</td>
-
+                  <td>{numeroParaReal(item.rentalAmount)}</td>
                   <td>{numeroParaReal(item.propertyValue)}</td>
                   <td>{numeroParaReal(item.initialCapitalYield)}</td>
-                  <td>{numeroParaReal(item.rentalIncomeYield)}</td>
                   <td>{numeroParaReal(item.outstandingBalance)}</td>
                   <td>{numeroParaReal(item.finalValue)}</td>
 

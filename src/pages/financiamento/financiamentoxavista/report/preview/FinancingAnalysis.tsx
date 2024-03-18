@@ -1,4 +1,4 @@
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import FinalEquityDivisionChart from "@/components/charts/FinalEquityDivisionChart";
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";

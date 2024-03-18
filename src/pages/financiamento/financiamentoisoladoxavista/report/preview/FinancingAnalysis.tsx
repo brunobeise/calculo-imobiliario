@@ -1,42 +1,41 @@
-import { propertyDataContext } from "@/PropertyDataContext";
+
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import FinalEquityDivisionChart from "@/components/charts/FinalEquityDivisionChart";
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
-import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/Context";
-import { useContext } from "react";
+import { IsolatedFinanceOrCashData } from "../../Context";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function FinancingAnalysis() {
-  const { propertyData } = useContext(propertyDataContext);
+  const propertyData: PropertyData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashPropertyData") || ""
+  );
 
   const {
     outstandingBalance,
-    personalBalance,
     financingFees,
     downPayment,
     appreciatedPropertyValue,
   } = propertyData;
 
-  const caseData: FinanceOrCashData = JSON.parse(
-    localStorage.getItem("financingOrInCashCaseData") || ""
+  const caseData: IsolatedFinanceOrCashData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashCaseData") || ""
   );
 
   return (
     <div className="px-10 pageBreakAfter">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+      <h3 className="text-2xl font-bold text-center leading-7 mb-5 mt-5">
         Análise do Financiamento:
       </h3>
       <div className="grid grid-cols-2 mb-5 px-12">
-        <div>
-          <p className="text-center">Divisão incial do capital:</p>
-          <InitialEquityDivisionChart
-            labels={["Renda Fixa", "Entrada", "Taxas"]}
-            values={[
-              personalBalance - financingFees - downPayment,
-              downPayment,
-              financingFees,
-            ]}
-          />
+        <div className="px-2">
+          <p className="text-center">Divisão inicial do capital:</p>
+          <div>
+            <InitialEquityDivisionChart
+              labels={["Entrada", "Taxas"]}
+              values={[downPayment, financingFees]}
+            />
+          </div>
         </div>
         <div>
           <p className="text-center">Divisão final do capital:</p>
@@ -51,7 +50,7 @@ export default function FinancingAnalysis() {
         </div>
       </div>
       <div className="px-3">
-        <p className="text-center text-sm">
+        <p className="text-justify text-sm ">
           Todo mês, somamos o aluguel e os rendimentos da renda fixa para pagar
           as parcelas. O que sobra é reinvestido. Com o aumento periódico do
           aluguel e parcelas fixas, o montante na renda fixa tende a crescer ao
@@ -59,15 +58,28 @@ export default function FinancingAnalysis() {
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart
-            propertyData={propertyData}
-            context="financing"
+            data={caseData.financing.detailedTable.map(
+              (i) =>
+                i.rentValue +
+                i.initialCapitalYield -
+                propertyData.installmentValue
+            )}
           />
         </div>
-        <p className="text-center text-sm mt-5">Análise completa:</p>
+        <p className="text-justify !text-center text-md mt-5 mb-2 font-bold">
+          Análise completa:
+        </p>
         <div className="px-8">
           <CompleteAnalysisChart
-            propertyData={propertyData}
-            context="financing"
+            investedEquityValues={caseData.financing.detailedTable.map(
+              (i) => i.totalCapital
+            )}
+            outstandingBalanceValues={caseData.financing.detailedTable.map(
+              (i) => i.outstandingBalance
+            )}
+            propertyValues={caseData.financing.detailedTable.map(
+              (i) => i.propertyValue
+            )}
           />
         </div>
       </div>

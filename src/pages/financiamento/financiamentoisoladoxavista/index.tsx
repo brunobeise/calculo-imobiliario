@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import Conclusão from "./Conclusão";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
-import { Button } from "@/components/ui/button";
-import { FileBarChart2 } from "lucide-react";
 import { caseDataContext } from "./Context";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import TableMonthlyInvestment from "@/components/tables/TableMonthlyInvestment";
+import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
+import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
+import { FaFile } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import DetailedTable from "./DetailedTable";
 
 export default function IsolatedFinancingOrCash() {
   const { propertyData } = useContext(propertyDataContext);
@@ -19,14 +20,6 @@ export default function IsolatedFinancingOrCash() {
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
-
-    if (propertyData.personalBalance < propertyData.propertyValue) {
-      newErrors.push({
-        title: "Saldo Pessoal incorreto.",
-        message:
-          "Na modalidade financiamento x a vista, o saldo pessoal deve ser igual ou superior ao valor do imóvel",
-      });
-    }
 
     if (propertyData.finalYear > 35 || propertyData.financingYears > 35) {
       newErrors.push({
@@ -43,27 +36,46 @@ export default function IsolatedFinancingOrCash() {
     }
   }, [propertyData]);
 
+
   return (
     <>
-      <Tabs defaultValue="Financiamento" className="w-full text-center">
-        <TabsList>
-          <TabsTrigger
-            onClick={() => setContext("financing")}
-            value="Financiamento"
+      <div className="w-full text-center">
+        <Tabs
+          defaultValue={"financing"}
+          aria-label="tabs"
+          sx={{ bgcolor: "transparent" }}
+        >
+          <TabList
+            onChange={(e) => console.log(e?.target)}
+            disableUnderline
+            sx={{
+              justifyContent: "center",
+              p: 0.5,
+              gap: 0.5,
+              borderRadius: "xl",
+              bgcolor: "transparent",
+              [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                boxShadow: "sm",
+                bgcolor: "background.surface",
+              },
+            }}
           >
-            Financiamento
-          </TabsTrigger>
-          <TabsTrigger onClick={() => setContext("inCash")} value="A Vista">
-            A Vista
-          </TabsTrigger>
-        </TabsList>
+            <div onClick={() => setContext("financing")}>
+              <Tab value="financing">Financiamennto</Tab>
+            </div>
+            <div onClick={() => setContext("inCash")}>
+              <Tab value="inCash">Á Vista</Tab>
+            </div>
+          </TabList>
+        </Tabs>
 
         {errors.length === 0 ? (
           <>
-            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5">
+            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5">
               <Conclusão context={context} />
 
               <TableRentAppreciation
+                data={caseData[context].detailedTable.map((i) => i.rentValue)}
                 maxHeight={300}
                 border
                 text="left"
@@ -71,21 +83,40 @@ export default function IsolatedFinancingOrCash() {
                 title={true}
                 colspan={12}
               />
-
-              <TableMonthlyInvestment context={context} border colspan={12} />
+              <TablePropertyAppreciation
+                data={caseData[context].detailedTable.map(
+                  (i) => i.propertyValue
+                )}
+                totalValorization
+                maxHeight={300}
+                border
+                text="left"
+                annualCollection={true}
+                title={true}
+                colspan={12}
+              />
+              <DetailedTable detailedTable={caseData[context].detailedTable} />
             </div>
-            <Button
-              onClick={() =>
-                localStorage.setItem(
-                  "financingOrInCashCaseData",
-                  JSON.stringify(caseData)
-                )
-              }
-              href="/financiamentoxavista/relatorio"
-              className="my-5"
-              text="Gerar Relatório Completo"
-              Icon={FileBarChart2}
-            />
+            <Link to={"/financiamentoisoladoxavista/relatorio"}>
+              <Button
+                startDecorator={<FaFile />}
+                onClick={() => {
+                    localStorage.setItem(
+                      "isolatedFinancingOrInCashCaseData",
+                      JSON.stringify(caseData)
+                    );
+                    localStorage.setItem(
+                      "isolatedFinancingOrInCashPropertyData",
+                      JSON.stringify(propertyData)
+                    );
+                }
+                
+                }
+                className="my-5"
+              >
+                Gerar Relatório Completo
+              </Button>
+            </Link>
           </>
         ) : (
           <div
@@ -99,7 +130,7 @@ export default function IsolatedFinancingOrCash() {
             ))}
           </div>
         )}
-      </Tabs>
+      </div>
     </>
   );
 }

@@ -1,13 +1,20 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { propertyDataContext } from "@/PropertyDataContext";
 import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
+import { IsolatedFinanceOrCashData } from "../../Context";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function PropertyDetails() {
-  const { propertyData } = useContext(propertyDataContext);
+  const propertyData: PropertyData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashPropertyData") || ""
+  );
   const { financeOrCashReportState } = useContext(FinanceOrCashReportContext);
+
+   const caseData: IsolatedFinanceOrCashData = JSON.parse(
+     localStorage.getItem("isolatedFinancingOrInCashCaseData") || ""
+   );
 
   const {
     finalYear,
@@ -60,10 +67,10 @@ export default function PropertyDetails() {
       .filter((item) => item);
 
   return (
-    <div className=" px-12 min-h-[283mm]">
+    <div className="px-12 pageBreakAfter">
       {financeOrCashReportState.propertyDetails.active && (
         <>
-          <h3 className="text-xl font-bold text-center leading-7 mb-5">
+          <h3 className="text-xl font-bold text-center leading-7 mb-2 mt-5">
             Dados considerados para o comparativo:
           </h3>
 
@@ -120,11 +127,11 @@ export default function PropertyDetails() {
 
       {financeOrCashReportState.preconditionsScenarios.active && (
         <>
-          <h3 className="text-xl font-bold text-center leading-7 mt-5 my-4">
+          <h3 className="text-xl font-bold text-center leading-7 mt-5 mb-2">
             Precondições para comparação dos cenários:
           </h3>
 
-          <ul className="list-decimal">
+          <ul className="list-decimal text-justify">
             {preconditionsItems.map((item, index) => {
               const splitIndex = item.indexOf(":");
               const title = item.substring(0, splitIndex);
@@ -142,10 +149,10 @@ export default function PropertyDetails() {
       )}
       {financeOrCashReportState.appreciationOfRent.active && (
         <>
-          <h3 className="text-xl font-bold text-center leading-7 mt-2">
+          <h3 className="text-xl font-bold text-center leading-7 mt-5 mb-2">
             Valorização do aluguel e do imóvel:
           </h3>
-          <p>
+          <p className="text-justify">
             À medida que o tempo passa, o valor do aluguel aumenta devido às
             tendências econômicas, e o valor de mercado do imóvel também
             valoriza no mesmo percentual do aluguel. Essa evolução é crucial
@@ -153,9 +160,19 @@ export default function PropertyDetails() {
             precisa do impacto financeiro ao longo do tempo.
           </p>
           {financeOrCashReportState.appreciationOfRent.activeSecondary && (
-            <div className="grid grid-cols-2 gap-2 mt-5">
-              <TablePropertyAppreciation />
-              <TableRentAppreciation border={false} text="left" />
+            <div className="grid grid-cols-2 gap-2 mt-5 ">
+              <TablePropertyAppreciation
+                data={caseData["financing"].detailedTable.map(
+                  (i) => i.propertyValue
+                )}
+                text="left"
+              />
+              <TableRentAppreciation
+                text="left"
+                data={caseData["financing"].detailedTable.map(
+                  (i) => i.rentValue
+                )}
+              />
             </div>
           )}
         </>

@@ -1,14 +1,15 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { FinanceOrCashData } from "../../Context";
-import { useContext } from "react";
-import { propertyDataContext } from "@/propertyData/PropertyDataContext";
+import { IsolatedFinanceOrCashData } from "../../Context";
 import UserSignature from "@/components/UserSignature";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function Conclusion() {
-  const { propertyData } = useContext(propertyDataContext);
+ const propertyData: PropertyData = JSON.parse(
+   localStorage.getItem("isolatedFinancingOrInCashPropertyData") || ""
+ );
 
-  const caseData: FinanceOrCashData = JSON.parse(
-    localStorage.getItem("financingOrInCashCaseData") || ""
+  const caseData: IsolatedFinanceOrCashData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashCaseData") || ""
   );
 
   return (
@@ -35,10 +36,7 @@ export default function Conclusion() {
             <ul className="text-left">
               <li className="font-bold mb-2">Financiamento: </li>
 
-              <li>
-                Aplicação inicial:{" "}
-                <span>{numeroParaReal(caseData.financing.investedEquity)}</span>
-              </li>
+        
               <li>
                 Compra do imóvel:{" "}
                 <span>

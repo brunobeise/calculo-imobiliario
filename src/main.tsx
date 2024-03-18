@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { PropertyDataProvider } from "./PropertyDataContext.tsx";
 import "@/assets/fonts/font.css";
 import { CssVarsProvider } from "@mui/joy/styles";
 import theme from "./theme.tsx";
@@ -35,9 +34,9 @@ ChartJS.register(
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CssVarsProvider  theme={theme}>
-      <PropertyDataProvider>
+  
         <App />
-      </PropertyDataProvider>
+     
     </CssVarsProvider >
   </React.StrictMode>
 );

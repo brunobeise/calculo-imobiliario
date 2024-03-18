@@ -1,17 +1,10 @@
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { propertyDataContext } from "@/PropertyDataContext";
+import { Sheet, Table } from "@mui/joy";
+
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
 import { caseDataContext } from "./Context";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 
 interface ConclusãoProps {
   context: "financing" | "inCash";
@@ -23,15 +16,10 @@ export default function Conclusão(props: ConclusãoProps) {
 
   const {
     finalYear,
-    monthlyYieldRate,
-
-    personalBalance,
     financingFees,
     downPayment,
     propertyValue,
     appreciatedPropertyValue,
-    investedEquity,
-    rentValue,
   } = propertyData;
 
   const calcCompraDoImovel = () => {
@@ -39,89 +27,135 @@ export default function Conclusão(props: ConclusãoProps) {
     else return propertyValue;
   };
 
-  const calcTotalInvestido = () => {
-    if (props.context === "financing")
-      return personalBalance - (downPayment + financingFees);
-    else return personalBalance - propertyValue;
-  };
-
-  const rendaMensal = () => {
-    return (
-      rentValue[rentValue.length - 1] * 1.08 +
-      (investedEquity * monthlyYieldRate) / 100
-    );
-  };
 
   return (
-    <Card
-      id="conclusao"
-      className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none"
+    <Sheet
+      variant="outlined"
+      className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center p-5"
     >
-      <CardTitle className="mt-5">
-        <h2 className="text-xl text-center mb-2">Conclusão</h2>
-      </CardTitle>
-      <CardContent className="grid grid-rows gap-5">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Compra do imóvel</TableHead>
-              <TableHead>Aplicação</TableHead>
-              <TableHead>Total</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>{numeroParaReal(calcCompraDoImovel()!)}</TableCell>
-              <TableCell>{numeroParaReal(calcTotalInvestido()!)}</TableCell>
-              <TableCell>
-                {numeroParaReal(calcCompraDoImovel()! + calcTotalInvestido()!)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
+      <h2 className="text-xl text-center my-2 font-bold">Conclusão</h2>
+      <p className="text-xs mb-7 text-center"></p>
+
+      <Sheet>
+        <Table
+          color="neutral"
+          size={"md"}
+          sx={{
+            "& thead th": {
+              textAlign: "center",
+            },
+            "& tbody td": {
+              textAlign: "center",
+            },
+            "& tbody tr": {
+              backgroundColor: "white",
+            },
+          }}
+        >
+          <thead>
+            <tr>
+              <th>Compra do imóvel</th>
+              <th>Taxas</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{numeroParaReal(calcCompraDoImovel()!)}</td>
+              <td>
+                {numeroParaReal(
+                  props.context === "financing"
+                    ? propertyData.financingFees
+                    : propertyData.inCashFees
+                )}
+              </td>
+              <td>
+                {numeroParaReal(
+                  calcCompraDoImovel()! +
+                    (props.context === "financing"
+                      ? propertyData.financingFees
+                      : propertyData.inCashFees)
+                )}
+              </td>
+            </tr>
+          </tbody>
         </Table>
+      </Sheet>
 
-        <p className="text-md my-2 text-center">
-          Resultado após {finalYear} anos:
-        </p>
+      <h2 className="text-md text-center my-2 mt-5 font-bold">
+        Resultado após {finalYear} anos:
+      </h2>
 
-        <Table>
-          <TableHeader>
-            <TableHead>Valor do imóvel</TableHead>
-            <TableHead>Total Aplicação</TableHead>
-            <TableHead>Saldo Devedor</TableHead>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>{numeroParaReal(appreciatedPropertyValue)}</TableCell>
-              <TableCell>
+      <Sheet>
+        <Table
+          className="text-center"
+          sx={{
+            "& thead th": {
+              textAlign: "center",
+            },
+            "& tbody td": {
+              textAlign: "center",
+            },
+            "& tbody tr": {
+              backgroundColor: "white",
+            },
+          }}
+          size="md"
+        >
+          <thead>
+            <tr>
+              <th>Valor do imóvel</th>
+              <th>Total Aplicação</th>
+              <th>Saldo Devedor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{numeroParaReal(appreciatedPropertyValue)}</td>
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.investedEquityFinal)
                   : numeroParaReal(caseData.inCash.investedEquityFinal)}
-              </TableCell>
-              <TableCell>
+              </td>
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(propertyData.outstandingBalance)
                   : numeroParaReal(0)}
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </td>
+            </tr>
+          </tbody>
         </Table>
+        <Table
+          className="text-center px-12 "
+          sx={{
+            "& thead th": {
+              textAlign: "center",
+            },
+            "& tbody td": {
+              textAlign: "center",
+            },
+            "& tbody tr": {
+              backgroundColor: "white",
+            },
+          }}
+          size="md"
+        >
+          <thead>
+            <tr>
+              <th>Patrimônio Final</th>
 
-        <Table>
-          <TableHeader>
-            <TableHead>Patrimônio Final</TableHead>
-            <TableHead>Renda Mensal</TableHead>
-            <TableHead>Lucro na operação</TableHead>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="text-black font-bold">
+              <th>Lucro na operação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="text-black font-bold">
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalFinalEquity)
                   : numeroParaReal(caseData.inCash.totalFinalEquity)}
-              </TableCell>
-              <TableCell>{numeroParaReal(rendaMensal())}</TableCell>
-              <TableCell>
+              </td>
+
+              <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalProfit)
                   : numeroParaReal(caseData.inCash.totalProfit)}
@@ -134,11 +168,11 @@ export default function Conclusão(props: ConclusãoProps) {
                       caseData.inCash.totalProfitPercent.toFixed(2) +
                       "%)"}
                 </p>
-              </TableCell>
-            </TableRow>
-          </TableBody>
+              </td>
+            </tr>
+          </tbody>
         </Table>
-      </CardContent>
-    </Card>
+      </Sheet>
+    </Sheet>
   );
 }

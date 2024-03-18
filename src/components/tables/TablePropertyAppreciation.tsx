@@ -1,5 +1,5 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { Sheet, Table } from "@mui/joy";
 
 import { useMemo } from "react";

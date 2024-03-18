@@ -5,6 +5,7 @@ import { financingRoutes } from "./routes/financiamento";
 import { auxiliarRoutes } from "./routes/auxiliar";
 import { relatorioRoutes } from "./routes/relatorios";
 import UserConfig from "./pages/userConfig";
+import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 
 export interface Route {
   title: string;
@@ -18,15 +19,17 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <Header />
-      <PropertyDataCard />
+      <PropertyDataProvider>
+        <Header />
+        <PropertyDataCard />
 
-      <Routes>
-        <Route path="/user" element={<UserConfig />} />
-        {routes.map((r) => (
-          <Route key={r.title} element={r.element} path={r.href} />
-        ))}
-      </Routes>
+        <Routes>
+          <Route path="/user" element={<UserConfig />} />
+          {routes.map((r) => (
+            <Route key={r.title} element={r.element} path={r.href} />
+          ))}
+        </Routes>
+      </PropertyDataProvider>
     </BrowserRouter>
   );
 }

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import Conclusão from "./Conclusão";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./Context";
@@ -35,9 +35,6 @@ export default function FinancingOrCash() {
       setErrors(newErrors);
     }
   }, [propertyData]);
-
-  console.log(context);
-  
 
   return (
     <>

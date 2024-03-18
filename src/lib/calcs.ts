@@ -1,5 +1,5 @@
 export function calcRentValue(valorInicial: number, ano: number): number {
-    return Number((valorInicial * Math.pow(1 + 0.08, ano - 1)).toFixed(2));
+    return Number((valorInicial * Math.pow(1 + 0.08, ano)).toFixed(2));
 }
 
 

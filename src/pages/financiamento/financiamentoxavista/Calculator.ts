@@ -1,4 +1,4 @@
-import { PropertyData } from "@/PropertyDataContext";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { calcOutstandingBalance, calcPropertyValuation, calcRentValue } from "@/lib/calcs";
 import { FinancingOrCashDetailedTable } from "./Context";
 

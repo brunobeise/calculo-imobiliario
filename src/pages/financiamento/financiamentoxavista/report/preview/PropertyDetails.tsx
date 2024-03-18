@@ -1,5 +1,5 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { propertyDataContext } from "@/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";

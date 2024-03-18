@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
-import { PropertyData, propertyDataContext } from "../PropertyDataContext";
+import { PropertyData, propertyDataContext } from "../propertyData/PropertyDataContext";
 import { Label } from "./ui/label";
 import {
   calcOutstandingBalance,
@@ -78,7 +78,7 @@ export default function PropertyDataCard() {
 
   useEffect(() => {
 
-
+    
     const propertyValueValorizado = calcPropertyValuation(
       propertyValue,
       propertyAppreciationRate,
@@ -102,7 +102,13 @@ export default function PropertyDataCard() {
     setpropertyData("installmentValue", installmentValue);
     setpropertyData("outstandingBalance", outstandingBalance);
 
+    setpropertyValueField(numeroParaReal(propertyValue));
+    setdownPaymentField(numeroParaReal(downPayment));
+    settaxasFincancimentoField(numeroParaReal(financingFees));
+    settaxasAVistaField(numeroParaReal(inCashFees));
+    setSaldoPessoalField(numeroParaReal(personalBalance));
     setinstallmentValueField(numeroParaReal(installmentValue));
+    setinitialRentValueField(numeroParaReal(initialRentValue));
     setSaldoDevedorField(numeroParaReal(outstandingBalance));
   }, [
     finalYear,
@@ -113,6 +119,8 @@ export default function PropertyDataCard() {
     propertyAppreciationRate,
     financingYears,
   ]);
+
+  
 
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
@@ -205,7 +213,7 @@ export default function PropertyDataCard() {
                 />
               </div>
 
-              <div>
+              <div className={!excludeInputByRoute(["/financiamentoisoladoxavista"]) ? 'col-span-2' : ''}>
                 <Label htmlFor="taxarendimento">Rendimento aplicação:</Label>
 
                 <InputPercent
@@ -219,20 +227,24 @@ export default function PropertyDataCard() {
               </div>
 
               <div>
-                <Label className="text-xs" htmlFor="taxarendimento">
-                  Rendimento montante do aluguel:
-                </Label>
+                {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
+                  <>
+                    <Label className="text-xs" htmlFor="taxarendimento">
+                      Rendimento montante do aluguel:
+                    </Label>
 
-                <InputPercent
-                  onChangeValue={(v) =>
-                    setpropertyData("rentMonthlyYieldRate", v)
-                  }
-                  type="number"
-                  step={0.1}
-                  id="taxarendimento"
-                  value={rentMonthlyYieldRate}
-                  required
-                />
+                    <InputPercent
+                      onChangeValue={(v) =>
+                        setpropertyData("rentMonthlyYieldRate", v)
+                      }
+                      type="number"
+                      step={0.1}
+                      id="taxarendimento"
+                      value={rentMonthlyYieldRate}
+                      required
+                    />
+                  </>
+                )}
               </div>
             </div>
           </Sheet>

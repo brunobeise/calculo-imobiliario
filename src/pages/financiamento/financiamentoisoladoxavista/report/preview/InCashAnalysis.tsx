@@ -1,31 +1,34 @@
-import { propertyDataContext } from "@/PropertyDataContext";
+
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import FinalEquityDivisionChart from "@/components/charts/FinalEquityDivisionChart";
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
-import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/Context";
-import { useContext } from "react";
+
+import { IsolatedFinanceOrCashData } from "../../Context";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function InCashAnalysis() {
-  const { propertyData } = useContext(propertyDataContext);
+  const propertyData: PropertyData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashPropertyData") || ""
+  );
 
-  const { propertyValue, appreciatedPropertyValue } = propertyData;
+  const { propertyValue, appreciatedPropertyValue, inCashFees } = propertyData;
 
-  const caseData: FinanceOrCashData = JSON.parse(
-    localStorage.getItem("financingOrInCashCaseData") || ""
+  const caseData: IsolatedFinanceOrCashData = JSON.parse(
+    localStorage.getItem("isolatedFinancingOrInCashCaseData") || ""
   );
 
   return (
     <div className="px-10 pageBreakAfter">
-      <h3 className="text-2xl font-bold text-center leading-7 mb-5">
+      <h3 className="text-2xl font-bold text-center leading-7 my-5">
         Análise de Compra À Vista:
       </h3>
-      <div className="grid grid-cols-2 mb-5 px-12">
+      <div className="grid grid-cols-2 mb-5 px-14">
         <div>
           <p className="text-center">Divisão incial do capital:</p>
           <InitialEquityDivisionChart
-            labels={["Compra do Imóvel"]}
-            values={[propertyValue]}
+            labels={["Compra do Imóvel", "Taxas"]}
+            values={[propertyValue, inCashFees]}
           />
         </div>
         <div>
@@ -40,7 +43,7 @@ export default function InCashAnalysis() {
         </div>
       </div>
       <div className="px-3">
-        <p className="text-center text-sm">
+        <p className="text-justify text-sm">
           Todo mês, somamos o aluguel e os rendimentos da renda fixa. O que
           sobra é reinvestido. O capital começa zerado, mas não tem desconto de
           parcelas. Com o aumento periódico do aluguel, o montante na renda fixa
@@ -48,13 +51,23 @@ export default function InCashAnalysis() {
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart
-            propertyData={propertyData}
-            context="inCash"
+            data={caseData.inCash.detailedTable.map(
+              (i) => i.rentValue + i.initialCapitalYield 
+            )}
           />
         </div>
-        <p className="text-center text-sm mt-5">Análise completa:</p>
+        <p className="text-center text-sm mt-5 font-bold mb-2">Análise completa:</p>
         <div className="px-8">
-          <CompleteAnalysisChart propertyData={propertyData} context="inCash" />
+          <CompleteAnalysisChart
+            investedEquityValues={caseData.inCash.detailedTable.map(
+              (i) => i.totalCapital
+            )}
+           
+            propertyValues={caseData.inCash.detailedTable.map(
+              (i) => i.propertyValue
+            )}
+            
+          />
         </div>
       </div>
     </div>
