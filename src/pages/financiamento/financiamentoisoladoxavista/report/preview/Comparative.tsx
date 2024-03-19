@@ -19,7 +19,7 @@ export default function Comparative() {
         Comparativo:
       </h3>
 
-      <div className="min-h-[280mm]">
+      <div className="min-h-[285mm]">
         <div className="mt-2 mb-5">
           <p className="mb-5 text-justify">
             O gráfico destaca uma jornada financeira onde, inicialmente, o
@@ -69,7 +69,7 @@ export default function Comparative() {
           />
         </div>
       </div>
-      <div className="min-h-[280mm]">
+      <div className="min-h-[297mm]">
         <div>
           <h3 className="text-2xl font-bold text-center leading-7 my-5">
             Lucro Relativo:
