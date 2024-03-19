@@ -46,8 +46,7 @@ export default function InCashAnalysis() {
         <p className="text-justify text-sm">
           Todo mês, somamos o aluguel e os rendimentos da renda fixa. O que
           sobra é reinvestido. O capital começa zerado, mas não tem desconto de
-          parcelas. Com o aumento periódico do aluguel, o montante na renda fixa
-          tende a crescer ao longo do tempo:
+          parcelas. Esse montante do mês já começa positivo e tende a crescer ao passar dos anos.
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart

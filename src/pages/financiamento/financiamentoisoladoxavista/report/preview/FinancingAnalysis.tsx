@@ -53,8 +53,7 @@ export default function FinancingAnalysis() {
         <p className="text-justify text-sm ">
           Todo mês, somamos o aluguel e os rendimentos da renda fixa para pagar
           as parcelas. O que sobra é reinvestido. Com o aumento periódico do
-          aluguel e parcelas fixas, o montante na renda fixa tende a crescer ao
-          longo do tempo:
+          aluguel e parcelas fixas, com o tempo, esse valor que era negativo, começa a ser positivo com o passar dos anos.
         </p>
         <div className="px-8">
           <MonthlyInvestmentGrowthChart

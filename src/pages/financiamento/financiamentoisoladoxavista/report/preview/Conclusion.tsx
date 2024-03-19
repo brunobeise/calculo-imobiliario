@@ -19,24 +19,27 @@ export default function Conclusion() {
       </h3>
       <div className="text-justify">
         <p className="mb-5">
-          Quando pensamos em adquirir um imóvel, surgem duas opções: pagar tudo
-          de uma vez ou financiar. Este relatório compara essas alternativas e
-          conclue que o financiamento não é apenas uma questão de possibilidade,
-          mas também de inteligência financeira.
+          No cenário de financiamento, observamos um aproveitamento eficiente do
+          capital disponível inicialmente. A entrada e as taxas, consideradas
+          como o único investimento inicial, permitem um foco maior na
+          potencialização dos retornos. Essa estratégia resulta em um lucro
+          operacional maior sobre o investimento inicial. A abordagem focada no
+          financiamento evidencia como a gestão eficaz do capital inicial pode
+          gerar crescimento exponencial do investimento, especialmente quando
+          beneficiado pelos juros compostos.
         </p>
         <p className="mb-5">
-          Com o financiamento, você começa com menos dinheiro do bolso, e esse
-          "extra" que você teria gasto pode crescer se investido com sabedoria.
-          Além disso, o imóvel que você está pagando aos poucos e o aluguel que
-          ele pode gerar estão propensos a valorizar com o tempo, aumentando seu
-          retorno.
+          Em contrapartida, a compra à vista apresenta um retorno absoluto
+          maior. Embora este cenário ofereça um valor
+          de retorno total superior, o financiamento se destaca por sua
+          capacidade de maximizar os retornos percentuais sobre um investimento
+          inicial mais concentrado.
         </p>
         <div className="grid grid-cols-2 mt-10 text-center gap-10">
           <div>
             <ul className="text-left">
               <li className="font-bold mb-2">Financiamento: </li>
 
-        
               <li>
                 Compra do imóvel:{" "}
                 <span>
@@ -80,12 +83,11 @@ export default function Conclusion() {
             <ul className="text-left">
               <li className="font-bold mb-2">À Vista:</li>
 
-          
               <li>
                 Compra do imóvel:{" "}
                 <span>{numeroParaReal(propertyData.propertyValue)}</span>
               </li>
-            
+
               <li>
                 Valor do imóvel:{" "}
                 <span>
@@ -115,27 +117,32 @@ export default function Conclusion() {
         <p className="mt-5 text-center text-xl">
           Diferença de lucro:{" "}
           <span className="font-bold">
-            {numeroParaReal(
-              Math.abs(
-                caseData.financing.totalProfit - caseData.inCash.totalProfit
-              )
-            )}
+            {Math.abs(
+              caseData.financing.totalProfitPercent -
+                caseData.inCash.totalProfitPercent
+            ).toFixed(2) + "%"}
           </span>
         </p>
         <p className="mb-10 text-sm text-center text-[#7b7b7b]">
-          {caseData.financing.totalProfit - caseData.inCash.totalProfit > 0 ? (
+          {caseData.financing.totalProfitPercent -
+            caseData.inCash.totalProfitPercent >
+          0 ? (
             <>utilizando financiamento</>
           ) : (
             <>comprando à vista</>
           )}
         </p>
         <p className="mb-5">
-          Os números falam por si: após 6 anos, o valor acumulado pelo
-          financiamento supera o da compra à vista. Isso significa que seu
-          dinheiro trabalhou para você, e o imóvel financiado se tornou o
-          caminho para um patrimônio maior.
+          Optar pelo financiamento imobiliário é escolher a inteligência
+          financeira a seu favor. Com um investimento inicial menor, libera-se
+          capital para diversificar investimentos e aproveitar outras
+          oportunidades de mercado. Ao longo do tempo, o crescimento percentual
+          obtido pelo financiamento supera o da compra à vista, demonstrando não
+          apenas a viabilidade, mas a superioridade dessa estratégia em termos
+          de alavancagem financeira e flexibilidade. Financiar é, portanto, mais
+          do que adquirir um imóvel; é maximizar seu potencial econômico.
         </p>
-        <div className="mt-72">
+        <div className="mt-32">
           <UserSignature />
         </div>
       </div>

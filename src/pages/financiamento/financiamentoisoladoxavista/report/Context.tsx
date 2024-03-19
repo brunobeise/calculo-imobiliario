@@ -67,7 +67,7 @@ export const FinanceOrCashReportProvider = ({
       },
       title: {
         content:
-          "Análise Comparativa de Aquisição: Financiamento vs. Compra à Vista",
+          "Análise Comparativa: Financiamento Isolado vs. Compra à Vista",
         active: true,
       },
       subtitle: {
@@ -81,7 +81,7 @@ export const FinanceOrCashReportProvider = ({
       },
       presentation: {
         content:
-          "A análise revela que, com foco no lucro final, o financiamento do imóvel se mostra a opção mais vantajosa em comparação com a compra à vista. Observa-se um retorno significativamente maior no cenário de financiamento. Esse resultado enfatiza a importância de considerar estratégias de financiamento como uma alternativa eficaz para maximizar os retornos financeiros em investimentos imobiliários.",
+          "A análise financeira realizada demonstra que, quando avaliamos o lucro em termos percentuais, o financiamento emerge como a estratégia mais rentável em comparação à compra à vista. Este resultado destaca o potencial dos financiamentos em maximizar os retornos sobre o investimento inicial, mesmo quando este é consideravelmente menor do que o desembolsado numa transação à vista.",
         active: true,
       },
       calculation: {

@@ -20,7 +20,6 @@ export default function PropertyDetails() {
     finalYear,
     monthlyYieldRate,
     outstandingBalance,
-    personalBalance,
     interestRate,
     financingFees,
     downPayment,
@@ -76,7 +75,6 @@ export default function PropertyDetails() {
 
           <div className="grid grid-cols-2 gap-10">
             <div>
-              <InfoItemReais text="Saldo inicial:" value={personalBalance} />
               <InfoItemReais text="Valor do imóvel:" value={propertyValue} />
 
               <InfoItemReais
@@ -95,9 +93,9 @@ export default function PropertyDetails() {
               />
 
               <InfoItemYears text="Cálculo feito em:" value={finalYear} />
+              <InfoItemReais text="Valor da entrada:" value={downPayment} />
             </div>
             <div>
-              <InfoItemReais text="Valor da entrada:" value={downPayment} />
               <InfoItemReais
                 text="Taxas do financiamento:"
                 value={financingFees}
