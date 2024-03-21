@@ -298,7 +298,7 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="financingFees">Taxas do fincancimento:</Label>
+              <Label htmlFor="financingFees">Taxas do financiamento:</Label>
               <Input
                 variant="outlined"
                 onChange={handleChangeReal}

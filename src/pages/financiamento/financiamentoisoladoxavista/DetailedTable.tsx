@@ -45,8 +45,10 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                 <th>Capital</th>
                 <th>Valor do Aluguel</th>
                 <th>Aluguel - Parcela</th>
+
                 <th>Valor do Imóvel</th>
                 <th>Rendimento do Capital</th>
+                <th>Investimento Excedente</th>
                 <th>Saldo Devedor</th>
                 <th>Patrimônio Líquido</th>
                 <th>Lucro</th>
@@ -61,6 +63,7 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                   <td>{numeroParaReal(item.rentalAmount)}</td>
                   <td>{numeroParaReal(item.propertyValue)}</td>
                   <td>{numeroParaReal(item.initialCapitalYield)}</td>
+                  <td>{numeroParaReal(item.rentalShortfall)}</td>
                   <td>{numeroParaReal(item.outstandingBalance)}</td>
                   <td>{numeroParaReal(item.finalValue)}</td>
 

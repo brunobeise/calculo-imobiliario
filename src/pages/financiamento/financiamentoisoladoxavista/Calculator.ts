@@ -1,5 +1,5 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { calcOutstandingBalance, calcPropertyValuation, calcRentValue } from "@/lib/calcs";
+import { calcOutstandingBalance, calcPropertyValuation, calcRentValue, calcTotalInterestPaid } from "@/lib/calcs";
 import { IsolatedFinancingOrCashDetailedTable } from "./Context";
 
 
@@ -17,9 +17,14 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
         totalFinalEquity: totalProfit.finalEquity,
         investedEquityFinal: calcInvestedEquityFinal(detailedTable, propertyData),
         breakEven: calcBreakEvenPoint(detailedTable),
+        totalRentalShortfall: detailedTable[detailedTable.length - 1].rentalShortfall,
+        totalInterestPaid: detailedTable.reduce((acc, val) => acc + val.interestPaid, 0),
         detailedTable
-
+       
     };
+
+   
+    
 }
 
 
@@ -72,14 +77,18 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
     const rows: IsolatedFinancingOrCashDetailedTable[] = [];
     
     let initialCapital = 0
-    const initialInvestment = context === 'financing' ? 
+    let initialInvestment = context === 'financing' ? 
     propertyData.downPayment + propertyData.financingFees
     : propertyData.inCashFees + propertyData.propertyValue
 
     let rentValue = propertyData.initialRentValue;
 
+    let totalRentalShortfall = 0
+
     for (let month = 1; month <= propertyData.finalYear * 12; month++) {
         const yearIndex = Math.floor((month ) / 12);
+
+     
 
         if (month % 12 === 1 || month === 1) {
             rentValue = calcRentValue(propertyData.initialRentValue, yearIndex)
@@ -90,6 +99,13 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
                 ? ((rentValue - propertyData.installmentValue))
                 : (rentValue);
 
+    
+                
+
+        if (rentalAmount < 0) {
+            totalRentalShortfall += rentalAmount *  -1
+            initialInvestment += rentalAmount * -1
+        }
        
         const capitalYield = initialCapital >= 0
             ? (((initialCapital * propertyData.monthlyYieldRate) / 100))
@@ -107,6 +123,14 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
             );
         }
 
+        const interestPaid = calcTotalInterestPaid(
+            propertyData.propertyValue - propertyData.downPayment,
+            propertyData.interestRate,
+            propertyData.financingYears,
+            propertyData.installmentValue,
+            month,
+        )   
+
         const finalValue = initialCapital + capitalYield + rentalAmount + propertyValue - outstandingBalance;
 
         const monthlyProfit = finalValue - initialInvestment
@@ -117,14 +141,19 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
             initialCapitalYield: capitalYield,
             propertyValue: propertyValue,
             rentValue: rentValue,
+            rentalShortfall: totalRentalShortfall,
             rentalAmount: rentalAmount,
             outstandingBalance: outstandingBalance,
+            interestPaid: interestPaid,
             finalValue: finalValue,
             monthlyProfit: monthlyProfit
+          
         });
 
+        if (rentalAmount > 0) initialCapital += rentalAmount
+        initialCapital += capitalYield;
 
-        initialCapital += capitalYield + rentalAmount;
+        
 
     }
 

@@ -4,8 +4,11 @@ import { ReactNode, createContext, useState } from "react";
 export interface InputReportElement {
   active: boolean;
   activeSecondary?: boolean;
-  content: string;
+  content?: string;
   color?: string;
+  translateX?: number
+  translateY?: number
+  
 }
 
 export type FinanceOrCashReportContextState = {
@@ -33,11 +36,18 @@ export type FinanceOrCashReportContextType = {
   createdAt: InputReportElement;
   presentation: InputReportElement;
   calculation: InputReportElement;
-  agentName: InputReportElement;
-  agentCRECI: InputReportElement;
+  agentDetails: InputReportElement;
   propertyDetails: InputReportElement;
   preconditionsScenarios: InputReportElement;
   appreciationOfRent: InputReportElement;
+  financingTitle: InputReportElement;
+  financingDivisionCharts: InputReportElement;
+  financingMonthlyInvestmentGrowthChart: InputReportElement;
+  financingCompleteAnalysis: InputReportElement;
+  inCashTitle: InputReportElement;
+  inCashDivisionCharts: InputReportElement;
+  inCashMonthlyInvestmentGrowthChart: InputReportElement;
+  inCashCompleteAnalysis: InputReportElement;
 };
 
 export const FinanceOrCashReportProvider = ({
@@ -88,13 +98,8 @@ export const FinanceOrCashReportProvider = ({
         active: true,
         content: "",
       },
-      agentName: {
+      agentDetails: {
         active: true,
-        content: "Pedro Regert",
-      },
-      agentCRECI: {
-        active: true,
-        content: "123871623",
       },
       propertyDetails: {
         active: true,
@@ -110,6 +115,36 @@ Reinvestimento Integral dos Rendimentos e Dedicação Exclusiva do Saldo para In
         activeSecondary: true,
         content:
           "À medida que o tempo passa, o valor do aluguel aumenta devido às tendências econômicas, e o valor de mercado do imóvel também valoriza no mesmo percentual do aluguel. Essa evolução é crucial para os cálculos em tabelas futuras, permitindo uma avaliação precisa do impacto financeiro ao longo do tempo.",
+      },
+      financingTitle: {
+        content: "Análise do Financiamento:",
+        active: true,
+      },
+      financingDivisionCharts: {
+        active: true,
+      },
+      financingMonthlyInvestmentGrowthChart: {
+        active: true,
+        content:
+          "Todo mês, somamos o aluguel e os rendimentos da renda fixa para pagar as parcelas. O que sobra é reinvestido. Com o aumento periódico do aluguel e parcelas fixas, o montante na renda fixa tende a crescer ao longo do tempo:",
+      },
+      financingCompleteAnalysis: {
+        active: true,
+      },
+      inCashTitle: {
+        content: "Análise da Compra À Vista:",
+        active: true,
+      },
+      inCashDivisionCharts: {
+        active: true,
+      },
+      inCashMonthlyInvestmentGrowthChart: {
+        active: true,
+        content:
+          "Todo mês, somamos o aluguel e os rendimentos da renda fixa para pagar as parcelas. O que sobra é reinvestido. Com o aumento periódico do aluguel e parcelas fixas, o montante na renda fixa tende a crescer ao longo do tempo:",
+      },
+      inCashCompleteAnalysis: {
+        active: true,
       },
     });
 

@@ -39,7 +39,7 @@ export default function TableRentAppreciation(
 
   return (
     <Sheet
-      variant="outlined"
+      variant={props.border ? "outlined" : "plain"}
       className={
         `w-full p-2 ${
           props.colspan

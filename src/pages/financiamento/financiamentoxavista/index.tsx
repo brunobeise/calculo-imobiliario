@@ -60,7 +60,7 @@ export default function FinancingOrCash() {
             }}
           >
             <div onClick={() => setContext("financing")}>
-              <Tab value="financing">Financiamennto</Tab>
+              <Tab value="financing">Financiamento</Tab>
             </div>
             <div onClick={() => setContext("inCash")}>
               <Tab value="inCash">Á Vista</Tab>

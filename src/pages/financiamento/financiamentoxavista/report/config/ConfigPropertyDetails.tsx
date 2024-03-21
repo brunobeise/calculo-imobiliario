@@ -1,7 +1,7 @@
 import TextReportInput from "@/components/report/TextReportInput";
 import { FinanceOrCashReportContext } from "../Context";
 import { useContext } from "react";
-import { Card } from "@/components/ui/card";
+import { Sheet } from "@mui/joy";
 
 export default function ConfigPropertyDetails() {
   const { financeOrCashReportState, setFinanceOrCashReportState } = useContext(
@@ -9,7 +9,7 @@ export default function ConfigPropertyDetails() {
   );
 
   return (
-    <Card className="grid grid-flow-rows gap-y-5 p-5">
+    <Sheet variant="outlined" className="grid grid-rows gap-5 p-5">
       <TextReportInput
         showInput={false}
         label="Detalhes do imóvel e financiamento"
@@ -35,8 +35,8 @@ export default function ConfigPropertyDetails() {
         label="Tabelas de valorização"
         value={financeOrCashReportState.appreciationOfRent}
         onChange={(v) => setFinanceOrCashReportState("appreciationOfRent", v)}
-        keyName="activeSecondary"
+        activeSecondary
       />
-    </Card>
+    </Sheet>
   );
 }

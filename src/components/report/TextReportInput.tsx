@@ -15,6 +15,7 @@ interface TextReportInputProps {
   label: string;
   type?: React.HTMLInputTypeAttribute;
   keyName?: keyof InputReportElement;
+  activeSecondary?: boolean;
   checkbox?: boolean;
   showInput?: boolean;
 }
@@ -42,11 +43,12 @@ export default function TextReportInput({
       {checkbox && (
         <Checkbox
           size="sm"
-          checked={props.value.active}
+          checked={(props.activeSecondary ? props.value.activeSecondary : props.value.active)}
           onChange={(v) => {
+            
             props.onChange({
               ...props.value,
-              active: v.target.checked,
+              [props.activeSecondary ? 'activeSecondary' : 'active']: v.target.checked,
             });
           }}
           className="block "

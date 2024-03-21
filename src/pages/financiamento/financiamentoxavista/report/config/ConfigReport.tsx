@@ -1,7 +1,9 @@
 
+import ConfigFinancingAnalysis from "./ConfigFinancingAnalysis";
 import ConfigIntro from "./ConfigIntro";
 import ConfigPropertyDetails from "./ConfigPropertyDetails";
 import { Accordion, AccordionDetails, AccordionGroup, AccordionSummary, Checkbox } from "@mui/joy";
+import InCashAnalysis from "./InCashAnalysis";
 
 interface ConfigReportProps {
   viewMap: {
@@ -52,8 +54,7 @@ export default function ConfigReport(props: ConfigReportProps) {
         <Accordion disabled={!props.viewMap.finance} className={"relative"}>
           <AccordionSummary>Análise Financiamento</AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <ConfigFinancingAnalysis/>
           </AccordionDetails>
           <Checkbox
             className={"!absolute top-2 left-[-1rem]"}
@@ -64,8 +65,7 @@ export default function ConfigReport(props: ConfigReportProps) {
         <Accordion disabled={!props.viewMap.inCash} className={"relative"}>
           <AccordionSummary>Análise à Vista</AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            <InCashAnalysis/>
           </AccordionDetails>
           <Checkbox
             className={"!absolute top-2 left-[-1rem]"}

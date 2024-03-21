@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { numeroParaReal } from "@/lib/formatter";
 import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/Context";
+import getUserData from "@/lib/localstorage";
 
 dayjs.locale("pt-br");
 
@@ -17,16 +18,17 @@ export default function Cover() {
     companyLogo1,
     createdAt,
     presentation,
-    agentCRECI,
-    agentName,
     calculation,
     companyLogo2,
     coverType,
+    agentDetails
   } = financeOrCashReportState;
 
   const caseData: FinanceOrCashData = JSON.parse(
     localStorage.getItem("financingOrInCashCaseData") || ""
   );
+
+  const user = getUserData()
 
   return (
     <div className="text-center relative pageBreakAfter">
@@ -93,14 +95,14 @@ export default function Cover() {
           </div>
         </div>
       )}
-      {agentName.active && agentCRECI.active && (
+      {agentDetails.active && (
         <div className="absolute bottom-[12%] left-[50%] translate-x-[-50%] w-full px-10">
-          <div className="grid grid-cols-3 flex justify-center items-center ">
+          <div className="flex justify-evenly items-center ">
             <p>
-              Corretor: <span className="font-bold"> {agentName.content} </span>{" "}
+              Corretor: <span className="font-bold"> {user.name} </span>{" "}
             </p>
             <p>
-              CRECI: <span className="font-bold"> {agentCRECI.content} </span>{" "}
+              CRECI: <span className="font-bold"> {user.creci} </span>{" "}
             </p>
             {createdAt.active && (
               <p>{dayjs(createdAt.content).format("DD [de] MMMM [de] YYYY")}</p>

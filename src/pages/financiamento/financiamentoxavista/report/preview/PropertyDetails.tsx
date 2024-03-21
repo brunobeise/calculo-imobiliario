@@ -60,7 +60,7 @@ export default function PropertyDetails() {
   );
 
   const preconditionsItems =
-    financeOrCashReportState.preconditionsScenarios.content
+    financeOrCashReportState.preconditionsScenarios.content!
       .split("\n")
       .filter((item) => item);
 
@@ -130,18 +130,19 @@ export default function PropertyDetails() {
           </h3>
 
           <ul className="list-decimal text-justify">
-            {preconditionsItems.map((item, index) => {
-              const splitIndex = item.indexOf(":");
-              const title = item.substring(0, splitIndex);
-              const content = item.substring(splitIndex + 1);
+            {preconditionsItems &&
+              preconditionsItems.map((item, index) => {
+                const splitIndex = item.indexOf(":");
+                const title = item.substring(0, splitIndex);
+                const content = item.substring(splitIndex + 1);
 
-              return (
-                <li key={index}>
-                  <strong>{title}:</strong>
-                  {content}
-                </li>
-              );
-            })}
+                return (
+                  <li key={index}>
+                    <strong>{title}:</strong>
+                    {content}
+                  </li>
+                );
+              })}
           </ul>
         </>
       )}
@@ -164,12 +165,15 @@ export default function PropertyDetails() {
                   (i) => i.propertyValue
                 )}
                 text="left"
+                border={false}
               />
+
               <TableRentAppreciation
                 text="left"
                 data={caseData["financing"].detailedTable.map(
                   (i) => i.rentValue
                 )}
+                border={false}
               />
             </div>
           )}

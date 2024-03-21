@@ -25,7 +25,7 @@ export default function InCashAnalysis() {
       </h3>
       <div className="grid grid-cols-2 mb-5 px-14">
         <div>
-          <p className="text-center">Divisão incial do capital:</p>
+          <p className="text-center">Divisão inicial do capital:</p>
           <InitialEquityDivisionChart
             labels={["Compra do Imóvel", "Taxas"]}
             values={[propertyValue, inCashFees]}

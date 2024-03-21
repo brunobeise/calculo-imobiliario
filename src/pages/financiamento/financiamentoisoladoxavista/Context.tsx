@@ -7,14 +7,16 @@ export const caseDataContext = createContext<caseDataContextType>({
 
 export interface IsolatedFinancingOrCashDetailedTable {
   totalCapital: number;
-  initialCapital: number; 
-  initialCapitalYield: number; 
-  rentValue: number; 
+  initialCapital: number;
+  initialCapitalYield: number;
+  rentValue: number;
   rentalAmount: number;
-  outstandingBalance: number; 
+  outstandingBalance: number;
+  interestPaid: number;
   finalValue: number;
   monthlyProfit: number;
   propertyValue: number;
+  rentalShortfall: number;
 }
 
 export type IsolatedFinanceOrCashData = {
@@ -24,6 +26,8 @@ export type IsolatedFinanceOrCashData = {
     investedEquityFinal: number;
     totalFinalEquity: number;
     breakEven: number;
+    totalRentalShortfall: number;
+    totalInterestPaid: number;
     detailedTable: IsolatedFinancingOrCashDetailedTable[];
   };
   financing: {
@@ -32,6 +36,8 @@ export type IsolatedFinanceOrCashData = {
     totalProfitPercent: number;
     totalFinalEquity: number;
     breakEven?: number;
+    totalRentalShortfall: number;
+    totalInterestPaid: number;
     detailedTable: IsolatedFinancingOrCashDetailedTable[];
   };
 };
@@ -51,17 +57,19 @@ export const IsolatedFinanceOrInCashCaseDataProvider = ({
 }) => {
   const [caseData, setCaseState] = useState<IsolatedFinanceOrCashData>({
     inCash: {
+      totalRentalShortfall: 0,
+      totalInterestPaid: 0,
       totalProfit: 192892.99,
       totalProfitPercent: 107.16,
-  
       investedEquityFinal: 0,
       totalFinalEquity: 372892,
-      breakEven: 66,
+      breakEven: 0,
       detailedTable: [],
     },
     financing: {
-    
       totalProfit: 265328.91,
+      totalRentalShortfall: 38547.84,
+      totalInterestPaid: 0,
       totalProfitPercent: 147.4,
       investedEquityFinal: 0,
       totalFinalEquity: 425637,

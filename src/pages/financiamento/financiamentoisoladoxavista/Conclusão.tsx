@@ -16,18 +16,11 @@ export default function Conclusão(props: ConclusãoProps) {
 
   const {
     finalYear,
-    financingFees,
-    downPayment,
-    propertyValue,
     appreciatedPropertyValue,
   } = propertyData;
 
-  const calcCompraDoImovel = () => {
-    if (props.context === "financing") return downPayment + financingFees;
-    else return propertyValue;
-  };
-
-
+  console.log(caseData.financing.totalInterestPaid);
+  
   return (
     <Sheet
       variant="outlined"
@@ -61,7 +54,14 @@ export default function Conclusão(props: ConclusãoProps) {
           </thead>
           <tbody>
             <tr>
-              <td>{numeroParaReal(calcCompraDoImovel()!)}</td>
+              <td>
+                {" "}
+                {numeroParaReal(
+                  props.context === "financing"
+                    ? propertyData.downPayment
+                    : propertyData.propertyValue
+                )}
+              </td>
               <td>
                 {numeroParaReal(
                   props.context === "financing"
@@ -71,10 +71,9 @@ export default function Conclusão(props: ConclusãoProps) {
               </td>
               <td>
                 {numeroParaReal(
-                  calcCompraDoImovel()! +
-                    (props.context === "financing"
-                      ? propertyData.financingFees
-                      : propertyData.inCashFees)
+                  props.context === "financing"
+                    ? propertyData.financingFees + propertyData.downPayment
+                    : propertyData.inCashFees + propertyData.propertyValue
                 )}
               </td>
             </tr>
@@ -126,7 +125,7 @@ export default function Conclusão(props: ConclusãoProps) {
           </tbody>
         </Table>
         <Table
-          className="text-center px-12 "
+          className="text-center"
           sx={{
             "& thead th": {
               textAlign: "center",
@@ -142,6 +141,7 @@ export default function Conclusão(props: ConclusãoProps) {
         >
           <thead>
             <tr>
+              <th>Invest. Excedente</th>
               <th>Patrimônio Final</th>
 
               <th>Lucro na operação</th>
@@ -149,6 +149,12 @@ export default function Conclusão(props: ConclusãoProps) {
           </thead>
           <tbody>
             <tr>
+              <td>
+                {props.context === "financing"
+                  ? numeroParaReal(caseData.financing.totalRentalShortfall)
+                  : numeroParaReal(0)}
+              </td>
+
               <td className="text-black font-bold">
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalFinalEquity)
