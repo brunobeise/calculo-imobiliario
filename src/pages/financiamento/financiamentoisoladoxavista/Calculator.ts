@@ -1,6 +1,6 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { calcOutstandingBalance, calcPropertyValuation, calcRentValue, calcTotalInterestPaid } from "@/lib/calcs";
-import { IsolatedFinancingOrCashDetailedTable } from "./Context";
+import { IsolatedFinancingOrCashDetailedTable } from "./CaseData";
 
 
 export function calcCaseData(context: 'inCash' | 'financing', propertyData: PropertyData) {
@@ -8,7 +8,9 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
     const initialInvestment = context === 'financing' ?
         propertyData.downPayment + propertyData.financingFees
         : propertyData.inCashFees + propertyData.propertyValue
-    const totalProfit = calcTotalProfit(detailedTable, initialInvestment)
+    const totalInterestPaid = detailedTable.reduce((acc, val) => acc + val.interestPaid, 0)
+    const capitalGainsTax = calcCapitalGainsTax(totalInterestPaid, propertyData, context)
+    const totalProfit = calcTotalProfit(detailedTable, initialInvestment, capitalGainsTax)
 
     return {
         investedEquity: 0,
@@ -18,7 +20,8 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
         investedEquityFinal: calcInvestedEquityFinal(detailedTable, propertyData),
         breakEven: calcBreakEvenPoint(detailedTable),
         totalRentalShortfall: detailedTable[detailedTable.length - 1].rentalShortfall,
-        totalInterestPaid: detailedTable.reduce((acc, val) => acc + val.interestPaid, 0),
+        totalInterestPaid,
+        capitalGainsTax,
         detailedTable
        
     };
@@ -28,12 +31,12 @@ export function calcCaseData(context: 'inCash' | 'financing', propertyData: Prop
 }
 
 
-export function calcTotalProfit(detailedTable: IsolatedFinancingOrCashDetailedTable[], personalBalance: number, row?: number) {
+export function calcTotalProfit(detailedTable: IsolatedFinancingOrCashDetailedTable[], personalBalance: number, capitalGainsTax: number, row?: number) {
 
     const finalRow = row ? detailedTable[row] : detailedTable[detailedTable.length - 1];
     const totalEquity = finalRow.finalValue
-    const operationProfitAmount = finalRow.monthlyProfit
-    const operationProfitPercent = ((finalRow.monthlyProfit / personalBalance) * 100);
+    const operationProfitAmount = finalRow.monthlyProfit - capitalGainsTax
+    const operationProfitPercent = ((operationProfitAmount / personalBalance) * 100);
 
     return {
         value: operationProfitAmount,
@@ -71,6 +74,15 @@ export function calcBreakEvenPoint(detailedTable: IsolatedFinancingOrCashDetaile
 
     return breakEvenPoint;
 
+}
+
+export function calcCapitalGainsTax(totalInterestPaid: number, propertyData: PropertyData, context: 'financing' | 'inCash'){
+    const appreciatedPropertyValue = calcPropertyValuation(propertyData.propertyValue, propertyData.interestRate, propertyData.finalYear)
+
+    if(context === 'financing'){
+        return (appreciatedPropertyValue - (propertyData.propertyValue + totalInterestPaid)) * 0.15
+    }
+    else return (appreciatedPropertyValue - propertyData.propertyValue) * 0.15
 }
 
 export function calcDetailedTable(context: 'inCash' | 'financing', propertyData: PropertyData) {

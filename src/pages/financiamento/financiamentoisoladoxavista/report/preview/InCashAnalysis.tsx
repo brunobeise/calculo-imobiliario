@@ -4,7 +4,7 @@ import FinalEquityDivisionChart from "@/components/charts/FinalEquityDivisionCha
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
 
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function InCashAnalysis() {

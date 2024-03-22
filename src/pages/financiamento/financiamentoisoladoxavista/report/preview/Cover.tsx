@@ -3,7 +3,7 @@ import { FinanceOrCashReportContext } from "../Context";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import { numeroParaReal } from "@/lib/formatter";
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 
 dayjs.locale("pt-br");
 

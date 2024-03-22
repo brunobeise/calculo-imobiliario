@@ -3,7 +3,7 @@ import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { IsolatedFinancingOrCashDetailedTable } from "../financiamentoisoladoxavista/Context";
+import { IsolatedFinancingOrCashDetailedTable } from "./CaseData";
 
 interface TabelaRendimentoProps {
   detailedTable: IsolatedFinancingOrCashDetailedTable[];
@@ -45,7 +45,6 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                 <th>Capital</th>
                 <th>Valor do Aluguel</th>
                 <th>Aluguel - Parcela</th>
-
                 <th>Valor do Imóvel</th>
                 <th>Rendimento do Capital</th>
                 <th>Investimento Excedente</th>
@@ -66,7 +65,6 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                   <td>{numeroParaReal(item.rentalShortfall)}</td>
                   <td>{numeroParaReal(item.outstandingBalance)}</td>
                   <td>{numeroParaReal(item.finalValue)}</td>
-
                   <td>{numeroParaReal(item.monthlyProfit)}</td>
                 </tr>
               ))}

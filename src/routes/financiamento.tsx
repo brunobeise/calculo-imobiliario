@@ -1,5 +1,5 @@
 import IsolatedFinancingOrCash from "@/pages/financiamento/financiamentoisoladoxavista";
-import { IsolatedFinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoisoladoxavista/Context";
+import { IsolatedFinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoisoladoxavista/CaseData";
 import FinancingOrCash from "@/pages/financiamento/financiamentoxavista";
 import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoxavista/Context";
 

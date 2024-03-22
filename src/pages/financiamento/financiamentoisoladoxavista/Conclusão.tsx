@@ -3,7 +3,7 @@ import { Sheet, Table } from "@mui/joy";
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
-import { caseDataContext } from "./Context";
+import { caseDataContext } from "./CaseData";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 
 interface ConclusãoProps {
@@ -18,8 +18,6 @@ export default function Conclusão(props: ConclusãoProps) {
     finalYear,
     appreciatedPropertyValue,
   } = propertyData;
-
-  console.log(caseData.financing.totalInterestPaid);
   
   return (
     <Sheet
@@ -178,6 +176,7 @@ export default function Conclusão(props: ConclusãoProps) {
             </tr>
           </tbody>
         </Table>
+        <p className="text-sm mt-5">*Imposto sobre ganho de capital: <span className="font-bold">{numeroParaReal(caseData[props.context].capitalGainsTax)}</span></p>
       </Sheet>
     </Sheet>
   );

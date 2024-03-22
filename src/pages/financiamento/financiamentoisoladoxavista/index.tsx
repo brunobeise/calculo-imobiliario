@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import Conclusão from "./Conclusão";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
-import { caseDataContext } from "./Context";
+import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";

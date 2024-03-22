@@ -29,6 +29,7 @@ export type IsolatedFinanceOrCashData = {
     totalRentalShortfall: number;
     totalInterestPaid: number;
     detailedTable: IsolatedFinancingOrCashDetailedTable[];
+    capitalGainsTax: number;
   };
   financing: {
     investedEquityFinal: number;
@@ -39,6 +40,7 @@ export type IsolatedFinanceOrCashData = {
     totalRentalShortfall: number;
     totalInterestPaid: number;
     detailedTable: IsolatedFinancingOrCashDetailedTable[];
+    capitalGainsTax: number;
   };
 };
 
@@ -65,6 +67,7 @@ export const IsolatedFinanceOrInCashCaseDataProvider = ({
       totalFinalEquity: 372892,
       breakEven: 0,
       detailedTable: [],
+      capitalGainsTax: 0
     },
     financing: {
       totalProfit: 265328.91,
@@ -75,6 +78,7 @@ export const IsolatedFinanceOrInCashCaseDataProvider = ({
       totalFinalEquity: 425637,
       breakEven: 66,
       detailedTable: [],
+      capitalGainsTax: 0
     },
   });
 

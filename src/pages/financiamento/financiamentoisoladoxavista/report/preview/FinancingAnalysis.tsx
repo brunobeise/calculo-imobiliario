@@ -3,7 +3,7 @@ import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import FinalEquityDivisionChart from "@/components/charts/FinalEquityDivisionChart";
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function FinancingAnalysis() {

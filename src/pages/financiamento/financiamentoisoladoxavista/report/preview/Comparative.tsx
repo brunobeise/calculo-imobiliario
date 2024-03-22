@@ -1,7 +1,7 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { ComparativeMonthlyInvestmentGrowthChart } from "@/components/charts/ComparativeMontlyInvestmentGrowthChart";
 import ComparativeTotalEquityGrowth from "@/components/charts/ComparativeTotalEquityGrowth";
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 import ComparativePercentageGrowthChart from "@/components/charts/ComparativePercentageGrowthChart";
 
 export default function Comparative() {

@@ -1,5 +1,5 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 import UserSignature from "@/components/UserSignature";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 

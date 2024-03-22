@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { FinanceOrCashReportContext } from "../Context";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import { IsolatedFinanceOrCashData } from "../../Context";
+import { IsolatedFinanceOrCashData } from "../../CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 export default function PropertyDetails() {
