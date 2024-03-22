@@ -16,7 +16,6 @@ export default function Conclusão(props: ConclusãoProps) {
 
   const {
     finalYear,
-    appreciatedPropertyValue,
   } = propertyData;
   
   return (
@@ -108,7 +107,7 @@ export default function Conclusão(props: ConclusãoProps) {
           </thead>
           <tbody>
             <tr>
-              <td>{numeroParaReal(appreciatedPropertyValue)}</td>
+              <td>{numeroParaReal(caseData[props.context].detailedTable[caseData[props.context].detailedTable.length - 1].propertyValue)}</td>
               <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.investedEquityFinal)

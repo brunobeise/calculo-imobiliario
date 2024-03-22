@@ -79,6 +79,9 @@ export function calcBreakEvenPoint(detailedTable: IsolatedFinancingOrCashDetaile
 export function calcCapitalGainsTax(totalInterestPaid: number, propertyData: PropertyData, context: 'financing' | 'inCash'){
     const appreciatedPropertyValue = calcPropertyValuation(propertyData.propertyValue, propertyData.interestRate, propertyData.finalYear)
 
+    console.log(appreciatedPropertyValue - propertyData.propertyValue);
+    
+
     if(context === 'financing'){
         return (appreciatedPropertyValue - (propertyData.propertyValue + totalInterestPaid)) * 0.15
     }
@@ -143,7 +146,7 @@ export function calcDetailedTable(context: 'inCash' | 'financing', propertyData:
             month,
         )   
 
-        const finalValue = initialCapital + capitalYield + rentalAmount + propertyValue - outstandingBalance;
+        const finalValue = initialCapital + propertyValue - outstandingBalance;
 
         const monthlyProfit = finalValue - initialInvestment
 
