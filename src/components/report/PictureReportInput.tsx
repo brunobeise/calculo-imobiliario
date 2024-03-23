@@ -16,7 +16,6 @@ export default function PictureReportInput(props: PictureReportInputProps) {
     const file = e.target.files[0];
     if (file) {
       const src = URL.createObjectURL(file);
-
       props.onChange({
         ...props.value,
         content: src,

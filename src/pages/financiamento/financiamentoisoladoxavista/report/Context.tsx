@@ -4,9 +4,12 @@ import { ReactNode, createContext, useState } from "react";
 export interface InputReportElement {
   active: boolean;
   activeSecondary?: boolean;
-  content: string;
+  content?: string;
   color?: string;
+  translateX?: number;
+  translateY?: number;
 }
+
 
 export type FinanceOrCashReportContextState = {
   financeOrCashReportState: FinanceOrCashReportContextType;
@@ -23,7 +26,6 @@ export const FinanceOrCashReportContext =
   });
 
 export type FinanceOrCashReportContextType = {
-  coverType: number;
   propertyPicture: InputReportElement;
   companyLogo1: InputReportElement;
   companyLogo2: InputReportElement;
@@ -47,7 +49,6 @@ export const FinanceOrCashReportProvider = ({
 }) => {
   const [financeOrCashReportState, setFinanceOrCashReportState] =
     useState<FinanceOrCashReportContextType>({
-      coverType: 1,
       propertyPicture: {
         content: "https://i.imgur.com/gyLifQC.jpg",
         active: true,
