@@ -61,7 +61,7 @@ export default function PropertyDetails() {
   );
 
   const preconditionsItems =
-    financeOrCashReportState.preconditionsScenarios.content
+    financeOrCashReportState.preconditionsScenarios.content!
       .split("\n")
       .filter((item) => item);
 
