@@ -21,7 +21,6 @@ export default function Cover() {
     agentName,
     calculation,
     companyLogo2,
-    coverType,
   } = financeOrCashReportState;
 
   const caseData: IsolatedFinanceOrCashData = JSON.parse(
@@ -36,7 +35,7 @@ export default function Cover() {
         </h1>
       )}
 
-      {propertyPicture.active && coverType === 1 ? (
+      {propertyPicture.active ? (
         <div className="relative h-[500px] overflow-hidden">
           <img
             className="absolute w-full top-[50%] translate-y-[-50%] left-[50%] translate-x-[-50%] shadow-lg"
