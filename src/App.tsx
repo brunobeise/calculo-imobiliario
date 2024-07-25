@@ -6,6 +6,7 @@ import { auxiliarRoutes } from "./routes/auxiliar";
 import { relatorioRoutes } from "./routes/relatorios";
 import UserConfig from "./pages/userConfig";
 import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
+import Scrap from "./scrapping/Scrap";
 
 export interface Route {
   title: string;
@@ -25,6 +26,7 @@ export default function App() {
 
         <Routes>
           <Route path="/user" element={<UserConfig />} />
+          <Route path="/scrap" element={<Scrap />} />
           {routes.map((r) => (
             <Route key={r.title} element={r.element} path={r.href} />
           ))}

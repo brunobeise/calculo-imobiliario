@@ -4,9 +4,9 @@ import {
   FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
-import { Button } from "./ui/button";
 import { UserData } from "@/pages/userConfig";
 import { Link } from "react-router-dom";
+import { IconButton } from "@mui/joy";
 
 interface UserSignatureProps {
   userData?: UserData;
@@ -71,24 +71,24 @@ export default function UserSignature(props: UserSignatureProps) {
         <div className="mt-5">
           <div className="flex ga-x-3">
             <Link to={data.whatsapp || ""} target="_blank">
-              <Button variant="link" className="text-2xl" size="icon">
-                <FaWhatsapp />
-              </Button>
+              <IconButton>
+                <FaWhatsapp size='22px' />
+              </IconButton>
             </Link>
             <Link to={data.instagram || ""} target="_blank">
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaInstagram />
-              </Button>
+              <IconButton>
+                <FaInstagram size='22px' />
+              </IconButton>
             </Link>
             <Link to={data.facebook || ""} target="_blank">
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaFacebookSquare />
-              </Button>
+              <IconButton>
+                <FaFacebookSquare size='22px' />
+              </IconButton>
             </Link>
             <Link to={data.linkedin || ""} target="_blank">
-              <Button className="text-2xl" variant="link" size="icon">
-                <FaLinkedin />
-              </Button>
+              <IconButton>
+                <FaLinkedin size='22px' />
+              </IconButton>
             </Link>
           </div>
           <div className="bg-primary w-full h-[1.2px]"></div>

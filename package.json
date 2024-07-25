@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "build-scrap": "tsc src/scrapping/index.ts --outDir dist/scrapping",
+    "run-scrap": "node dist/scrapping/index.js",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -29,10 +31,12 @@
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.4",
+    "@types/cheerio": "^0.22.35",
     "@vercel/node": "^3.0.21",
-    "axios": "^1.6.7",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.1",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^2.0.3",
     "clsx": "^2.1.0",
@@ -67,6 +71,7 @@
     "postcss": "^8.4.33",
     "postcss-nesting": "^12.0.2",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }

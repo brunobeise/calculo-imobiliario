@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
-import { PropertyData, propertyDataContext } from "../propertyData/PropertyDataContext";
-import { Label } from "./ui/label";
+import {
+  PropertyData,
+  propertyDataContext,
+} from "../propertyData/PropertyDataContext";
 import {
   calcOutstandingBalance,
   calcInstallmentValue,
@@ -10,9 +12,7 @@ import {
 } from "@/lib/calcs";
 
 import { useLocation } from "react-router-dom";
-import InputPercent from "./ui/InputPercent";
-import InputYears from "./ui/inputYears";
-import { Input, Sheet, Slider } from "@mui/joy";
+import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -77,8 +77,6 @@ export default function PropertyDataCard() {
   };
 
   useEffect(() => {
-
-    
     const propertyValueValorizado = calcPropertyValuation(
       propertyValue,
       propertyAppreciationRate,
@@ -120,12 +118,10 @@ export default function PropertyDataCard() {
     financingYears,
   ]);
 
-  
-
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
 
-  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user"];
+  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user", "/scrap" ];
 
   const isException = execptionRoutes.some((route) =>
     location.pathname.includes(route)
@@ -153,7 +149,9 @@ export default function PropertyDataCard() {
             <div className="grid grid-cols-1  gap-6">
               {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
                 <div>
-                  <Label htmlFor="propertyValue">Saldo Disponível:</Label>
+                  <FormLabel htmlFor="propertyValue">
+                    Saldo Disponível:
+                  </FormLabel>
                   <Input
                     variant="outlined"
                     onChange={handleChangeReal}
@@ -166,7 +164,7 @@ export default function PropertyDataCard() {
               )}
 
               <div>
-                <Label htmlFor="propertyValue">Valor do imóvel:</Label>
+                <FormLabel htmlFor="propertyValue">Valor do imóvel:</FormLabel>
                 <Input
                   variant="outlined"
                   onChange={handleChangeReal}
@@ -177,17 +175,26 @@ export default function PropertyDataCard() {
                 />
               </div>
               <div className="relative">
-                <Label htmlFor="valorizaçãoDoImóvel">
+                <FormLabel htmlFor="valorizaçãoDoImóvel">
                   Valorização anual do imóvel:
-                </Label>
-                <InputPercent
-                  onChangeValue={(v) =>
-                    setpropertyData("propertyAppreciationRate", v)
+                </FormLabel>
+                <Input
+                  onChange={(v) =>
+                    setpropertyData(
+                      "propertyAppreciationRate",
+                      Number(v.target.value)
+                    )
                   }
+                  endDecorator={"%"}
+                  slotProps={{
+                    input: {
+                      min: 0.1,
+                      step: 0.1,
+                    },
+                  }}
                   type="number"
-                  step={0.1}
                   id="valorizaçãoDoImóvel"
-                  value={propertyAppreciationRate}
+                  defaultValue={propertyAppreciationRate}
                   required
                 />
               </div>
@@ -201,7 +208,9 @@ export default function PropertyDataCard() {
 
             <div className="grid grid-cols-2 gap-6">
               <div className="col-span-2">
-                <Label htmlFor="propertyValue">Valor Inicial Aluguel:</Label>
+                <FormLabel htmlFor="propertyValue">
+                  Valor Inicial Aluguel:
+                </FormLabel>
                 <Input
                   variant="outlined"
                   className=""
@@ -213,13 +222,29 @@ export default function PropertyDataCard() {
                 />
               </div>
 
-              <div className={!excludeInputByRoute(["/financiamentoisoladoxavista"]) ? 'col-span-2' : ''}>
-                <Label htmlFor="taxarendimento">Rendimento aplicação:</Label>
+              <div
+                className={
+                  !excludeInputByRoute(["/financiamentoisoladoxavista"])
+                    ? "col-span-2"
+                    : ""
+                }
+              >
+                <FormLabel htmlFor="taxarendimento">
+                  Rendimento aplicação:
+                </FormLabel>
 
-                <InputPercent
-                  onChangeValue={(v) => setpropertyData("monthlyYieldRate", v)}
+                <Input
+                  onChange={(v) =>
+                    setpropertyData("monthlyYieldRate", Number(v.target.value))
+                  }
                   type="number"
-                  step={0.1}
+                  endDecorator={"%"}
+                  slotProps={{
+                    input: {
+                      min: 0.1,
+                      step: 0.1,
+                    },
+                  }}
                   id="taxarendimento"
                   value={monthlyYieldRate}
                   required
@@ -229,16 +254,25 @@ export default function PropertyDataCard() {
               <div>
                 {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
                   <>
-                    <Label className="text-xs" htmlFor="taxarendimento">
+                    <FormLabel className="text-xs" htmlFor="taxarendimento">
                       Rendimento montante do aluguel:
-                    </Label>
+                    </FormLabel>
 
-                    <InputPercent
-                      onChangeValue={(v) =>
-                        setpropertyData("rentMonthlyYieldRate", v)
+                    <Input
+                      onChange={(v) =>
+                        setpropertyData(
+                          "rentMonthlyYieldRate",
+                          Number(v.target.value)
+                        )
                       }
                       type="number"
-                      step={0.1}
+                      endDecorator={"%"}
+                      slotProps={{
+                        input: {
+                          min: 0.1,
+                          step: 0.1,
+                        },
+                      }}
                       id="taxarendimento"
                       value={rentMonthlyYieldRate}
                       required
@@ -257,7 +291,7 @@ export default function PropertyDataCard() {
 
           <div className="grid grid-cols-1 h-[90%] justify-between gap-4">
             <div>
-              <Label htmlFor="propertyValue">Valor da Entrada:</Label>
+              <FormLabel htmlFor="propertyValue">Valor da Entrada:</FormLabel>
               <div className="relative">
                 <Input
                   variant="outlined"
@@ -298,7 +332,9 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="financingFees">Taxas do financiamento:</Label>
+              <FormLabel htmlFor="financingFees">
+                Taxas do financiamento:
+              </FormLabel>
               <Input
                 variant="outlined"
                 onChange={handleChangeReal}
@@ -310,7 +346,7 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="inCashFees">Taxas á vista:</Label>
+              <FormLabel htmlFor="inCashFees">Taxas á vista:</FormLabel>
               <Input
                 variant="outlined"
                 onChange={handleChangeReal}
@@ -322,12 +358,18 @@ export default function PropertyDataCard() {
             </div>
 
             <div className="relative">
-              <Label htmlFor="interestRate">Juros financiamento:</Label>
-              <InputPercent
-                onChangeValue={(v) => {
-                  setpropertyData("interestRate", v);
+              <FormLabel htmlFor="interestRate">Juros financiamento:</FormLabel>
+              <Input
+                onChange={(v) => {
+                  setpropertyData("interestRate", Number(v.target.value));
                 }}
-                step={0.1}
+                endDecorator={"%"}
+                slotProps={{
+                  input: {
+                    min: 0.1,
+                    step: 0.1,
+                  },
+                }}
                 id="interestRate"
                 type="number"
                 value={interestRate}
@@ -335,7 +377,7 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="financingFees">Total Investido:</Label>
+              <FormLabel htmlFor="financingFees">Total Investido:</FormLabel>
               <Input
                 disabled
                 variant="outlined"
@@ -356,20 +398,28 @@ export default function PropertyDataCard() {
 
           <div className="grid grid-cols-1 h-[90%] gap-6">
             <div>
-              <Label htmlFor="anos">Calcular até:</Label>
-              <InputYears
-                onChangeValue={(v) => {
-                  if (v > 0) setpropertyData("finalYear", v);
-                }}
-                step={1}
-                id="anos"
+              <FormLabel htmlFor="anos">Calcular até:</FormLabel>
+
+              <Input
+                endDecorator={"Anos"}
                 type="number"
-                value={finalYear}
+                onChange={(v) => {
+                  if (Number(v.target.value) > 0)
+                    setpropertyData("finalYear", Number(v.target.value));
+                }}
+                defaultValue={finalYear}
+                slotProps={{
+                  input: {
+                    min: 1,
+                    max: 35,
+                    step: 1,
+                  },
+                }}
               />
             </div>
 
             <div>
-              <Label htmlFor="propertyValue">Valor da Parcela:</Label>
+              <FormLabel htmlFor="propertyValue">Valor da Parcela:</FormLabel>
               <Input
                 variant="outlined"
                 onChange={handleChangeReal}
@@ -381,9 +431,9 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="outstandingBalance">
+              <FormLabel htmlFor="outstandingBalance">
                 Saldo devedor em {finalYear} anos:
-              </Label>
+              </FormLabel>
               <Input
                 variant="outlined"
                 onChange={handleChangeReal}
@@ -393,20 +443,30 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <Label htmlFor="anosfinanciamento">Tempo do financiamento:</Label>
-              <InputYears
-                onChangeValue={(value) => {
-                  if (Number(value))
-                    setpropertyData("financingYears", Number(value));
-                }}
+              <FormLabel htmlFor="anosfinanciamento">
+                Tempo do financiamento:
+              </FormLabel>
+              <Input
                 id="anosfinanciamento"
+                endDecorator={"Anos"}
                 type="number"
-                value={financingYears}
+                onChange={(v) => {
+                  if (Number(v.target.value) > 0)
+                    setpropertyData("financingYears", Number(v.target.value));
+                }}
+                defaultValue={financingYears}
+                slotProps={{
+                  input: {
+                    min: 1,
+                    max: 35,
+                    step: 1,
+                  },
+                }}
               />
             </div>
 
             <div>
-              <Label htmlFor="financingFees">Total Financiado:</Label>
+              <FormLabel htmlFor="financingFees">Total Financiado:</FormLabel>
               <Input
                 disabled
                 variant="outlined"

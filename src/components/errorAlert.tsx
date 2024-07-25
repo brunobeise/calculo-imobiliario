@@ -1,6 +1,5 @@
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, Typography } from "@mui/joy";
+import { IoWarning } from "react-icons/io5";
 
 export interface propertyDataError {
   message: string;
@@ -9,10 +8,22 @@ export interface propertyDataError {
 
 export function ErrorAlert(props: propertyDataError) {
   return (
-    <Alert className="max-w-[600px] block" variant="destructive">
-      <ExclamationTriangleIcon className="!text-white h-4 w-4" />
-      <AlertTitle>{props.title}</AlertTitle>
-      <AlertDescription>{props.message}</AlertDescription>
+    <Alert
+      startDecorator={<IoWarning size="30px" />}
+      variant="soft"
+      color="danger"
+      sx={{
+        padding: "2rem",
+      }}
+    >
+      <div>
+        <Typography level="body-md" color={"danger"}>
+          {props.title}
+        </Typography>
+        <Typography level="body-sm" color={"danger"}>
+          {props.message}
+        </Typography>
+      </div>
     </Alert>
   );
 }
