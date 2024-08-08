@@ -12,7 +12,7 @@ export default function FinanceOrCashReport() {
 
   const [configData, setConfigData] = useState<FinaceOrCashReportData>({
     principalPhoto: "",
-    description: ``,
+    description: "",
     additionalPhotos: [],
     features: [],
   });
