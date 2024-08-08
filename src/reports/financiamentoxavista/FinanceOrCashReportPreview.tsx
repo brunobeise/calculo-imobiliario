@@ -84,7 +84,7 @@ const FinanceOrCashReportPreview = forwardRef<
         </div>
 
         <div className="grid grid-cols-7 mt-10 w-full px-14 text-primary">
-          <div className="col-span-3 relative">
+          <div className="col-span-3 relative mt-7 ms-5">
             <span className="absolute font-bold text-3xl top-[4.4rem] left-[6rem]">
               {caseData.financing.totalProfitPercent.toFixed(2) + "%"}
             </span>
@@ -93,7 +93,7 @@ const FinanceOrCashReportPreview = forwardRef<
                 caseData.financing.totalProfitPercent / propertyData.finalYear
               ).toFixed(2) + "%"}
             </span>
-            <img className="w-[250px]" src={lucroAnualFinal} />
+            <img className="w-[250px] absolute" src={lucroAnualFinal} />
           </div>
           <div className="text-xl col-span-4">
             <div className="flex justify-between items-center">
