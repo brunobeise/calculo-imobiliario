@@ -1,54 +1,100 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { InputReportElement } from "@/pages/financiamento/financiamentoxavista/report/Context";
-import { Checkbox } from "../ui/checkbox";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import React, { useState } from "react";
+import { Button, FormLabel, SvgIcon } from "@mui/joy";
 
 interface PictureReportInputProps {
-  onChange: (value: InputReportElement) => void;
-  value: InputReportElement;
+  onChange: (src: string) => void;
   label: string;
+  multiple?: boolean;
 }
 
-export default function PictureReportInput(props: PictureReportInputProps) {
-  const handleFileChange = (e: React.ChangeEvent<any>) => {
-    const file = e.target.files[0];
-    if (file) {
-      const src = URL.createObjectURL(file);
-      props.onChange({
-        ...props.value,
-        content: src,
-      });
+export default function PictureReportInput({
+  onChange,
+  label,
+  multiple = false,
+}: PictureReportInputProps) {
+  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileSrcs, setFileSrcs] = useState<string[]>([]);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      const srcs = Array.from(files).map((file) => URL.createObjectURL(file));
+      const names = Array.from(files).map((file) => file.name);
+      setFileNames(names);
+      setFileSrcs(srcs);
+      onChange(srcs.join(","));
     }
   };
 
   return (
-    <div
-      className={`p-3 rounded flex items-center ${
-        !props.value.active
-          ? " outline-0"
-          : " outline outline-border outline-1 shadow"
-      }`}
-    >
-      <Checkbox
-        checked={props.value.active}
-        onCheckedChange={(v) => {
-          props.onChange({
-            ...props.value,
-            active: v as boolean,
-          });
-        }}
-        className="block "
-      />
+    <div className="p-3 rounded">
       <div className="ms-4 w-full">
-        <Label htmlFor={props.label}>{props.label}</Label>
-        <Input
-          className="w-full"
-          onChange={handleFileChange}
-          id={props.label}
-          type="file"
-        />
+        <FormLabel htmlFor={label} className="mr-2">
+          {label}
+        </FormLabel>
+        <div className="flex items-center mt-2">
+          <Button
+            component="label"
+            role={undefined}
+            tabIndex={-1}
+            variant="outlined"
+            color="neutral"
+            startDecorator={
+              <SvgIcon>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                  />
+                </svg>
+              </SvgIcon>
+            }
+          >
+            Escolher arquivo
+            <input
+              id={label}
+              type="file"
+              multiple={multiple}
+              onChange={handleFileChange}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </Button>
+          {fileSrcs.length === 1 && (
+            <div className="flex items-center ml-4">
+              {fileSrcs.map((src, index) => (
+                <div key={index} className="flex items-center mr-4">
+                  <img
+                    src={src}
+                    alt="Preview"
+                    className="w-10 h-10 object-cover mr-2"
+                  />
+                  <span>{fileNames[index]}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        {fileSrcs.length > 1 && (
+          <div className="flex items-center ml-4 mt-2 flex-wrap gap-5">
+            {fileSrcs.map((src, index) => (
+              <div key={index} className="flex items-center mr-4">
+                <img
+                  src={src}
+                  alt="Preview"
+                  className="w-10 h-10 object-cover mr-2"
+                />
+                <span>{fileNames[index]}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

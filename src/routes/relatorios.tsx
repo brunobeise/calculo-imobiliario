@@ -1,5 +1,4 @@
-import IsolatedFinancingOrInCashReport from "@/pages/financiamento/financiamentoisoladoxavista/report";
-import RelatorioFinanciamentoXAvista from "@/pages/financiamento/financiamentoxavista/report";
+import RelatorioFinanciamentoXAvista from "@/reports/financiamentoxavista/FinanceOrCashReport";
 
 export const relatorioRoutes = [
   {
@@ -9,11 +8,11 @@ export const relatorioRoutes = [
       "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
     element: <RelatorioFinanciamentoXAvista />,
   },
-  {
-    title: "Relatório - Financiamento Isolado X A Vista",
-    href: "/financiamentoisoladoxavista/relatorio",
-    description:
-      "Compara as duas hipóteses com diferentes valores de investimento inicial",
-    element: <IsolatedFinancingOrInCashReport />,
-  },
+  // {
+  //   title: "Relatório - Financiamento Isolado X A Vista",
+  //   href: "/financiamentoisoladoxavista/relatorio",
+  //   description:
+  //     "Compara as duas hipóteses com diferentes valores de investimento inicial",
+  //   element: <IsolatedFinancingOrInCashReport />,
+  // },
 ];

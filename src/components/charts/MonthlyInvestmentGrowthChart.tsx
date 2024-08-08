@@ -59,7 +59,7 @@ export function MonthlyInvestmentGrowthChart(props: {
         label: "Rendimento + Aluguel - Parcela",
         data: props.data,
         borderColor: "#002f57",
-        backgroundColor: "#002e57e1",
+        backgroundColor: "#002f57",
         pointRadius: 0,
       },
     ],

@@ -34,20 +34,19 @@ export default function Comparative() {
             de investimento do dinheiro que não foi usado na compra imediata do
             imóvel.
           </p>
-        
-            <ComparativeMonthlyInvestmentGrowthChart
-              finalYear={propertyData.finalYear}
-              financingValues={caseData.financing.detailedTable.map(
-                (r) =>
-                  r.rentValue +
-                  r.initialCapitalYield -
-                  propertyData.installmentValue
-              )}
-              inCashValues={caseData.inCash.detailedTable.map(
-                (r) => r.rentValue + r.initialCapitalYield
-              )}
-            />
-    
+
+          <ComparativeMonthlyInvestmentGrowthChart
+            finalYear={propertyData.finalYear}
+            financingValues={caseData.financing.detailedTable.map(
+              (r) =>
+                r.rentValue +
+                r.initialCapitalYield -
+                propertyData.installmentValue
+            )}
+            inCashValues={caseData.inCash.detailedTable.map(
+              (r) => r.rentValue + r.initialCapitalYield
+            )}
+          />
         </div>
         <div className="mt-2">
           <p className="mb-5 text-justify">

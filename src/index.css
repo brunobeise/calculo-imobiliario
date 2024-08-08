@@ -25,20 +25,12 @@ h1 {
   font-family: "Rawline Light", sans-serif;
 }
 
-.pageBreakAfter {
-  padding-left: 50px;
-  padding-right: 50px;
-  page-break-after: always;
-  height: 288mm !important;
-  overflow: hidden;
-}
-
 strong {
   font-family: "Rawline Bold", sans-serif;
 }
 
-body {
-  padding: 1rem;
+.italic {
+  font-family: "Rawline SemiBold Italic";
 }
 
 @layer base {

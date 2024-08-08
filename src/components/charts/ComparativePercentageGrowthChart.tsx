@@ -10,11 +10,6 @@ interface ComparativePercentageGrowthProps {
 
 export default function ComparativePercentageGrowthChart(props: ComparativePercentageGrowthProps) {
 
-    console.log(props.financingValues);
-    
-
-
-
   const options: ChartOptions<"line"> = {
     responsive: true,
 

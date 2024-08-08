@@ -49,8 +49,6 @@ export function calcTotalInterestPaid(loanAmount: number, interestRate: number, 
     // A diferença entre os saldos antes e depois do pagamento é o valor principal pago
     const principalPaid = installmentValue - (balanceBeforePayment - balanceAfterPayment);
 
-    console.log(principalPaid);
-
     return principalPaid;
 }
 

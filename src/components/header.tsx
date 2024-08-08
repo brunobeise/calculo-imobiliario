@@ -25,7 +25,7 @@ export default function Header() {
 
   const title = routes.find((r) => r.href === location.pathname)?.title;
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between p-1">
       <div className="flex">
         <Link to={"/"}>
           <IconButton size="lg">

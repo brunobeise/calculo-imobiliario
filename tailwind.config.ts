@@ -4,10 +4,10 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
 
   prefix: "",
@@ -15,40 +15,39 @@ const config: Config = {
     container: {
       center: true,
       padding: "2rem",
-
-
     },
     colors: {
-      background: 'hsl(var(--background))',
-      foreground: 'hsl(var(--foreground))',
-      card: 'hsl(var(--card))',
-      cardForeground: 'hsl(var(--card-foreground))',
-      popover: 'hsl(var(--popover))',
-      popoverForeground: 'hsl(var(--popover-foreground))',
-      primary: 'rgb(var(--primary))',
-      primaryForeground: 'hsl(var(--primary-foreground))',
-      secondary: 'rgb(241, 245, 249)',
-      secondaryForeground: 'hsl(var(--secondary-foreground))',
-      muted: 'hsl(var(--muted))',
-      mutedForeground: 'hsl(var(--muted-foreground))',
-      accent: 'hsl(var(--accent))',
-      accentForeground: 'hsl(var(--accent-foreground))',
-      destructive: 'hsl(var(--destructive))',
-      destructiveForeground: 'hsl(var(--destructive-foreground))',
-      border: 'hsl(var(--border))',
-      input: 'hsl(var(--input))',
-      ring: 'rgb(var(--ring))',
+      background: "hsl(var(--background))",
+      foreground: "hsl(var(--foreground))",
+      card: "hsl(var(--card))",
+      cardForeground: "hsl(var(--card-foreground))",
+      popover: "hsl(var(--popover))",
+      popoverForeground: "hsl(var(--popover-foreground))",
+      primary: "rgb(var(--primary))",
+      primaryForeground: "hsl(var(--primary-foreground))",
+      secondary: "rgb(241, 245, 249)",
+      secondaryForeground: "hsl(var(--secondary-foreground))",
+      muted: "hsl(var(--muted))",
+      mutedForeground: "hsl(var(--muted-foreground))",
+      accent: "hsl(var(--accent))",
+      accentForeground: "hsl(var(--accent-foreground))",
+      destructive: "hsl(var(--destructive))",
+      destructiveForeground: "hsl(var(--destructive-foreground))",
+      border: "hsl(var(--border))",
+      input: "hsl(var(--input))",
+      ring: "rgb(var(--ring))",
       white: "#fafaf9",
-      whitefull: '#ffff'
-
+      whitefull: "#ffff",
+      green: "#239e15",
+      red: "#a82222",
     },
     extend: {
       screens: {
-        'sm': '640px',
-        'md': '768px',
-        'lg': '1024px',
-        'xl': '1280px',
-        'uw': '2000px',
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        uw: "2000px",
       },
       keyframes: {
         "accordion-down": {
@@ -66,10 +65,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require('postcss-nesting'),
-  ],
-}
+  plugins: [require("tailwindcss-animate"), require("postcss-nesting")],
+};
 
 export default config;

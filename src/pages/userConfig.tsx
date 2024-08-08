@@ -1,4 +1,3 @@
-import UserSignature from "@/components/UserSignature";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,10 +12,14 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { uploadImage } from "@/lib/imgur";
+import UserSignature from "@/components/user/UserSignature";
+import UserSignature2 from "@/components/user/UserSignature2";
 
 export interface UserData {
   name?: string;
   logo?: string;
+  logo2?: string;
+  agentPhoto?: string;
   office?: string;
   creci?: string;
   address?: string;
@@ -68,12 +71,41 @@ export default function UserConfig() {
 
   const handleSave = async () => {
     setUploadLoading(true);
-    const imageUrl = await uploadImage(form.logo!);
+
+    let imageUrl, imageUrl2, imageUrl3;
+
+    if (form.logo) {
+      imageUrl = await uploadImage(form.logo);
+    }
+    if (form.logo2) {
+      imageUrl2 = await uploadImage(form.logo2);
+    }
+    if (form.agentPhoto) {
+      imageUrl3 = await uploadImage(form.agentPhoto);
+    }
+
     setUploadLoading(false);
-    setForm({ ...form, logo: imageUrl });
+
+    setForm({
+      ...form,
+      ...(imageUrl && { logo: imageUrl }),
+      ...(imageUrl2 && { logo2: imageUrl2 }),
+      ...(imageUrl3 && { agentPhoto: imageUrl3 }),
+    });
+
+    console.log(imageUrl2);
+    console.log(imageUrl3);
+    
+    
+
     localStorage.setItem(
       "userData",
-      JSON.stringify({ ...form, logo: imageUrl })
+      JSON.stringify({
+        ...form,
+        ...(imageUrl && { logo: imageUrl }),
+        ...(imageUrl2 && { logo2: imageUrl2 }),
+        ...(imageUrl3 && { agentPhoto: imageUrl3 }),
+      })
     );
   };
 
@@ -133,6 +165,24 @@ export default function UserConfig() {
                 />
               </div>
               <div className="col-span-3">
+                <Label htmlFor="logo">Logo 2 da imobiliária:</Label>
+                <Input
+                  onChange={handleFileChange}
+                  type="file"
+                  id="logo2"
+                  required
+                />
+              </div>
+              <div className="col-span-6">
+                <Label htmlFor="logo">Foto do agente:</Label>
+                <Input
+                  onChange={handleFileChange}
+                  type="file"
+                  id="agentPhoto"
+                  required
+                />
+              </div>
+              <div className="col-span-6">
                 <Label htmlFor="telephone">Telefone</Label>
                 <Input
                   onChange={handleChange}
@@ -206,10 +256,11 @@ export default function UserConfig() {
           </Card>
         </form>
       </div>
-      <Card className="h-[200px]">
+      <Card className="h-min">
         <CardContent className="mt-4">
-          <div className="flex justify-center">
+          <div className="flex justify-center flex-col gap-10 items-center">
             <UserSignature userData={form} />
+            <UserSignature2 userData={form} />
           </div>
           <div className="mt-10 text-center">
             <Button

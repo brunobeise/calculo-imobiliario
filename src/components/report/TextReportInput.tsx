@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { InputReportElement } from "@/pages/financiamento/financiamentoxavista/report/Context";
+import { InputReportElement } from "@/pages/financiamento/financiamentoisoladoxavista/report/Context";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";

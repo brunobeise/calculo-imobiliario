@@ -23,14 +23,13 @@ export default function App() {
       <PropertyDataProvider>
         <Header />
         <PropertyDataCard />
-
-        <Routes>
-          <Route path="/user" element={<UserConfig />} />
-          <Route path="/scrap" element={<Scrap />} />
-          {routes.map((r) => (
-            <Route key={r.title} element={r.element} path={r.href} />
-          ))}
-        </Routes>
+          <Routes>
+            <Route path="/user" element={<UserConfig />} />
+            <Route path="/scrap" element={<Scrap />} />
+            {routes.map((r) => (
+              <Route key={r.title} element={r.element} path={r.href} />
+            ))}
+          </Routes>
       </PropertyDataProvider>
     </BrowserRouter>
   );

@@ -1,18 +1,18 @@
 import { Line } from "react-chartjs-2";
 
-
 export default function CompleteAnalysisChart(props: {
   propertyValues: number[];
   outstandingBalanceValues?: number[];
   investedEquityValues: number[];
 }) {
-  
-
   const options = {
     responsive: true,
     plugins: {
       legend: {
         position: "top" as const,
+        labels: {
+          padding: 12,
+        },
       },
       datalabels: {
         display: false,
@@ -41,15 +41,18 @@ export default function CompleteAnalysisChart(props: {
     ],
   };
 
-   if (props.outstandingBalanceValues && props.outstandingBalanceValues.length > 0) {
-     data.datasets.push({
-       label: "Saldo Devedor",
-       data: props.outstandingBalanceValues,
-       borderColor: "#a41d3f",
-       backgroundColor: "#a41d3f",
-       pointRadius: 0,
-     });
-   }
+  if (
+    props.outstandingBalanceValues &&
+    props.outstandingBalanceValues.length > 0
+  ) {
+    data.datasets.push({
+      label: "Saldo Devedor",
+      data: props.outstandingBalanceValues,
+      borderColor: "#a41d3f",
+      backgroundColor: "#a41d3f",
+      pointRadius: 0,
+    });
+  }
 
   return <Line options={options} data={data} />;
 }

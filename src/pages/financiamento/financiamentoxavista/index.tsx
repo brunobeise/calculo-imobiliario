@@ -100,13 +100,16 @@ export default function FinancingOrCash() {
             <Link to={"/financiamentoxavista/relatorio"}>
               <Button
                 startDecorator={<FaFile />}
-                onClick={() =>
+                onClick={() => {
                   localStorage.setItem(
-                    "financingOrInCashCaseData",
+                    "financeOrCashCaseData",
                     JSON.stringify(caseData)
-                  )
-                }
-                
+                  );
+                  localStorage.setItem(
+                    "financeOrCashPropertyData",
+                    JSON.stringify(propertyData)
+                  );
+                }}
                 className="my-5"
               >
                 Gerar Relatório Completo
