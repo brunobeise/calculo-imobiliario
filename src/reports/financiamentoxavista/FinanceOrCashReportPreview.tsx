@@ -70,20 +70,20 @@ const FinanceOrCashReportPreview = forwardRef<
 
         <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
           <img className="w-full" src={configData.principalPhoto} />
-          <div className="absolute bottom-0 h-[150px] w-full bg-[#0000007b] flex items-center px-10 text-lg font-light">
-            <p className="whitespace-pre text-whitefull">
+          <div className="absolute bottom-0 h-[150px] w-full bg-gradient-to-t from-[#000000de] to-transparent flex items-center px-10 text-lg font-light">
+            <p className="whitespace-pre text-whitefull text-xl">
               {configData.description}{" "}
             </p>
           </div>
         </div>
 
-        <div className="bg-primary mt-10 w-[60%] text-white flex justify-center p-1">
+        <div className="bg-primary mt-10 text-white flex justify-center p-1 px-4 text-[1.4rem]">
           <strong>
             Melhor Cenário de Compra / Projeção em {propertyData.finalYear} anos{" "}
           </strong>
         </div>
 
-        <div className="grid grid-cols-7 mt-16 w-full px-14">
+        <div className="grid grid-cols-7 mt-10 w-full px-14 text-primary">
           <div className="col-span-3 relative">
             <span className="absolute font-bold text-3xl top-[4.4rem] left-[6rem]">
               {caseData.financing.totalProfitPercent.toFixed(2) + "%"}
@@ -96,8 +96,9 @@ const FinanceOrCashReportPreview = forwardRef<
             <img className="w-[250px]" src={lucroAnualFinal} />
           </div>
           <div className="text-xl col-span-4">
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>- Valor do imóvel</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-green">
                 {numeroParaReal(
                   caseData.financing.detailedTable[
@@ -107,8 +108,9 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>- Aplicado</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-green">
                 {numeroParaReal(
                   caseData.financing.detailedTable[
@@ -121,8 +123,9 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center items-center">
               <span>- Dívida</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(
                   caseData.financing.detailedTable[
@@ -132,8 +135,9 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span>- Valor Investido</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(
                   propertyData.financingFees +
@@ -144,8 +148,9 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between font-bold">
+            <div className="flex justify-between items-center font-bold">
               <span>Lucro Líquido</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-green">
                 {numeroParaReal(caseData.financing.totalProfit)}
               </span>
@@ -153,8 +158,9 @@ const FinanceOrCashReportPreview = forwardRef<
 
             <div className="h-[2px] bg-primary my-2" />
 
-            <div className="flex justify-between font-bold text-blue-800 mt-2">
+            <div className="flex justify-between items-center font-bold text-blue-800 mt-2">
               <span>Investimento</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(
                   propertyData.financingFees +
@@ -165,8 +171,9 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between ml-4">
+            <div className="flex justify-between items-center ml-4">
               <span>- Aplicação</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(
                   propertyData.personalBalance -
@@ -175,15 +182,17 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
-            <div className="flex justify-between ml-4">
+            <div className="flex justify-between items-center ml-4">
               <span>- Entrada</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(propertyData.downPayment)}
               </span>
             </div>
 
-            <div className="flex justify-between ml-4">
+            <div className="flex justify-between items-center ml-4">
               <span>- Documentação</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-red">
                 {numeroParaReal(propertyData.financingFees)}
               </span>
@@ -191,7 +200,15 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="w-full px-12 mt-32">
+        <div className="flex justify-center mt-10">
+          <img
+            className="w-[250px]"
+            src={"https://i.imgur.com/5Nz5u7Q.png"}
+            alt=""
+          />
+        </div>
+
+        <div className="w-full px-12 mt-10">
           <h1 className="text-2xl font-bold mb-4 mt-4 underline">
             Entenda o Cálculo
           </h1>
@@ -249,7 +266,7 @@ const FinanceOrCashReportPreview = forwardRef<
           </table>
         </div>
 
-        <div className="w-full px-12 mt-12 grid grid-cols-2 gap-10 ">
+        <div className="w-full px-12 mt-5 grid grid-cols-2 gap-10 ">
           <div>
             <h6 className="font-bold text-2xl ">Cenário de Compra</h6>
             <div className="h-[0.5px] bg-primary mt-2" />
@@ -364,7 +381,15 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="w-full px-12 mt-10">
+        <div className="px-12 text-primary mt-2">
+          <p>
+            *O índice é conservador pois nos últimos anos a média nacional é 12%
+            e na região é 16% **Soma da entrada e documentação com a diferença
+            entre o saldo devedor amortizado e os rendimentos do aluguel
+          </p>
+        </div>
+
+        <div className="w-full px-12 mt-2">
           <div className=" w-full mt-5 relative">
             <div className="text-primary absolute top-[4.8rem] left-[1rem] flex flex-col items-center gap-1">
               <span className="text-xl font-bold">
@@ -546,7 +571,7 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
           <div className="grid grid-cols-7 gap-5">
             <div className="col-span-5">
-              <p className="italic my-2 text-primary">Compra à vista</p>
+              <p className="italic text-primary">Compra à vista</p>
               <CompleteAnalysisChart
                 investedEquityValues={caseData.inCash.detailedTable.map(
                   (i) => i.totalCapital
@@ -569,7 +594,7 @@ const FinanceOrCashReportPreview = forwardRef<
                 Todo mês, somamos o aluguel e os rendimentos da renda fixa para
                 pagar as parcelas. O que sobra é reinvestido.
               </p>
-              <p className="mt-28">
+              <p className="mt-24">
                 O capital começa zerado, mas não tem desconto de parcelas. Com o
                 aumento periódico do aluguel e parcelas fixas, o montante na
                 renda fixa tende a crescer ao longo do tempo.
@@ -578,7 +603,7 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="w-full mt-20 px-12">
+        <div className="w-full mt-12 px-12">
           <h5 className="underline text-primary text-xl">
             <strong>Análise Comparativa </strong> Financiamento x Compra à vista
           </h5>
