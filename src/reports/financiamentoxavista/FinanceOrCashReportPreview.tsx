@@ -365,16 +365,16 @@ const FinanceOrCashReportPreview = forwardRef<
               <span className="font-bold text-xl">Lucro ($)</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span className="font-bold text-xl">
-                {numeroParaReal(propertyData.totalProfit)}
+                {numeroParaReal(caseData.financing.totalProfit)}
               </span>
             </div>
             <div className="flex text-primary">
               <span className="font-bold text-xl">Lucro (%)</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span className="font-bold text-xl">
-                {propertyData.totalProfitPercent + "%"} |
+                {caseData.financing.totalProfitPercent + "%"} |
                 {" " +
-                  (propertyData.totalProfitPercent / 12).toFixed(2) +
+                  (caseData.financing.totalProfitPercent / 12).toFixed(2) +
                   "% (ano)"}
               </span>
             </div>

@@ -20,29 +20,27 @@ export default function Conclusão(props: ConclusãoProps) {
     financingFees,
     downPayment,
     propertyValue,
-    appreciatedPropertyValue,
+    inCashFees
   } = propertyData;
 
   const calcCompraDoImovel = () => {
     if (props.context === "financing") return downPayment + financingFees;
-    else return propertyValue;
+    else return propertyValue + inCashFees;
   };
 
   const calcTotalInvestido = () => {
     if (props.context === "financing")
       return personalBalance - (downPayment + financingFees);
-    else return personalBalance - propertyValue;
+    else return personalBalance - (propertyValue + inCashFees);
   };
 
   const rendaMensal = useMemo(() => {
-    // Verifica se os dados necessários estão disponíveis
     if (caseData[props.context].detailedTable.length > 0) {
       const ultimoRegistro =
         caseData[props.context].detailedTable[
           caseData[props.context].detailedTable.length - 1
         ];
 
-      // Verifica se rentValue e finalValue existem
       if (
         typeof ultimoRegistro.rentValue !== "undefined" &&
         typeof ultimoRegistro.finalValue !== "undefined"
@@ -54,10 +52,8 @@ export default function Conclusão(props: ConclusãoProps) {
       }
     }
 
-    // Retorna 0 se os dados necessários não estiverem disponíveis
     return 0;
   }, [caseData, monthlyYieldRate, props.context]);
-
 
   return (
     <Sheet
@@ -131,7 +127,13 @@ export default function Conclusão(props: ConclusãoProps) {
           </thead>
           <tbody>
             <tr>
-              <td>{numeroParaReal(appreciatedPropertyValue)}</td>
+              <td>
+                {numeroParaReal(
+                  caseData.financing.detailedTable[
+                    caseData.financing.detailedTable.length - 1
+                  ]?.propertyValue
+                ) || 0}
+              </td>
               <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.investedEquityFinal)
@@ -178,7 +180,7 @@ export default function Conclusão(props: ConclusãoProps) {
         </Table>
       </Sheet>
 
-      {caseData[props.context].breakEven && (
+      {caseData[props.context].breakEven !== 0 && (
         <p className="text-xs mt-5">
           *Break-even no mes{" "}
           <strong> {caseData[props.context].breakEven} </strong>

@@ -13,7 +13,6 @@ export type PropertyData = {
   downPayment: number;
   installmentValue: number;
   initialRentValue: number;
-  appreciatedPropertyValue: number;
   inCashFees: number;
   financingFees: number;
   monthlyYieldRate: number;
@@ -24,8 +23,6 @@ export type PropertyData = {
   propertyAppreciationRate: number;
   outstandingBalance: number;
   interestRate: number;
-  totalProfit: number;
-  totalProfitPercent: number;
 };
 
 export type propertyDataContextType = {
@@ -38,8 +35,6 @@ export type propertyDataContextType = {
 };
 
 export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
-  
-
   const location = useLocation();
 
   const [propertyData, setImovelState] = useState<PropertyData>(
@@ -50,9 +45,7 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
     const initialValues = getInitialValues(location.pathname);
     setImovelState(initialValues);
   }, [location.pathname]);
-  
 
-  
   const setpropertyData = (
     campo: keyof PropertyData,
     valor: PropertyData[keyof PropertyData]
@@ -63,12 +56,12 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
     }));
   };
 
-   const setMultiplePropertyData = (valores: Partial<PropertyData>) => {
-     setImovelState((prevState) => ({
-       ...prevState,
-       ...valores,
-     }));
-   };
+  const setMultiplePropertyData = (valores: Partial<PropertyData>) => {
+    setImovelState((prevState) => ({
+      ...prevState,
+      ...valores,
+    }));
+  };
 
   return (
     <propertyDataContext.Provider
