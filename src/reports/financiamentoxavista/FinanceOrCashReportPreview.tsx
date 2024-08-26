@@ -65,7 +65,7 @@ const FinanceOrCashReportPreview = forwardRef<
     >
       <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
         <div className="bg-primary w-full flex items-center ps-10">
-          <UserSignature2 />
+          <UserSignature2 desc={configData.title} />
         </div>
 
         <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
@@ -244,11 +244,11 @@ const FinanceOrCashReportPreview = forwardRef<
             </thead>
             <tbody>
               {caseData.financing.detailedTable.map((item, i) => {
-                if ((i + 1) % 12 === 0)
+                if ((i - 1) % 12 === 0)
                   return (
                     <tr className="text-primary">
                       <td className="px-4 py-2 border-r border-primary">
-                        Ano {(i + 1) / 12}
+                        Ano {(i - 1) / 12}
                       </td>
                       <td className="px-4 py-2 border-r border-primary">
                         {numeroParaReal(item.propertyValue)}
@@ -372,9 +372,11 @@ const FinanceOrCashReportPreview = forwardRef<
               <span className="font-bold text-xl">Lucro (%)</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span className="font-bold text-xl">
-                {caseData.financing.totalProfitPercent + "%"} |
+                {caseData.financing.totalProfitPercent.toFixed(2) + "%"} |
                 {" " +
-                  (caseData.financing.totalProfitPercent / 12).toFixed(2) +
+                  Number(caseData.financing.totalProfitPercent / 12).toFixed(
+                    2
+                  ) +
                   "% (ano)"}
               </span>
             </div>

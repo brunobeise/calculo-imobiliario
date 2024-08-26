@@ -11,6 +11,7 @@ export default function FinanceOrCashReport() {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const [configData, setConfigData] = useState<FinaceOrCashReportData>({
+    title: "",
     principalPhoto: "",
     description: "",
     additionalPhotos: [],

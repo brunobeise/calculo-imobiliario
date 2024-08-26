@@ -6,6 +6,7 @@ import { Sheet } from "@mui/joy";
 export interface FinaceOrCashReportData {
   principalPhoto: string;
   description: string;
+  title: string;
   additionalPhotos: string[];
   features: string[];
 }
@@ -25,6 +26,11 @@ export default function FinaceOrCashReportConfig(
         onChange={(v) => props.setData({ ...props.data, principalPhoto: v })}
       />
       <TextFieldReportInput
+        label="Nome do imóvel"
+        onChange={(v) => props.setData({ ...props.data, title: v })}
+      />
+      <TextFieldReportInput
+        isTextarea
         label="Descrição do imóvel"
         onChange={(v) => props.setData({ ...props.data, description: v })}
       />
