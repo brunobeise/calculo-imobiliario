@@ -410,14 +410,6 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="px-12 text-primary mt-2">
-          <p>
-            *O índice é conservador pois nos últimos anos a média nacional é 12%
-            e na região é 16% **Soma da entrada e documentação com a diferença
-            entre o saldo devedor amortizado e os rendimentos do aluguel
-          </p>
-        </div>
-
         <div className="w-full px-12 mt-2">
           <div className=" w-full mt-5 relative">
             <div className="text-primary absolute top-[4.8rem] left-[1rem] flex flex-col items-center gap-1">
@@ -670,7 +662,7 @@ const FinanceOrCashReportPreview = forwardRef<
           <div className="grid grid-cols-2 gap-10">
             <div>
               <InfoItemReais
-                text="Slado inicial:"
+                text="Saldo inicial:"
                 value={propertyData.personalBalance}
               />
 

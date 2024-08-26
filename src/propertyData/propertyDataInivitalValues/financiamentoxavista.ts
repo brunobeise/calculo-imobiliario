@@ -1,7 +1,7 @@
 const data = {
     propertyValue: 500000,
     downPayment: 100000,
-    installmentValue: 3655.97,
+    installmentValue: 3477.4,
     initialRentValue: 2500,
     financingYears: 30,
     inCashFees: 17000,
@@ -12,7 +12,7 @@ const data = {
     finalYear: 7,
     propertyAppreciationRate: 8,
     interestRate: 9.3764,
-    outstandingBalance: 380366.73,
+    outstandingBalance: 376150.25,
 }
 
 export default data

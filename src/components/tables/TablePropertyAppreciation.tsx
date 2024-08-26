@@ -13,7 +13,7 @@ interface TablePropertyAppreciationProps {
   border?: boolean;
   maxHeight?: number;
   data: number[];
-  totalValorization?: boolean
+  totalValorization?: boolean;
 }
 
 export default function TablePropertyAppreciation(
@@ -25,7 +25,13 @@ export default function TablePropertyAppreciation(
     let actualPropertyValue = props.data[0] || 0;
     return props.data.reduce(
       (acc, item, i) => {
-        if (item !== actualPropertyValue) {
+        if (i === 0) {
+          acc.push({
+            ano: 0,
+            propertyValue: numeroParaReal(actualPropertyValue),
+            arrecadacaoAnual: "0%",
+          });
+        } else if (item !== actualPropertyValue) {
           acc.push({
             ano: (i + 1) / 12,
             propertyValue: numeroParaReal(item),
@@ -48,7 +54,7 @@ export default function TablePropertyAppreciation(
 
   return (
     <Sheet
-      variant={props.border ? 'outlined' : 'plain'}
+      variant={props.border ? "outlined" : "plain"}
       className={
         `w-full p-2 ${
           props.colspan
