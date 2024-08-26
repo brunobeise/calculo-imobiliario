@@ -16,6 +16,7 @@ export interface FinancingOrCashDetailedTable {
   rentalIncomeCapital: number; // Capital gerado a partir da renda de aluguel
   rentalIncomeYield: number; // Rendimento gerado a partir do capital de renda de aluguel
   monthlyProfit: number;
+  interestPaid: number;
   propertyValue: number;
 }
 
@@ -28,6 +29,9 @@ export type FinanceOrCashData = {
     totalFinalEquity: number;
     breakEven: number;
     detailedTable: FinancingOrCashDetailedTable[];
+    capitalGainsTax: number;
+    finalRow: FinancingOrCashDetailedTable;
+    brokerageFee: number;
   };
   financing: {
     investedEquityFinal: number;
@@ -37,6 +41,9 @@ export type FinanceOrCashData = {
     totalFinalEquity: number;
     breakEven?: number;
     detailedTable: FinancingOrCashDetailedTable[];
+    capitalGainsTax: number;
+    finalRow: FinancingOrCashDetailedTable;
+    brokerageFee: number;
   };
 };
 
@@ -62,6 +69,9 @@ export const FinanceOrInCashCaseDataProvider = ({
       totalFinalEquity: 372892,
       breakEven: 66,
       detailedTable: [],
+      capitalGainsTax: 0,
+      brokerageFee: 0,
+      finalRow: {} as FinancingOrCashDetailedTable,
     },
     financing: {
       investedEquity: 293863.08,
@@ -71,6 +81,9 @@ export const FinanceOrInCashCaseDataProvider = ({
       totalFinalEquity: 425637,
       breakEven: 66,
       detailedTable: [],
+      capitalGainsTax: 0,
+      brokerageFee: 0,
+      finalRow: {} as FinancingOrCashDetailedTable,
     },
   });
 

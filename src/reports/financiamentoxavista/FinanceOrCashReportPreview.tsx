@@ -84,7 +84,7 @@ const FinanceOrCashReportPreview = forwardRef<
         </div>
 
         <div className="grid grid-cols-7 mt-10 w-full px-14 text-primary">
-          <div className="col-span-3 relative mt-7 ms-5">
+          <div className="col-span-3 relative mt-20 ms-5">
             <span className="absolute font-bold text-3xl top-[4.4rem] left-[6rem]">
               {caseData.financing.totalProfitPercent.toFixed(2) + "%"}
             </span>
@@ -148,6 +148,26 @@ const FinanceOrCashReportPreview = forwardRef<
               </span>
             </div>
 
+            <div className="flex justify-between items-center">
+              <span> - Corretagem</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+              <span className="text-red">
+                {numeroParaReal(
+                  caseData.financing.detailedTable[
+                    caseData.financing.detailedTable.length - 1
+                  ].propertyValue * 0.06
+                )}
+              </span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span> - Imposto Ganho de Capital</span>
+              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+              <span className="text-red">
+                {numeroParaReal(caseData.financing.capitalGainsTax)}
+              </span>
+            </div>
+
             <div className="flex justify-between items-center font-bold">
               <span>Lucro Líquido</span>
               <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
@@ -200,15 +220,8 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="flex justify-center mt-10">
-          <img
-            className="w-[250px]"
-            src={"https://i.imgur.com/5Nz5u7Q.png"}
-            alt=""
-          />
-        </div>
-
-        <div className="w-full px-12 mt-10">
+  
+        <div className="w-full px-12 mt-16">
           <h1 className="text-2xl font-bold mb-4 mt-4 underline">
             Entenda o Cálculo
           </h1>
@@ -353,13 +366,27 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Saldo Devedor</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                {numeroParaReal(
+                - {numeroParaReal(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].outstandingBalance
                 )}
               </span>
             </div>
+            <div className="flex text-primary">
+              <span>Corretagem</span>
+              <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
+              <span> - {numeroParaReal(caseData.financing.brokerageFee)}</span>
+            </div>
+            <div className="flex text-primary">
+              <span>Imposto Ganho de Capital</span>
+              <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
+              <span>
+                - {numeroParaReal(
+                  caseData.financing.capitalGainsTax
+                )}
+              </span>
+            </div> 
             <div className="h-[1px] bg-primary mt-2" />
             <div className="flex text-primary">
               <span className="font-bold text-xl">Lucro ($)</span>
@@ -438,15 +465,8 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="flex justify-center mt-20">
-          <img
-            className="w-[250px]"
-            src={"https://i.imgur.com/5Nz5u7Q.png"}
-            alt=""
-          />
-        </div>
 
-        <div className="w-full mt-20 px-12">
+        <div className="w-full mt-32 px-12">
           <h5 className="underline text-primary text-xl">
             <strong>Análise Comparativa </strong> Financiamento x Compra à vista
           </h5>
@@ -525,15 +545,9 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="flex justify-center mt-10">
-          <img
-            className="w-[250px]"
-            src={"https://i.imgur.com/5Nz5u7Q.png"}
-            alt=""
-          />
-        </div>
+      
 
-        <div className="w-full mt-12 px-12">
+        <div className="w-full mt-32 px-12">
           <h5 className="underline text-primary text-xl">
             <strong>Análise Comparativa </strong> Financiamento x Compra à vista
           </h5>
@@ -605,7 +619,7 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-        <div className="w-full mt-12 px-12">
+        <div className="w-full mt-16 px-12">
           <h5 className="underline text-primary text-xl">
             <strong>Análise Comparativa </strong> Financiamento x Compra à vista
           </h5>

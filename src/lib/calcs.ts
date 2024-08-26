@@ -32,21 +32,14 @@ export function calcTotalInterestPaid(loanAmount: number, interestRate: number, 
     const monthlyInterestRate = interestRate / 100 / 12;
     const totalPayments = totalYearsOfLoan * 12;
 
-    // Calcula o saldo devedor antes do pagamento atual
     const balanceBeforePayment = loanAmount *
         ((Math.pow(1 + monthlyInterestRate, totalPayments) - Math.pow(1 + monthlyInterestRate, paymentsMade - 1)) /
             (Math.pow(1 + monthlyInterestRate, totalPayments) - 1));
 
-    // Calcula o saldo devedor após o pagamento atual
     const balanceAfterPayment = loanAmount *
         ((Math.pow(1 + monthlyInterestRate, totalPayments) - Math.pow(1 + monthlyInterestRate, paymentsMade)) /
             (Math.pow(1 + monthlyInterestRate, totalPayments) - 1));
 
-
-   
-    
-
-    // A diferença entre os saldos antes e depois do pagamento é o valor principal pago
     const principalPaid = installmentValue - (balanceBeforePayment - balanceAfterPayment);
 
     return principalPaid;

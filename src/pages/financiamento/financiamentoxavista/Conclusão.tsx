@@ -151,6 +151,12 @@ export default function Conclusão(props: ConclusãoProps) {
             </tr>
           </tbody>
         </Table>
+        <p className="text-sm mt-5">
+          *Imposto sobre ganho de capital:{" "}
+          <span className="font-bold">
+            {numeroParaReal(caseData[props.context].capitalGainsTax)}
+          </span>
+        </p>
       </Sheet>
 
       {caseData[props.context].breakEven !== 0 && (
