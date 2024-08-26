@@ -8,7 +8,6 @@ import {
 import {
   calcOutstandingBalance,
   calcInstallmentValue,
-  calcPropertyValuation,
 } from "@/lib/calcs";
 
 import { useLocation } from "react-router-dom";
@@ -77,12 +76,6 @@ export default function PropertyDataCard() {
   };
 
   useEffect(() => {
-    const propertyValueValorizado = calcPropertyValuation(
-      propertyValue,
-      propertyAppreciationRate,
-      finalYear
-    );
-
     const installmentValue = calcInstallmentValue(
       propertyValue - downPayment,
       interestRate,
@@ -96,7 +89,6 @@ export default function PropertyDataCard() {
       12 * finalYear
     );
 
-    setpropertyData("appreciatedPropertyValue", propertyValueValorizado);
     setpropertyData("installmentValue", installmentValue);
     setpropertyData("outstandingBalance", outstandingBalance);
 
@@ -121,7 +113,7 @@ export default function PropertyDataCard() {
   const location = useLocation();
   if (location.pathname === "/") return <BemVindo />;
 
-  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user", "/scrap" ];
+  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user", "/scrap"];
 
   const isException = execptionRoutes.some((route) =>
     location.pathname.includes(route)
