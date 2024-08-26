@@ -2,7 +2,7 @@ import { Sheet, Table } from "@mui/joy";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { caseDataContext } from "./Context";
 
 interface ConclusãoProps {
@@ -15,12 +15,11 @@ export default function Conclusão(props: ConclusãoProps) {
 
   const {
     finalYear,
-    monthlyYieldRate,
     personalBalance,
     financingFees,
     downPayment,
     propertyValue,
-    inCashFees
+    inCashFees,
   } = propertyData;
 
   const calcCompraDoImovel = () => {
@@ -33,27 +32,6 @@ export default function Conclusão(props: ConclusãoProps) {
       return personalBalance - (downPayment + financingFees);
     else return personalBalance - (propertyValue + inCashFees);
   };
-
-  const rendaMensal = useMemo(() => {
-    if (caseData[props.context].detailedTable.length > 0) {
-      const ultimoRegistro =
-        caseData[props.context].detailedTable[
-          caseData[props.context].detailedTable.length - 1
-        ];
-
-      if (
-        typeof ultimoRegistro.rentValue !== "undefined" &&
-        typeof ultimoRegistro.finalValue !== "undefined"
-      ) {
-        return (
-          ultimoRegistro.rentValue * 1.08 +
-          (ultimoRegistro.finalValue * monthlyYieldRate) / 100
-        );
-      }
-    }
-
-    return 0;
-  }, [caseData, monthlyYieldRate, props.context]);
 
   return (
     <Sheet
@@ -149,8 +127,8 @@ export default function Conclusão(props: ConclusãoProps) {
           <thead>
             <tr>
               <th>Patrimônio Final</th>
-              <th>Renda Mensal</th>
-              <th>Lucro na operação</th>
+              <th>Lucro (%)</th>
+              <th>Lucro (R$)</th>
             </tr>
           </thead>
           <tbody>
@@ -160,20 +138,15 @@ export default function Conclusão(props: ConclusãoProps) {
                   ? numeroParaReal(caseData.financing.totalFinalEquity)
                   : numeroParaReal(caseData.inCash.totalFinalEquity)}
               </td>
-              <td>{numeroParaReal(rendaMensal)}</td>
+              <td>
+                {props.context === "financing"
+                  ? caseData.financing.totalProfitPercent.toFixed(2) + "%"
+                  : caseData.inCash.totalProfitPercent.toFixed(2) + "%"}
+              </td>
               <td>
                 {props.context === "financing"
                   ? numeroParaReal(caseData.financing.totalProfit)
                   : numeroParaReal(caseData.inCash.totalProfit)}
-                <p>
-                  {props.context === "financing"
-                    ? "(" +
-                      caseData.financing.totalProfitPercent.toFixed(2) +
-                      "%)"
-                    : "(" +
-                      caseData.inCash.totalProfitPercent.toFixed(2) +
-                      "%)"}
-                </p>
               </td>
             </tr>
           </tbody>
