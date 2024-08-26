@@ -599,8 +599,7 @@ const FinanceOrCashReportPreview = forwardRef<
             </div>
             <div className="text-primary col-span-2 mt-10">
               <p>
-                Todo mês, somamos o aluguel e os rendimentos da renda fixa para
-                pagar as parcelas. O que sobra é reinvestido.
+                Todo mês, somamos o aluguel e os rendimentos da renda fixa, o que sobra é reinvestido.
               </p>
               <p className="mt-24">
                 O capital começa zerado, mas não tem desconto de parcelas. Com o

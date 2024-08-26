@@ -19,16 +19,9 @@ export default function TableRentAppreciation(
     let actualRentValue = props.data[0] || 0;
     return props.data.reduce(
       (acc, item, i) => {
-        if (i === 0) {
+        if (i === 0 || item !== actualRentValue) {
           acc.push({
-            ano: 0,
-            rentValue: numeroParaReal(actualRentValue),
-            arrecadacaoAnual: numeroParaReal(actualRentValue * 12),
-          });
-        } else if (item !== actualRentValue) {
-          const ano = i / 12;
-          acc.push({
-            ano: ano,
+            ano: i === 0 ? 1 : i / 12 + 1,
             rentValue: numeroParaReal(item),
             arrecadacaoAnual: numeroParaReal(item * 12),
           });
@@ -43,7 +36,6 @@ export default function TableRentAppreciation(
       }[]
     );
   }, [props.data]);
-
 
   return (
     <Sheet
@@ -64,14 +56,13 @@ export default function TableRentAppreciation(
           <h2 className="text-xl text-center font-bold ">
             Valorização do Aluguel
           </h2>
-          <p className="text-xs mb-3 text-center">(inflação 8% ao ano)</p>
         </div>
       )}
 
       <Sheet
         sx={{ height: 380, overflow: "auto", backgroundColor: "transparent" }}
       >
-        <Table stickyHeader={true} className={`w-full text-${props.text}`}>
+        <Table stickyHeader={true} className={`w-full mt-2 text-${props.text}`}>
           <thead>
             <tr>
               <th className="w-24">Ano</th>

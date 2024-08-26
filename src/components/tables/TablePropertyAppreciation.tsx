@@ -71,13 +71,10 @@ export default function TablePropertyAppreciation(
           <h2 className="text-xl text-center font-bold ">
             Valorização do Imóvel
           </h2>
-          <p className="text-xs mb-3 text-center">
-            ({propertyData.propertyAppreciationRate}% ao ano)
-          </p>
         </div>
       )}
       <Sheet sx={{ height: 380, overflow: "auto" }}>
-        <Table stickyHeader={true} className="w-full text-left">
+        <Table stickyHeader={true} className="w-full mt-2 text-left">
           <thead>
             <tr>
               <th className="w-24">Ano</th>
