@@ -14,7 +14,7 @@ export function calcInstallmentValue(valorFinanciado: number, interestRate: numb
 
     return valorFinanciado *
         (taxaMensal * Math.pow((1 + taxaMensal), financingYears * 12)) /
-        (Math.pow((1 + taxaMensal), financingYears * 12) - 1);
+        (Math.pow((1 + taxaMensal), financingYears * 12) - 1) + 150;
 }
 
 export function calcOutstandingBalance(valorFinanciado: number, interestRate: number, totalAnosFinanciamento: number, pagamentosRealizados: number): number {

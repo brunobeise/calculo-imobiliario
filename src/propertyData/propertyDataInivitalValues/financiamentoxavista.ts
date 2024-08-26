@@ -11,7 +11,7 @@ const data = {
     personalBalance: 517000,
     finalYear: 7,
     propertyAppreciationRate: 8,
-    interestRate: 10.49,
+    interestRate: 9.3764,
     outstandingBalance: 380366.73,
 }
 
