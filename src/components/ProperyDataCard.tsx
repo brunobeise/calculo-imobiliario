@@ -222,7 +222,7 @@ export default function PropertyDataCard() {
                 }
               >
                 <FormLabel htmlFor="taxarendimento">
-                  Rendimento aplicação:
+                  Rendimento aplicação no mercado financeiro:
                 </FormLabel>
 
                 <Input
@@ -350,7 +350,7 @@ export default function PropertyDataCard() {
             </div>
 
             <div className="relative">
-              <FormLabel htmlFor="interestRate">Juros financiamento:</FormLabel>
+              <FormLabel htmlFor="interestRate">Juros nominal financiamento:</FormLabel>
               <Input
                 onChange={(v) => {
                   setpropertyData("interestRate", Number(v.target.value));
