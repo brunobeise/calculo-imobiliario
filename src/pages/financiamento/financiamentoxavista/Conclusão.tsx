@@ -13,7 +13,7 @@ interface ConclusãoProps {
 export default function Conclusão({ caseData, context }: ConclusãoProps) {
   const { propertyData } = useContext(propertyDataContext);
 
-  if (caseData)
+  if (caseData[context].detailedTable.length > 0)
     return (
       <Sheet
         variant="outlined"
@@ -29,11 +29,7 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
             <span>- Valor do imóvel</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-green">
-              {numeroParaReal(
-                caseData[context].detailedTable[
-                  caseData[context].detailedTable.length - 1
-                ].propertyValue
-              )}
+              {numeroParaReal(caseData[context].finalRow.propertyValue)}
             </span>
           </div>
 
@@ -42,12 +38,8 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-green">
               {numeroParaReal(
-                caseData[context].detailedTable[
-                  caseData[context].detailedTable.length - 1
-                ].initialCapital +
-                  caseData[context].detailedTable[
-                    caseData[context].detailedTable.length - 1
-                  ].rentalIncomeCapital
+                caseData[context].finalRow.initialCapital +
+                  caseData[context].finalRow.rentalIncomeCapital
               )}
             </span>
           </div>
@@ -56,11 +48,7 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
             <span>- Dívida</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-red">
-              {numeroParaReal(
-                caseData[context].detailedTable[
-                  caseData[context].detailedTable.length - 1
-                ].outstandingBalance
-              )}
+              {numeroParaReal(caseData[context].finalRow.outstandingBalance)}
             </span>
           </div>
 
@@ -81,11 +69,7 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
             <span> - Corretagem</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-red">
-              {numeroParaReal(
-                caseData[context].detailedTable[
-                  caseData[context].detailedTable.length - 1
-                ].propertyValue * 0.06
-              )}
+              {numeroParaReal(caseData[context].finalRow.propertyValue * 0.06)}
             </span>
           </div>
 
