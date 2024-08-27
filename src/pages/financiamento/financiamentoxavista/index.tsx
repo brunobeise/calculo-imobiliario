@@ -11,6 +11,7 @@ import TablePropertyAppreciation from "@/components/tables/TablePropertyApprecia
 import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import PropertyDataCard from "@/propertyData/ProperyDataCard";
 
 export default function FinancingOrCash() {
   const { propertyData } = useContext(propertyDataContext);
@@ -38,6 +39,7 @@ export default function FinancingOrCash() {
 
   return (
     <>
+      <PropertyDataCard />
       <div className="w-full text-center">
         <Tabs
           defaultValue={"financing"}
@@ -70,8 +72,8 @@ export default function FinancingOrCash() {
 
         {errors.length === 0 ? (
           <>
-            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5">
-              <Conclusão context={context} />
+            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5 px-5">
+              <Conclusão caseData={caseData} context={context} />
 
               <TableRentAppreciation
                 data={caseData[context].detailedTable.map((i) => i.rentValue)}

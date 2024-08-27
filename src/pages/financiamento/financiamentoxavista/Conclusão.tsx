@@ -1,170 +1,116 @@
-import { Sheet, Table } from "@mui/joy";
+import { Sheet } from "@mui/joy";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
-import { caseDataContext } from "./Context";
+import { FinanceOrCashData } from "./Context";
 
 interface ConclusãoProps {
   context: "financing" | "inCash";
+  caseData: FinanceOrCashData;
 }
 
-export default function Conclusão(props: ConclusãoProps) {
+export default function Conclusão({ caseData, context }: ConclusãoProps) {
   const { propertyData } = useContext(propertyDataContext);
-  const { caseData } = useContext(caseDataContext);
 
-  const {
-    finalYear,
-    personalBalance,
-    financingFees,
-    downPayment,
-    propertyValue,
-    inCashFees,
-  } = propertyData;
-
-  const calcCompraDoImovel = () => {
-    if (props.context === "financing") return downPayment + financingFees;
-    else return propertyValue + inCashFees;
-  };
-
-  const calcTotalInvestido = () => {
-    if (props.context === "financing")
-      return personalBalance - (downPayment + financingFees);
-    else return personalBalance - (propertyValue + inCashFees);
-  };
-
-  return (
-    <Sheet
-      variant="outlined"
-      className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center p-5"
-    >
-      <h2 className="text-xl text-center my-2 font-bold">Conclusão</h2>
-      <p className="text-xs mb-7 text-center"></p>
-
-      <Sheet>
-        <Table
-          color="neutral"
-          size={"md"}
-          sx={{
-            "& thead th": {
-              textAlign: "center",
-            },
-            "& tbody td": {
-              textAlign: "center",
-            },
-            "& tbody tr": {
-              backgroundColor: "white",
-            },
-          }}
-        >
-          <thead>
-            <tr>
-              <th>Compra do imóvel</th>
-              <th>Aplicação</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{numeroParaReal(calcCompraDoImovel()!)}</td>
-              <td>{numeroParaReal(calcTotalInvestido()!)}</td>
-              <td>
-                {numeroParaReal(calcCompraDoImovel()! + calcTotalInvestido()!)}
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-      </Sheet>
-
-      <h2 className="text-md text-center my-2 mt-5 font-bold">
-        Resultado após {finalYear} anos:
-      </h2>
-
-      <Sheet>
-        <Table
-          className="text-center"
-          sx={{
-            "& thead th": {
-              textAlign: "center",
-            },
-            "& tbody td": {
-              textAlign: "center",
-            },
-            "& tbody tr": {
-              backgroundColor: "white",
-            },
-          }}
-          size="md"
-        >
-          <thead>
-            <tr>
-              <th>Valor do imóvel</th>
-              <th>Total Aplicação</th>
-              <th>Saldo Devedor</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                {numeroParaReal(
-                  caseData.financing.detailedTable[
-                    caseData.financing.detailedTable.length - 1
-                  ]?.propertyValue
-                ) || 0}
-              </td>
-              <td>
-                {props.context === "financing"
-                  ? numeroParaReal(caseData.financing.investedEquityFinal)
-                  : numeroParaReal(caseData.inCash.investedEquityFinal)}
-              </td>
-              <td>
-                {props.context === "financing"
-                  ? numeroParaReal(propertyData.outstandingBalance)
-                  : numeroParaReal(0)}
-              </td>
-            </tr>
-          </tbody>
-          <thead>
-            <tr>
-              <th>Patrimônio Final</th>
-              <th>Lucro (%)</th>
-              <th>Lucro (R$)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="text-black font-bold">
-                {props.context === "financing"
-                  ? numeroParaReal(caseData.financing.totalFinalEquity)
-                  : numeroParaReal(caseData.inCash.totalFinalEquity)}
-              </td>
-              <td>
-                {props.context === "financing"
-                  ? caseData.financing.totalProfitPercent.toFixed(2) + "%"
-                  : caseData.inCash.totalProfitPercent.toFixed(2) + "%"}
-              </td>
-              <td>
-                {props.context === "financing"
-                  ? numeroParaReal(caseData.financing.totalProfit)
-                  : numeroParaReal(caseData.inCash.totalProfit)}
-              </td>
-            </tr>
-          </tbody>
-        </Table>
-        <p className="text-sm mt-5">
-          *Imposto sobre ganho de capital:{" "}
-          <span className="font-bold">
-            {numeroParaReal(caseData[props.context].capitalGainsTax)}
-          </span>
+  if (caseData)
+    return (
+      <Sheet
+        variant="outlined"
+        className="col-span-12 md:col-span-6 lg:col-span-4 order-last lg:order-none text-center p-5"
+      >
+        <h2 className="text-xl text-center my-2 font-bold">Conclusão</h2>
+        <p className="text-md mb-7 text-center">
+          Resultado após {propertyData.finalYear} anos
         </p>
-      </Sheet>
 
-      {caseData[props.context].breakEven !== 0 && (
-        <p className="text-xs mt-5">
-          *Break-even no mes{" "}
-          <strong> {caseData[props.context].breakEven} </strong>
-        </p>
-      )}
-    </Sheet>
-  );
+        <div className="text-xl col-span-4 px-8">
+          <div className="flex justify-between items-center">
+            <span>- Valor do imóvel</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-green">
+              {numeroParaReal(
+                caseData[context].detailedTable[
+                  caseData[context].detailedTable.length - 1
+                ].propertyValue
+              )}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>- Aplicado</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-green">
+              {numeroParaReal(
+                caseData[context].detailedTable[
+                  caseData[context].detailedTable.length - 1
+                ].initialCapital +
+                  caseData[context].detailedTable[
+                    caseData[context].detailedTable.length - 1
+                  ].rentalIncomeCapital
+              )}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center items-center">
+            <span>- Dívida</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-red">
+              {numeroParaReal(
+                caseData[context].detailedTable[
+                  caseData[context].detailedTable.length - 1
+                ].outstandingBalance
+              )}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span>- Valor Investido</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-red">
+              {numeroParaReal(
+                propertyData.financingFees +
+                  propertyData.downPayment +
+                  (propertyData.personalBalance -
+                    (propertyData.financingFees + propertyData.downPayment))
+              )}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span> - Corretagem</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-red">
+              {numeroParaReal(
+                caseData[context].detailedTable[
+                  caseData[context].detailedTable.length - 1
+                ].propertyValue * 0.06
+              )}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <span> - Imposto Ganho de Capital</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-red">
+              {numeroParaReal(caseData[context].capitalGainsTax)}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center font-bold">
+            <span>Lucro Líquido</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-green">
+              {numeroParaReal(caseData[context].totalProfit)}
+            </span>
+          </div>
+        </div>
+
+        {caseData[context].breakEven !== 0 && (
+          <p className="text-xs mt-5">
+            *Break-even no mes <strong> {caseData[context].breakEven} </strong>
+          </p>
+        )}
+      </Sheet>
+    );
 }

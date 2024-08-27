@@ -23,6 +23,7 @@ export type PropertyData = {
   propertyAppreciationRate: number;
   outstandingBalance: number;
   interestRate: number;
+  isHousing: boolean;
 };
 
 export type propertyDataContextType = {

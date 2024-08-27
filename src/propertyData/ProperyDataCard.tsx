@@ -5,13 +5,8 @@ import {
   PropertyData,
   propertyDataContext,
 } from "../propertyData/PropertyDataContext";
-import {
-  calcOutstandingBalance,
-  calcInstallmentValue,
-} from "@/lib/calcs";
-
-import { useLocation } from "react-router-dom";
-import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
+import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
+import { Checkbox, FormLabel, Input, Sheet, Slider } from "@mui/joy";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -75,6 +70,13 @@ export default function PropertyDataCard() {
     if (id === "outstandingBalance") setSaldoDevedorField(valorFormatado);
   };
 
+  const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.checked;
+    const id = event.target.id;
+
+    setpropertyData(id as keyof PropertyData, value);
+  };
+
   useEffect(() => {
     const installmentValue = calcInstallmentValue(
       propertyValue - downPayment,
@@ -109,17 +111,6 @@ export default function PropertyDataCard() {
     propertyAppreciationRate,
     financingYears,
   ]);
-
-  const location = useLocation();
-  if (location.pathname === "/") return <BemVindo />;
-
-  const execptionRoutes = ["/juroscompostos", "/relatorio", "/user", "/scrap"];
-
-  const isException = execptionRoutes.some((route) =>
-    location.pathname.includes(route)
-  );
-
-  if (isException) return <></>;
 
   const excludeInputByRoute = (routes: string[]) => {
     return !location.pathname.includes(routes.join(" "));
@@ -198,12 +189,13 @@ export default function PropertyDataCard() {
               Rendimento e Aluguel
             </h2>
 
-            <div className="grid grid-cols-2 gap-6">
-              <div className="col-span-2">
+            <div className="grid grid-cols-2 gap-6 items-center">
+              <div>
                 <FormLabel htmlFor="propertyValue">
                   Valor Inicial Aluguel:
                 </FormLabel>
                 <Input
+                  disabled={propertyData.isHousing}
                   variant="outlined"
                   className=""
                   onChange={handleChangeReal}
@@ -211,6 +203,16 @@ export default function PropertyDataCard() {
                   id="initialRentValue"
                   value={initialRentValueField}
                   required
+                />
+              </div>
+
+              <div className="mt-6">
+                <Checkbox
+                  id="isHousing"
+                  slotProps={{}}
+                  onChange={handleChangeBoolean}
+                  checked={propertyData.isHousing}
+                  label="É Moradia"
                 />
               </div>
 
@@ -350,7 +352,9 @@ export default function PropertyDataCard() {
             </div>
 
             <div className="relative">
-              <FormLabel htmlFor="interestRate">Juros nominal financiamento:</FormLabel>
+              <FormLabel htmlFor="interestRate">
+                Juros nominal financiamento:
+              </FormLabel>
               <Input
                 onChange={(v) => {
                   setpropertyData("interestRate", Number(v.target.value));
@@ -474,17 +478,4 @@ export default function PropertyDataCard() {
       </form>
     </>
   );
-
-  function BemVindo() {
-    return (
-      <div className="absolute top-[50%] w-full left-[50%] text-center translate-y-[-50%] translate-x-[-50%]">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Bem vindo ao sistema Cálculo imobiliário!
-        </h1>
-        <p className="leading-7 [&:not(:first-child)]:mt-6">
-          Selecione um contexto no canto superior esquerdo para continuar
-        </p>
-      </div>
-    );
-  }
 }

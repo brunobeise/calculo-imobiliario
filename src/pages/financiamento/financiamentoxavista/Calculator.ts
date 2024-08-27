@@ -33,7 +33,7 @@ export function calcCaseData(
     detailedTable,
     capitalGainsTax: capitalGainsTax,
     finalRow: detailedTable[detailedTable.length - 1],
-    brokerageFee: detailedTable[detailedTable.length - 1].propertyValue * 0.06
+    brokerageFee: detailedTable[detailedTable.length - 1].propertyValue * 0.06,
   };
 }
 
@@ -134,11 +134,11 @@ export function calcDetailedTable(
   let initialCapital =
     context === "financing"
       ? propertyData.personalBalance -
-      propertyData.financingFees -
-      propertyData.downPayment
+        propertyData.financingFees -
+        propertyData.downPayment
       : propertyData.personalBalance -
-      propertyData.inCashFees -
-      propertyData.propertyValue;
+        propertyData.inCashFees -
+        propertyData.propertyValue;
 
   let rentalIncomeCapital = 0;
   let rentValue = propertyData.initialRentValue;
@@ -147,7 +147,9 @@ export function calcDetailedTable(
     const yearIndex = Math.floor((month - 1) / 12);
 
     if (month % 12 === 1 || month === 1) {
-      rentValue = calcRentValue(propertyData.initialRentValue, yearIndex);
+      rentValue = propertyData.isHousing
+        ? 0
+        : calcRentValue(propertyData.initialRentValue, yearIndex);
     }
 
     const rentalAmount =
@@ -222,3 +224,4 @@ export function calcDetailedTable(
 
   return rows;
 }
+
