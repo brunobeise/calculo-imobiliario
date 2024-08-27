@@ -112,14 +112,7 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>- Aplicado</span>
               <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
               <span className="text-green">
-                {numeroParaReal(
-                  caseData.financing.detailedTable[
-                    caseData.financing.detailedTable.length - 1
-                  ].initialCapital +
-                    caseData.financing.detailedTable[
-                      caseData.financing.detailedTable.length - 1
-                    ].rentalIncomeCapital
-                )}
+                {numeroParaReal(caseData.financing.finalRow.totalCapital)}
               </span>
             </div>
 
@@ -220,7 +213,6 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-  
         <div className="w-full px-12 mt-16">
           <h1 className="text-2xl font-bold mb-4 mt-4 underline">
             Entenda o Cálculo
@@ -366,7 +358,8 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Saldo Devedor</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                - {numeroParaReal(
+                -{" "}
+                {numeroParaReal(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].outstandingBalance
@@ -382,11 +375,9 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Imposto Ganho de Capital</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                - {numeroParaReal(
-                  caseData.financing.capitalGainsTax
-                )}
+                - {numeroParaReal(caseData.financing.capitalGainsTax)}
               </span>
-            </div> 
+            </div>
             <div className="h-[1px] bg-primary mt-2" />
             <div className="flex text-primary">
               <span className="font-bold text-xl">Lucro ($)</span>
@@ -456,7 +447,6 @@ const FinanceOrCashReportPreview = forwardRef<
             <img src={entendaOFinancimento} className="mx-auto" />
           </div>
         </div>
-
 
         <div className="w-full mt-32 px-12">
           <h5 className="underline text-primary text-xl">
@@ -537,8 +527,6 @@ const FinanceOrCashReportPreview = forwardRef<
           </div>
         </div>
 
-      
-
         <div className="w-full mt-32 px-12">
           <h5 className="underline text-primary text-xl">
             <strong>Análise Comparativa </strong> Financiamento x Compra à vista
@@ -599,7 +587,8 @@ const FinanceOrCashReportPreview = forwardRef<
             </div>
             <div className="text-primary col-span-2 mt-10">
               <p>
-                Todo mês, somamos o aluguel e os rendimentos da renda fixa, o que sobra é reinvestido.
+                Todo mês, somamos o aluguel e os rendimentos da renda fixa, o
+                que sobra é reinvestido.
               </p>
               <p className="mt-24">
                 O capital começa zerado, mas não tem desconto de parcelas. Com o

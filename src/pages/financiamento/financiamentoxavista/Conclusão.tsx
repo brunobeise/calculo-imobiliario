@@ -37,10 +37,7 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
             <span>- Aplicado</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-green">
-              {numeroParaReal(
-                caseData[context].finalRow.initialCapital +
-                  caseData[context].finalRow.rentalIncomeCapital
-              )}
+              {numeroParaReal(caseData[context].finalRow.totalCapital)}
             </span>
           </div>
 

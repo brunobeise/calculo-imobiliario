@@ -204,7 +204,8 @@ export function calcDetailedTable(
     );
 
     rows.push({
-      totalCapital: initialCapital + rentalIncomeCapital,
+      totalCapital:
+        initialCapital + rentalIncomeCapital + capitalYield + rentalIncomeYield + rentalAmount,
       initialCapital: initialCapital,
       initialCapitalYield: capitalYield,
       propertyValue: propertyValue,
@@ -218,10 +219,21 @@ export function calcDetailedTable(
       monthlyProfit: monthlyProfit,
     });
 
+    if (month === 84 && context === "financing") {
+      console.log(
+        initialCapital +
+          capitalYield +
+          rentalIncomeCapital +
+          rentalIncomeYield +
+          rentalAmount +
+          propertyValue -
+          outstandingBalance
+      );
+    }
+
     initialCapital += capitalYield;
     rentalIncomeCapital += rentalIncomeYield + rentalAmount;
   }
 
   return rows;
 }
-
