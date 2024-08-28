@@ -10,7 +10,7 @@ const data = {
   monthlyYieldRate: 0.9,
   rentMonthlyYieldRate: 0.8,
   personalBalance: 200000,
-  finalYear: 10,
+  finalYear: 7,
   propertyAppreciationRate: 10,
   interestRate: 10,
   outstandingBalance: 365309.39,
