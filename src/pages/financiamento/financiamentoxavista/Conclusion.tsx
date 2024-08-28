@@ -2,10 +2,11 @@ import { Sheet } from "@mui/joy";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 import { useContext } from "react";
-import { FinancingPlanningData } from "./CaseData";
+import { FinanceOrCashData } from "./CaseData";
 
 interface ConclusionProps {
-  caseData: FinancingPlanningData;
+  context: "financing" | "inCash";
+  caseData: FinanceOrCashData;
 }
 
 interface InfoRowProps {
@@ -22,10 +23,10 @@ const InfoRow = ({ label, value, valueClass }: InfoRowProps) => (
   </div>
 );
 
-export default function Conclusion({ caseData }: ConclusionProps) {
+export default function Conclusion({ caseData, context }: ConclusionProps) {
   const { propertyData } = useContext(propertyDataContext);
 
-  if (caseData.detailedTable.length > 0)
+  if (caseData[context].detailedTable.length > 0)
     return (
       <Sheet
         variant="outlined"
@@ -39,17 +40,17 @@ export default function Conclusion({ caseData }: ConclusionProps) {
         <div className="text-xl col-span-4 px-8">
           <InfoRow
             label="Valor do imóvel"
-            value={caseData.finalRow.propertyValue}
+            value={caseData[context].finalRow.propertyValue}
             valueClass="text-green"
           />
           <InfoRow
             label="Aplicado"
-            value={caseData.finalRow.totalCapital}
+            value={caseData[context].finalRow.totalCapital}
             valueClass="text-green"
           />
           <InfoRow
             label="Dívida"
-            value={caseData.finalRow.outstandingBalance}
+            value={caseData[context].finalRow.outstandingBalance}
             valueClass="text-red"
           />
           <InfoRow
@@ -57,40 +58,40 @@ export default function Conclusion({ caseData }: ConclusionProps) {
             value={
               propertyData.financingFees +
               propertyData.downPayment +
-              caseData.finalRow.rentalShortfall
+              (propertyData.personalBalance -
+                (propertyData.financingFees + propertyData.downPayment))
             }
             valueClass="text-red"
           />
           <InfoRow
             label="Corretagem"
-            value={caseData.finalRow.propertyValue * 0.06}
+            value={caseData[context].finalRow.propertyValue * 0.06}
             valueClass="text-red"
           />
           <InfoRow
             label="Imposto Ganho de Capital"
-            value={caseData.capitalGainsTax}
+            value={caseData[context].capitalGainsTax}
             valueClass="text-red"
           />
           <InfoRow
             label="Lucro (R$)"
-            value={caseData.totalProfit}
+            value={caseData[context].totalProfit}
             valueClass="text-green font-bold"
           />
           <div className="flex justify-between items-center">
             <span>{`- Lucro (%)`}</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-green font-bold">
-              {caseData.totalProfitPercent.toFixed(2) + "% / "}
-              {(caseData.totalProfitPercent / propertyData.finalYear).toFixed(
-                2
-              ) + "% (ano)"}
+              {caseData[context].totalProfitPercent.toFixed(2) + "% / "}
+              {(caseData[context].totalProfitPercent / propertyData.finalYear).toFixed(2) +
+                "% (ano)"}
             </span>
           </div>
         </div>
 
-        {caseData.breakEven !== 0 && (
+        {caseData[context].breakEven !== 0 && (
           <p className="text-xs mt-5">
-            *Break-even no mês <strong>{caseData.breakEven}</strong>
+            *Break-even no mês <strong>{caseData[context].breakEven}</strong>
           </p>
         )}
       </Sheet>

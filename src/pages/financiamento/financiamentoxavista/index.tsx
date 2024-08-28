@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
-import Conclusão from "./Conclusão";
+import Conclusion from "./Conclusion";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
@@ -73,7 +73,7 @@ export default function FinancingOrCash() {
         {errors.length === 0 ? (
           <>
             <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5 px-5">
-              <Conclusão caseData={caseData} context={context} />
+              <Conclusion caseData={caseData} context={context} />
 
               <TableRentAppreciation
                 data={caseData[context].detailedTable.map((i) => i.rentValue)}
