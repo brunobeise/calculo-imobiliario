@@ -5,7 +5,7 @@ import {
   calcRentValue,
   calcTotalInterestPaid,
 } from "@/lib/calcs";
-import { FinancingOrCashDetailedTable } from "./Context";
+import { FinancingOrCashDetailedTable } from "./CaseData";
 
 export function calcCaseData(
   context: "inCash" | "financing",

@@ -3,7 +3,7 @@ import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { numeroParaReal } from "@/lib/formatter";
 
 import { useContext } from "react";
-import { FinanceOrCashData } from "./Context";
+import { FinanceOrCashData } from "./CaseData";
 
 interface ConclusãoProps {
   context: "financing" | "inCash";

@@ -1,5 +1,5 @@
 import { numeroParaReal } from "@/lib/formatter";
-import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financiamentoxavista/Context";
+import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financiamentoxavista/CaseData";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";

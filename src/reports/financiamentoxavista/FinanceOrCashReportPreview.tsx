@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import UserSignature2 from "@/components/user/UserSignature2";
 import { FinaceOrCashReportData } from "./FinaceOrCashReportConfig";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/Context";
+import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/CaseData";
 import lucroAnualFinal from "./assets/lucro-anual-total.svg";
 import entendaOFinancimento from "./assets/entenda-o-financimento.svg";
 import { numeroParaReal } from "@/lib/formatter";
