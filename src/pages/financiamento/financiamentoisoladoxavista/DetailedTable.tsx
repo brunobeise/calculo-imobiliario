@@ -3,10 +3,10 @@ import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { IsolatedFinancingOrCashDetailedTable } from "./CaseData";
+import { FinancingPlanningDetailedTable } from "./CaseData";
 
 interface TabelaRendimentoProps {
-  detailedTable: IsolatedFinancingOrCashDetailedTable[];
+  detailedTable: FinancingPlanningDetailedTable[];
 }
 
 export default function DetailedTable(props: TabelaRendimentoProps) {

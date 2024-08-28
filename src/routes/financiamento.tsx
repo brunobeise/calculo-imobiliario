@@ -1,5 +1,7 @@
-import IsolatedFinancingOrCash from "@/pages/financiamento/financiamentoisoladoxavista";
-import { IsolatedFinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoisoladoxavista/CaseData";
+
+
+import FinancingPlanning from "@/pages/financiamento/financiamentoisoladoxavista";
+import { FinancingPlanningCaseDataProvider } from "@/pages/financiamento/financiamentoisoladoxavista/CaseData";
 import FinancingOrCash from "@/pages/financiamento/financiamentoxavista";
 import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoxavista/CaseData";
 
@@ -16,14 +18,14 @@ export const financingRoutes = [
     ),
   },
   {
-    title: "Financiamento Isolado X A Vista",
-    href: "/financiamentoisoladoxavista",
+    title: "Planejamento de Financiamento",
+    href: "/planejamentofinanciamento",
     description:
-      "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
+      "Faz um plano de aquisição com a estratégia de financiamento imobiliário.",
     element: (
-      <IsolatedFinanceOrInCashCaseDataProvider>
-        <IsolatedFinancingOrCash />
-      </IsolatedFinanceOrInCashCaseDataProvider>
+      <FinancingPlanningCaseDataProvider>
+        <FinancingPlanning />
+      </FinancingPlanningCaseDataProvider>
     ),
   },
 ];

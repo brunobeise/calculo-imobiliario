@@ -1,9 +1,9 @@
 import financiamentoxavista from './financiamentoxavista'
-import financiamentoisoaldoxavista from "./financiamentoisoaldoxavista";
+import financingPlanningxavista from "./financingPlanning";
 
 export function getInitialValues(location: string){
     if(location === "/financiamentoxavista") return financiamentoxavista;
-      if (location === "/financiamentoisoladoxavista") return financiamentoisoaldoxavista;
+      if (location === "/planejamentofinanciamento") return financingPlanningxavista;
 
       else return financiamentoxavista;
 }

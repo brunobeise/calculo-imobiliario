@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
-import Conclusão from "./Conclusão";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
-import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
+import { Button } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DetailedTable from "./DetailedTable";
+import Conclusion from "./Conclusion";
+import PropertyDataCard from "@/propertyData/ProperyDataCard";
 
-export default function IsolatedFinancingOrCash() {
+export default function FinancingPlanning() {
   const { propertyData } = useContext(propertyDataContext);
-  const [context, setContext] = useState<"financing" | "inCash">("financing");
   const [errors, setErrors] = useState<propertyDataError[]>([]);
   const { caseData, setCaseData } = useContext(caseDataContext);
 
@@ -28,54 +28,24 @@ export default function IsolatedFinancingOrCash() {
       });
     }
 
-    setCaseData("inCash", calcCaseData("inCash", propertyData));
-    setCaseData("financing", calcCaseData("financing", propertyData));
+    setCaseData(calcCaseData(propertyData));
 
     if (JSON.stringify(errors) !== JSON.stringify(newErrors)) {
       setErrors(newErrors);
     }
   }, [propertyData]);
 
-
   return (
     <>
+      <PropertyDataCard />
       <div className="w-full text-center">
-        <Tabs
-          defaultValue={"financing"}
-          aria-label="tabs"
-          sx={{ bgcolor: "transparent" }}
-        >
-          <TabList
-            onChange={(e) => console.log(e?.target)}
-            disableUnderline
-            sx={{
-              justifyContent: "center",
-              p: 0.5,
-              gap: 0.5,
-              borderRadius: "xl",
-              bgcolor: "transparent",
-              [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                boxShadow: "sm",
-                bgcolor: "background.surface",
-              },
-            }}
-          >
-            <div onClick={() => setContext("financing")}>
-              <Tab value="financing">Financiamento</Tab>
-            </div>
-            <div onClick={() => setContext("inCash")}>
-              <Tab value="inCash">Á Vista</Tab>
-            </div>
-          </TabList>
-        </Tabs>
-
         {errors.length === 0 ? (
           <>
-            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5">
-              <Conclusão context={context} />
+            <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5 px-5">
+              <Conclusion caseData={caseData} />
 
               <TableRentAppreciation
-                data={caseData[context].detailedTable.map((i) => i.rentValue)}
+                data={caseData.detailedTable.map((i) => i.rentValue)}
                 maxHeight={300}
                 border
                 text="left"
@@ -84,9 +54,7 @@ export default function IsolatedFinancingOrCash() {
                 colspan={12}
               />
               <TablePropertyAppreciation
-                data={caseData[context].detailedTable.map(
-                  (i) => i.propertyValue
-                )}
+                data={caseData.detailedTable.map((i) => i.propertyValue)}
                 totalValorization
                 maxHeight={300}
                 border
@@ -95,23 +63,21 @@ export default function IsolatedFinancingOrCash() {
                 title={true}
                 colspan={12}
               />
-              <DetailedTable detailedTable={caseData[context].detailedTable} />
+              <DetailedTable detailedTable={caseData.detailedTable} />
             </div>
-            <Link to={"/financiamentoisoladoxavista/relatorio"}>
+            <Link to={"/planejamentofinanciamento/relatorio"}>
               <Button
                 startDecorator={<FaFile />}
                 onClick={() => {
-                    localStorage.setItem(
-                      "isolatedFinancingOrInCashCaseData",
-                      JSON.stringify(caseData)
-                    );
-                    localStorage.setItem(
-                      "isolatedFinancingOrInCashPropertyData",
-                      JSON.stringify(propertyData)
-                    );
-                }
-                
-                }
+                  localStorage.setItem(
+                    "isolatedFinancingOrInCashCaseData",
+                    JSON.stringify(caseData)
+                  );
+                  localStorage.setItem(
+                    "isolatedFinancingOrInCashPropertyData",
+                    JSON.stringify(propertyData)
+                  );
+                }}
                 className="my-5"
               >
                 Gerar Relatório Completo

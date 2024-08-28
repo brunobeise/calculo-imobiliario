@@ -10,7 +10,7 @@ export const relatorioRoutes = [
   },
   // {
   //   title: "Relatório - Financiamento Isolado X A Vista",
-  //   href: "/financiamentoisoladoxavista/relatorio",
+  //   href: "/planejamentofinanciamento/relatorio",
   //   description:
   //     "Compara as duas hipóteses com diferentes valores de investimento inicial",
   //   element: <IsolatedFinancingOrInCashReport />,

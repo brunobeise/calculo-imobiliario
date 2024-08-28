@@ -130,7 +130,7 @@ export default function PropertyDataCard() {
             </h2>
 
             <div className="grid grid-cols-1  gap-6">
-              {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
+              {excludeInputByRoute(["/planejamentofinanciamento"]) && (
                 <div>
                   <FormLabel htmlFor="propertyValue">
                     Saldo Disponível:
@@ -218,7 +218,7 @@ export default function PropertyDataCard() {
 
               <div
                 className={
-                  !excludeInputByRoute(["/financiamentoisoladoxavista"])
+                  !excludeInputByRoute(["/planejamentofinanciamento"])
                     ? "col-span-2"
                     : ""
                 }
@@ -246,7 +246,7 @@ export default function PropertyDataCard() {
               </div>
 
               <div>
-                {excludeInputByRoute(["/financiamentoisoladoxavista"]) && (
+                {excludeInputByRoute(["/planejamentofinanciamento"]) && (
                   <>
                     <FormLabel className="text-xs" htmlFor="taxarendimento">
                       Rendimento montante do aluguel:
@@ -339,17 +339,19 @@ export default function PropertyDataCard() {
               />
             </div>
 
-            <div>
-              <FormLabel htmlFor="inCashFees">Taxas á vista:</FormLabel>
-              <Input
-                variant="outlined"
-                onChange={handleChangeReal}
-                type="text"
-                id="inCashFees"
-                value={taxasAVistaField}
-                required
-              />
-            </div>
+            {excludeInputByRoute(["/planejamentofinanciamento"]) && (
+              <div>
+                <FormLabel htmlFor="inCashFees">Taxas á vista:</FormLabel>
+                <Input
+                  variant="outlined"
+                  onChange={handleChangeReal}
+                  type="text"
+                  id="inCashFees"
+                  value={taxasAVistaField}
+                  required
+                />
+              </div>
+            )}
 
             <div className="relative">
               <FormLabel htmlFor="interestRate">
@@ -380,7 +382,7 @@ export default function PropertyDataCard() {
                 onChange={() => {}}
                 type="text"
                 id="financingFees"
-                value={numeroParaReal(downPayment + financingFees)}
+                value={numeroParaReal(downPayment + financingFees + inCashFees)}
                 required
               />
             </div>

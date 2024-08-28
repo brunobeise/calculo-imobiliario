@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useState } from "react";
 
 export const caseDataContext = createContext<caseDataContextType>({
-  caseData: {} as IsolatedFinanceOrCashData,
+  caseData: {} as FinancingPlanningData,
   setCaseData: () => {},
 });
 
-export interface IsolatedFinancingOrCashDetailedTable {
+export interface FinancingPlanningDetailedTable {
   totalCapital: number;
   initialCapital: number;
   initialCapitalYield: number;
@@ -19,79 +19,43 @@ export interface IsolatedFinancingOrCashDetailedTable {
   rentalShortfall: number;
 }
 
-export type IsolatedFinanceOrCashData = {
-  inCash: {
-    totalProfit: number;
-    totalProfitPercent: number;
-    investedEquityFinal: number;
-    totalFinalEquity: number;
-    breakEven: number;
-    totalRentalShortfall: number;
-    totalInterestPaid: number;
-    detailedTable: IsolatedFinancingOrCashDetailedTable[];
-    capitalGainsTax: number;
-  };
-  financing: {
-    investedEquityFinal: number;
-    totalProfit: number;
-    totalProfitPercent: number;
-    totalFinalEquity: number;
-    breakEven?: number;
-    totalRentalShortfall: number;
-    totalInterestPaid: number;
-    detailedTable: IsolatedFinancingOrCashDetailedTable[];
-    capitalGainsTax: number;
-  };
+export type FinancingPlanningData = {
+  investedEquityFinal: number;
+  totalProfit: number;
+  totalProfitPercent: number;
+  totalFinalEquity: number;
+  breakEven?: number;
+  totalRentalShortfall: number;
+  totalInterestPaid: number;
+  detailedTable: FinancingPlanningDetailedTable[];
+  capitalGainsTax: number;
+  finalRow: FinancingPlanningDetailedTable;
 };
 
 export type caseDataContextType = {
-  caseData: IsolatedFinanceOrCashData;
-  setCaseData: (
-    campo: keyof IsolatedFinanceOrCashData,
-    valor: IsolatedFinanceOrCashData[keyof IsolatedFinanceOrCashData]
-  ) => void;
+  caseData: FinancingPlanningData;
+  setCaseData: (value: FinancingPlanningData) => void;
 };
 
-export const IsolatedFinanceOrInCashCaseDataProvider = ({
+export const FinancingPlanningCaseDataProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const [caseData, setCaseState] = useState<IsolatedFinanceOrCashData>({
-    inCash: {
-      totalRentalShortfall: 0,
-      totalInterestPaid: 0,
-      totalProfit: 192892.99,
-      totalProfitPercent: 107.16,
-      investedEquityFinal: 0,
-      totalFinalEquity: 372892,
-      breakEven: 0,
-      detailedTable: [],
-      capitalGainsTax: 0
-    },
-    financing: {
-      totalProfit: 265328.91,
-      totalRentalShortfall: 38547.84,
-      totalInterestPaid: 0,
-      totalProfitPercent: 147.4,
-      investedEquityFinal: 0,
-      totalFinalEquity: 425637,
-      breakEven: 66,
-      detailedTable: [],
-      capitalGainsTax: 0
-    },
+  const [caseData, setCaseState] = useState<FinancingPlanningData>({
+    totalProfit: 265328.91,
+    totalRentalShortfall: 38547.84,
+    totalInterestPaid: 0,
+    totalProfitPercent: 147.4,
+    investedEquityFinal: 0,
+    totalFinalEquity: 425637,
+    breakEven: 66,
+    detailedTable: [],
+    capitalGainsTax: 0,
+    finalRow: {} as FinancingPlanningDetailedTable,
   });
 
-  const setCaseData = (
-    key: keyof IsolatedFinanceOrCashData,
-    value: IsolatedFinanceOrCashData[keyof IsolatedFinanceOrCashData]
-  ) => {
-    setCaseState((prevState) => ({
-      ...prevState,
-      [key]: value,
-    }));
-  };
-
+  const setCaseData = (value: FinancingPlanningData) => setCaseState(value);
   return (
     <caseDataContext.Provider value={{ caseData, setCaseData }}>
       {children}
