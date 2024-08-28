@@ -123,7 +123,9 @@ export function calcDetailedTable(propertyData: PropertyData) {
     const yearIndex = Math.floor(month / 12);
 
     if (month % 12 === 1 || month === 1) {
-      rentValue = calcRentValue(propertyData.initialRentValue, yearIndex);
+      rentValue = propertyData.isHousing
+        ? 0
+        : calcRentValue(propertyData.initialRentValue, yearIndex);
     }
 
     const rentalAmount = rentValue - propertyData.installmentValue;
