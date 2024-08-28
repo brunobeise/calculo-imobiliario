@@ -10,10 +10,10 @@ const data = {
   rentMonthlyYieldRate: 0.8,
   personalBalance: 0,
   finalYear: 7,
-  propertyAppreciationRate: 8,
+  propertyAppreciationRate: 10,
   interestRate: 10,
   outstandingBalance: 363053.53,
-  isHousing: true,
+  isHousing: false,
 };
 
 export default data;

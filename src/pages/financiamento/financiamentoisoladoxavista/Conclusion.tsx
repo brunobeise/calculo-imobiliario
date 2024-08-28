@@ -42,11 +42,14 @@ export default function Conclusion({ caseData }: ConclusionProps) {
             value={caseData.finalRow.propertyValue}
             valueClass="text-green"
           />
-          <InfoRow
-            label="Aplicado"
-            value={caseData.finalRow.totalCapital}
-            valueClass="text-green"
-          />
+          {!propertyData.isHousing && (
+            <InfoRow
+              label="Aplicado"
+              value={caseData.finalRow.totalCapital}
+              valueClass="text-green"
+            />
+          )}
+
           <InfoRow
             label="Dívida"
             value={caseData.finalRow.outstandingBalance}
