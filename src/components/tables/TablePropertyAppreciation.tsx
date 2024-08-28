@@ -22,16 +22,9 @@ export default function TablePropertyAppreciation(
   const { propertyData } = useContext(propertyDataContext);
 
   const rows = useMemo(() => {
-    let actualPropertyValue = props.data[0] || 0;
     return props.data.reduce(
       (acc, item, i) => {
-        if (i === 0) {
-          acc.push({
-            ano: 0,
-            propertyValue: numeroParaReal(actualPropertyValue),
-            arrecadacaoAnual: "0%",
-          });
-        } else if (item !== actualPropertyValue) {
+        if (i > 0 && item !== props.data[i - 1]) {
           acc.push({
             ano: (i + 1) / 12,
             propertyValue: numeroParaReal(item),
@@ -40,7 +33,6 @@ export default function TablePropertyAppreciation(
               100
             ).toFixed(2)}%`,
           });
-          actualPropertyValue = item;
         }
         return acc;
       },
@@ -51,6 +43,7 @@ export default function TablePropertyAppreciation(
       }[]
     );
   }, [propertyData.propertyValue, props.data]);
+
 
   return (
     <Sheet
