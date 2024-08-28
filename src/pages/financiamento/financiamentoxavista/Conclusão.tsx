@@ -79,10 +79,20 @@ export default function Conclusão({ caseData, context }: ConclusãoProps) {
           </div>
 
           <div className="flex justify-between items-center font-bold">
-            <span>Lucro Líquido</span>
+            <span>- Lucro (R$)</span>
             <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
             <span className="text-green">
               {numeroParaReal(caseData[context].totalProfit)}
+            </span>
+          </div>
+
+          <div className="flex justify-between items-center font-bold">
+            <span>- Lucro (%)</span>
+            <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+            <span className="text-green">
+              {caseData[context].totalProfitPercent.toFixed(2) + "% / "}
+              {(caseData[context].totalProfitPercent / 12).toFixed(2) +
+                "% (ano)"}
             </span>
           </div>
         </div>
