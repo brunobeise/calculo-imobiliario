@@ -24,6 +24,7 @@ export default function PropertyDataCard() {
     initialRentValue,
     installmentValue,
     propertyAppreciationRate,
+    rentAppreciationRate,
     financingYears,
     rentMonthlyYieldRate,
   } = propertyData;
@@ -206,23 +207,24 @@ export default function PropertyDataCard() {
                 />
               </div>
 
-              <div className="mt-6">
+              <div className="mt-6 grid grid-col gap-4">
                 <Checkbox
                   id="isHousing"
                   slotProps={{}}
                   onChange={handleChangeBoolean}
                   checked={propertyData.isHousing}
-                  label="É Moradia"
+                  label=" Não considerar aluguel"
+                />
+                <Checkbox
+                  id="investTheRest"
+                  slotProps={{}}
+                  onChange={handleChangeBoolean}
+                  checked={propertyData.investTheRest}
+                  label="Investir o restante"
                 />
               </div>
 
-              <div
-                className={
-                  !excludeInputByRoute(["/planejamentofinanciamento"])
-                    ? "col-span-2"
-                    : ""
-                }
-              >
+              <div>
                 <FormLabel htmlFor="taxarendimento">
                   Rendimento aplicação no mercado financeiro:
                 </FormLabel>
@@ -241,6 +243,32 @@ export default function PropertyDataCard() {
                   }}
                   id="taxarendimento"
                   value={monthlyYieldRate}
+                  required
+                />
+              </div>
+
+              <div>
+                <FormLabel htmlFor="taxarendimento">
+                  Valorização anual do aluguel:
+                </FormLabel>
+
+                <Input
+                  onChange={(v) =>
+                    setpropertyData(
+                      "rentAppreciationRate",
+                      Number(v.target.value)
+                    )
+                  }
+                  type="number"
+                  endDecorator={"%"}
+                  slotProps={{
+                    input: {
+                      min: 0.1,
+                      step: 0.1,
+                    },
+                  }}
+                  id="taxarendimento"
+                  value={rentAppreciationRate}
                   required
                 />
               </div>

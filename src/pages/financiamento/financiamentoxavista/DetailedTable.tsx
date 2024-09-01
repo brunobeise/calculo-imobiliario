@@ -14,13 +14,24 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
   const theme = useTheme();
   const matchesLG = useMediaQuery(theme.breakpoints.up("lg"));
 
+  const shouldDisplayColumn = {
+    initialCapital: rows.some((item) => item.initialCapital !== 0),
+    rentalIncomeCapital: rows.some((item) => item.rentalIncomeCapital !== 0),
+    rentValue: rows.some((item) => item.rentValue !== 0),
+    propertyValue: rows.some((item) => item.propertyValue !== 0),
+    initialCapitalYield: rows.some((item) => item.initialCapitalYield !== 0),
+    rentalIncomeYield: rows.some((item) => item.rentalIncomeYield !== 0),
+    outstandingBalance: rows.some((item) => item.outstandingBalance !== 0),
+    finalValue: rows.some((item) => item.finalValue !== 0),
+    monthlyProfit: rows.some((item) => item.monthlyProfit !== 0),
+  };
+
   return (
     <div className="col-span-12 lg:px-2">
       <h2 className="text-xl text-center font-bold my-2">Tabela Detalhada</h2>
       <Sheet
         sx={{
           height: 500,
-
           backgroundColor: "transparent",
           overflowX: "auto",
         }}
@@ -28,7 +39,10 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
         <div style={{ minWidth: 600 }}>
           <Table
             className="text-left"
-            sx={{ "& thead th:nth-child-of-type(1)": { width: "50px" }, minWidth: 1000 }}
+            sx={{
+              "& thead th:nth-child-of-type(1)": { width: "50px" },
+              minWidth: 1000,
+            }}
             borderAxis="x"
             color="neutral"
             size={matchesLG ? "md" : "sm"}
@@ -38,33 +52,57 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
           >
             <thead>
               <tr>
-                <th style={{width: '60px'}}>Mês </th>
-                <th>Capital</th>
-                <th>Capital do Aluguel</th>
-                <th>Valor do Aluguel</th>
-                <th>Valor do Imóvel</th>
-                <th>Rendimento do Capital</th>
-                <th>Rendimento do Aluguel</th>
-                <th>Saldo Devedor</th>
-                <th>Patrimônio Líquido</th>
-                <th>Lucro</th>
+                <th style={{ width: "60px" }}>Mês</th>
+                {shouldDisplayColumn.initialCapital && <th>Capital</th>}
+                {shouldDisplayColumn.rentalIncomeCapital && (
+                  <th>Capital do Aluguel</th>
+                )}
+                {shouldDisplayColumn.rentValue && <th>Valor do Aluguel</th>}
+                {shouldDisplayColumn.propertyValue && <th>Valor do Imóvel</th>}
+                {shouldDisplayColumn.initialCapitalYield && (
+                  <th>Rendimento do Capital</th>
+                )}
+                {shouldDisplayColumn.rentalIncomeYield && (
+                  <th>Rendimento do Aluguel</th>
+                )}
+                {shouldDisplayColumn.outstandingBalance && (
+                  <th>Saldo Devedor</th>
+                )}
+                {shouldDisplayColumn.finalValue && <th>Patrimônio Líquido</th>}
+                {shouldDisplayColumn.monthlyProfit && <th>Lucro</th>}
               </tr>
             </thead>
             <tbody>
               {rows.map((item, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{numeroParaReal(item.initialCapital)}</td>
-                  <td>{numeroParaReal(item.rentalIncomeCapital)}</td>
-                  <td>{numeroParaReal(item.rentValue)}</td>
-
-                  <td>{numeroParaReal(item.propertyValue)}</td>
-                  <td>{numeroParaReal(item.initialCapitalYield)}</td>
-                  <td>{numeroParaReal(item.rentalIncomeYield)}</td>
-                  <td>{numeroParaReal(item.outstandingBalance)}</td>
-                  <td>{numeroParaReal(item.finalValue)}</td>
-
-                  <td>{numeroParaReal(item.monthlyProfit)}</td>
+                  {shouldDisplayColumn.initialCapital && (
+                    <td>{numeroParaReal(item.initialCapital)}</td>
+                  )}
+                  {shouldDisplayColumn.rentalIncomeCapital && (
+                    <td>{numeroParaReal(item.rentalIncomeCapital)}</td>
+                  )}
+                  {shouldDisplayColumn.rentValue && (
+                    <td>{numeroParaReal(item.rentValue)}</td>
+                  )}
+                  {shouldDisplayColumn.propertyValue && (
+                    <td>{numeroParaReal(item.propertyValue)}</td>
+                  )}
+                  {shouldDisplayColumn.initialCapitalYield && (
+                    <td>{numeroParaReal(item.initialCapitalYield)}</td>
+                  )}
+                  {shouldDisplayColumn.rentalIncomeYield && (
+                    <td>{numeroParaReal(item.rentalIncomeYield)}</td>
+                  )}
+                  {shouldDisplayColumn.outstandingBalance && (
+                    <td>{numeroParaReal(item.outstandingBalance)}</td>
+                  )}
+                  {shouldDisplayColumn.finalValue && (
+                    <td>{numeroParaReal(item.finalValue)}</td>
+                  )}
+                  {shouldDisplayColumn.monthlyProfit && (
+                    <td>{numeroParaReal(item.monthlyProfit)}</td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -11,9 +11,11 @@ const data = {
   personalBalance: 0,
   finalYear: 7,
   propertyAppreciationRate: 10,
+  rentAppreciationRate: 8,
   interestRate: 10,
   outstandingBalance: 363053.53,
   isHousing: false,
+  investTheRest: true
 };
 
 export default data;

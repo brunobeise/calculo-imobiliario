@@ -125,7 +125,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
     if (month % 12 === 1 || month === 1) {
       rentValue = propertyData.isHousing
         ? 0
-        : calcRentValue(propertyData.initialRentValue, yearIndex);
+        : calcRentValue(propertyData.initialRentValue, yearIndex, propertyData.rentAppreciationRate);
     }
 
     const rentalAmount = rentValue - propertyData.installmentValue;
@@ -179,7 +179,9 @@ export function calcDetailedTable(propertyData: PropertyData) {
       monthlyProfit: monthlyProfit,
     });
 
-    if (rentalAmount > 0) initialCapital += rentalAmount;
+     if (rentalAmount > 0 && propertyData.investTheRest) {
+      initialCapital += rentalAmount;
+    }
     initialCapital += capitalYield;
   }
 

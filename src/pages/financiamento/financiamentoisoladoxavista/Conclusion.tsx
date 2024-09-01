@@ -14,13 +14,16 @@ interface InfoRowProps {
   valueClass?: string;
 }
 
-const InfoRow = ({ label, value, valueClass }: InfoRowProps) => (
-  <div className="flex justify-between items-center">
-    <span>{`- ${label}`}</span>
-    <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-    <span className={valueClass}>{numeroParaReal(value)}</span>
-  </div>
-);
+const InfoRow = ({ label, value, valueClass }: InfoRowProps) => {
+  if (value !== 0)
+    return (
+      <div className="flex justify-between items-center">
+        <span>{`- ${label}`}</span>
+        <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
+        <span className={valueClass}>{numeroParaReal(value)}</span>
+      </div>
+    );
+};
 
 export default function Conclusion({ caseData }: ConclusionProps) {
   const { propertyData } = useContext(propertyDataContext);

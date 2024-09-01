@@ -21,9 +21,11 @@ export type PropertyData = {
   finalYear: number;
   financingYears: number;
   propertyAppreciationRate: number;
+  rentAppreciationRate: number;
   outstandingBalance: number;
   interestRate: number;
   isHousing: boolean;
+  investTheRest: boolean;
 };
 
 export type propertyDataContextType = {

@@ -4,7 +4,7 @@ import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { FinancingPlanningDetailedTable } from "./CaseData";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 
 interface TabelaRendimentoProps {
@@ -15,8 +15,25 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
   const rows = props.detailedTable || [];
   const theme = useTheme();
   const matchesLG = useMediaQuery(theme.breakpoints.up("lg"));
-
   const { propertyData } = useContext(propertyDataContext);
+
+  const visibleColumns = useMemo(() => {
+    const columnVisibility = {
+      initialCapital:
+        !propertyData.isHousing && rows.some((row) => row.initialCapital !== 0),
+      rentValue:
+        !propertyData.isHousing && rows.some((row) => row.rentValue !== 0),
+      initialCapitalYield:
+        !propertyData.isHousing &&
+        rows.some((row) => row.initialCapitalYield !== 0),
+      rentalShortfall: rows.some((row) => row.rentalShortfall !== 0),
+      outstandingBalance: rows.some((row) => row.outstandingBalance !== 0),
+      finalValue: rows.some((row) => row.finalValue !== 0),
+      monthlyProfit: rows.some((row) => row.monthlyProfit !== 0),
+    };
+
+    return columnVisibility;
+  }, [rows, propertyData.isHousing]);
 
   return (
     <div className="col-span-12 lg:px-2">
@@ -24,7 +41,6 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
       <Sheet
         sx={{
           height: 500,
-
           backgroundColor: "transparent",
           overflowX: "auto",
         }}
@@ -46,39 +62,48 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
             <thead>
               <tr>
                 <th style={{ width: "60px" }}>Mês </th>
-                {!propertyData.isHousing && <th>Capital</th>}
-
-                {!propertyData.isHousing && <th>Valor do Aluguel</th>}
+                {visibleColumns.initialCapital && <th>Capital</th>}
+                {visibleColumns.rentValue && <th>Valor do Aluguel</th>}
                 <th>Aluguel - Parcela</th>
                 <th>Valor do Imóvel</th>
-                {!propertyData.isHousing && <th>Rendimento do Capital</th>}
-
-                <th>Investimento Excedente</th>
-                <th>Saldo Devedor</th>
-                <th>Patrimônio Líquido</th>
-                <th>Lucro</th>
+                {visibleColumns.initialCapitalYield && (
+                  <th>Rendimento do Capital</th>
+                )}
+                {visibleColumns.rentalShortfall && (
+                  <th>Investimento Excedente</th>
+                )}
+                {visibleColumns.outstandingBalance && <th>Saldo Devedor</th>}
+                {visibleColumns.finalValue && <th>Patrimônio Líquido</th>}
+                {visibleColumns.monthlyProfit && <th>Lucro</th>}
               </tr>
             </thead>
             <tbody>
               {rows.map((item, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  {!propertyData.isHousing && (
+                  {visibleColumns.initialCapital && (
                     <td>{numeroParaReal(item.initialCapital)}</td>
                   )}
-                  {!propertyData.isHousing && (
+                  {visibleColumns.rentValue && (
                     <td>{numeroParaReal(item.rentValue)}</td>
                   )}
-
                   <td>{numeroParaReal(item.rentalAmount)}</td>
                   <td>{numeroParaReal(item.propertyValue)}</td>
-                  {!propertyData.isHousing && (
+                  {visibleColumns.initialCapitalYield && (
                     <td>{numeroParaReal(item.initialCapitalYield)}</td>
                   )}
-                  <td>{numeroParaReal(item.rentalShortfall)}</td>
-                  <td>{numeroParaReal(item.outstandingBalance)}</td>
-                  <td>{numeroParaReal(item.finalValue)}</td>
-                  <td>{numeroParaReal(item.monthlyProfit)}</td>
+                  {visibleColumns.rentalShortfall && (
+                    <td>{numeroParaReal(item.rentalShortfall)}</td>
+                  )}
+                  {visibleColumns.outstandingBalance && (
+                    <td>{numeroParaReal(item.outstandingBalance)}</td>
+                  )}
+                  {visibleColumns.finalValue && (
+                    <td>{numeroParaReal(item.finalValue)}</td>
+                  )}
+                  {visibleColumns.monthlyProfit && (
+                    <td>{numeroParaReal(item.monthlyProfit)}</td>
+                  )}
                 </tr>
               ))}
             </tbody>

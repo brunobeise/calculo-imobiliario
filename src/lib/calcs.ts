@@ -1,5 +1,7 @@
-export function calcRentValue(valorInicial: number, ano: number): number {
-    return Number((valorInicial * Math.pow(1 + 0.08, ano)).toFixed(2));
+export function calcRentValue(valorInicial: number, ano: number, rentAppreciationRate: number): number {
+    return Number(
+      (valorInicial * Math.pow(1 + rentAppreciationRate / 100, ano)).toFixed(2)
+    );
 }
 
 
