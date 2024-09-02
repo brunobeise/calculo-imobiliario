@@ -1,29 +1,13 @@
 import { Sheet } from "@mui/joy";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
-import { numeroParaReal } from "@/lib/formatter";
 import { useContext } from "react";
 import { FinancingPlanningData } from "./CaseData";
+import InfoRow from "@/components/shared/InfoRow";
+import { numeroParaReal } from "@/lib/formatter";
 
 interface ConclusionProps {
   caseData: FinancingPlanningData;
 }
-
-interface InfoRowProps {
-  label: string;
-  value: number;
-  valueClass?: string;
-}
-
-const InfoRow = ({ label, value, valueClass }: InfoRowProps) => {
-  if (value !== 0)
-    return (
-      <div className="flex justify-between items-center">
-        <span>{`- ${label}`}</span>
-        <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-        <span className={valueClass}>{numeroParaReal(value)}</span>
-      </div>
-    );
-};
 
 export default function Conclusion({ caseData }: ConclusionProps) {
   const { propertyData } = useContext(propertyDataContext);
@@ -66,7 +50,11 @@ export default function Conclusion({ caseData }: ConclusionProps) {
               caseData.finalRow.rentalShortfall
             }
             valueClass="text-red"
+            tooltipText={
+              "VP: " + numeroParaReal(caseData.investedEquityPresentValue)
+            }
           />
+
           <InfoRow
             label="Corretagem"
             value={caseData.finalRow.propertyValue * 0.06}

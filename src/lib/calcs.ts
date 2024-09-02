@@ -47,6 +47,17 @@ export function calcTotalInterestPaid(loanAmount: number, interestRate: number, 
     return principalPaid;
 }
 
+export function calculatePresentValue(futureCashFlows: number[], discountRate: number, periods: number[]): number {
+    let presentValue = 0;
+
+    for (let i = 0; i < futureCashFlows.length; i++) {
+        presentValue += futureCashFlows[i] / Math.pow(1 + discountRate / 100, periods[i]);
+    }
+
+    return Number(presentValue.toFixed(2));
+}
+
+
 
 
 

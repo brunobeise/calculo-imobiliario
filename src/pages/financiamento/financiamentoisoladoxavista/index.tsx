@@ -36,9 +36,9 @@ export default function FinancingPlanning() {
   }, [propertyData]);
 
   return (
-    <>
+    <div className="relative">
       <PropertyDataCard />
-      <div className="w-full text-center">
+      <div className="w-full text-center ">
         {errors.length === 0 ? (
           <>
             <div className="grid grid-cols-12 px-0 gap-3 justify-center mt-5 mb-5 px-5">
@@ -65,24 +65,6 @@ export default function FinancingPlanning() {
               />
               <DetailedTable detailedTable={caseData.detailedTable} />
             </div>
-            <Link to={"/planejamentofinanciamento/relatorio"}>
-              <Button
-                startDecorator={<FaFile />}
-                onClick={() => {
-                  localStorage.setItem(
-                    "isolatedFinancingOrInCashCaseData",
-                    JSON.stringify(caseData)
-                  );
-                  localStorage.setItem(
-                    "isolatedFinancingOrInCashPropertyData",
-                    JSON.stringify(propertyData)
-                  );
-                }}
-                className="my-5"
-              >
-                Gerar Relatório Completo
-              </Button>
-            </Link>
           </>
         ) : (
           <div
@@ -97,6 +79,25 @@ export default function FinancingPlanning() {
           </div>
         )}
       </div>
-    </>
+      <div className="fixed bottom-4 right-4 z-10">
+        <Link to={"/planejamentofinanciamento/relatorio"}>
+          <Button
+            className="!rounded-full w-[50px] h-[50px]"
+            onClick={() => {
+              localStorage.setItem(
+                "isolatedFinancingOrInCashCaseData",
+                JSON.stringify(caseData)
+              );
+              localStorage.setItem(
+                "isolatedFinancingOrInCashPropertyData",
+                JSON.stringify(propertyData)
+              );
+            }}
+          >
+            <FaFile className="text-4xl" />
+          </Button>
+        </Link>
+      </div>
+    </div>
   );
 }

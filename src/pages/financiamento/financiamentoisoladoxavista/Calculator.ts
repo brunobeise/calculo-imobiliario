@@ -35,6 +35,7 @@ export function calcCaseData(propertyData: PropertyData) {
     capitalGainsTax,
     detailedTable,
     finalRow: detailedTable[detailedTable.length - 1],
+    investedEquityPresentValue: calcInvestedEquityPresentValue(propertyData, detailedTable, 8)
   };
 }
 
@@ -57,6 +58,32 @@ export function calcTotalProfit(
     percent: operationProfitPercent,
     finalEquity: totalEquity,
   };
+}
+
+export function calcInvestedEquityPresentValue(propertyData: PropertyData, detailedTable: FinancingPlanningDetailedTable[], discountRate: number) {
+    let totalPresentValue = 0;
+    let previousInvestmentExcess = 0;
+
+    totalPresentValue += propertyData.downPayment 
+    totalPresentValue += propertyData.financingFees
+
+    for (let month = 1; month <= detailedTable.length; month++) {
+        const row = detailedTable[month - 1];
+        const investmentExcess = row.rentalShortfall;
+        const additionalInvestment = investmentExcess - previousInvestmentExcess;
+
+       
+
+        const presentValue = additionalInvestment / Math.pow(1 + discountRate / 100, month);
+
+        totalPresentValue += presentValue;
+
+        previousInvestmentExcess = investmentExcess;
+    }
+
+      console.log(propertyData.financingFees / Math.pow(1 + discountRate / 100, 1));
+
+    return totalPresentValue;
 }
 
 export function calcInvestedEquityFinal(
@@ -112,13 +139,11 @@ export function calcCapitalGainsTax(
 
 export function calcDetailedTable(propertyData: PropertyData) {
   const rows: FinancingPlanningDetailedTable[] = [];
-
   let initialCapital = 0;
   let initialInvestment = propertyData.downPayment + propertyData.financingFees;
-
   let rentValue = propertyData.initialRentValue;
   let totalRentalShortfall = 0;
-
+  
   for (let month = 1; month <= propertyData.finalYear * 12; month++) {
     const yearIndex = Math.floor(month / 12);
 
@@ -130,9 +155,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const rentalAmount = rentValue - propertyData.installmentValue;
 
+    let investmentExcess = 0;
     if (rentalAmount < 0) {
-      totalRentalShortfall += rentalAmount * -1;
-      initialInvestment += rentalAmount * -1;
+      investmentExcess = rentalAmount * -1;
+      totalRentalShortfall += investmentExcess;
+      initialInvestment += investmentExcess;
     }
 
     const capitalYield =
@@ -165,6 +192,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const monthlyProfit = finalValue - initialInvestment - propertyValue * 0.06;
 
+    const investmentExcessPresentValue = investmentExcess / Math.pow(1 + propertyData.monthlyYieldRate / 100, month);
+
     rows.push({
       totalCapital: initialCapital,
       initialCapital: initialCapital,
@@ -177,9 +206,10 @@ export function calcDetailedTable(propertyData: PropertyData) {
       interestPaid: interestPaid,
       finalValue: finalValue,
       monthlyProfit: monthlyProfit,
+      investmentExcessPresentValue: investmentExcessPresentValue, 
     });
 
-     if (rentalAmount > 0 && propertyData.investTheRest) {
+    if (rentalAmount > 0 && propertyData.investTheRest) {
       initialCapital += rentalAmount;
     }
     initialCapital += capitalYield;
@@ -187,3 +217,4 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
   return rows;
 }
+

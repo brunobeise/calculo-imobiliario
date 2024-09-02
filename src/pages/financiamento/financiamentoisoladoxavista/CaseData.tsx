@@ -17,6 +17,7 @@ export interface FinancingPlanningDetailedTable {
   monthlyProfit: number;
   propertyValue: number;
   rentalShortfall: number;
+  investmentExcessPresentValue: number;
 }
 
 export type FinancingPlanningData = {
@@ -30,6 +31,7 @@ export type FinancingPlanningData = {
   detailedTable: FinancingPlanningDetailedTable[];
   capitalGainsTax: number;
   finalRow: FinancingPlanningDetailedTable;
+  investedEquityPresentValue: number;
 };
 
 export type caseDataContextType = {
@@ -52,6 +54,7 @@ export const FinancingPlanningCaseDataProvider = ({
     breakEven: 66,
     detailedTable: [],
     capitalGainsTax: 0,
+    investedEquityPresentValue: 0,
     finalRow: {} as FinancingPlanningDetailedTable,
   });
 
