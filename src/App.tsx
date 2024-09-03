@@ -17,7 +17,7 @@ export interface Route {
 import { Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
 import Login from "./pages/Login";
-import UserConfig from "./pages/UserConfig";
+import UserConfig from "./pages/userConfig";
 
 interface PrivateRouteProps {
   children: JSX.Element;

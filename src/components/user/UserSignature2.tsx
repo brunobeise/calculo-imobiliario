@@ -1,4 +1,4 @@
-import { UserData } from "@/pages/UserConfig";
+import { UserData } from "@/pages/userConfig";
 import dayjs from "dayjs";
 
 interface UserSignatureProps {
