@@ -4,7 +4,7 @@ import {
   FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
-import { UserData } from "@/pages/userConfig";
+import { UserData } from "@/pages/UserConfig";
 import { Link } from "react-router-dom";
 import { IconButton } from "@mui/joy";
 

@@ -93,11 +93,6 @@ export default function UserConfig() {
       ...(imageUrl3 && { agentPhoto: imageUrl3 }),
     });
 
-    console.log(imageUrl2);
-    console.log(imageUrl3);
-    
-    
-
     localStorage.setItem(
       "userData",
       JSON.stringify({

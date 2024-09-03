@@ -14,14 +14,19 @@ import { auxiliarRoutes } from "@/routes/auxiliar";
 import { relatorioRoutes } from "@/routes/relatorios";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IconButton } from "@mui/joy";
+import { useAuth } from "@/auth";
 
 export default function Header() {
   const location = useLocation();
+
   const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location]);
+
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) return null;
 
   const title = routes.find((r) => r.href === location.pathname)?.title;
   return (

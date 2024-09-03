@@ -3,9 +3,11 @@ import Header from "./components/header";
 import { financingRoutes } from "./routes/financiamento";
 import { auxiliarRoutes } from "./routes/auxiliar";
 import { relatorioRoutes } from "./routes/relatorios";
-import UserConfig from "./pages/userConfig";
+import UserConfig from "./pages/UserConfig";
 import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 import Scrap from "./scrapping/Scrap";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export interface Route {
   title: string;
   href: string;
@@ -13,8 +15,35 @@ export interface Route {
   element: JSX.Element;
 }
 
+import { Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./auth";
+import Login from "./pages/Login";
+
+interface PrivateRouteProps {
+  children: JSX.Element;
+}
+
+export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+  const { isAuthenticated } = useAuth();
+
+  return isAuthenticated ? children : <Navigate to="/" />;
+};
+
+export const notify = (
+  type: "success" | "info" | "error" | "warning",
+  message: string
+) => {
+  toast[type](message);
+};
+
 export default function App() {
   const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
+
+  function Home() {
+    const { isAuthenticated } = useAuth();
+
+    return isAuthenticated ? <Welcome /> : <Login />;
+  }
 
   function Welcome() {
     return (
@@ -30,19 +59,52 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
-      <PropertyDataProvider>
-        <Header />
+    <AuthProvider>
+      <BrowserRouter>
+        <PropertyDataProvider>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            transition={Bounce}
+          />
+          <Header />
 
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/user" element={<UserConfig />} />
-          <Route path="/scrap" element={<Scrap />} />
-          {routes.map((r) => (
-            <Route key={r.title} element={r.element} path={r.href} />
-          ))}
-        </Routes>
-      </PropertyDataProvider>
-    </BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/user"
+              element={
+                <PrivateRoute>
+                  <UserConfig />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/scrap"
+              element={
+                <PrivateRoute>
+                  <Scrap />
+                </PrivateRoute>
+              }
+            />
+            {routes.map((r) => (
+              <Route
+                key={r.title}
+                path={r.href}
+                element={<PrivateRoute>{r.element}</PrivateRoute>}
+              />
+            ))}
+          </Routes>
+        </PropertyDataProvider>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
