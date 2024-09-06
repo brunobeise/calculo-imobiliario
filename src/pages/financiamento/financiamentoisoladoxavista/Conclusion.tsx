@@ -17,13 +17,11 @@ export default function Conclusion({ caseData }: ConclusionProps) {
       value: caseData.finalRow.propertyValue,
       valueClass: "text-green",
     },
-    propertyData.isHousing
-      ? null
-      : {
-          label: "Aplicado",
-          value: caseData.finalRow.totalCapital,
-          valueClass: "text-green",
-        },
+    {
+      label: "Aplicado",
+      value: caseData.finalRow.totalCapital,
+      valueClass: "text-green",
+    },
     {
       label: "Dívida",
       value: caseData.finalRow.outstandingBalance,
