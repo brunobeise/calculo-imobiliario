@@ -14,8 +14,9 @@ const data = {
   rentAppreciationRate: 8,
   interestRate: 10,
   outstandingBalance: 363053.53,
+  PVDiscountRate: 8,
   isHousing: false,
-  investTheRest: true
+  investTheRest: true,
 };
 
 export default data;

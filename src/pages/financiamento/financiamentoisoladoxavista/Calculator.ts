@@ -42,8 +42,7 @@ export function calcCaseData(propertyData: PropertyData) {
     finalRow: detailedTable[detailedTable.length - 1],
     investedEquityPresentValue: calcInvestedEquityPresentValue(
       propertyData,
-      detailedTable,
-      8
+      detailedTable
     ),
   };
 }
@@ -72,29 +71,18 @@ export function calcTotalProfit(
 
 export function calcInvestedEquityPresentValue(
   propertyData: PropertyData,
-  detailedTable: FinancingPlanningDetailedTable[],
-  discountRate: number
+  detailedTable: FinancingPlanningDetailedTable[]
 ) {
-  let totalPresentValue = 0;
-  let previousInvestmentExcess = 0;
+  const investmentExcessVpSum = detailedTable.reduce(
+    (acc, val) => acc + val.investmentExcessPresentValue,
+    0
+  );
 
-  totalPresentValue += propertyData.downPayment;
-  totalPresentValue += propertyData.financingFees;
-
-  for (let month = 1; month <= detailedTable.length; month++) {
-    const row = detailedTable[month - 1];
-    const investmentExcess = row.rentalShortfall;
-    const additionalInvestment = investmentExcess - previousInvestmentExcess;
-
-    const presentValue =
-      additionalInvestment / Math.pow(1 + discountRate / 100, month);
-
-    totalPresentValue += presentValue;
-
-    previousInvestmentExcess = investmentExcess;
-  }
-
-  return totalPresentValue;
+  return (
+    propertyData.downPayment +
+    propertyData.financingFees +
+    investmentExcessVpSum
+  );
 }
 
 export function calcInvestedEquityFinal(
@@ -207,9 +195,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const monthlyProfit = finalValue - initialInvestment - propertyValue * 0.06;
 
+    const monthlyDiscountRate =
+      Math.pow(1 + propertyData.PVDiscountRate / 100, 1 / 12) - 1;
+
     const investmentExcessPresentValue =
-      investmentExcess /
-      Math.pow(1 + propertyData.monthlyYieldRate / 100, month);
+      investmentExcess / Math.pow(1 + monthlyDiscountRate, month);
 
     rows.push({
       totalCapital: initialCapital,

@@ -24,6 +24,7 @@ export type PropertyData = {
   rentAppreciationRate: number;
   outstandingBalance: number;
   interestRate: number;
+  PVDiscountRate: number;
   isHousing: boolean;
   investTheRest: boolean;
 };

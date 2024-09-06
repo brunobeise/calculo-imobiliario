@@ -27,6 +27,7 @@ export default function PropertyDataCard() {
     rentAppreciationRate,
     financingYears,
     rentMonthlyYieldRate,
+    PVDiscountRate,
   } = propertyData;
 
   const [propertyValueField, setpropertyValueField] = useState(
@@ -243,6 +244,29 @@ export default function PropertyDataCard() {
                   }}
                   id="taxarendimento"
                   value={monthlyYieldRate}
+                  required
+                />
+              </div>
+
+              <div>
+                <FormLabel htmlFor="taxarendimento">
+                  Taxa de Desconto anual para valor presente:
+                </FormLabel>
+
+                <Input
+                  onChange={(v) =>
+                    setpropertyData("PVDiscountRate", Number(v.target.value))
+                  }
+                  type="number"
+                  endDecorator={"%"}
+                  slotProps={{
+                    input: {
+                      min: 0.1,
+                      step: 0.1,
+                    },
+                  }}
+                  id="PVDiscountRate"
+                  value={PVDiscountRate}
                   required
                 />
               </div>
