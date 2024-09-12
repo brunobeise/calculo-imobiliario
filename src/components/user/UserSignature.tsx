@@ -6,7 +6,7 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { IconButton } from "@mui/joy";
-import { UserData } from "@/pages/UserConfigTemp";
+import { UserData } from "@/pages/UserConfig";
 
 interface UserSignatureProps {
   userData?: UserData;
