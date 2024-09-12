@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL:
-    import.meta.env.API_URL || "http://localhost:8080",
+    import.meta.env.API_URL ||
+    "https://calculo-imobiliario-backend.vercel.app",
 });
 
 api.interceptors.request.use(
