@@ -54,7 +54,7 @@ export default function UserSignature2(props: UserSignatureProps) {
           </div>
           <div className="w-[90px] h-[90px] rounded-full overflow-hidden flex items-center justify-center border-2 border-white">
             <img
-              className="w-full h-full"
+              className="w-full h-full object-cover object-center"
               src={
                 data.photo ||
                 "https://res.cloudinary.com/dr9bi47aq/image/upload/v1726154180/r20tb0lgt0duwjn51khq.webp"
@@ -62,6 +62,7 @@ export default function UserSignature2(props: UserSignatureProps) {
               alt=""
             />
           </div>
+
           <div className="w-[400px] ms-5">
             <div className="grid grid-rows">
               <h3 className="text-2xl text-white mb-1">
