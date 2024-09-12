@@ -1,4 +1,4 @@
-import { UserData } from "@/pages/UserConfig";
+import { UserData } from "@/pages/UserConfigTemp";
 
 export default function getUserData(){
     return localStorage.getItem("userData")
