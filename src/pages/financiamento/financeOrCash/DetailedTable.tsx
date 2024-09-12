@@ -1,5 +1,5 @@
-import { numeroParaReal } from "@/lib/formatter";
-import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financiamentoxavista/CaseData";
+import { toBRL } from "@/lib/formatter";
+import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financeOrCash/CaseData";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -77,31 +77,31 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   {shouldDisplayColumn.initialCapital && (
-                    <td>{numeroParaReal(item.initialCapital)}</td>
+                    <td>{toBRL(item.initialCapital)}</td>
                   )}
                   {shouldDisplayColumn.rentalIncomeCapital && (
-                    <td>{numeroParaReal(item.rentalIncomeCapital)}</td>
+                    <td>{toBRL(item.rentalIncomeCapital)}</td>
                   )}
                   {shouldDisplayColumn.rentValue && (
-                    <td>{numeroParaReal(item.rentValue)}</td>
+                    <td>{toBRL(item.rentValue)}</td>
                   )}
                   {shouldDisplayColumn.propertyValue && (
-                    <td>{numeroParaReal(item.propertyValue)}</td>
+                    <td>{toBRL(item.propertyValue)}</td>
                   )}
                   {shouldDisplayColumn.initialCapitalYield && (
-                    <td>{numeroParaReal(item.initialCapitalYield)}</td>
+                    <td>{toBRL(item.initialCapitalYield)}</td>
                   )}
                   {shouldDisplayColumn.rentalIncomeYield && (
-                    <td>{numeroParaReal(item.rentalIncomeYield)}</td>
+                    <td>{toBRL(item.rentalIncomeYield)}</td>
                   )}
                   {shouldDisplayColumn.outstandingBalance && (
-                    <td>{numeroParaReal(item.outstandingBalance)}</td>
+                    <td>{toBRL(item.outstandingBalance)}</td>
                   )}
                   {shouldDisplayColumn.finalValue && (
-                    <td>{numeroParaReal(item.finalValue)}</td>
+                    <td>{toBRL(item.finalValue)}</td>
                   )}
                   {shouldDisplayColumn.monthlyProfit && (
-                    <td>{numeroParaReal(item.monthlyProfit)}</td>
+                    <td>{toBRL(item.monthlyProfit)}</td>
                   )}
                 </tr>
               ))}

@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
-import { financingRoutes } from "./routes/financiamento";
+import { financingRoutes } from "./routes/financing";
 import { auxiliarRoutes } from "./routes/auxiliar";
-import { relatorioRoutes } from "./routes/relatorios";
+import { relatorioRoutes } from "./routes/reports";
 import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 import Scrap from "./scrapping/Scrap";
 import { Bounce, toast, ToastContainer } from "react-toastify";
@@ -17,7 +17,7 @@ export interface Route {
 import { Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
 import Login from "./pages/Login";
-import UserConfig from "./pages/userConfig";
+import UserConfig from "./pages/UserConfig";
 
 interface PrivateRouteProps {
   children: JSX.Element;

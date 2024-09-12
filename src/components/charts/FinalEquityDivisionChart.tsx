@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Pie } from "react-chartjs-2";
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 
 interface InitialEquityDivisionChharProps {
   labels: string[];
@@ -28,7 +28,7 @@ export default function FinalEquityDivisionChart({
       datalabels: {
         color: "#fff", // Define a cor do texto dos labels
         formatter: (value: any) => {
-          return numeroParaReal(value);
+          return toBRL(value);
         },
       },
       tooltip: {

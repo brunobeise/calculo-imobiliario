@@ -1,4 +1,4 @@
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { Sheet, Table } from "@mui/joy";
 
@@ -27,7 +27,7 @@ export default function TablePropertyAppreciation(
         if (i > 0 && item !== props.data[i - 1]) {
           acc.push({
             ano: (i + 1) / 12,
-            propertyValue: numeroParaReal(item),
+            propertyValue: toBRL(item),
             arrecadacaoAnual: `${(
               (item / propertyData.propertyValue) * 100 -
               100

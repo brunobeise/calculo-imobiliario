@@ -1,7 +1,7 @@
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { useContext } from "react";
 import { FinanceOrCashData } from "./CaseData";
-import ConclusionCaseStructure from "@/components/shared/ConclusionCaseStructure";
+import ConclusionCaseStructure from "@/components/structure/ConclusionCaseStructure";
 
 interface ConclusionProps {
   context: "financing" | "inCash";

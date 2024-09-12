@@ -6,7 +6,7 @@ import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import DetailedTable from "@/pages/financiamento/financiamentoxavista/DetailedTable";
+import DetailedTable from "@/pages/financiamento/financeOrCash/DetailedTable";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
@@ -99,24 +99,25 @@ export default function FinancingOrCash() {
               {/* <TabelaRendimento context={context} /> */}
               <DetailedTable detailedTable={caseData[context].detailedTable} />
             </div>
-            <Link to={"/financiamentoxavista/relatorio"}>
-              <Button
-                startDecorator={<FaFile />}
-                onClick={() => {
-                  localStorage.setItem(
-                    "financeOrCashCaseData",
-                    JSON.stringify(caseData)
-                  );
-                  localStorage.setItem(
-                    "financeOrCashPropertyData",
-                    JSON.stringify(propertyData)
-                  );
-                }}
-                className="my-5"
-              >
-                Gerar Relatório Completo
-              </Button>
-            </Link>
+            <div className="fixed bottom-4 right-4 z-10">
+              <Link to={"/financiamentoxavista/relatorio"}>
+                <Button
+                  onClick={() => {
+                    localStorage.setItem(
+                      "financeOrCashCaseData",
+                      JSON.stringify(caseData)
+                    );
+                    localStorage.setItem(
+                      "financeOrCashPropertyData",
+                      JSON.stringify(propertyData)
+                    );
+                  }}
+                  className="!rounded-full w-[50px] h-[50px]"
+                >
+                  <FaFile className="text-4xl" />
+                </Button>
+              </Link>
+            </div>
           </>
         ) : (
           <div

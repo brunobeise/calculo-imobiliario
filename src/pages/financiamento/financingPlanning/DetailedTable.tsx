@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FinancingPlanningDetailedTable } from "./CaseData";
-import DetailedTableComponent from "@/components/shared/DetailedTableStructure";
+import DetailedTableComponent from "@/components/structure/DetailedTableStructure";
 
 interface TabelaRendimentoProps {
   detailedTable: FinancingPlanningDetailedTable[];

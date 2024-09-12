@@ -20,32 +20,36 @@ export default function CompleteAnalysisChart(props: {
     },
   };
 
-  const data = {
-    labels: props.propertyValues.map((_v, i) => i),
-    datasets: [
-      {
-        label: "Valor do Imóvel",
-        data: props.propertyValues,
-        borderColor: "#0073d7",
-        backgroundColor: "#0073d7",
-        pointRadius: 0,
-      },
+  const allValuesAreZero = (arr: number[]) => arr.every((value) => value === 0);
 
-      {
-        label: "Patrimônio Renda Fixa",
-        data: props.investedEquityValues,
-        borderColor: "#1e476b",
-        backgroundColor: "#1e476b",
-        pointRadius: 0,
-      },
-    ],
-  };
+  const datasets = [];
+
+  if (!allValuesAreZero(props.propertyValues)) {
+    datasets.push({
+      label: "Valor do Imóvel",
+      data: props.propertyValues,
+      borderColor: "#0073d7",
+      backgroundColor: "#0073d7",
+      pointRadius: 0,
+    });
+  }
+
+  if (!allValuesAreZero(props.investedEquityValues)) {
+    datasets.push({
+      label: "Patrimônio Renda Fixa",
+      data: props.investedEquityValues,
+      borderColor: "#1e476b",
+      backgroundColor: "#1e476b",
+      pointRadius: 0,
+    });
+  }
 
   if (
     props.outstandingBalanceValues &&
-    props.outstandingBalanceValues.length > 0
+    props.outstandingBalanceValues.length > 0 &&
+    !allValuesAreZero(props.outstandingBalanceValues)
   ) {
-    data.datasets.push({
+    datasets.push({
       label: "Saldo Devedor",
       data: props.outstandingBalanceValues,
       borderColor: "#a41d3f",
@@ -53,6 +57,11 @@ export default function CompleteAnalysisChart(props: {
       pointRadius: 0,
     });
   }
+
+  const data = {
+    labels: props.propertyValues.map((_v, i) => i),
+    datasets,
+  };
 
   return <Line options={options} data={data} />;
 }

@@ -1,4 +1,4 @@
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import { Sheet, Table } from "@mui/joy";
 import { useMemo } from "react";
 
@@ -22,8 +22,8 @@ export default function TableRentAppreciation(
         if (i === 0 || item !== actualRentValue) {
           acc.push({
             ano: i === 0 ? 1 : i / 12 + 1,
-            rentValue: numeroParaReal(item),
-            arrecadacaoAnual: numeroParaReal(item * 12),
+            rentValue: toBRL(item),
+            arrecadacaoAnual: toBRL(item * 12),
           });
           actualRentValue = item;
         }

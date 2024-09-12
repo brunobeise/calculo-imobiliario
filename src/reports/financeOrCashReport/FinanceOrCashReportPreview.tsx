@@ -1,16 +1,17 @@
 import { forwardRef } from "react";
 import UserSignature2 from "@/components/user/UserSignature2";
-import { FinaceOrCashReportData } from "./FinaceOrCashReportConfig";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinanceOrCashData } from "@/pages/financiamento/financiamentoxavista/CaseData";
+import { FinanceOrCashData } from "@/pages/financiamento/financeOrCash/CaseData";
 import lucroAnualFinal from "./assets/lucro-anual-total.svg";
 import entendaOFinancimento from "./assets/entenda-o-financimento.svg";
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import { ComparativeMonthlyInvestmentGrowthChart } from "@/components/charts/ComparativeMontlyInvestmentGrowthChart";
 import ComparativeTotalEquityGrowth from "@/components/charts/ComparativeTotalEquityGrowth";
+import { FinaceOrCashReportData } from "./FinaceOrCashReportConfig";
+import InfoRow from "../components/preview/InfoRow";
 
 interface FinanceOrCashReportPreviewProps {
   configData: FinaceOrCashReportData;
@@ -32,7 +33,7 @@ const FinanceOrCashReportPreview = forwardRef<
     <p>
       {text}
       {"  "}
-      <span className="font-bold">{numeroParaReal(value)}</span>
+      <span className="font-bold">{toBRL(value)}</span>
     </p>
   );
 
@@ -96,120 +97,78 @@ const FinanceOrCashReportPreview = forwardRef<
             <img className="w-[250px] absolute" src={lucroAnualFinal} />
           </div>
           <div className="text-xl col-span-4">
-            <div className="flex justify-between items-center">
-              <span>- Valor do imóvel</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-green">
-                {numeroParaReal(
-                  caseData.financing.detailedTable[
-                    caseData.financing.detailedTable.length - 1
-                  ].propertyValue
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-green"
+              label="Valor do imóvel"
+              value={caseData.financing.finalRow.propertyValue}
+            />
 
-            <div className="flex justify-between items-center">
-              <span>- Aplicado</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-green">
-                {numeroParaReal(caseData.financing.finalRow.totalCapital)}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-green"
+              label="Aplicado"
+              value={caseData.financing.finalRow.totalCapital}
+            />
 
-            <div className="flex justify-between items-center items-center">
-              <span>- Dívida</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(
-                  caseData.financing.detailedTable[
-                    caseData.financing.detailedTable.length - 1
-                  ].outstandingBalance
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Dívida"
+              value={caseData.financing.finalRow.outstandingBalance}
+            />
 
-            <div className="flex justify-between items-center">
-              <span>- Valor Investido</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(
-                  propertyData.financingFees +
-                    propertyData.downPayment +
-                    (propertyData.personalBalance -
-                      (propertyData.financingFees + propertyData.downPayment))
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Valor Investido"
+              value={propertyData.personalBalance}
+            />
 
-            <div className="flex justify-between items-center">
-              <span> - Corretagem</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(
-                  caseData.financing.detailedTable[
-                    caseData.financing.detailedTable.length - 1
-                  ].propertyValue * 0.06
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Corretagem"
+              value={caseData.financing.brokerageFee}
+            />
 
-            <div className="flex justify-between items-center">
-              <span> - Imposto Ganho de Capital</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(caseData.financing.capitalGainsTax)}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Imposto Ganho de Capital"
+              value={caseData.financing.capitalGainsTax}
+            />
 
-            <div className="flex justify-between items-center font-bold">
-              <span>Lucro Líquido</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-green">
-                {numeroParaReal(caseData.financing.totalProfit)}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-green"
+              label="Lucro Líquido"
+              value={caseData.financing.totalProfit}
+              isTitle={true}
+            />
 
             <div className="h-[2px] bg-primary my-2" />
 
-            <div className="flex justify-between items-center font-bold text-blue-800 mt-2">
-              <span>Investimento</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(
-                  propertyData.financingFees +
-                    propertyData.downPayment +
-                    (propertyData.personalBalance -
-                      (propertyData.financingFees + propertyData.downPayment))
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Investimento"
+              value={propertyData.personalBalance}
+              isTitle={true}
+            />
 
-            <div className="flex justify-between items-center ml-4">
-              <span>- Aplicação</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(
-                  propertyData.personalBalance -
-                    (propertyData.financingFees + propertyData.downPayment)
-                )}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Aplicação"
+              value={
+                propertyData.personalBalance -
+                (propertyData.financingFees + propertyData.downPayment)
+              }
+            />
 
-            <div className="flex justify-between items-center ml-4">
-              <span>- Entrada</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(propertyData.downPayment)}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Entrada"
+              value={propertyData.downPayment}
+            />
 
-            <div className="flex justify-between items-center ml-4">
-              <span>- Documentação</span>
-              <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
-              <span className="text-red">
-                {numeroParaReal(propertyData.financingFees)}
-              </span>
-            </div>
+            <InfoRow
+              valueClass="text-red"
+              label="Documentação"
+              value={propertyData.financingFees}
+            />
           </div>
         </div>
 
@@ -256,13 +215,13 @@ const FinanceOrCashReportPreview = forwardRef<
                         Ano {(i - 1) / 12}
                       </td>
                       <td className="px-4 py-2 border-r border-primary">
-                        {numeroParaReal(item.propertyValue)}
+                        {toBRL(item.propertyValue)}
                       </td>
                       <td className="px-4 py-2 border-r border-primary">
-                        {numeroParaReal(item.rentValue)}
+                        {toBRL(item.rentValue)}
                       </td>
                       <td className="px-4 py-2 border-primary">
-                        {numeroParaReal(item.rentalAmount)}
+                        {toBRL(item.rentalAmount)}
                       </td>
                     </tr>
                   );
@@ -278,18 +237,18 @@ const FinanceOrCashReportPreview = forwardRef<
             <div className="flex  text-primary">
               <span>Valor do Imóvel</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span>{numeroParaReal(propertyData.propertyValue)}</span>
+              <span>{toBRL(propertyData.propertyValue)}</span>
             </div>
             <div className="flex  text-primary">
               <span>Entrada</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span>{numeroParaReal(propertyData.downPayment)}</span>
+              <span>{toBRL(propertyData.downPayment)}</span>
             </div>
             <div className="flex  text-primary">
               <span>Aplicação</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                {numeroParaReal(
+                {toBRL(
                   propertyData.personalBalance -
                     (propertyData.downPayment + propertyData.financingFees)
                 )}
@@ -298,19 +257,19 @@ const FinanceOrCashReportPreview = forwardRef<
             <div className="flex  text-primary">
               <span>Documentação</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span>{numeroParaReal(propertyData.financingFees)}</span>
+              <span>{toBRL(propertyData.financingFees)}</span>
             </div>
             <div className="flex  text-primary">
               <span>Parcela (finan.)</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span>{numeroParaReal(propertyData.installmentValue)}</span>
+              <span>{toBRL(propertyData.installmentValue)}</span>
             </div>
             <div className="h-[1px] bg-primary mt-2" />
             <div className="flex  text-primary">
               <span className="font-bold text-xl">Total</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span className="font-bold text-xl">
-                {numeroParaReal(propertyData.personalBalance)}
+                {toBRL(propertyData.personalBalance)}
               </span>
             </div>
           </div>
@@ -324,7 +283,7 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Valor do Imóvel </span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                {numeroParaReal(
+                {toBRL(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].propertyValue
@@ -336,7 +295,7 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Valor Aplicado</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                {numeroParaReal(
+                {toBRL(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].initialCapital
@@ -347,7 +306,7 @@ const FinanceOrCashReportPreview = forwardRef<
               <span>Capital do Aluguel </span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
-                {numeroParaReal(
+                {toBRL(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].rentalIncomeCapital
@@ -359,7 +318,7 @@ const FinanceOrCashReportPreview = forwardRef<
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span>
                 -{" "}
-                {numeroParaReal(
+                {toBRL(
                   caseData.financing.detailedTable[
                     caseData.financing.detailedTable.length - 1
                   ].outstandingBalance
@@ -369,21 +328,19 @@ const FinanceOrCashReportPreview = forwardRef<
             <div className="flex text-primary">
               <span>Corretagem</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span> - {numeroParaReal(caseData.financing.brokerageFee)}</span>
+              <span> - {toBRL(caseData.financing.brokerageFee)}</span>
             </div>
             <div className="flex text-primary">
               <span>Imposto Ganho de Capital</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-              <span>
-                - {numeroParaReal(caseData.financing.capitalGainsTax)}
-              </span>
+              <span>- {toBRL(caseData.financing.capitalGainsTax)}</span>
             </div>
             <div className="h-[1px] bg-primary mt-2" />
             <div className="flex text-primary">
               <span className="font-bold text-xl">Lucro ($)</span>
               <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
               <span className="font-bold text-xl">
-                {numeroParaReal(caseData.financing.totalProfit)}
+                {toBRL(caseData.financing.totalProfit)}
               </span>
             </div>
             <div className="flex text-primary">
@@ -405,15 +362,13 @@ const FinanceOrCashReportPreview = forwardRef<
           <div className=" w-full mt-5 relative">
             <div className="text-primary absolute top-[4.8rem] left-[1rem] flex flex-col items-center gap-1">
               <span className="text-xl font-bold">
-                {numeroParaReal(propertyData.propertyValue)}
+                {toBRL(propertyData.propertyValue)}
               </span>
               <span className="mt-[-10px]">valor do imóvel</span>
             </div>
             <div className="text-primary absolute top-[4.8rem] left-[11.5rem] flex flex-col items-center gap-1">
               <span className="text-xl font-bold">
-                {numeroParaReal(
-                  propertyData.propertyValue - propertyData.downPayment
-                )}
+                {toBRL(propertyData.propertyValue - propertyData.downPayment)}
               </span>
               <span className="mt-[-10px]">valor financiado</span>
             </div>
@@ -426,12 +381,12 @@ const FinanceOrCashReportPreview = forwardRef<
             <div className="text-primary absolute top-[4.5rem] left-[35.5rem] flex flex-col items-center gap-1">
               <span>parcelas de </span>
               <span className="text-xl font-bold mt-[-5px]">
-                {numeroParaReal(propertyData.installmentValue)}
+                {toBRL(propertyData.installmentValue)}
               </span>
             </div>
             <div className="text-primary absolute top-[15.8rem] left-[1rem] flex flex-col items-center gap-1">
               <span className="text-xl font-bold">
-                {numeroParaReal(propertyData.downPayment)}
+                {toBRL(propertyData.downPayment)}
               </span>
               <span className="mt-[-10px]">entrada</span>
             </div>
@@ -546,11 +501,14 @@ const FinanceOrCashReportPreview = forwardRef<
                 )}
               />
               <MonthlyInvestmentGrowthChart
-                data={caseData.financing.detailedTable.map(
-                  (i) =>
-                    i.rentValue +
-                    i.initialCapitalYield -
-                    propertyData.installmentValue
+                rentValues={caseData.financing.detailedTable.map(
+                  (i) => i.rentValue
+                )}
+                initialCapitalYields={caseData.financing.detailedTable.map(
+                  (i) => i.initialCapitalYield
+                )}
+                installmentValues={caseData.financing.detailedTable.map(
+                  () => propertyData.installmentValue
                 )}
               />
             </div>
@@ -580,9 +538,13 @@ const FinanceOrCashReportPreview = forwardRef<
                 )}
               />
               <MonthlyInvestmentGrowthChart
-                data={caseData.inCash.detailedTable.map(
-                  (i) => i.rentValue + i.rentalIncomeYield
+                rentValues={caseData.inCash.detailedTable.map(
+                  (i) => i.rentValue
                 )}
+                initialCapitalYields={caseData.inCash.detailedTable.map(
+                  (i) => i.initialCapitalYield
+                )}
+                installmentValues={caseData.inCash.detailedTable.map(() => 0)}
               />
             </div>
             <div className="text-primary col-span-2 mt-10">

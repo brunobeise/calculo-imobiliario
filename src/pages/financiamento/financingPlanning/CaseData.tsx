@@ -32,6 +32,7 @@ export type FinancingPlanningData = {
   capitalGainsTax: number;
   finalRow: FinancingPlanningDetailedTable;
   investedEquityPresentValue: number;
+  brokerageFee: number;
 };
 
 export type caseDataContextType = {
@@ -56,6 +57,7 @@ export const FinancingPlanningCaseDataProvider = ({
     capitalGainsTax: 0,
     investedEquityPresentValue: 0,
     finalRow: {} as FinancingPlanningDetailedTable,
+    brokerageFee: 0,
   });
 
   const setCaseData = (value: FinancingPlanningData) => setCaseState(value);

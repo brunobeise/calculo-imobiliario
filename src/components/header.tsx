@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Link, useLocation } from "react-router-dom";
 import { forwardRef, useEffect } from "react";
-import { financingRoutes } from "@/routes/financiamento";
+import { financingRoutes } from "@/routes/financing";
 import { auxiliarRoutes } from "@/routes/auxiliar";
-import { relatorioRoutes } from "@/routes/relatorios";
+import { relatorioRoutes } from "@/routes/reports";
 import { FaHome, FaUser } from "react-icons/fa";
 import { IconButton } from "@mui/joy";
 import { useAuth } from "@/auth";

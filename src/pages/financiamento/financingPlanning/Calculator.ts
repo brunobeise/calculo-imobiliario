@@ -44,6 +44,10 @@ export function calcCaseData(propertyData: PropertyData) {
       propertyData,
       detailedTable
     ),
+    brokerageFee:
+      (detailedTable[detailedTable.length - 1].propertyValue *
+        propertyData.brokerageFee) /
+      100,
   };
 }
 
@@ -193,7 +197,10 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const finalValue = initialCapital + propertyValue - outstandingBalance;
 
-    const monthlyProfit = finalValue - initialInvestment - propertyValue * 0.06;
+    const monthlyProfit =
+      finalValue -
+      initialInvestment -
+      propertyValue * (propertyData.brokerageFee / 100);
 
     const monthlyDiscountRate =
       Math.pow(1 + propertyData.PVDiscountRate / 100, 1 / 12) - 1;

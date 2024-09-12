@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { FinancingPlanningData } from "./CaseData";
-import { numeroParaReal } from "@/lib/formatter";
-import ConclusionCaseStructure from "@/components/shared/ConclusionCaseStructure";
+import { toBRL } from "@/lib/formatter";
+import ConclusionCaseStructure from "@/components/structure/ConclusionCaseStructure";
 
 interface ConclusionProps {
   caseData: FinancingPlanningData;
@@ -34,11 +34,11 @@ export default function Conclusion({ caseData }: ConclusionProps) {
         propertyData.downPayment +
         caseData.finalRow.rentalShortfall,
       valueClass: "text-red",
-      tooltipText: "VP: " + numeroParaReal(caseData.investedEquityPresentValue),
+      tooltipText: "VP: " + toBRL(caseData.investedEquityPresentValue),
     },
     {
       label: "Corretagem",
-      value: caseData.finalRow.propertyValue * 0.06,
+      value: caseData.brokerageFee,
       valueClass: "text-red",
     },
     {

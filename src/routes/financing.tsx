@@ -1,9 +1,9 @@
 
 
-import FinancingPlanning from "@/pages/financiamento/financiamentoisoladoxavista";
-import { FinancingPlanningCaseDataProvider } from "@/pages/financiamento/financiamentoisoladoxavista/CaseData";
-import FinancingOrCash from "@/pages/financiamento/financiamentoxavista";
-import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financiamentoxavista/CaseData";
+import FinancingPlanning from "@/pages/financiamento/financingPlanning";
+import { FinancingPlanningCaseDataProvider } from "@/pages/financiamento/financingPlanning/CaseData";
+import FinanceOrCash from "@/pages/financiamento/financeOrCash";
+import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financeOrCash/CaseData";
 
 export const financingRoutes = [
   {
@@ -13,7 +13,7 @@ export const financingRoutes = [
       "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
     element: (
       <FinanceOrInCashCaseDataProvider>
-        <FinancingOrCash />
+        <FinanceOrCash />
       </FinanceOrInCashCaseDataProvider>
     ),
   },

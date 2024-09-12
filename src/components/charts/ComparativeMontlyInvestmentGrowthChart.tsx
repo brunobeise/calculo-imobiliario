@@ -1,4 +1,4 @@
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import { Line } from "react-chartjs-2";
 
 interface ComparativeMonthlyInvestmentGrowthChartProps {
@@ -26,7 +26,7 @@ export function ComparativeMonthlyInvestmentGrowthChart(
         callbacks: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: function (context: any) {
-            return "Montante do mês: " + numeroParaReal(context.parsed.y);
+            return "Montante do mês: " + toBRL(context.parsed.y);
           },
         },
       },

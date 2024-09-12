@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 
 import { useEffect, useState } from "react";
 
@@ -41,13 +41,13 @@ export default function TabelaJurosCompostos({
     for (let linha = 1; linha <= data.linhas; linha++) {
       const lucroMensal = (capitalAcumulado * data.interestRate) / 100;
       const valorFinal = capitalAcumulado + lucroMensal + data.aporteMensal;
-      if (linha === data.linhas) setCapitalFinal(numeroParaReal(valorFinal));
+      if (linha === data.linhas) setCapitalFinal(toBRL(valorFinal));
       rows.push({
         linha,
-        capital: numeroParaReal(capitalAcumulado),
-        lucroMensal: numeroParaReal(lucroMensal),
-        aporteMensal: numeroParaReal(data.aporteMensal),
-        valorFinal: numeroParaReal(valorFinal),
+        capital: toBRL(capitalAcumulado),
+        lucroMensal: toBRL(lucroMensal),
+        aporteMensal: toBRL(data.aporteMensal),
+        valorFinal: toBRL(valorFinal),
       });
 
       capitalAcumulado = valorFinal;

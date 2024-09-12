@@ -1,5 +1,5 @@
 import { Sheet } from "@mui/joy";
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import InfoTooltip from "../ui/InfoTooltip";
 
 interface InfoRowProps {
@@ -16,7 +16,7 @@ const InfoRow = ({ label, value, valueClass, tooltipText }: InfoRowProps) => {
         <span className="text-[1rem]">{`- ${label}`}</span>
         <div className="flex-grow border-b h-full border-dotted border-black mx-1 mt-5 border-primary"></div>
         <span className={valueClass + " text-[1rem]"}>
-          {numeroParaReal(value)}
+          {toBRL(value)}
         </span>
         {tooltipText && (
           <div className="absolute right-5">

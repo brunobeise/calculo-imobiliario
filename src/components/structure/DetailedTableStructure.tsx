@@ -4,7 +4,7 @@ import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import { Tooltip } from "@mui/joy";
 
 interface ColumnDefinition {
@@ -77,7 +77,7 @@ const DetailedTableComponent: React.FC<DetailedTableComponentProps> = ({
                     <td key={colIndex}>
                       {col.render
                         ? col.render(row[col.dataIndex], row, index)
-                        : numeroParaReal(row[col.dataIndex])}
+                        : toBRL(row[col.dataIndex])}
                     </td>
                   ))}
                 </tr>

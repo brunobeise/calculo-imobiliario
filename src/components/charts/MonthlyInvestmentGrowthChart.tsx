@@ -1,4 +1,4 @@
-import { numeroParaReal } from "@/lib/formatter";
+import { toBRL } from "@/lib/formatter";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,9 +24,25 @@ ChartJS.register(
 );
 
 export function MonthlyInvestmentGrowthChart(props: {
-  data: number[];
+  rentValues: number[];
+  initialCapitalYields: number[];
+  installmentValues: number[];
+  monthlyInvestmentValues?: number[];
 }) {
-  
+  const allValuesAreZero = (arr: number[]) => arr.every((value) => value === 0);
+
+
+  const calculatedData = props.rentValues.map(
+    (rentValue, index) =>
+      rentValue +
+      props.initialCapitalYields[index] -
+      props.installmentValues[index]
+  );
+
+  // Definindo o label dinamicamente com base nos dados de rendimento
+  const label = allValuesAreZero(props.initialCapitalYields)
+    ? "Aluguel - Parcela"
+    : "Rendimento + Aluguel - Parcela";
 
   const options = {
     responsive: true,
@@ -44,7 +60,7 @@ export function MonthlyInvestmentGrowthChart(props: {
         callbacks: {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           label: function (context: any) {
-            return "Montante do mês: " + numeroParaReal(context.parsed.y);
+            return "Montante do mês: " + toBRL(context.parsed.y);
           },
         },
       },
@@ -52,18 +68,33 @@ export function MonthlyInvestmentGrowthChart(props: {
   };
 
   const data = {
-    labels: props.data.map((_v, i) => i),
+    labels: calculatedData.map((_v, i) => i),
     datasets: [
       {
-        fill: true,
-        label: "Rendimento + Aluguel - Parcela",
-        data: props.data,
+        fill: false, // Removendo o preenchimento
+        label: label, // Usando o label dinâmico
+        data: calculatedData,
         borderColor: "#002f57",
         backgroundColor: "#002f57",
         pointRadius: 0,
       },
     ],
   };
+
+  // Adicionando a linha do MonthlyInvestment, caso seja passada
+  if (
+    props.monthlyInvestmentValues &&
+    props.monthlyInvestmentValues.length > 0
+  ) {
+    data.datasets.push({
+      fill: false,
+      label: "Investimento Mensal (VP)",
+      data: props.monthlyInvestmentValues,
+      borderColor: "#ff6347", // Cor diferente para distinguir
+      backgroundColor: "#ff6347",
+      pointRadius: 0,
+    });
+  }
 
   return <Line options={options} data={data} />;
 }

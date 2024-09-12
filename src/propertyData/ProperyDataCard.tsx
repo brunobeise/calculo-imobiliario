@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
+import { formatterReal, toBRL, realParaNumero } from "@/lib/formatter";
 import { useState, useContext, useEffect } from "react";
 import {
   PropertyData,
@@ -28,32 +28,33 @@ export default function PropertyDataCard() {
     financingYears,
     rentMonthlyYieldRate,
     PVDiscountRate,
+    brokerageFee,
   } = propertyData;
 
   const [propertyValueField, setpropertyValueField] = useState(
-    numeroParaReal(propertyValue)
+    toBRL(propertyValue)
   );
   const [downPaymentField, setdownPaymentField] = useState(
-    numeroParaReal(downPayment)
+    toBRL(downPayment)
   );
   const [taxasFincancimentoField, settaxasFincancimentoField] = useState(
-    numeroParaReal(financingFees)
+    toBRL(financingFees)
   );
   const [taxasAVistaField, settaxasAVistaField] = useState(
-    numeroParaReal(inCashFees)
+    toBRL(inCashFees)
   );
   const [saldoPessoalField, setSaldoPessoalField] = useState(
-    numeroParaReal(personalBalance)
+    toBRL(personalBalance)
   );
   const [installmentValueField, setinstallmentValueField] = useState(
-    numeroParaReal(installmentValue)
+    toBRL(installmentValue)
   );
   const [initialRentValueField, setinitialRentValueField] = useState(
-    numeroParaReal(initialRentValue)
+    toBRL(initialRentValue)
   );
 
   const [saldoDevedorField, setSaldoDevedorField] = useState(
-    numeroParaReal(outstandingBalance)
+    toBRL(outstandingBalance)
   );
 
   const handleChangeReal = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,14 +97,14 @@ export default function PropertyDataCard() {
     setpropertyData("installmentValue", installmentValue);
     setpropertyData("outstandingBalance", outstandingBalance);
 
-    setpropertyValueField(numeroParaReal(propertyValue));
-    setdownPaymentField(numeroParaReal(downPayment));
-    settaxasFincancimentoField(numeroParaReal(financingFees));
-    settaxasAVistaField(numeroParaReal(inCashFees));
-    setSaldoPessoalField(numeroParaReal(personalBalance));
-    setinstallmentValueField(numeroParaReal(installmentValue));
-    setinitialRentValueField(numeroParaReal(initialRentValue));
-    setSaldoDevedorField(numeroParaReal(outstandingBalance));
+    setpropertyValueField(toBRL(propertyValue));
+    setdownPaymentField(toBRL(downPayment));
+    settaxasFincancimentoField(toBRL(financingFees));
+    settaxasAVistaField(toBRL(inCashFees));
+    setSaldoPessoalField(toBRL(personalBalance));
+    setinstallmentValueField(toBRL(installmentValue));
+    setinitialRentValueField(toBRL(initialRentValue));
+    setSaldoDevedorField(toBRL(outstandingBalance));
   }, [
     finalYear,
     initialRentValue,
@@ -273,6 +274,29 @@ export default function PropertyDataCard() {
 
               <div>
                 <FormLabel htmlFor="taxarendimento">
+                  Taxa de corretagem na venda:
+                </FormLabel>
+
+                <Input
+                  onChange={(v) =>
+                    setpropertyData("brokerageFee", Number(v.target.value))
+                  }
+                  type="number"
+                  endDecorator={"%"}
+                  slotProps={{
+                    input: {
+                      min: 0.1,
+                      step: 0.1,
+                    },
+                  }}
+                  id="brokerageFee"
+                  value={brokerageFee}
+                  required
+                />
+              </div>
+
+              <div>
+                <FormLabel htmlFor="taxarendimento">
                   Valorização anual do aluguel:
                 </FormLabel>
 
@@ -434,7 +458,7 @@ export default function PropertyDataCard() {
                 onChange={() => {}}
                 type="text"
                 id="financingFees"
-                value={numeroParaReal(downPayment + financingFees + inCashFees)}
+                value={toBRL(downPayment + financingFees + inCashFees)}
                 required
               />
             </div>
@@ -523,7 +547,7 @@ export default function PropertyDataCard() {
                 onChange={() => {}}
                 type="text"
                 id="financingFees"
-                value={numeroParaReal(propertyValue - downPayment)}
+                value={toBRL(propertyValue - downPayment)}
                 required
               />
             </div>

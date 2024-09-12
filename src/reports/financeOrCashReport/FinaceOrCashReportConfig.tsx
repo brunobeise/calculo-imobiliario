@@ -1,6 +1,6 @@
-import ItemListInput from "@/components/report/ItemListInput";
-import PictureReportInput from "@/components/report/PictureReportInput";
-import TextFieldReportInput from "@/components/report/TextFieldReportInput";
+import ItemListInput from "@/reports/components/inputs/ItemListInput";
+import PictureReportInput from "@/reports/components/inputs/PictureReportInput";
+import TextFieldReportInput from "@/reports/components/inputs/TextFieldReportInput";
 import { Sheet } from "@mui/joy";
 
 export interface FinaceOrCashReportData {

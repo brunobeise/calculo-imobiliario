@@ -1,12 +1,12 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatterReal, numeroParaReal, realParaNumero } from "@/lib/formatter";
+import { formatterReal, toBRL, realParaNumero } from "@/lib/formatter";
 import { useState } from "react";
 import TabelaJurosCompostos from "./TabelaJurosCompostos";
 
 export default function JurosCompostos() {
-  const [capitalInicial, setCapitalInicial] = useState(numeroParaReal(10000));
-  const [aporteMensal, setAporteMensal] = useState(numeroParaReal(500));
+  const [capitalInicial, setCapitalInicial] = useState(toBRL(10000));
+  const [aporteMensal, setAporteMensal] = useState(toBRL(500));
   const [capitalFinal, setCapitalFinal] = useState("");
 
   const [data, setData] = useState<{

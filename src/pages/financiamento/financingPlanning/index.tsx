@@ -85,11 +85,11 @@ export default function FinancingPlanning() {
             className="!rounded-full w-[50px] h-[50px]"
             onClick={() => {
               localStorage.setItem(
-                "isolatedFinancingOrInCashCaseData",
+                "financingPlanningCaseData",
                 JSON.stringify(caseData)
               );
               localStorage.setItem(
-                "isolatedFinancingOrInCashPropertyData",
+                "financingPlanningPropertyData",
                 JSON.stringify(propertyData)
               );
             }}
