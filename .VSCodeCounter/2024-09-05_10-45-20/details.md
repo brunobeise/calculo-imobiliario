@@ -27,7 +27,7 @@ Total : 83 files,  6293 codes, 39 comments, 685 blanks, all 7017 lines
 | [src/components/errorAlert.tsx](/src/components/errorAlert.tsx) | TypeScript JSX | 27 | 0 | 3 | 30 |
 | [src/components/header.tsx](/src/components/header.tsx) | TypeScript JSX | 117 | 0 | 8 | 125 |
 | [src/components/report/ItemListInput.tsx](/src/components/report/ItemListInput.tsx) | TypeScript JSX | 56 | 0 | 6 | 62 |
-| [src/components/report/PictureReportInput.tsx](/src/components/report/PictureReportInput.tsx) | TypeScript JSX | 97 | 0 | 5 | 102 |
+| [src/components/report/PictureInput.tsx](/src/components/report/PictureInput.tsx) | TypeScript JSX | 97 | 0 | 5 | 102 |
 | [src/components/report/TextFieldReportInput.tsx](/src/components/report/TextFieldReportInput.tsx) | TypeScript JSX | 33 | 0 | 3 | 36 |
 | [src/components/shared/ConclusionCaseStructure.tsx](/src/components/shared/ConclusionCaseStructure.tsx) | TypeScript JSX | 89 | 0 | 7 | 96 |
 | [src/components/shared/DetailedTableStructure.tsx](/src/components/shared/DetailedTableStructure.tsx) | TypeScript JSX | 86 | 1 | 7 | 94 |

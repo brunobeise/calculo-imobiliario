@@ -20,8 +20,6 @@ export const loginService = {
       });
 
       localStorage.setItem("token", response.data.token);
-      console.log(response.data);
-
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

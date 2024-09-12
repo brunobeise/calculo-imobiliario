@@ -1,6 +1,6 @@
-import ItemListInput from "@/reports/components/inputs/ItemListInput";
-import PictureReportInput from "@/reports/components/inputs/PictureReportInput";
-import TextFieldReportInput from "@/reports/components/inputs/TextFieldReportInput";
+import ItemListInput from "@/components/inputs/ItemListInput";
+import PictureInput from "@/components/inputs/PictureInput";
+import TextFieldReportInput from "@/components/inputs/TextFieldReportInput";
 import { Sheet } from "@mui/joy";
 
 export interface FinancingPlanningReportData {
@@ -21,7 +21,7 @@ export default function FinancingPlanningReportConfig(
 ) {
   return (
     <Sheet className="grid grid-rows shadow">
-      <PictureReportInput
+      <PictureInput
         label="Foto Principal do imóvel"
         onChange={(v) => props.setData({ ...props.data, principalPhoto: v })}
       />
@@ -34,7 +34,7 @@ export default function FinancingPlanningReportConfig(
         label="Descrição do imóvel"
         onChange={(v) => props.setData({ ...props.data, description: v })}
       />
-      <PictureReportInput
+      <PictureInput
         label="Fotos Adicionais do imóvel"
         multiple
         onChange={(v) =>

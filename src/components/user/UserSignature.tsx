@@ -18,12 +18,12 @@ export default function UserSignature(props: UserSignatureProps) {
     : {};
 
   const data: UserData = {
-    name: props.userData?.name || userSaved.name,
+    fullName: props.userData?.fullName || userSaved.fullName,
     logo: props.userData?.logo || userSaved.logo,
-    office: props.userData?.office || userSaved.office,
+    role: props.userData?.role || userSaved.role,
     creci: props.userData?.creci || userSaved.creci,
     address: props.userData?.address || userSaved.address,
-    telephone: props.userData?.telephone || userSaved.telephone,
+    phone: props.userData?.phone || userSaved.phone,
     whatsapp: props.userData?.whatsapp || userSaved.whatsapp,
     instagram: props.userData?.instagram || userSaved.instagram,
     facebook: props.userData?.facebook || userSaved.facebook,
@@ -57,10 +57,10 @@ export default function UserSignature(props: UserSignatureProps) {
         </div>
         <div className="w-[400px]">
           <div className="grid grid-rows">
-            <h3 className="text-2xl font-bold">{data.name?.toUpperCase()}</h3>
+            <h3 className="text-2xl font-bold">{data.fullName?.toUpperCase()}</h3>
             <p>
               <span className="text-sm font-bold">
-                {data.office?.toUpperCase()}
+                {data.role?.toUpperCase()}
               </span>{" "}
               <span className="font-light">CRECI {data.creci}</span>
               <div className="bg-primary w-full h-[1.2px] mt-1"></div>
@@ -93,7 +93,7 @@ export default function UserSignature(props: UserSignatureProps) {
           </div>
           <div className="bg-primary w-full h-[1.2px]"></div>
           <p className="text-center">
-            {formatPhoneNumber(data.telephone || "")}
+            {formatPhoneNumber(data.phone || "")}
           </p>
         </div>
       </div>

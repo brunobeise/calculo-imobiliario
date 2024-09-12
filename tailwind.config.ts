@@ -40,6 +40,7 @@ const config: Config = {
       whitefull: "#ffff",
       green: "#239e15",
       red: "#a82222",
+      black: "#000000",
     },
     extend: {
       screens: {

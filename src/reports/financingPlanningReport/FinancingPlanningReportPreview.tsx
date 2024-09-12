@@ -64,8 +64,8 @@ const FinancingPlanningReportPreview = forwardRef<
       className="lg:col-span-7 uw:col-span-6 !w-[210mm] shadow light !bg-whitefull mb-[1000px]"
     >
       <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
-        <div className="bg-primary w-full flex items-center ps-10">
-          <UserSignature2 desc={configData.title} />
+        <div className="bg-primary w-full flex items-center">
+          <UserSignature2 getUser desc={configData.title} />
         </div>
 
         <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
@@ -117,16 +117,6 @@ const FinancingPlanningReportPreview = forwardRef<
 
               <InfoRow
                 valueClass="text-red"
-                label="Valor Investido"
-                value={
-                  propertyData.financingFees +
-                  propertyData.downPayment +
-                  caseData.totalRentalShortfall
-                }
-              />
-
-              <InfoRow
-                valueClass="text-red"
                 label="Corretagem"
                 value={caseData.brokerageFee}
               />
@@ -138,7 +128,18 @@ const FinancingPlanningReportPreview = forwardRef<
               />
 
               <InfoRow
-                valueClass="text-green"
+                label="Saldo Final"
+                value={
+                  caseData.finalRow.propertyValue -
+                  caseData.finalRow.outstandingBalance -
+                  caseData.brokerageFee -
+                  caseData.capitalGainsTax
+                }
+                isTitle
+              />
+
+              <InfoRow
+                valueClass="font-bold !text-green"
                 label="Lucro Líquido"
                 value={caseData.totalProfit}
                 isTitle={true}
@@ -148,7 +149,7 @@ const FinancingPlanningReportPreview = forwardRef<
 
               <InfoRow
                 valueClass="text-red"
-                label="Investimento"
+                label="Valor Investido"
                 value={
                   propertyData.financingFees +
                   propertyData.downPayment +

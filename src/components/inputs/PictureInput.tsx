@@ -3,17 +3,21 @@ import { Button, FormLabel, SvgIcon } from "@mui/joy";
 
 interface PictureReportInputProps {
   onChange: (src: string) => void;
+  value?: string[];
   label: string;
   multiple?: boolean;
+  bordered?: boolean;
 }
 
-export default function PictureReportInput({
+export default function PictureInput({
   onChange,
   label,
+  value,
   multiple = false,
+  bordered = false,
 }: PictureReportInputProps) {
   const [fileNames, setFileNames] = useState<string[]>([]);
-  const [fileSrcs, setFileSrcs] = useState<string[]>([]);
+  const [fileSrcs, setFileSrcs] = useState<string[]>(value || []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -27,14 +31,17 @@ export default function PictureReportInput({
   };
 
   return (
-    <div className="p-3 rounded">
-      <div className="ms-4 w-full">
+    <div
+      className={`p-3 rounded ${
+        bordered ? " py-3 px-0 border border-[#e7e5e4]" : ""
+      }`}
+    >
+      <div className={"ms-4 w-full"}>
         <FormLabel htmlFor={label} className="mr-2">
           {label}
         </FormLabel>
         <div className="flex items-center mt-2">
           <Button
-            component="label"
             role={undefined}
             tabIndex={-1}
             variant="outlined"
