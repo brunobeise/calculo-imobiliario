@@ -15,8 +15,18 @@ export default function UserSignature2(props: UserSignatureProps) {
   const [userSaved, setUserSaved] = useState<UserData>();
 
   useEffect(() => {
-    props.getUser &&
-      userService.getUserData().then((data) => setUserSaved(data));
+    if (props.getUser) {
+      const storedUserData = localStorage.getItem("userData");
+
+      if (storedUserData) {
+        setUserSaved(JSON.parse(storedUserData));
+      } else {
+        userService.getUserData().then((data) => {
+          setUserSaved(data);
+          localStorage.setItem("userData", JSON.stringify(data));
+        });
+      }
+    }
   }, [props.getUser]);
 
   const data: UserData = {

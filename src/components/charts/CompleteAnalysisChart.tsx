@@ -1,9 +1,10 @@
 import { Line } from "react-chartjs-2";
 
 export default function CompleteAnalysisChart(props: {
-  propertyValues: number[];
+  propertyValues?: number[];
   outstandingBalanceValues?: number[];
-  investedEquityValues: number[];
+  investedEquityValues?: number[];
+  profitValues?: number[];
 }) {
   const options = {
     responsive: true,
@@ -24,7 +25,7 @@ export default function CompleteAnalysisChart(props: {
 
   const datasets = [];
 
-  if (!allValuesAreZero(props.propertyValues)) {
+  if (props.propertyValues && !allValuesAreZero(props.propertyValues)) {
     datasets.push({
       label: "Valor do Imóvel",
       data: props.propertyValues,
@@ -34,7 +35,10 @@ export default function CompleteAnalysisChart(props: {
     });
   }
 
-  if (!allValuesAreZero(props.investedEquityValues)) {
+  if (
+    props.investedEquityValues &&
+    !allValuesAreZero(props.investedEquityValues)
+  ) {
     datasets.push({
       label: "Patrimônio Renda Fixa",
       data: props.investedEquityValues,
@@ -58,8 +62,29 @@ export default function CompleteAnalysisChart(props: {
     });
   }
 
+  if (
+    props.profitValues &&
+    props.profitValues.length > 0 &&
+    !allValuesAreZero(props.profitValues)
+  ) {
+    datasets.push({
+      label: "Lucro",
+      data: props.profitValues,
+      borderColor: "#28a745",
+      backgroundColor: "#28a745",
+      pointRadius: 0,
+    });
+  }
+
+  const maxLength = Math.max(
+    props.propertyValues?.length || 0,
+    props.investedEquityValues?.length || 0,
+    props.outstandingBalanceValues?.length || 0,
+    props.profitValues?.length || 0
+  );
+
   const data = {
-    labels: props.propertyValues.map((_v, i) => i),
+    labels: Array.from({ length: maxLength }, (_, i) => i),
     datasets,
   };
 

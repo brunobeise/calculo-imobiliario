@@ -46,7 +46,7 @@ const FinancingPlanningReportPreview = forwardRef<
     <p>
       {text}
       {"  "}
-      <span className="font-bold">{value + "%"}</span>
+      <span className="font-bold">{value.toFixed(2) + "%"}</span>
     </p>
   );
 
@@ -69,7 +69,7 @@ const FinancingPlanningReportPreview = forwardRef<
         </div>
 
         <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
-          <img className="w-full" src={configData.principalPhoto} />
+          <img className="w-full h-full" src={configData.principalPhoto} />
           <div className="absolute bottom-0 h-[150px] w-full bg-gradient-to-t from-[#000000de] to-transparent flex items-center px-10 text-lg font-light">
             <p className="whitespace-pre text-whitefull text-xl">
               {configData.description}{" "}
@@ -365,7 +365,176 @@ const FinancingPlanningReportPreview = forwardRef<
         </div>
 
         <div className="w-full mt-32 px-12">
-          <h5 className="underline text-primary text-xl mb-5 mt-5">
+          <h5 className="underline text-primary text-xl mt-5">
+            <strong>Análise Detalhada </strong> Financiamento imobiliário
+          </h5>
+          <p className="text-primary mt-2 mb-5">
+            Conversão do investimento excedente para valor presente
+          </p>
+
+          <div className="text-primary col-span-2 mb-10">
+            <p>
+              O valor presente (VP) de um pagamento mensal mostra quanto um
+              pagamento futuro vale hoje. Isso acontece porque o dinheiro perde
+              valor com o tempo. Em outras palavras, o valor presente representa
+              quanto seria necessário investir hoje para alcançar um valor que
+              será pago no futuro. Embora o pagamento ou investimento mensal
+              possa permanecer o mesmo, o valor presente desse pagamento diminui
+              quanto mais distante ele estiver no tempo. Isso ajuda a entender o
+              impacto financeiro de compromissos ou investimentos futuros no
+              momento atual.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <table className="min-w-full">
+              <thead className="text-primary">
+                <tr>
+                  <th className="px-4 py-2 border-r border-b border-primary text-left"></th>
+                  <th className="px-4 py-2 border-r border-b border-primary text-left">
+                    <div className="flex flex-col">
+                      <strong>Investimento excedente em valor real</strong>
+                    </div>
+                  </th>
+                  <th className="px-4 py-2 border-r border-b border-primary text-left">
+                    <div className="flex flex-col">
+                      <strong>
+                        Investimento excedente convertido em valor presente
+                      </strong>
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {caseData?.detailedTable?.[0] && (
+                  <tr className="text-primary">
+                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                      Mês 1
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        (caseData.detailedTable[0].rentValue -
+                          propertyData.installmentValue) *
+                          -1
+                      )}
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        caseData.detailedTable[0].investmentExcessPresentValue
+                      )}
+                    </td>
+                  </tr>
+                )}
+                {caseData?.detailedTable?.[
+                  Math.floor(caseData.detailedTable.length / 2)
+                ] && (
+                  <tr className="text-primary">
+                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                      Mês {Math.floor(caseData.detailedTable.length / 2)}
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        (caseData.detailedTable[
+                          Math.floor(caseData.detailedTable.length / 2)
+                        ].rentValue -
+                          propertyData.installmentValue) *
+                          -1
+                      )}
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        caseData.detailedTable[
+                          Math.floor(caseData.detailedTable.length / 2)
+                        ].investmentExcessPresentValue
+                      )}
+                    </td>
+                  </tr>
+                )}
+                {caseData?.detailedTable
+                  ?.slice()
+                  .reverse()
+                  .find(
+                    (item) =>
+                      item.rentalShortfall !== 0 ||
+                      item.investmentExcessPresentValue !== 0
+                  ) && (
+                  <tr className="text-primary">
+                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                      Mês {caseData.detailedTable.length}
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        (caseData.detailedTable
+                          .slice()
+                          .reverse()
+                          .find(
+                            (item) => item.investmentExcessPresentValue !== 0
+                          )!.rentValue -
+                          propertyData.installmentValue) *
+                          -1
+                      )}
+                    </td>
+                    <td className="px-4 py-2 border-r border-b border-primary">
+                      {toBRL(
+                        caseData.detailedTable
+                          .slice()
+                          .reverse()
+                          .find(
+                            (item) => item.investmentExcessPresentValue !== 0
+                          )!.investmentExcessPresentValue
+                      )}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            <div className="grid grid-cols-2 text-primary mb-10">
+              <InfoItemReais
+                text="Total Investido em valor:"
+                value={caseData.finalRow.rentalShortfall}
+              />
+              <InfoItemReais
+                text="Total Investido em VP:"
+                value={caseData.detailedTable.reduce(
+                  (acc, val) => acc + val.investmentExcessPresentValue,
+                  0
+                )}
+              />
+              <InfoItemPercent
+                text="Lucro Percentual em valor:"
+                value={
+                  (caseData.totalProfit /
+                    (propertyData.financingFees +
+                      propertyData.downPayment +
+                      caseData.totalRentalShortfall)) *
+                  100
+                }
+              />
+
+              <InfoItemPercent
+                text="Lucro Percentual em VP:"
+                value={caseData.totalProfitPercent}
+              />
+            </div>
+
+            <MonthlyInvestmentGrowthChart
+              rentValues={caseData.detailedTable.map((i) => i.rentValue)}
+              initialCapitalYields={caseData.detailedTable.map(
+                (i) => i.initialCapitalYield
+              )}
+              installmentValues={caseData.detailedTable.map(
+                () => propertyData.installmentValue
+              )}
+              monthlyInvestmentValues={caseData.detailedTable.map(
+                (i) => i.investmentExcessPresentValue
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="w-full mt-32 px-12">
+          <h5 className="underline text-primary text-xl mb-5 mt-10">
             <strong>Análise Detalhada </strong> Financiamento imobiliário
           </h5>
           <div className="flex flex-col gap-5">
@@ -380,36 +549,13 @@ const FinancingPlanningReportPreview = forwardRef<
                 (i) => i.propertyValue
               )}
             />
-            <MonthlyInvestmentGrowthChart
-              rentValues={caseData.detailedTable.map((i) => i.rentValue)}
-              initialCapitalYields={caseData.detailedTable.map(
-                (i) => i.initialCapitalYield
-              )}
-              installmentValues={caseData.detailedTable.map(
-                () => propertyData.installmentValue
-              )}
-              monthlyInvestmentValues={caseData.detailedTable.map(
-                (i) => i.investmentExcessPresentValue
-              )}
+            <CompleteAnalysisChart
+              profitValues={caseData.detailedTable.map((i) => i.monthlyProfit)}
             />
-
-            <div className="text-primary col-span-2 mb-10">
-              <p>
-                O valor presente (VP) de um pagamento mensal mostra quanto um
-                pagamento futuro vale hoje. Isso acontece porque o dinheiro
-                perde valor com o tempo. Em outras palavras, o valor presente
-                representa quanto seria necessário investir hoje para alcançar
-                um valor que será pago no futuro. Embora o pagamento ou
-                investimento mensal possa permanecer o mesmo, o valor presente
-                desse pagamento diminui quanto mais distante ele estiver no
-                tempo. Isso ajuda a entender o impacto financeiro de
-                compromissos ou investimentos futuros no momento atual.
-              </p>
-            </div>
           </div>
         </div>
 
-        <div className="w-full mt-20 px-12">
+        <div className="w-full mt-10 px-12">
           <h3 className="text-xl font-bold  leading-7 mb-2 mt-5 underline">
             Dados considerados para a análise:
           </h3>
@@ -491,24 +637,26 @@ const FinancingPlanningReportPreview = forwardRef<
               />
             </div>
           </div>
-
-          {(configData.additionalPhotos.length > 0 ||
-            configData.features.length > 0) && (
-            <>
-              <h3 className="text-xl font-bold  leading-7 mb-2 mt-5 underline">
-                Características do imóvel:
-              </h3>
-              {configData.features.map((f) => (
-                <span className="mx-2 text-primary">• {f}</span>
-              ))}
-              <div className="grid grid-cols-2 gap-5 mt-3">
-                {configData.additionalPhotos.map((p) => (
-                  <img src={p} className="w-full" />
-                ))}
-              </div>
-            </>
-          )}
         </div>
+
+        {(configData.additionalPhotos.length > 0 ||
+          configData.features.length > 0) && (
+          <div className="w-full mt-10 px-12">
+            <h3 className="text-xl font-bold  leading-7 mb-2 mt-12 underline">
+              Características do imóvel:
+            </h3>
+            {configData.features.map((f) => (
+              <span className="mx-2 text-primary">• {f}</span>
+            ))}
+            <div className="columns-2 mt-5">
+              {configData.additionalPhotos.map((p) => (
+                <div className="relative overflow-hidden rounded-lg border border-4 border-primary my-2">
+                  <img src={p} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -30,13 +30,14 @@ export default function FinancingPlanningReport() {
           setData={(d) => setConfigData(d)}
         />
         <div className="w-full text-center mt-5">
-          <Button
-            startDecorator={<FaPrint />}
-            className=""
-            onClick={handlePrint}
-          >
-            Imprimir Relatório
-          </Button>
+          <div className="fixed bottom-4 right-4 z-10">
+            <Button
+              onClick={handlePrint}
+              className="!rounded-full w-[50px] h-[50px] flex"
+            >
+              <FaPrint className="!text-4xl" />
+            </Button>
+          </div>
         </div>
       </div>
       <div>
