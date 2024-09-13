@@ -61,6 +61,14 @@ export default function UserConfig() {
       photo: uploadPhoto,
     });
 
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({
+        ...form,
+        photo: uploadPhoto,
+      })
+    );
+
     setUploadLoading(false);
   };
 
@@ -68,7 +76,10 @@ export default function UserConfig() {
     setLoading(true);
     userService
       .getUserData()
-      .then((data) => setForm(data))
+      .then((data) => {
+        setForm(data);
+        localStorage.setItem("userData", JSON.stringify(data));
+      })
       .finally(() => setLoading(false));
   }, []);
 
