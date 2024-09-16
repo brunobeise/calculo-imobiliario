@@ -1,13 +1,13 @@
-
-
 import FinancingPlanning from "@/pages/financiamento/financingPlanning";
 import { FinancingPlanningCaseDataProvider } from "@/pages/financiamento/financingPlanning/CaseData";
 import FinanceOrCash from "@/pages/financiamento/financeOrCash";
 import { FinanceOrInCashCaseDataProvider } from "@/pages/financiamento/financeOrCash/CaseData";
+import FinancingPlanningImage from "@/assets/financingPlanning.png";
+import FinancingOrCashImage from "@/assets/financiamentoxavista.png";
 
 export const financingRoutes = [
   {
-    title: "Financiamento X A Vista",
+    title: "Financiamento vs. Compra à Vista",
     href: "/financiamentoxavista",
     description:
       "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
@@ -16,6 +16,8 @@ export const financingRoutes = [
         <FinanceOrCash />
       </FinanceOrInCashCaseDataProvider>
     ),
+
+    image: FinancingOrCashImage,
   },
   {
     title: "Planejamento de Financiamento",
@@ -27,5 +29,6 @@ export const financingRoutes = [
         <FinancingPlanning />
       </FinancingPlanningCaseDataProvider>
     ),
+    image: FinancingPlanningImage,
   },
 ];

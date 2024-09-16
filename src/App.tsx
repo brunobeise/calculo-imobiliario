@@ -7,6 +7,9 @@ import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 import Scrap from "./scrapping/Scrap";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
+import rural from "@/assets/rurallfinancing.png";
+import invest from "@/assets/financingOrInvest.png";
 export interface Route {
   title: string;
   href: string;
@@ -18,6 +21,7 @@ import { Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
 import Login from "./pages/Login";
 import UserConfig from "./pages/UserConfig";
+import CaseCard from "./components/shared/CaseCard";
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -47,13 +51,42 @@ export default function App() {
 
   function Welcome() {
     return (
-      <div className="absolute top-[50%] w-full left-[50%] text-center translate-y-[-50%] translate-x-[-50%]">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          Bem vindo ao sistema Cálculo imobiliário!
-        </h1>
-        <p className="leading-7 [&:not(:first-child)]:mt-6">
-          Selecione um contexto no canto superior esquerdo para continuar
-        </p>
+      <div>
+        <div className="flex justify-center mb-10">
+          <img className="w-[120px]" src={logo} />
+        </div>
+
+        <div className="w-full flex justify-center">
+          <div className="w-full lg:w-[80%] gap-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center">
+            {financingRoutes.map((i) => (
+              <CaseCard
+                key={i.title}
+                link={i.href}
+                desc={i.description}
+                image={i.image}
+                title={i.title}
+              />
+            ))}
+            <CaseCard
+              comingSoon
+              link={""}
+              desc={
+                "Faz um plano de aquisição de financimento para imóvel rural"
+              }
+              image={rural}
+              title={"Planejamento para imóvel agrícola"}
+            />
+            <CaseCard
+              comingSoon
+              link={""}
+              desc={
+                "Analisa como o investimento em imóveis se compara a outros métodos de investimento."
+              }
+              image={invest}
+              title={"Comprar imóvel vs. investimento tradicional2"}
+            />
+          </div>
+        </div>
       </div>
     );
   }
