@@ -51,7 +51,7 @@ export default function App() {
         </div>
 
         <div className="w-full flex justify-center">
-          <div className="w-full lg:w-[80%] gap-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center">
+          <div className="gap-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center">
             {financingRoutes.map((i) => (
               <CaseCard
                 key={i.title}
