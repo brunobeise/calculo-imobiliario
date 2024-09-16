@@ -5,7 +5,7 @@ import { auxiliarRoutes } from "./routes/auxiliar";
 import { relatorioRoutes } from "./routes/reports";
 import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 import Scrap from "./scrapping/Scrap";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
 import rural from "@/assets/rurallfinancing.png";
@@ -33,12 +33,6 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   return isAuthenticated ? children : <Navigate to="/" />;
 };
 
-export const notify = (
-  type: "success" | "info" | "error" | "warning",
-  message: string
-) => {
-  toast[type](message);
-};
 
 export default function App() {
   const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
@@ -83,7 +77,7 @@ export default function App() {
                 "Analisa como o investimento em imóveis se compara a outros métodos de investimento."
               }
               image={invest}
-              title={"Comprar imóvel vs. investimento tradicional2"}
+              title={"Comprar imóvel vs. investimento tradicional"}
             />
           </div>
         </div>

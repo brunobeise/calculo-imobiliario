@@ -1,4 +1,4 @@
-import { notify } from "@/App";
+import { notify } from "@/notify";
 import { api } from "./api";
 import { UserData } from "@/pages/UserConfig";
 
