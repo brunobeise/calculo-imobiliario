@@ -6,7 +6,7 @@ import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import DetailedTable from "@/pages/financiamento/financeOrCash/DetailedTable";
+import DetailedTable from "@/pages/financiamento/financingOrCash/DetailedTable";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
@@ -47,7 +47,6 @@ export default function FinancingOrCash() {
           sx={{ bgcolor: "transparent" }}
         >
           <TabList
-            onChange={(e) => console.log(e?.target)}
             disableUnderline
             sx={{
               justifyContent: "center",
@@ -104,11 +103,11 @@ export default function FinancingOrCash() {
                 <Button
                   onClick={() => {
                     localStorage.setItem(
-                      "financeOrCashCaseData",
+                      "financingOrCashCaseData",
                       JSON.stringify(caseData)
                     );
                     localStorage.setItem(
-                      "financeOrCashPropertyData",
+                      "financingOrCashPropertyData",
                       JSON.stringify(propertyData)
                     );
                   }}

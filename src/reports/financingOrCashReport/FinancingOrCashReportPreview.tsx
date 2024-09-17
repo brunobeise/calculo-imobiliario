@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import UserSignature2 from "@/components/user/UserSignature2";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinanceOrCashData } from "@/pages/financiamento/financeOrCash/CaseData";
+import { financingOrCashData } from "@/pages/financiamento/financingOrCash/CaseData";
 import lucroAnualFinal from "./assets/lucro-anual-total.svg";
 import entendaOFinancimento from "./assets/entenda-o-financimento.svg";
 import { toBRL } from "@/lib/formatter";
@@ -10,23 +10,23 @@ import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestm
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import { ComparativeMonthlyInvestmentGrowthChart } from "@/components/charts/ComparativeMontlyInvestmentGrowthChart";
 import ComparativeTotalEquityGrowth from "@/components/charts/ComparativeTotalEquityGrowth";
-import { FinaceOrCashReportData } from "./FinaceOrCashReportConfig";
+import { FinaceOrCashReportData } from "./FinancingOrCashReportConfig";
 import InfoRow from "../components/preview/InfoRow";
 
-interface FinanceOrCashReportPreviewProps {
+interface financingOrCashReportPreviewProps {
   configData: FinaceOrCashReportData;
 }
 
-const FinanceOrCashReportPreview = forwardRef<
+const financingOrCashReportPreview = forwardRef<
   HTMLDivElement,
-  FinanceOrCashReportPreviewProps
->(({ configData }: FinanceOrCashReportPreviewProps, ref) => {
+  financingOrCashReportPreviewProps
+>(({ configData }: financingOrCashReportPreviewProps, ref) => {
   const propertyData: PropertyData = JSON.parse(
-    localStorage.getItem("financeOrCashPropertyData") || ""
+    localStorage.getItem("financingOrCashPropertyData") || ""
   );
 
-  const caseData: FinanceOrCashData = JSON.parse(
-    localStorage.getItem("financeOrCashCaseData") || ""
+  const caseData: financingOrCashData = JSON.parse(
+    localStorage.getItem("financingOrCashCaseData") || ""
   );
 
   const InfoItemReais = ({ text, value }: { text: string; value: number }) => (
@@ -66,7 +66,7 @@ const FinanceOrCashReportPreview = forwardRef<
     >
       <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
         <div className="bg-primary w-full flex items-center">
-          <UserSignature2 desc={configData.title} />
+          <UserSignature2 getUser desc={configData.title} />
         </div>
 
         <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
@@ -710,4 +710,4 @@ const FinanceOrCashReportPreview = forwardRef<
   );
 });
 
-export default FinanceOrCashReportPreview;
+export default financingOrCashReportPreview;

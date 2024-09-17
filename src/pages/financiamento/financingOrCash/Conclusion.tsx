@@ -1,11 +1,11 @@
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { useContext } from "react";
-import { FinanceOrCashData } from "./CaseData";
+import { financingOrCashData } from "./CaseData";
 import ConclusionCaseStructure from "@/components/structure/ConclusionCaseStructure";
 
 interface ConclusionProps {
   context: "financing" | "inCash";
-  caseData: FinanceOrCashData;
+  caseData: financingOrCashData;
 }
 
 export default function Conclusion({ caseData, context }: ConclusionProps) {

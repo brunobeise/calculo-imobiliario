@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { formatterReal, toBRL, realParaNumero } from "@/lib/formatter";
-import { useState, useContext, useEffect } from "react";
+import { toBRL } from "@/lib/formatter";
+import { useContext, useEffect } from "react";
 import {
   PropertyData,
   propertyDataContext,
 } from "../propertyData/PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
 import { Checkbox, FormLabel, Input, Sheet, Slider } from "@mui/joy";
+import MaskInputBRL from "@/components/inputs/masks/MaskInputBRL";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -31,48 +32,6 @@ export default function PropertyDataCard() {
     brokerageFee,
   } = propertyData;
 
-  const [propertyValueField, setpropertyValueField] = useState(
-    toBRL(propertyValue)
-  );
-  const [downPaymentField, setdownPaymentField] = useState(
-    toBRL(downPayment)
-  );
-  const [taxasFincancimentoField, settaxasFincancimentoField] = useState(
-    toBRL(financingFees)
-  );
-  const [taxasAVistaField, settaxasAVistaField] = useState(
-    toBRL(inCashFees)
-  );
-  const [saldoPessoalField, setSaldoPessoalField] = useState(
-    toBRL(personalBalance)
-  );
-  const [installmentValueField, setinstallmentValueField] = useState(
-    toBRL(installmentValue)
-  );
-  const [initialRentValueField, setinitialRentValueField] = useState(
-    toBRL(initialRentValue)
-  );
-
-  const [saldoDevedorField, setSaldoDevedorField] = useState(
-    toBRL(outstandingBalance)
-  );
-
-  const handleChangeReal = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const valor = event.target.value;
-    const id = event.target.id;
-    const valorFormatado = formatterReal(valor);
-
-    setpropertyData(id as keyof PropertyData, realParaNumero(valorFormatado));
-    if (id === "propertyValue") setpropertyValueField(valorFormatado);
-    if (id === "downPayment") setdownPaymentField(valorFormatado);
-    if (id === "financingFees") settaxasFincancimentoField(valorFormatado);
-    if (id === "inCashFees") settaxasAVistaField(valorFormatado);
-    if (id === "personalBalance") setSaldoPessoalField(valorFormatado);
-    if (id === "installmentValue") setinstallmentValueField(valorFormatado);
-    if (id === "initialRentValue") setinitialRentValueField(valorFormatado);
-    if (id === "outstandingBalance") setSaldoDevedorField(valorFormatado);
-  };
-
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
     const id = event.target.id;
@@ -96,15 +55,6 @@ export default function PropertyDataCard() {
 
     setpropertyData("installmentValue", installmentValue);
     setpropertyData("outstandingBalance", outstandingBalance);
-
-    setpropertyValueField(toBRL(propertyValue));
-    setdownPaymentField(toBRL(downPayment));
-    settaxasFincancimentoField(toBRL(financingFees));
-    settaxasAVistaField(toBRL(inCashFees));
-    setSaldoPessoalField(toBRL(personalBalance));
-    setinstallmentValueField(toBRL(installmentValue));
-    setinitialRentValueField(toBRL(initialRentValue));
-    setSaldoDevedorField(toBRL(outstandingBalance));
   }, [
     finalYear,
     initialRentValue,
@@ -121,7 +71,7 @@ export default function PropertyDataCard() {
 
   return (
     <>
-      <form className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
+      <form className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
         <Sheet
           variant="outlined"
           color="neutral"
@@ -140,10 +90,21 @@ export default function PropertyDataCard() {
                   </FormLabel>
                   <Input
                     variant="outlined"
-                    onChange={handleChangeReal}
+                    onChange={(v) => {
+                      setpropertyData(
+                        "personalBalance",
+                        Number(v.target.value)
+                      );
+                    }}
                     type="text"
                     id="personalBalance"
-                    value={saldoPessoalField}
+                    startDecorator="R$"
+                    slotProps={{
+                      input: {
+                        component: MaskInputBRL,
+                      },
+                    }}
+                    value={personalBalance}
                     required
                   />
                 </div>
@@ -153,11 +114,19 @@ export default function PropertyDataCard() {
                 <FormLabel htmlFor="propertyValue">Valor do imóvel:</FormLabel>
                 <Input
                   variant="outlined"
-                  onChange={handleChangeReal}
+                  onChange={(v) => {
+                    setpropertyData("propertyValue", Number(v.target.value));
+                  }}
                   type="text"
                   id="propertyValue"
-                  value={propertyValueField}
+                  value={propertyValue}
                   required
+                  startDecorator="R$"
+                  slotProps={{
+                    input: {
+                      component: MaskInputBRL,
+                    },
+                  }}
                 />
               </div>
               <div className="relative">
@@ -200,11 +169,18 @@ export default function PropertyDataCard() {
                 <Input
                   disabled={propertyData.isHousing}
                   variant="outlined"
-                  className=""
-                  onChange={handleChangeReal}
+                  onChange={(v) => {
+                    setpropertyData("initialRentValue", Number(v.target.value));
+                  }}
                   type="text"
                   id="initialRentValue"
-                  value={initialRentValueField}
+                  startDecorator="R$"
+                  slotProps={{
+                    input: {
+                      component: MaskInputBRL,
+                    },
+                  }}
+                  value={initialRentValue}
                   required
                 />
               </div>
@@ -354,22 +330,30 @@ export default function PropertyDataCard() {
           </Sheet>
         </Sheet>
 
-        <Sheet variant="outlined" color="neutral" className="p-5">
+        <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
             Informações do Financiamento
           </h2>
 
-          <div className="grid grid-cols-1 h-[90%] justify-between gap-4">
+          <div className="flex flex-col h-[90%] justify-between">
             <div>
-              <FormLabel htmlFor="propertyValue">Valor da Entrada:</FormLabel>
+              <FormLabel htmlFor="downPayment">Valor da Entrada:</FormLabel>
               <div className="relative">
                 <Input
+                  startDecorator="R$"
                   variant="outlined"
-                  onChange={handleChangeReal}
+                  onChange={(v) => {
+                    setpropertyData("downPayment", Number(v.target.value));
+                  }}
                   type="text"
                   id="downPayment"
-                  value={downPaymentField}
+                  value={downPayment}
                   required
+                  slotProps={{
+                    input: {
+                      component: MaskInputBRL,
+                    },
+                  }}
                 />
                 <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
                   {((downPayment / propertyValue) * 100).toFixed(2) + "%"}
@@ -382,9 +366,6 @@ export default function PropertyDataCard() {
                   onChange={(e: any) => {
                     const v = e.target?.value;
                     setpropertyData("downPayment", (propertyValue * v) / 10);
-                    setdownPaymentField(
-                      formatterReal((propertyValue * 100 * v) / 10)
-                    );
                   }}
                   defaultValue={2}
                   min={0}
@@ -407,10 +388,17 @@ export default function PropertyDataCard() {
               </FormLabel>
               <Input
                 variant="outlined"
-                onChange={handleChangeReal}
+                onChange={(v) => {
+                  setpropertyData("financingFees", Number(v.target.value));
+                }}
                 type="text"
-                id="financingFees"
-                value={taxasFincancimentoField}
+                startDecorator="R$"
+                slotProps={{
+                  input: {
+                    component: MaskInputBRL,
+                  },
+                }}
+                value={financingFees}
                 required
               />
             </div>
@@ -420,10 +408,18 @@ export default function PropertyDataCard() {
                 <FormLabel htmlFor="inCashFees">Taxas á vista:</FormLabel>
                 <Input
                   variant="outlined"
-                  onChange={handleChangeReal}
+                  onChange={(v) => {
+                    setpropertyData("inCashFees", Number(v.target.value));
+                  }}
                   type="text"
                   id="inCashFees"
-                  value={taxasAVistaField}
+                  value={inCashFees}
+                  startDecorator="R$"
+                  slotProps={{
+                    input: {
+                      component: MaskInputBRL,
+                    },
+                  }}
                   required
                 />
               </div>
@@ -465,12 +461,12 @@ export default function PropertyDataCard() {
           </div>
         </Sheet>
 
-        <Sheet variant="outlined" color="neutral" className="p-5">
+        <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
             Cálculo do Financiamento
           </h2>
 
-          <div className="grid grid-cols-1 h-[90%] gap-6">
+          <div className="flex flex-col h-[90%] justify-between ">
             <div>
               <FormLabel htmlFor="anos">Calcular até:</FormLabel>
 
@@ -493,14 +489,24 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <FormLabel htmlFor="propertyValue">Valor da Parcela:</FormLabel>
+              <FormLabel htmlFor="installmentValue">
+                Valor da Parcela:
+              </FormLabel>
               <Input
                 variant="outlined"
-                onChange={handleChangeReal}
+                onChange={(v) => {
+                  setpropertyData("installmentValue", Number(v.target.value));
+                }}
                 type="text"
                 id="installmentValue"
-                value={installmentValueField}
+                value={installmentValue}
                 required
+                startDecorator="R$"
+                slotProps={{
+                  input: {
+                    component: MaskInputBRL,
+                  },
+                }}
               />
             </div>
 
@@ -510,9 +516,17 @@ export default function PropertyDataCard() {
               </FormLabel>
               <Input
                 variant="outlined"
-                onChange={handleChangeReal}
+                onChange={(v) => {
+                  setpropertyData("outstandingBalance", Number(v.target.value));
+                }}
                 id="outstandingBalance"
-                value={saldoDevedorField}
+                value={outstandingBalance}
+                startDecorator="R$"
+                slotProps={{
+                  input: {
+                    component: MaskInputBRL,
+                  },
+                }}
               />
             </div>
 

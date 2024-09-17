@@ -6,6 +6,8 @@ import FinancingPlanningReportConfig, {
   FinancingPlanningReportData,
 } from "./FinancingPlanningReportConfig";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
+import { VscDebugStepBack } from "react-icons/vsc";
+import { Link } from "react-router-dom";
 
 export default function FinancingPlanningReport() {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -30,7 +32,12 @@ export default function FinancingPlanningReport() {
           setData={(d) => setConfigData(d)}
         />
         <div className="w-full text-center mt-5">
-          <div className="fixed bottom-4 right-4 z-10">
+          <div className="fixed bottom-4 right-4 z-10 flex flex-col gap-2">
+            <Link to={"/planejamentofinanciamento?useSaveData=true"}>
+              <Button className="!rounded-full w-[50px] h-[50px] flex">
+                <VscDebugStepBack className="!text-4xl" />
+              </Button>
+            </Link>
             <Button
               onClick={handlePrint}
               className="!rounded-full w-[50px] h-[50px] flex"

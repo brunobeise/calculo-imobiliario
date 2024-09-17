@@ -1,5 +1,5 @@
 import { toBRL } from "@/lib/formatter";
-import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financeOrCash/CaseData";
+import { FinancingOrCashDetailedTable } from "@/pages/financiamento/financingOrCash/CaseData";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";

@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { propertyDataContext } from "@/propertyData/PropertyDataContext";
+import {
+  PropertyData,
+  propertyDataContext,
+} from "@/propertyData/PropertyDataContext";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
@@ -8,15 +11,19 @@ import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import { Button } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 
 export default function FinancingPlanning() {
-  const { propertyData } = useContext(propertyDataContext);
+  const { propertyData, setMultiplePropertyData } =
+    useContext(propertyDataContext);
   const [errors, setErrors] = useState<propertyDataError[]>([]);
   const { caseData, setCaseData } = useContext(caseDataContext);
+
+  const [searchParams] = useSearchParams();
+  const useSaveData = searchParams.get("useSaveData") === "true";
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
@@ -34,6 +41,15 @@ export default function FinancingPlanning() {
       setErrors(newErrors);
     }
   }, [propertyData]);
+
+  useEffect(() => {
+    if (useSaveData) {
+      const propertyData: PropertyData = JSON.parse(
+        localStorage.getItem("financingPlanningPropertyData") || ""
+      );
+      setMultiplePropertyData(propertyData);
+    }
+  }, []);
 
   return (
     <div className="relative">

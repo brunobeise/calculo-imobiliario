@@ -156,13 +156,14 @@ export default function UserConfig() {
                     required
                   />
                 </div>
-                <div className="col-span-6">
+
+                <div className="col-span-3">
                   <FormLabel htmlFor="whatsapp">Link Whatsapp:</FormLabel>
                   <div className="flex items-center">
                     <FaWhatsapp className="text-xl" />
 
                     <Input
-                      className="ms-2"
+                      className="ms-2 w-full"
                       onChange={handleChange}
                       type="text"
                       id="whatsapp"
@@ -171,13 +172,13 @@ export default function UserConfig() {
                     />
                   </div>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-3">
                   <FormLabel htmlFor="instagram">Link Instagram:</FormLabel>
                   <div className="flex items-center">
                     <FaInstagram className="text-xl" />
 
                     <Input
-                      className="ms-2"
+                      className="ms-2 w-full"
                       onChange={handleChange}
                       type="text"
                       id="instagram"
@@ -186,13 +187,13 @@ export default function UserConfig() {
                     />
                   </div>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-3">
                   <FormLabel htmlFor="facebook">Link Facebook:</FormLabel>
                   <div className="flex items-center">
                     <FaFacebookSquare className="text-xl" />
 
                     <Input
-                      className="ms-2"
+                      className="ms-2 w-full"
                       onChange={handleChange}
                       type="text"
                       id="facebook"
@@ -201,13 +202,13 @@ export default function UserConfig() {
                     />
                   </div>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-3">
                   <FormLabel htmlFor="linkedin">Link Linkedin:</FormLabel>
                   <div className="flex items-center">
                     <FaLinkedin className="text-xl" />
 
                     <Input
-                      className="ms-2"
+                      className="ms-2 w-full"
                       onChange={handleChange}
                       type="text"
                       id="linkedin"

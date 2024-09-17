@@ -43,7 +43,6 @@ export const uploadImage = async (image: string) => {
     );
     const data = await response.json();
     if (data.secure_url) {
-      console.log(data.secure_url);
       return data.secure_url;
     }
   } catch (error) {

@@ -81,8 +81,8 @@ Total : 83 files,  6293 codes, 39 comments, 685 blanks, all 7017 lines
 | [src/propertyData/propertyDataInivitalValues/financingPlanning.ts](/src/propertyData/propertyDataInivitalValues/financingPlanning.ts) | TypeScript | 20 | 0 | 2 | 22 |
 | [src/propertyData/propertyDataInivitalValues/index.tsx](/src/propertyData/propertyDataInivitalValues/index.tsx) | TypeScript JSX | 7 | 0 | 2 | 9 |
 | [src/reports/financiamentoxavista/FinaceOrCashReportConfig.tsx](/src/reports/financiamentoxavista/FinaceOrCashReportConfig.tsx) | TypeScript JSX | 51 | 0 | 4 | 55 |
-| [src/reports/financiamentoxavista/FinanceOrCashReport.tsx](/src/reports/financiamentoxavista/FinanceOrCashReport.tsx) | TypeScript JSX | 43 | 0 | 5 | 48 |
-| [src/reports/financiamentoxavista/FinanceOrCashReportPreview.tsx](/src/reports/financiamentoxavista/FinanceOrCashReportPreview.tsx) | TypeScript JSX | 709 | 0 | 43 | 752 |
+| [src/reports/financiamentoxavista/financingOrCashReport.tsx](/src/reports/financiamentoxavista/financingOrCashReport.tsx) | TypeScript JSX | 43 | 0 | 5 | 48 |
+| [src/reports/financiamentoxavista/financingOrCashReportPreview.tsx](/src/reports/financiamentoxavista/financingOrCashReportPreview.tsx) | TypeScript JSX | 709 | 0 | 43 | 752 |
 | [src/reports/financiamentoxavista/assets/entenda-o-financimento.svg](/src/reports/financiamentoxavista/assets/entenda-o-financimento.svg) | XML | 70 | 1 | 1 | 72 |
 | [src/reports/financiamentoxavista/assets/lucro-anual-total.svg](/src/reports/financiamentoxavista/assets/lucro-anual-total.svg) | XML | 33 | 1 | 1 | 35 |
 | [src/routes/auxiliar.tsx](/src/routes/auxiliar.tsx) | TypeScript JSX | 9 | 0 | 2 | 11 |

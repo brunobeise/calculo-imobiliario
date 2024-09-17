@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useState } from "react";
 
 export const caseDataContext = createContext<caseDataContextType>({
-  caseData: {} as FinanceOrCashData,
+  caseData: {} as financingOrCashData,
   setCaseData: () => {},
 });
 
@@ -20,7 +20,7 @@ export interface FinancingOrCashDetailedTable {
   propertyValue: number;
 }
 
-export type FinanceOrCashData = {
+export type financingOrCashData = {
   inCash: {
     totalProfit: number;
     totalProfitPercent: number;
@@ -48,10 +48,10 @@ export type FinanceOrCashData = {
 };
 
 export type caseDataContextType = {
-  caseData: FinanceOrCashData;
+  caseData: financingOrCashData;
   setCaseData: (
-    campo: keyof FinanceOrCashData,
-    valor: FinanceOrCashData[keyof FinanceOrCashData]
+    campo: keyof financingOrCashData,
+    valor: financingOrCashData[keyof financingOrCashData]
   ) => void;
 };
 
@@ -60,7 +60,7 @@ export const FinanceOrInCashCaseDataProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [caseData, setCaseState] = useState<FinanceOrCashData>({
+  const [caseData, setCaseState] = useState<financingOrCashData>({
     inCash: {
       totalProfit: 192892.99,
       totalProfitPercent: 107.16,
@@ -88,8 +88,8 @@ export const FinanceOrInCashCaseDataProvider = ({
   });
 
   const setCaseData = (
-    campo: keyof FinanceOrCashData,
-    valor: FinanceOrCashData[keyof FinanceOrCashData]
+    campo: keyof financingOrCashData,
+    valor: financingOrCashData[keyof financingOrCashData]
   ) => {
     setCaseState((prevState) => ({
       ...prevState,

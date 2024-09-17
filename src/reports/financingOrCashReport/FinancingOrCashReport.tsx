@@ -4,10 +4,10 @@ import { Button } from "@mui/joy";
 import { FaPrint } from "react-icons/fa";
 import FinaceOrCashReportConfig, {
   FinaceOrCashReportData,
-} from "./FinaceOrCashReportConfig";
-import FinanceOrCashReportPreview from "./FinanceOrCashReportPreview";
+} from "./FinancingOrCashReportConfig";
+import FinancingOrCashReportPreview from "./FinancingOrCashReportPreview";
 
-export default function FinanceOrCashReport() {
+export default function FinancingOrCashReport() {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const [configData, setConfigData] = useState<FinaceOrCashReportData>({
@@ -40,7 +40,7 @@ export default function FinanceOrCashReport() {
         </div>
       </div>
       <div>
-        <FinanceOrCashReportPreview
+        <FinancingOrCashReportPreview
           configData={configData}
           ref={componentRef}
         />

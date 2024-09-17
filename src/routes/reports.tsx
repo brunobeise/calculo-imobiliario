@@ -1,4 +1,4 @@
-import FinanceOrCashReport from "@/reports/financeOrCashReport/FinanceOrCashReport";
+import FinancingOrCashReport from "@/reports/financingOrCashReport/FinancingOrCashReport";
 import FinancingPlanningReport from "@/reports/financingPlanningReport/FinancingPlanningReport";
 
 export const relatorioRoutes = [
@@ -7,7 +7,7 @@ export const relatorioRoutes = [
     href: "/financiamentoxavista/relatorio",
     description:
       "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista.",
-    element: <FinanceOrCashReport />,
+    element: <FinancingOrCashReport />,
   },
   {
     title: "Relatório - Planejamento de Financiamento",

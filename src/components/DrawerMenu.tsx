@@ -13,14 +13,23 @@ import ListDivider from "@mui/joy/ListDivider";
 import { FaCalculator } from "react-icons/fa";
 import { financingRoutes } from "@/routes/financing";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
+import { RiLogoutBoxRLine } from "react-icons/ri";
+import { useAuth } from "@/auth";
 
 export default function DrawerMenu() {
+  const { isAuthenticated } = useAuth();
+
   const [open, setOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
 
+  if (!isAuthenticated) return null;
+
   return (
     <>
-      <Button  className="translate-x-[10px] !bg-[#f0f0f0] !text-primary" onClick={() => setOpen(!open)}>
+      <Button
+        className="translate-x-[10px] !bg-[#f0f0f0] !text-primary"
+        onClick={() => setOpen(!open)}
+      >
         <FaBars />
       </Button>
 
@@ -80,21 +89,37 @@ export default function DrawerMenu() {
             <List>
               {financingRoutes.map((i) => (
                 <>
-                  <ListItem
-                    onClick={() => setCasesOpen(!casesOpen)}
-                    className="cursor-pointer !px-6"
-                    nested
-                    sx={{ my: 1 }}
-                  >
-                    <Typography className="font-bold !ms-[10px]">
-                      {i.title}
-                    </Typography>
-                  </ListItem>
+                  <Link onClick={() => setOpen(false)} to={i.href}>
+                    <ListItem
+                      onClick={() => setCasesOpen(!casesOpen)}
+                      className="cursor-pointer !px-6"
+                      nested
+                      sx={{ my: 1 }}
+                    >
+                      <Typography className="font-bold !ms-[10px]">
+                        {i.title}
+                      </Typography>
+                    </ListItem>
+                  </Link>
                   <ListDivider />
                 </>
               ))}
             </List>
           )}
+        </List>
+        <List size="lg" className="!absolute bottom-0">
+          <ListItem
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.reload();
+            }}
+            className="!ms-5 cursor-pointer"
+          >
+            <ListItemDecorator>
+              <RiLogoutBoxRLine />
+            </ListItemDecorator>
+            <Typography className="font-bold !ms-[-10px]">Sair</Typography>
+          </ListItem>
         </List>
       </div>
     </>
