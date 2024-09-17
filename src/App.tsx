@@ -22,6 +22,7 @@ import { AuthProvider, useAuth } from "./auth";
 import Login from "./pages/Login";
 import UserConfig from "./pages/UserConfig";
 import CaseCard from "./components/shared/CaseCard";
+import DrawerMenu from "./components/DrawerMenu";
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -32,7 +33,6 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
 
   return isAuthenticated ? children : <Navigate to="/" />;
 };
-
 
 export default function App() {
   const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
@@ -103,6 +103,7 @@ export default function App() {
             transition={Bounce}
           />
           <Header />
+          <DrawerMenu />
 
           <Routes>
             <Route path="/" element={<Home />} />
