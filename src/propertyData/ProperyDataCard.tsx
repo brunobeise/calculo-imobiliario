@@ -11,6 +11,7 @@ import PercentageInput from "@/components/inputs/PercentageInput";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import BooleanInput from "@/components/inputs/BooleanInput";
 import { toBRL } from "@/lib/formatter";
+import InfoTooltip from "@/components/ui/InfoTooltip";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -321,7 +322,11 @@ export default function PropertyDataCard() {
 
           <div className="flex flex-col h-[90%] justify-between ">
             <div>
-              <FormLabel htmlFor="finalYear">Calcular até:</FormLabel>
+              <div className="flex items-center">
+                <FormLabel htmlFor="finalYear">Calcular até:</FormLabel>
+                <InfoTooltip text="Define o período de tempo em anos que o cálculo é feito." />
+              </div>
+
               <Input
                 id="finalYear"
                 value={finalYear}
