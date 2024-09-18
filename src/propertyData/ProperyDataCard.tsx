@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { toBRL } from "@/lib/formatter";
 import { useContext, useEffect } from "react";
 import {
   PropertyData,
   propertyDataContext,
 } from "../propertyData/PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
-import { Checkbox, FormLabel, Input, Sheet, Slider } from "@mui/joy";
-import MaskInputBRL from "@/components/inputs/masks/MaskInputBRL";
+import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
+import React from "react";
+import PercentageInput from "@/components/inputs/PercentageInput";
+import CurrencyInput from "@/components/inputs/CurrencyInput";
+import BooleanInput from "@/components/inputs/BooleanInput";
+import { toBRL } from "@/lib/formatter";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -30,13 +33,22 @@ export default function PropertyDataCard() {
     rentMonthlyYieldRate,
     PVDiscountRate,
     brokerageFee,
+    isHousing,
+    investTheRest,
   } = propertyData;
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
-    const id = event.target.id;
+    const id = event.target.id as keyof PropertyData;
 
-    setpropertyData(id as keyof PropertyData, value);
+    setpropertyData(id, value);
+  };
+
+  const handleChangeNumber = (
+    id: keyof PropertyData,
+    value: string | number
+  ) => {
+    setpropertyData(id, Number(value));
   };
 
   useEffect(() => {
@@ -66,12 +78,13 @@ export default function PropertyDataCard() {
   ]);
 
   const excludeInputByRoute = (routes: string[]) => {
-    return !location.pathname.includes(routes.join(" "));
+    return !routes.some((route) => location.pathname.includes(route));
   };
 
   return (
     <>
       <form className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
+        {/* Informações do Imóvel */}
         <Sheet
           variant="outlined"
           color="neutral"
@@ -82,254 +95,133 @@ export default function PropertyDataCard() {
               Informações do Imóvel
             </h2>
 
-            <div className="grid grid-cols-1  gap-6">
+            <div className="grid grid-cols-1 gap-6">
               {excludeInputByRoute(["/planejamentofinanciamento"]) && (
-                <div>
-                  <FormLabel htmlFor="propertyValue">
-                    Saldo Disponível:
-                  </FormLabel>
-                  <Input
-                    variant="outlined"
-                    onChange={(v) => {
-                      setpropertyData(
-                        "personalBalance",
-                        Number(v.target.value)
-                      );
-                    }}
-                    type="text"
-                    id="personalBalance"
-                    startDecorator="R$"
-                    slotProps={{
-                      input: {
-                        component: MaskInputBRL,
-                      },
-                    }}
-                    value={personalBalance}
-                    required
-                  />
-                </div>
+                <CurrencyInput
+                  label="Saldo Disponível:"
+                  id="personalBalance"
+                  value={personalBalance}
+                  onChange={(v) =>
+                    handleChangeNumber("personalBalance", v.target.value)
+                  }
+                />
               )}
 
-              <div>
-                <FormLabel htmlFor="propertyValue">Valor do imóvel:</FormLabel>
-                <Input
-                  variant="outlined"
-                  onChange={(v) => {
-                    setpropertyData("propertyValue", Number(v.target.value));
-                  }}
-                  type="text"
-                  id="propertyValue"
-                  value={propertyValue}
-                  required
-                  startDecorator="R$"
-                  slotProps={{
-                    input: {
-                      component: MaskInputBRL,
-                    },
-                  }}
-                />
-              </div>
-              <div className="relative">
-                <FormLabel htmlFor="valorizaçãoDoImóvel">
-                  Valorização anual do imóvel:
-                </FormLabel>
-                <Input
-                  onChange={(v) =>
-                    setpropertyData(
-                      "propertyAppreciationRate",
-                      Number(v.target.value)
-                    )
-                  }
-                  endDecorator={"%"}
-                  slotProps={{
-                    input: {
-                      min: 0.1,
-                      step: 0.1,
-                    },
-                  }}
-                  type="number"
-                  id="valorizaçãoDoImóvel"
-                  defaultValue={propertyAppreciationRate}
-                  required
-                />
-              </div>
+              <CurrencyInput
+                label="Valor do imóvel:"
+                id="propertyValue"
+                value={propertyValue}
+                onChange={(v) =>
+                  handleChangeNumber("propertyValue", v.target.value)
+                }
+              />
+
+              <PercentageInput
+                label="Valorização anual do imóvel:"
+                id="propertyAppreciationRate"
+                value={propertyAppreciationRate}
+                onChange={(v) =>
+                  handleChangeNumber("propertyAppreciationRate", v.target.value)
+                }
+                infoTooltip="Percentual de aumento no valor do imóvel a cada ano."
+                wrapperClassName="relative"
+              />
             </div>
           </Sheet>
 
+          {/* Rendimento e Aluguel */}
           <Sheet>
             <h2 className="text-xl text-center my-3 font-bold ">
               Rendimento e Aluguel
             </h2>
 
             <div className="grid grid-cols-2 gap-6 items-center">
-              <div>
-                <FormLabel htmlFor="propertyValue">
-                  Valor Inicial Aluguel:
-                </FormLabel>
-                <Input
-                  disabled={propertyData.isHousing}
-                  variant="outlined"
-                  onChange={(v) => {
-                    setpropertyData("initialRentValue", Number(v.target.value));
-                  }}
-                  type="text"
-                  id="initialRentValue"
-                  startDecorator="R$"
-                  slotProps={{
-                    input: {
-                      component: MaskInputBRL,
-                    },
-                  }}
-                  value={initialRentValue}
-                  required
-                />
-              </div>
+              <CurrencyInput
+                label="Valor Inicial Aluguel:"
+                id="initialRentValue"
+                value={initialRentValue}
+                onChange={(v) =>
+                  handleChangeNumber("initialRentValue", v.target.value)
+                }
+                disabled={isHousing}
+              />
 
               <div className="mt-6 grid grid-col gap-4">
-                <Checkbox
+                <BooleanInput
                   id="isHousing"
-                  slotProps={{}}
+                  checked={isHousing}
                   onChange={handleChangeBoolean}
-                  checked={propertyData.isHousing}
                   label=" Não considerar aluguel"
+                  infoTooltip="Marque esta opção se não quiser incluir o valor do aluguel nos cálculos."
                 />
-                <Checkbox
+                <BooleanInput
                   id="investTheRest"
-                  slotProps={{}}
+                  checked={investTheRest}
                   onChange={handleChangeBoolean}
-                  checked={propertyData.investTheRest}
                   label="Investir o restante"
+                  infoTooltip="Selecione esta opção para investir em renda fixa o valor restante do mês (diferença entre o aluguel e a parcela), caso esse saldo seja positivo."
                 />
               </div>
 
-              <div>
-                <FormLabel htmlFor="taxarendimento">
-                  Rendimento aplicação no mercado financeiro:
-                </FormLabel>
+              <PercentageInput
+                label="Rendimento aplicação no mercado financeiro:"
+                id="monthlyYieldRate"
+                value={monthlyYieldRate}
+                infoTooltip="Taxa de retorno anual estimada ao investir o dinheiro no mercado financeiro, como poupança, ações ou fundos de investimento."
+                onChange={(v) =>
+                  handleChangeNumber("monthlyYieldRate", v.target.value)
+                }
+              />
 
-                <Input
+              <PercentageInput
+                label="Taxa de desconto anual para valor presente:"
+                id="PVDiscountRate"
+                value={PVDiscountRate}
+                infoTooltip="Percentual usado para ajustar o valor de um dinheiro que você vai receber no futuro, trazendo-o para o valor que ele teria hoje."
+                onChange={(v) =>
+                  handleChangeNumber("PVDiscountRate", v.target.value)
+                }
+              />
+
+              <PercentageInput
+                label="Taxa de corretagem na venda:"
+                id="brokerageFee"
+                value={brokerageFee}
+                infoTooltip={`Percentual cobrado por uma imobiliária pela intermediação da venda de um imóvel. ${
+                  brokerageFee / 100
+                } * ${toBRL(propertyValue)} = ${toBRL(
+                  (brokerageFee / 100) * propertyValue
+                )}`}
+                onChange={(v) =>
+                  handleChangeNumber("brokerageFee", v.target.value)
+                }
+              />
+
+              <PercentageInput
+                label="Valorização anual do aluguel:"
+                id="rentAppreciationRate"
+                value={rentAppreciationRate}
+                infoTooltip="Taxa percentual de aumento anual do valor do aluguel, baseada na valorização do imóvel e condições de mercado."
+                onChange={(v) =>
+                  handleChangeNumber("rentAppreciationRate", v.target.value)
+                }
+              />
+
+              {excludeInputByRoute(["/planejamentofinanciamento"]) && (
+                <PercentageInput
+                  label="Rendimento montante do aluguel:"
+                  id="rentMonthlyYieldRate"
+                  value={rentMonthlyYieldRate}
                   onChange={(v) =>
-                    setpropertyData("monthlyYieldRate", Number(v.target.value))
+                    handleChangeNumber("rentMonthlyYieldRate", v.target.value)
                   }
-                  type="number"
-                  endDecorator={"%"}
-                  slotProps={{
-                    input: {
-                      min: 0.1,
-                      step: 0.1,
-                    },
-                  }}
-                  id="taxarendimento"
-                  value={monthlyYieldRate}
-                  required
                 />
-              </div>
-
-              <div>
-                <FormLabel htmlFor="taxarendimento">
-                  Taxa de Desconto anual para valor presente:
-                </FormLabel>
-
-                <Input
-                  onChange={(v) =>
-                    setpropertyData("PVDiscountRate", Number(v.target.value))
-                  }
-                  type="number"
-                  endDecorator={"%"}
-                  slotProps={{
-                    input: {
-                      min: 0.1,
-                      step: 0.1,
-                    },
-                  }}
-                  id="PVDiscountRate"
-                  value={PVDiscountRate}
-                  required
-                />
-              </div>
-
-              <div>
-                <FormLabel htmlFor="taxarendimento">
-                  Taxa de corretagem na venda:
-                </FormLabel>
-
-                <Input
-                  onChange={(v) =>
-                    setpropertyData("brokerageFee", Number(v.target.value))
-                  }
-                  type="number"
-                  endDecorator={"%"}
-                  slotProps={{
-                    input: {
-                      min: 0.1,
-                      step: 0.1,
-                    },
-                  }}
-                  id="brokerageFee"
-                  value={brokerageFee}
-                  required
-                />
-              </div>
-
-              <div>
-                <FormLabel htmlFor="taxarendimento">
-                  Valorização anual do aluguel:
-                </FormLabel>
-
-                <Input
-                  onChange={(v) =>
-                    setpropertyData(
-                      "rentAppreciationRate",
-                      Number(v.target.value)
-                    )
-                  }
-                  type="number"
-                  endDecorator={"%"}
-                  slotProps={{
-                    input: {
-                      min: 0.1,
-                      step: 0.1,
-                    },
-                  }}
-                  id="taxarendimento"
-                  value={rentAppreciationRate}
-                  required
-                />
-              </div>
-
-              <div>
-                {excludeInputByRoute(["/planejamentofinanciamento"]) && (
-                  <>
-                    <FormLabel className="text-xs" htmlFor="taxarendimento">
-                      Rendimento montante do aluguel:
-                    </FormLabel>
-
-                    <Input
-                      onChange={(v) =>
-                        setpropertyData(
-                          "rentMonthlyYieldRate",
-                          Number(v.target.value)
-                        )
-                      }
-                      type="number"
-                      endDecorator={"%"}
-                      slotProps={{
-                        input: {
-                          min: 0.1,
-                          step: 0.1,
-                        },
-                      }}
-                      id="taxarendimento"
-                      value={rentMonthlyYieldRate}
-                      required
-                    />
-                  </>
-                )}
-              </div>
+              )}
             </div>
           </Sheet>
         </Sheet>
 
+        {/* Informações do Financiamento */}
         <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
             Informações do Financiamento
@@ -339,21 +231,13 @@ export default function PropertyDataCard() {
             <div>
               <FormLabel htmlFor="downPayment">Valor da Entrada:</FormLabel>
               <div className="relative">
-                <Input
-                  startDecorator="R$"
-                  variant="outlined"
-                  onChange={(v) => {
-                    setpropertyData("downPayment", Number(v.target.value));
-                  }}
-                  type="text"
+                <CurrencyInput
+                  label=""
                   id="downPayment"
                   value={downPayment}
-                  required
-                  slotProps={{
-                    input: {
-                      component: MaskInputBRL,
-                    },
-                  }}
+                  onChange={(v) =>
+                    handleChangeNumber("downPayment", v.target.value)
+                  }
                 />
                 <span className="text-sm absolute top-[50%] translate-y-[-50%] right-[1rem]">
                   {((downPayment / propertyValue) * 100).toFixed(2) + "%"}
@@ -362,14 +246,16 @@ export default function PropertyDataCard() {
 
               <div className="relative mt-2">
                 <Slider
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  onChange={(e: any) => {
-                    const v = e.target?.value;
-                    setpropertyData("downPayment", (propertyValue * v) / 10);
+                  onChange={(_e, value) => {
+                    setpropertyData(
+                      "downPayment",
+                      (propertyValue * (value as number)) / 10
+                    );
                   }}
                   defaultValue={2}
                   min={0}
                   max={10}
+                  step={0.1}
                 />
 
                 <span className="text-xs text-gray-500 dark:text-gray-400 absolute start-0 ">
@@ -382,85 +268,52 @@ export default function PropertyDataCard() {
               </div>
             </div>
 
-            <div>
-              <FormLabel htmlFor="financingFees">
-                Taxas do financiamento:
-              </FormLabel>
-              <Input
-                variant="outlined"
-                onChange={(v) => {
-                  setpropertyData("financingFees", Number(v.target.value));
-                }}
-                type="text"
-                startDecorator="R$"
-                slotProps={{
-                  input: {
-                    component: MaskInputBRL,
-                  },
-                }}
-                value={financingFees}
-                required
-              />
-            </div>
+            <CurrencyInput
+              label="Taxas do financiamento:"
+              id="financingFees"
+              value={financingFees}
+              onChange={(v) =>
+                handleChangeNumber("financingFees", v.target.value)
+              }
+              infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
+            />
 
             {excludeInputByRoute(["/planejamentofinanciamento"]) && (
-              <div>
-                <FormLabel htmlFor="inCashFees">Taxas á vista:</FormLabel>
-                <Input
-                  variant="outlined"
-                  onChange={(v) => {
-                    setpropertyData("inCashFees", Number(v.target.value));
-                  }}
-                  type="text"
-                  id="inCashFees"
-                  value={inCashFees}
-                  startDecorator="R$"
-                  slotProps={{
-                    input: {
-                      component: MaskInputBRL,
-                    },
-                  }}
-                  required
-                />
-              </div>
+              <CurrencyInput
+                label="Taxas à vista:"
+                id="inCashFees"
+                value={inCashFees}
+                onChange={(v) =>
+                  handleChangeNumber("inCashFees", v.target.value)
+                }
+              />
             )}
 
-            <div className="relative">
-              <FormLabel htmlFor="interestRate">
-                Juros nominal financiamento:
-              </FormLabel>
-              <Input
-                onChange={(v) => {
-                  setpropertyData("interestRate", Number(v.target.value));
-                }}
-                endDecorator={"%"}
-                slotProps={{
-                  input: {
-                    min: 0.1,
-                    step: 0.1,
-                  },
-                }}
-                id="interestRate"
-                type="number"
-                value={interestRate}
-              />
-            </div>
+            <PercentageInput
+              label="Juros nominal do financiamento:"
+              id="interestRate"
+              value={interestRate}
+              onChange={(v) =>
+                handleChangeNumber("interestRate", v.target.value)
+              }
+              wrapperClassName="relative"
+              infoTooltip="Percentual nominal dos juros aplicados ao financiamento, que representa a taxa base acordada com a instituição financeira, sem considerar a inflação ou outros ajustes."
+            />
 
             <div>
-              <FormLabel htmlFor="financingFees">Total Investido:</FormLabel>
-              <Input
-                disabled
-                variant="outlined"
+              <CurrencyInput
+                label="Total Investido"
+                id="totalInvested"
+                value={downPayment + financingFees + inCashFees}
+                infoTooltip="Soma total dos valores investidos, incluindo a entrada e taxas de financiamento."
                 onChange={() => {}}
-                type="text"
-                id="financingFees"
-                value={toBRL(downPayment + financingFees + inCashFees)}
-                required
+                disabled
               />
             </div>
           </div>
         </Sheet>
 
+        {/* Cálculo do Financiamento */}
         <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
             Cálculo do Financiamento
@@ -468,16 +321,16 @@ export default function PropertyDataCard() {
 
           <div className="flex flex-col h-[90%] justify-between ">
             <div>
-              <FormLabel htmlFor="anos">Calcular até:</FormLabel>
-
+              <FormLabel htmlFor="finalYear">Calcular até:</FormLabel>
               <Input
-                endDecorator={"Anos"}
-                type="number"
+                id="finalYear"
+                value={finalYear}
                 onChange={(v) => {
-                  if (Number(v.target.value) > 0)
-                    setpropertyData("finalYear", Number(v.target.value));
+                  const value = Number(v.target.value);
+                  if (value > 0) setpropertyData("finalYear", value);
                 }}
-                defaultValue={finalYear}
+                type="number"
+                endDecorator="Anos"
                 slotProps={{
                   input: {
                     min: 1,
@@ -488,61 +341,41 @@ export default function PropertyDataCard() {
               />
             </div>
 
-            <div>
-              <FormLabel htmlFor="installmentValue">
-                Valor da Parcela:
-              </FormLabel>
-              <Input
-                variant="outlined"
-                onChange={(v) => {
-                  setpropertyData("installmentValue", Number(v.target.value));
-                }}
-                type="text"
-                id="installmentValue"
-                value={installmentValue}
-                required
-                startDecorator="R$"
-                slotProps={{
-                  input: {
-                    component: MaskInputBRL,
-                  },
-                }}
-              />
-            </div>
+            <CurrencyInput
+              label="Valor da Parcela:"
+              id="installmentValue"
+              value={installmentValue}
+              onChange={(v) =>
+                handleChangeNumber("installmentValue", v.target.value)
+              }
+              infoTooltip="R$ 150,00 em taxas de administração e seguro foram adicionados automaticamente. Você pode ajustar esse valor manualmente ao realizar uma simulação."
+            />
 
             <div>
-              <FormLabel htmlFor="outstandingBalance">
-                Saldo devedor em {finalYear} anos:
-              </FormLabel>
-              <Input
-                variant="outlined"
-                onChange={(v) => {
-                  setpropertyData("outstandingBalance", Number(v.target.value));
-                }}
+              <CurrencyInput
+                label={`Saldo devedor em ${finalYear} anos:`}
                 id="outstandingBalance"
+                infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
                 value={outstandingBalance}
-                startDecorator="R$"
-                slotProps={{
-                  input: {
-                    component: MaskInputBRL,
-                  },
-                }}
+                onChange={(v) =>
+                  handleChangeNumber("outstandingBalance", v.target.value)
+                }
               />
             </div>
 
             <div>
-              <FormLabel htmlFor="anosfinanciamento">
+              <FormLabel htmlFor="financingYears">
                 Tempo do financiamento:
               </FormLabel>
               <Input
-                id="anosfinanciamento"
-                endDecorator={"Anos"}
-                type="number"
+                id="financingYears"
+                value={financingYears}
                 onChange={(v) => {
-                  if (Number(v.target.value) > 0)
-                    setpropertyData("financingYears", Number(v.target.value));
+                  const value = Number(v.target.value);
+                  if (value > 0) setpropertyData("financingYears", value);
                 }}
-                defaultValue={financingYears}
+                type="number"
+                endDecorator="Anos"
                 slotProps={{
                   input: {
                     min: 1,
@@ -554,15 +387,13 @@ export default function PropertyDataCard() {
             </div>
 
             <div>
-              <FormLabel htmlFor="financingFees">Total Financiado:</FormLabel>
-              <Input
-                disabled
-                variant="outlined"
+              <FormLabel htmlFor="totalFinanced">Total Financiado:</FormLabel>
+              <CurrencyInput
+                label=""
+                id="totalFinanced"
+                value={propertyValue - downPayment}
                 onChange={() => {}}
-                type="text"
-                id="financingFees"
-                value={toBRL(propertyValue - downPayment)}
-                required
+                disabled
               />
             </div>
           </div>

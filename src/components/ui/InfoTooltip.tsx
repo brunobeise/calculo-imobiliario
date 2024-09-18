@@ -3,7 +3,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 
 const InfoTooltip = ({ text }: { text: string }) => {
   return (
-    <Tooltip title={text} arrow>
+    <Tooltip sx={{ maxWidth: "280px" }} size="md" title={text} arrow>
       <Button
         className="bg-transparent"
         sx={{
@@ -16,7 +16,7 @@ const InfoTooltip = ({ text }: { text: string }) => {
           },
         }}
       >
-        <FaRegQuestionCircle  />
+        <FaRegQuestionCircle />
       </Button>
     </Tooltip>
   );
