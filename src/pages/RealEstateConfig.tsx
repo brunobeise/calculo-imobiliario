@@ -239,7 +239,7 @@ export default function RealEstateConfig() {
                           if (user.id !== userId)
                             setChangeAdminUser({
                               text: user.owner
-                                ? `${user.fullName} deixará de poder fazer alterações na imobiliária.`
+                                ? `${user.fullName} não poderá mais fazer alterações na imobiliária.`
                                 : `${user.fullName} poderá fazer alterações na imobiliária.`,
                               userId: user.id!,
                               owner: user.owner!,

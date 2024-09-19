@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
 import rural from "@/assets/rurallfinancing.png";
 import invest from "@/assets/financingOrInvest.png";
+import obra from "@/assets/jurosdeobra.png";
 export interface Route {
   title: string;
   href: string;
@@ -52,7 +53,7 @@ export default function App() {
         </div>
 
         <div className="w-full flex justify-center">
-          <div className="gap-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 justify-items-center">
+          <div className="gap-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 justify-items-center">
             {financingRoutes.map((i) => (
               <CaseCard
                 key={i.title}
@@ -78,7 +79,16 @@ export default function App() {
                 "Analisa como o investimento em imóveis se compara a outros métodos de investimento."
               }
               image={invest}
-              title={"Comprar imóvel vs. investimento tradicional"}
+              title={"Comprar imóvel vs. investimento"}
+            />
+            <CaseCard
+              comingSoon
+              link={""}
+              desc={
+                "Faz um plano de aquisição para compra de um imóvel na planta, considerando juros de obra até ficar pronto."
+              }
+              image={obra}
+              title={"Financiamento de imóvel na planta"}
             />
           </div>
         </div>
