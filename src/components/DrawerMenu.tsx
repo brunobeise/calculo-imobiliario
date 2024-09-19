@@ -15,6 +15,9 @@ import { financingRoutes } from "@/routes/financing";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { useAuth } from "@/auth";
+import { decodeToken } from "@/lib/jwt-decode";
+import Cookies from "js-cookie";
+import { MdOutlineRealEstateAgent } from "react-icons/md";
 
 export default function DrawerMenu() {
   const { isAuthenticated } = useAuth();
@@ -23,6 +26,8 @@ export default function DrawerMenu() {
   const [casesOpen, setCasesOpen] = useState(false);
 
   if (!isAuthenticated) return null;
+
+  const user = decodeToken();
 
   return (
     <>
@@ -58,7 +63,7 @@ export default function DrawerMenu() {
             </ListItem>
           </Link>
           <ListDivider />
-          <Link to={"/user"} onClick={() => setOpen(false)}>
+          <Link to={"/usuario"} onClick={() => setOpen(false)}>
             <ListItem className="!ms-5">
               <ListItemDecorator>
                 <FaUser />
@@ -68,6 +73,22 @@ export default function DrawerMenu() {
               </Typography>
             </ListItem>
           </Link>
+
+          {user.owner && (
+            <>
+              <ListDivider />
+              <Link to={"/imobiliaria"} onClick={() => setOpen(false)}>
+                <ListItem className="!ms-5">
+                  <ListItemDecorator>
+                    <MdOutlineRealEstateAgent />
+                  </ListItemDecorator>
+                  <Typography className="font-bold !ms-[-10px]">
+                    Imobiliária
+                  </Typography>
+                </ListItem>
+              </Link>
+            </>
+          )}
           <ListDivider />
           <ListItem
             endAction={
@@ -110,7 +131,7 @@ export default function DrawerMenu() {
         <List size="lg" className="!absolute bottom-0">
           <ListItem
             onClick={() => {
-              localStorage.removeItem("token");
+              Cookies.remove("token");
               window.location.reload();
             }}
             className="!ms-5 cursor-pointer"

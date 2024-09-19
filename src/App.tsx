@@ -23,6 +23,7 @@ import Login from "./pages/Login";
 import UserConfig from "./pages/UserConfig";
 import CaseCard from "./components/shared/CaseCard";
 import DrawerMenu from "./components/DrawerMenu";
+import RealEstateConfig from "./pages/RealEstateConfig";
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -91,7 +92,7 @@ export default function App() {
         <PropertyDataProvider>
           <ToastContainer
             position="top-center"
-            autoClose={5000}
+            autoClose={2500}
             hideProgressBar={false}
             newestOnTop={false}
             closeOnClick
@@ -108,10 +109,18 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/user"
+              path="/usuario"
               element={
                 <PrivateRoute>
                   <UserConfig />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/imobiliaria"
+              element={
+                <PrivateRoute>
+                  <RealEstateConfig />
                 </PrivateRoute>
               }
             />

@@ -1,4 +1,5 @@
 // authContext.tsx
+import Cookies from "js-cookie";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface AuthContextType {
@@ -11,16 +12,16 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return !!localStorage.getItem("token"); 
+    return !!Cookies.get("token");
   });
 
   const login = (token: string) => {
-    localStorage.setItem("token", token);
+    Cookies.set("token", token);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    Cookies.remove("token");
     setIsAuthenticated(false);
   };
 

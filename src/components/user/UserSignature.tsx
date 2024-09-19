@@ -17,12 +17,13 @@ export default function UserSignature(props: UserSignatureProps) {
     ? JSON.parse(localStorage.getItem("userData")!)
     : {};
 
-  const data: UserData = {
+  const data = {
     fullName: props.userData?.fullName || userSaved.fullName,
-    logo: props.userData?.logo || userSaved.logo,
+    logo: props.userData?.realEstate?.logo || userSaved.realEstate?.logo,
     role: props.userData?.role || userSaved.role,
     creci: props.userData?.creci || userSaved.creci,
-    address: props.userData?.address || userSaved.address,
+    address:
+      props.userData?.realEstate?.address || userSaved.realEstate?.address,
     phone: props.userData?.phone || userSaved.phone,
     whatsapp: props.userData?.whatsapp || userSaved.whatsapp,
     instagram: props.userData?.instagram || userSaved.instagram,
@@ -49,7 +50,7 @@ export default function UserSignature(props: UserSignatureProps) {
           <img
             className="w-full h-full"
             src={
-              data.logo ||
+              data?.logo ||
               "https://res.cloudinary.com/dpegpgjpr/image/upload/v1709820101/n8rcav0jndwk8j3yr6sm.png"
             }
             alt=""
@@ -57,7 +58,9 @@ export default function UserSignature(props: UserSignatureProps) {
         </div>
         <div className="w-[400px]">
           <div className="grid grid-rows">
-            <h3 className="text-2xl font-bold">{data.fullName?.toUpperCase()}</h3>
+            <h3 className="text-2xl font-bold">
+              {data.fullName?.toUpperCase()}
+            </h3>
             <p>
               <span className="text-sm font-bold">
                 {data.role?.toUpperCase()}
@@ -65,36 +68,34 @@ export default function UserSignature(props: UserSignatureProps) {
               <span className="font-light">CRECI {data.creci}</span>
               <div className="bg-primary w-full h-[1.2px] mt-1"></div>
             </p>
-            <p className="font-light mt-1">{data.address}</p>
+            <p className="font-light mt-1">{data?.address}</p>
           </div>
         </div>
         <div className="mt-5">
           <div className="flex ga-x-3">
             <Link to={data.whatsapp || ""} target="_blank">
               <IconButton>
-                <FaWhatsapp size='22px' />
+                <FaWhatsapp size="22px" />
               </IconButton>
             </Link>
             <Link to={data.instagram || ""} target="_blank">
               <IconButton>
-                <FaInstagram size='22px' />
+                <FaInstagram size="22px" />
               </IconButton>
             </Link>
             <Link to={data.facebook || ""} target="_blank">
               <IconButton>
-                <FaFacebookSquare size='22px' />
+                <FaFacebookSquare size="22px" />
               </IconButton>
             </Link>
             <Link to={data.linkedin || ""} target="_blank">
               <IconButton>
-                <FaLinkedin size='22px' />
+                <FaLinkedin size="22px" />
               </IconButton>
             </Link>
           </div>
           <div className="bg-primary w-full h-[1.2px]"></div>
-          <p className="text-center">
-            {formatPhoneNumber(data.phone || "")}
-          </p>
+          <p className="text-center">{formatPhoneNumber(data.phone || "")}</p>
         </div>
       </div>
     </div>

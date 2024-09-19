@@ -1,5 +1,6 @@
 import { notify } from "@/notify";
-import { api } from "./api"; // Importa a instância do Axios que criamos
+import { api } from "./api";
+import Cookies from "js-cookie";
 
 interface LoginResponse {
   token: string;
@@ -19,7 +20,7 @@ export const loginService = {
         password,
       });
 
-      localStorage.setItem("token", response.data.token);
+      Cookies.set("token", response.data.token);
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -43,13 +44,5 @@ export const loginService = {
       notify("error", error.response.data.error);
       throw new Error(error.response?.data?.error || "Failed to set password");
     }
-  },
-
-  logout() {
-    localStorage.removeItem("token");
-  },
-
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem("token");
   },
 };

@@ -29,14 +29,14 @@ export default function UserSignature2(props: UserSignatureProps) {
     }
   }, [props.getUser]);
 
-  const data: UserData = {
+  const data = {
     fullName: props.userData?.fullName || userSaved?.fullName,
-    logo: props.userData?.logo || userSaved?.logo,
-    logo2: props.userData?.logo2 || userSaved?.logo2,
+    logo: props.userData?.realEstate?.logo || userSaved?.realEstate?.logo,
+    logo2: props.userData?.realEstate?.logo2 || userSaved?.realEstate?.logo2,
     photo: props.userData?.photo || userSaved?.photo,
     role: props.userData?.role || userSaved?.role,
     creci: props.userData?.creci || userSaved?.creci,
-    address: props.userData?.address || userSaved?.address,
+    address: props.userData?.realEstate?.address || userSaved?.realEstate?.address,
     phone: props.userData?.phone || userSaved?.phone,
     whatsapp: props.userData?.whatsapp || userSaved?.whatsapp,
     instagram: props.userData?.instagram || userSaved?.instagram,

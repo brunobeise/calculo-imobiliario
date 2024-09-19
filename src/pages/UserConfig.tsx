@@ -15,21 +15,22 @@ import { userService } from "@/service/userService";
 import GlobalLoading from "@/components/GlobalLoading";
 import { Card, CardContent, FormLabel, Input } from "@mui/joy";
 import PictureInput from "@/components/inputs/PictureInput";
+import { RealEstateData } from "./RealEstateConfig";
 
 export interface UserData {
   id?: string;
   fullName?: string;
-  logo?: string;
-  logo2?: string;
   photo?: string;
+  email?: string;
   role?: string;
   creci?: string;
-  address?: string;
   phone?: string;
   whatsapp?: string;
   instagram?: string;
   facebook?: string;
   linkedin?: string;
+  owner?: boolean;
+  realEstate?: RealEstateData;
 }
 
 export default function UserConfig() {
@@ -58,6 +59,7 @@ export default function UserConfig() {
 
     await userService.editUser(form.id, {
       ...form,
+      realEstate: undefined,
       photo: uploadPhoto,
     });
 
@@ -119,16 +121,6 @@ export default function UserConfig() {
                     type="text"
                     id="creci"
                     value={form?.creci}
-                    required
-                  />
-                </div>
-                <div className="col-span-6">
-                  <FormLabel htmlFor="address">Endereço:</FormLabel>
-                  <Input
-                    onChange={handleChange}
-                    type="text"
-                    id="address"
-                    value={form?.address}
                     required
                   />
                 </div>
