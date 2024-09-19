@@ -32,15 +32,15 @@ export default function PictureInput({
 
   return (
     <div
-      className={`p-3 rounded ${
+      className={`p-3 rounded overflow-hidden  ${
         bordered ? " py-3 px-0 border border-[#e7e5e4]" : ""
       }`}
     >
-      <div className={"ms-4 w-full"}>
+      <div className={"ms-4 w-full !cursor-pointer"}>
         <FormLabel htmlFor={label} className="mr-2">
           {label}
         </FormLabel>
-        <div className="flex items-center mt-2">
+        <div className="flex items-center mt-2 !cursor-pointer">
           <Button
             role={undefined}
             tabIndex={-1}
@@ -70,7 +70,7 @@ export default function PictureInput({
               type="file"
               multiple={multiple}
               onChange={handleFileChange}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              className="absolute inset-0 w-full h-full opacity-0 !cursor-pointer"
             />
           </Button>
           {fileSrcs.length === 1 && (

@@ -1,7 +1,6 @@
 // components/RealEstateConfig.tsx
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, FormLabel, Input, Table } from "@mui/joy";
+import { Button, Card, CardContent, FormLabel, Input, Table } from "@mui/joy";
 import ReactLoading from "react-loading";
 import PictureInput from "@/components/inputs/PictureInput";
 import GlobalLoading from "@/components/GlobalLoading";
@@ -11,9 +10,11 @@ import { UserData } from "./UserConfig";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { userService } from "@/service/userService";
-import ConfirmationModal from "@/components/shared/ConfirmationModal";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { useAuth } from "@/auth";
 import { useNavigate } from "react-router-dom";
+import CreateUserModal from "@/components/modals/CreateUserModal";
+import { IoAddCircleSharp } from "react-icons/io5";
 
 export interface RealEstateData {
   id?: string;
@@ -42,6 +43,7 @@ export default function RealEstateConfig() {
     owner: false,
     loading: false,
   });
+  const [createUserModal, setCreateUserModal] = useState(false);
 
   const { user: User } = useAuth();
 
@@ -212,7 +214,18 @@ export default function RealEstateConfig() {
 
         <Card>
           <CardContent>
-            <h2 className="text-xl font-bold mb-4">Usuários da Imobiliária</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold mb-4">
+                Usuários da Imobiliária
+              </h2>
+              <Button
+                onClick={() => setCreateUserModal(true)}
+                endDecorator={<IoAddCircleSharp />}
+              >
+                Novo usuário
+              </Button>
+            </div>
+
             {users.length > 0 ? (
               <Table size="lg">
                 <thead>
@@ -287,6 +300,12 @@ export default function RealEstateConfig() {
         content={changeAdminUser.text}
         title="Deseja alterar a permissão desse usuário?"
         onOk={handleAdmin}
+      />
+
+      <CreateUserModal
+        open={createUserModal}
+        onClose={() => setCreateUserModal(false)}
+        userAdded={(user) => setUsers([...users, user])}
       />
     </div>
   );

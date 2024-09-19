@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notify } from "@/notify";
 import { api } from "./api";
 import { UserData } from "@/pages/UserConfig";
@@ -8,7 +9,6 @@ export const userService = {
     try {
       const response = await api.get("/user-data");
       return response.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar dados do usuário.");
     }
@@ -20,7 +20,6 @@ export const userService = {
         "/permissions"
       );
       return response.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar dados do usuário.");
     }
@@ -31,9 +30,18 @@ export const userService = {
       const response = await api.put("/users/" + userId, data);
       notify("success", "Dados atualizados com sucesso!");
       return response.data;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       handleApiError(error, "Erro ao atualizar usuário.");
+    }
+  },
+
+  async createUser(data: UserData) {
+    try {
+      const response = await api.post("/users", data);
+      notify("success", "Usuário criado com sucesso!");
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Erro ao criar usuário.");
     }
   },
 };
