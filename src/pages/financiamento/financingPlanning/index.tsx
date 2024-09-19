@@ -58,7 +58,7 @@ export default function FinancingPlanning() {
         );
       }
     }
-  }, [useSaveData, setMultiplePropertyData]);
+  }, []);
   return (
     <div className="relative">
       <PropertyDataCard />
