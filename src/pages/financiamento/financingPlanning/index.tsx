@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import {
-  PropertyData,
-  propertyDataContext,
-} from "@/propertyData/PropertyDataContext";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
@@ -11,19 +8,15 @@ import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import { Button } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 
 export default function FinancingPlanning() {
-  const { propertyData, setMultiplePropertyData } =
-    useContext(propertyDataContext);
+  const { propertyData } = useContext(propertyDataContext);
   const [errors, setErrors] = useState<propertyDataError[]>([]);
   const { caseData, setCaseData } = useContext(caseDataContext);
-
-  const [searchParams] = useSearchParams();
-  const useSaveData = searchParams.get("useSaveData") === "true";
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
@@ -42,23 +35,6 @@ export default function FinancingPlanning() {
     }
   }, [propertyData]);
 
-  useEffect(() => {
-    if (useSaveData && typeof window !== "undefined") {
-      const storedData = localStorage.getItem("financingPlanningPropertyData");
-      if (storedData) {
-        try {
-          const propertyData: PropertyData = JSON.parse(storedData);
-          setMultiplePropertyData(propertyData);
-        } catch (error) {
-          console.error("Erro ao analisar os dados do localStorage:", error);
-        }
-      } else {
-        console.warn(
-          "Nenhum dado encontrado no localStorage para 'financingPlanningPropertyData'."
-        );
-      }
-    }
-  }, []);
   return (
     <div className="relative">
       <PropertyDataCard />

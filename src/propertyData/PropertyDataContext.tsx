@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { getInitialValues } from "./propertyDataInivitalValues";
 
 export const propertyDataContext = createContext<propertyDataContextType>({
@@ -41,13 +41,25 @@ export type propertyDataContextType = {
 
 export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const useSaveData = searchParams.get("useSaveData") === "true";
+
+  const useSaveDataMap = {
+    "/planejamentofinanciamento": JSON.parse(
+      localStorage.getItem("financingPlanningPropertyData") || ""
+    ),
+  };
 
   const [propertyData, setImovelState] = useState<PropertyData>(
-    getInitialValues(location.pathname)
+    useSaveData
+      ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
+      : getInitialValues(location.pathname)
   );
 
   useEffect(() => {
-    const initialValues = getInitialValues(location.pathname);
+    const initialValues = useSaveData
+      ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
+      : getInitialValues(location.pathname);
     setImovelState(initialValues);
   }, [location.pathname]);
 
