@@ -43,14 +43,22 @@ export default function FinancingPlanning() {
   }, [propertyData]);
 
   useEffect(() => {
-    if (useSaveData) {
-      const propertyData: PropertyData = JSON.parse(
-        localStorage.getItem("financingPlanningPropertyData") || ""
-      );
-      setMultiplePropertyData(propertyData);
+    if (useSaveData && typeof window !== "undefined") {
+      const storedData = localStorage.getItem("financingPlanningPropertyData");
+      if (storedData) {
+        try {
+          const propertyData: PropertyData = JSON.parse(storedData);
+          setMultiplePropertyData(propertyData);
+        } catch (error) {
+          console.error("Erro ao analisar os dados do localStorage:", error);
+        }
+      } else {
+        console.warn(
+          "Nenhum dado encontrado no localStorage para 'financingPlanningPropertyData'."
+        );
+      }
     }
-  }, []);
-
+  }, [useSaveData, setMultiplePropertyData]);
   return (
     <div className="relative">
       <PropertyDataCard />

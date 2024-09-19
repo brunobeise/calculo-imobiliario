@@ -40,7 +40,9 @@ export default function App() {
   const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
 
   function Home() {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    -+
+    console.log(user);
 
     return isAuthenticated ? <Welcome /> : <Login />;
   }

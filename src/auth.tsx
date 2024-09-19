@@ -1,11 +1,22 @@
-// authContext.tsx
 import Cookies from "js-cookie";
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { userService } from "./service/userService";
+import { decodeToken } from "./lib/jwt-decode";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
+  user: {
+    id: string;
+    owner: boolean;
+  };
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -15,9 +26,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return !!Cookies.get("token");
   });
 
-  const login = (token: string) => {
+  const token = decodeToken();
+
+  const [user, setUser] = useState<{ id: string; owner: boolean }>(() => {
+    if (token) {
+      return {
+        id: token.userId,
+        owner: Cookies.get("owner") === "true",
+      };
+    }
+    return {
+      id: "", 
+      owner: false,
+    };
+  });
+
+  const login = async (token: string) => {
     Cookies.set("token", token);
     setIsAuthenticated(true);
+
+    await getPermissions();
   };
 
   const logout = () => {
@@ -25,8 +53,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setIsAuthenticated(false);
   };
 
+  const getPermissions = async () => {
+    try {
+      const permissions = await userService.getUserPermissions();
+      if (permissions) {
+        setUser(permissions);
+        Cookies.set("owner", permissions.owner.toString());
+      }
+      return permissions;
+    } catch (error) {
+      console.error("Erro ao obter permissões do usuário", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      getPermissions().then((permissions) => {
+        if (permissions) {
+          setUser(permissions);
+        }
+      });
+    }
+  }, [isAuthenticated]);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, user }}>
       {children}
     </AuthContext.Provider>
   );

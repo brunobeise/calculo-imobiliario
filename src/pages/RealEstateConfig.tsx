@@ -12,7 +12,8 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { userService } from "@/service/userService";
 import ConfirmationModal from "@/components/shared/ConfirmationModal";
-import { decodeToken } from "@/lib/jwt-decode";
+import { useAuth } from "@/auth";
+import { useNavigate } from "react-router-dom";
 
 export interface RealEstateData {
   id?: string;
@@ -30,6 +31,7 @@ export interface RealEstateData {
 }
 
 export default function RealEstateConfig() {
+  const navigate = useNavigate();
   const [form, setForm] = useState<RealEstateData>();
   const [users, setUsers] = useState<UserData[]>([]);
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -40,6 +42,8 @@ export default function RealEstateConfig() {
     owner: false,
     loading: false,
   });
+
+  const { user: User } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;
@@ -82,6 +86,11 @@ export default function RealEstateConfig() {
   };
 
   useEffect(() => {
+    if (!User || !User.owner) {
+      navigate("/");
+      return;
+    }
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -96,7 +105,7 @@ export default function RealEstateConfig() {
     };
 
     fetchData();
-  }, []);
+  }, [User, navigate]);
 
   const handleAdmin = async () => {
     setChangeAdminUser({
@@ -123,8 +132,6 @@ export default function RealEstateConfig() {
       loading: false,
     });
   };
-
-  const userId = decodeToken().userId;
 
   if (loading && !form) return <GlobalLoading />;
 
@@ -236,7 +243,7 @@ export default function RealEstateConfig() {
                       <td>{user.role}</td>
                       <td
                         onClick={() => {
-                          if (user.id !== userId)
+                          if (user.id !== User?.id)
                             setChangeAdminUser({
                               text: user.owner
                                 ? `${user.fullName} não poderá mais fazer alterações na imobiliária.`
@@ -247,7 +254,7 @@ export default function RealEstateConfig() {
                             });
                         }}
                         className={`w-[80px]" ${
-                          userId !== user.id ? "cursor-pointer" : ""
+                          User.id !== user.id ? "cursor-pointer" : ""
                         }
                         `}
                       >

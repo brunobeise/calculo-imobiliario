@@ -10,7 +10,19 @@ export const userService = {
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      handleApiError(error.response?.data?.error, "Não foi possível buscar dados do usuário.");
+      handleApiError(error, "Não foi possível buscar dados do usuário.");
+    }
+  },
+
+  async getUserPermissions() {
+    try {
+      const response = await api.get<{ id: string; owner: boolean }>(
+        "/permissions"
+      );
+      return response.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      handleApiError(error, "Não foi possível buscar dados do usuário.");
     }
   },
 
@@ -21,7 +33,7 @@ export const userService = {
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      handleApiError(error.response?.data?.error, "Erro ao atualizar usuário.");
+      handleApiError(error, "Erro ao atualizar usuário.");
     }
   },
 };

@@ -15,7 +15,6 @@ import { financingRoutes } from "@/routes/financing";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { useAuth } from "@/auth";
-import { decodeToken } from "@/lib/jwt-decode";
 import Cookies from "js-cookie";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 
@@ -25,9 +24,9 @@ export default function DrawerMenu() {
   const [open, setOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
 
-  if (!isAuthenticated) return null;
+  const { user } = useAuth();
 
-  const user = decodeToken();
+  if (!isAuthenticated) return null;
 
   return (
     <>
@@ -74,7 +73,7 @@ export default function DrawerMenu() {
             </ListItem>
           </Link>
 
-          {user.owner && (
+          {user?.owner && (
             <>
               <ListDivider />
               <Link to={"/imobiliaria"} onClick={() => setOpen(false)}>
