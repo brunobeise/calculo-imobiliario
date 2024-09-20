@@ -355,183 +355,207 @@ const FinancingPlanningReportPreview = forwardRef<
 
           <div className="absolute left-[50%] translate-x-[-50%] bottom-[0.6rem] w-[260px]">
             <InitialEquityDivisionChart
-              labels={["Valor Imóvel", "Saldo Devedor"]}
+              labels={["Valor Imóvel", "Saldo Devedor", "Valor Aplicado"]}
               values={[
                 caseData.finalRow.propertyValue,
                 caseData.finalRow.outstandingBalance,
+                caseData.finalRow.totalCapital,
               ]}
             />
           </div>
         </div>
 
-        <div className="w-full mt-32 px-12">
-          <h5 className="underline text-primary text-xl mt-5">
-            <strong>Análise Detalhada </strong> Financiamento imobiliário
-          </h5>
-          <p className="text-primary mt-2 mb-5">
-            Conversão do investimento excedente para valor presente
-          </p>
+        {(caseData.detailedTable[0].rentValue - propertyData.installmentValue) *
+          -1 >
+          0 ||
+          ((caseData.detailedTable[
+            Math.floor(caseData.detailedTable.length / 2)
+          ].rentValue -
+            propertyData.installmentValue) *
+            -1 >
+            0 && (
+            <div className="w-full mt-32 px-12">
+              <h5 className="underline text-primary text-xl mt-5">
+                <strong>Análise Detalhada </strong> Financiamento imobiliário
+              </h5>
 
-          <div className="text-primary col-span-2 mb-10">
-            <p>
-              O valor presente (VP) de um pagamento mensal mostra quanto um
-              pagamento futuro vale hoje. Isso acontece porque o dinheiro perde
-              valor com o tempo. Em outras palavras, o valor presente representa
-              quanto seria necessário investir hoje para alcançar um valor que
-              será pago no futuro. Embora o pagamento ou investimento mensal
-              possa permanecer o mesmo, o valor presente desse pagamento diminui
-              quanto mais distante ele estiver no tempo. Isso ajuda a entender o
-              impacto financeiro de compromissos ou investimentos futuros no
-              momento atual.
-            </p>
-          </div>
+              <p className="text-primary mt-2 mb-5">
+                Conversão do investimento excedente para valor presente
+              </p>
 
-          <div className="flex flex-col gap-5">
-            <table className="min-w-full">
-              <thead className="text-primary">
-                <tr>
-                  <th className="px-4 py-2 border-r border-b border-primary text-left"></th>
-                  <th className="px-4 py-2 border-r border-b border-primary text-left">
-                    <div className="flex flex-col">
-                      <strong>Investimento excedente em valor real</strong>
-                    </div>
-                  </th>
-                  <th className="px-4 py-2 border-r border-b border-primary text-left">
-                    <div className="flex flex-col">
-                      <strong>
-                        Investimento excedente convertido em valor presente
-                      </strong>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {caseData?.detailedTable?.[0] && (
-                  <tr className="text-primary">
-                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
-                      Mês 1
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        (caseData.detailedTable[0].rentValue -
-                          propertyData.installmentValue) *
-                          -1
-                      )}
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        caseData.detailedTable[0].investmentExcessPresentValue
-                      )}
-                    </td>
-                  </tr>
-                )}
-                {caseData?.detailedTable?.[
-                  Math.floor(caseData.detailedTable.length / 2)
-                ] && (
-                  <tr className="text-primary">
-                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
-                      Mês {Math.floor(caseData.detailedTable.length / 2)}
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        (caseData.detailedTable[
-                          Math.floor(caseData.detailedTable.length / 2)
-                        ].rentValue -
-                          propertyData.installmentValue) *
-                          -1
-                      )}
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        caseData.detailedTable[
-                          Math.floor(caseData.detailedTable.length / 2)
-                        ].investmentExcessPresentValue
-                      )}
-                    </td>
-                  </tr>
-                )}
-                {caseData?.detailedTable
-                  ?.slice()
-                  .reverse()
-                  .find(
-                    (item) =>
-                      item.rentalShortfall !== 0 ||
-                      item.investmentExcessPresentValue !== 0
-                  ) && (
-                  <tr className="text-primary">
-                    <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
-                      Mês {caseData.detailedTable.length}
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        (caseData.detailedTable
-                          .slice()
-                          .reverse()
-                          .find(
-                            (item) => item.investmentExcessPresentValue !== 0
-                          )!.rentValue -
-                          propertyData.installmentValue) *
-                          -1
-                      )}
-                    </td>
-                    <td className="px-4 py-2 border-r border-b border-primary">
-                      {toBRL(
-                        caseData.detailedTable
-                          .slice()
-                          .reverse()
-                          .find(
-                            (item) => item.investmentExcessPresentValue !== 0
-                          )!.investmentExcessPresentValue
-                      )}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+              <div className="text-primary col-span-2 mb-10">
+                <p>
+                  O valor presente (VP) de um pagamento mensal mostra quanto um
+                  pagamento futuro vale hoje. Isso acontece porque o dinheiro
+                  perde valor com o tempo. Em outras palavras, o valor presente
+                  representa quanto seria necessário investir hoje para alcançar
+                  um valor que será pago no futuro. Embora o pagamento ou
+                  investimento mensal possa permanecer o mesmo, o valor presente
+                  desse pagamento diminui quanto mais distante ele estiver no
+                  tempo. Isso ajuda a entender o impacto financeiro de
+                  compromissos ou investimentos futuros no momento atual.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-2 text-primary mb-10">
-              <InfoItemReais
-                text="Total Investido em valor:"
-                value={caseData.finalRow.rentalShortfall}
-              />
-              <InfoItemReais
-                text="Total Investido em VP:"
-                value={caseData.detailedTable.reduce(
-                  (acc, val) => acc + val.investmentExcessPresentValue,
-                  0
-                )}
-              />
-              <InfoItemPercent
-                text="Lucro Percentual em valor:"
-                value={
-                  (caseData.totalProfit /
-                    (propertyData.financingFees +
-                      propertyData.downPayment +
-                      caseData.totalRentalShortfall)) *
-                  100
-                }
-              />
+              <div className="flex flex-col gap-5">
+                <table className="min-w-full">
+                  <thead className="text-primary">
+                    <tr>
+                      <th className="px-4 py-2 border-r border-b border-primary text-left"></th>
+                      <th className="px-4 py-2 border-r border-b border-primary text-left">
+                        <div className="flex flex-col">
+                          <strong>Investimento excedente em valor real</strong>
+                        </div>
+                      </th>
+                      <th className="px-4 py-2 border-r border-b border-primary text-left">
+                        <div className="flex flex-col">
+                          <strong>
+                            Investimento excedente convertido em valor presente
+                          </strong>
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {caseData?.detailedTable?.[0] &&
+                      (caseData.detailedTable[0].rentValue -
+                        propertyData.installmentValue) *
+                        -1 >
+                        0 && (
+                        <tr className="text-primary">
+                          <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                            Mês 1
+                          </td>
+                          <td className="px-4 py-2 border-r border-b border-primary">
+                            {toBRL(
+                              caseData.detailedTable[0].rentValue -
+                                propertyData.installmentValue
+                            )}
+                          </td>
+                          <td className="px-4 py-2 border-r border-b border-primary">
+                            {toBRL(
+                              caseData.detailedTable[0]
+                                .investmentExcessPresentValue
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                    {caseData?.detailedTable?.[
+                      Math.floor(caseData.detailedTable.length / 2)
+                    ] &&
+                      (caseData.detailedTable[
+                        Math.floor(caseData.detailedTable.length / 2)
+                      ].rentValue -
+                        propertyData.installmentValue) *
+                        -1 >
+                        0 && (
+                        <tr className="text-primary">
+                          <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                            Mês {Math.floor(caseData.detailedTable.length / 2)}
+                          </td>
+                          <td className="px-4 py-2 border-r border-b border-primary">
+                            {toBRL(
+                              (caseData.detailedTable[
+                                Math.floor(caseData.detailedTable.length / 2)
+                              ].rentValue -
+                                propertyData.installmentValue) *
+                                -1
+                            )}
+                          </td>
+                          <td className="px-4 py-2 border-r border-b border-primary">
+                            {toBRL(
+                              caseData.detailedTable[
+                                Math.floor(caseData.detailedTable.length / 2)
+                              ].investmentExcessPresentValue
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                    {caseData?.detailedTable
+                      ?.slice()
+                      .reverse()
+                      .find(
+                        (item) =>
+                          item.rentalShortfall !== 0 ||
+                          item.investmentExcessPresentValue !== 0
+                      ) && (
+                      <tr className="text-primary">
+                        <td className="px-4 py-2 border-r border-b border-primary w-[100px]">
+                          Mês {caseData.detailedTable.length}
+                        </td>
+                        <td className="px-4 py-2 border-r border-b border-primary">
+                          {toBRL(
+                            (caseData.detailedTable
+                              .slice()
+                              .reverse()
+                              .find(
+                                (item) =>
+                                  item.investmentExcessPresentValue !== 0
+                              )!.rentValue -
+                              propertyData.installmentValue) *
+                              -1
+                          )}
+                        </td>
+                        <td className="px-4 py-2 border-r border-b border-primary">
+                          {toBRL(
+                            caseData.detailedTable
+                              .slice()
+                              .reverse()
+                              .find(
+                                (item) =>
+                                  item.investmentExcessPresentValue !== 0
+                              )!.investmentExcessPresentValue
+                          )}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
 
-              <InfoItemPercent
-                text="Lucro Percentual em VP:"
-                value={caseData.totalProfitPercent}
-              />
+                <div className="grid grid-cols-2 text-primary mb-10">
+                  <InfoItemReais
+                    text="Total Investido em valor:"
+                    value={caseData.finalRow.rentalShortfall}
+                  />
+                  <InfoItemReais
+                    text="Total Investido em VP:"
+                    value={caseData.detailedTable.reduce(
+                      (acc, val) => acc + val.investmentExcessPresentValue,
+                      0
+                    )}
+                  />
+                  <InfoItemPercent
+                    text="Lucro Percentual em valor:"
+                    value={
+                      (caseData.totalProfit /
+                        (propertyData.financingFees +
+                          propertyData.downPayment +
+                          caseData.totalRentalShortfall)) *
+                      100
+                    }
+                  />
+
+                  <InfoItemPercent
+                    text="Lucro Percentual em VP:"
+                    value={caseData.totalProfitPercent}
+                  />
+                </div>
+
+                <MonthlyInvestmentGrowthChart
+                  rentValues={caseData.detailedTable.map((i) => i.rentValue)}
+                  initialCapitalYields={caseData.detailedTable.map(
+                    (i) => i.initialCapitalYield
+                  )}
+                  installmentValues={caseData.detailedTable.map(
+                    () => propertyData.installmentValue
+                  )}
+                  monthlyInvestmentValues={caseData.detailedTable.map(
+                    (i) => i.investmentExcessPresentValue
+                  )}
+                />
+              </div>
             </div>
-
-            <MonthlyInvestmentGrowthChart
-              rentValues={caseData.detailedTable.map((i) => i.rentValue)}
-              initialCapitalYields={caseData.detailedTable.map(
-                (i) => i.initialCapitalYield
-              )}
-              installmentValues={caseData.detailedTable.map(
-                () => propertyData.installmentValue
-              )}
-              monthlyInvestmentValues={caseData.detailedTable.map(
-                (i) => i.investmentExcessPresentValue
-              )}
-            />
-          </div>
-        </div>
+          ))}
 
         <div className="w-full mt-32 px-12">
           <h5 className="underline text-primary text-xl mb-5 mt-10">

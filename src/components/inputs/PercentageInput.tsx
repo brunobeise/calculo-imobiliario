@@ -27,7 +27,7 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
 }) => {
   return (
     <div className={wrapperClassName}>
-      <div className="flex">
+      <div className="flex h-[40px] items-center">
         <FormLabel htmlFor={id}>{label}</FormLabel>
         {infoTooltip && <InfoTooltip text={infoTooltip} />}
       </div>

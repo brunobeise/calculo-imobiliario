@@ -16,6 +16,7 @@ export function calcCaseData(propertyData: PropertyData) {
       (acc, val) => acc + val.investmentExcessPresentValue,
       0
     );
+
   const totalInterestPaid = detailedTable.reduce(
     (acc, val) => acc + val.interestPaid,
     0
@@ -147,6 +148,15 @@ export function calcDetailedTable(propertyData: PropertyData) {
   let rentValue = propertyData.initialRentValue;
   let totalRentalShortfall = 0;
 
+  const dischargesByMonth: Record<number, number> = {};
+
+  propertyData.discharges.forEach((discharge) => {
+    if (!dischargesByMonth[discharge.month]) {
+      dischargesByMonth[discharge.month] = 0;
+    }
+    dischargesByMonth[discharge.month] += discharge.value;
+  });
+
   for (let month = 1; month <= propertyData.finalYear * 12; month++) {
     const yearIndex = Math.floor(month / 12);
 
@@ -167,6 +177,12 @@ export function calcDetailedTable(propertyData: PropertyData) {
       investmentExcess = rentalAmount * -1;
       totalRentalShortfall += investmentExcess;
       initialInvestment += investmentExcess;
+    }
+
+    if (dischargesByMonth[month]) {
+      investmentExcess += dischargesByMonth[month];
+      totalRentalShortfall += dischargesByMonth[month];
+      initialInvestment += dischargesByMonth[month];
     }
 
     const capitalYield =
@@ -197,16 +213,16 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const finalValue = initialCapital + propertyValue - outstandingBalance;
 
-    const monthlyProfit =
-      finalValue -
-      initialInvestment -
-      propertyValue * (propertyData.brokerageFee / 100);
-
     const monthlyDiscountRate =
       Math.pow(1 + propertyData.PVDiscountRate / 100, 1 / 12) - 1;
 
     const investmentExcessPresentValue =
       investmentExcess / Math.pow(1 + monthlyDiscountRate, month);
+
+    const monthlyProfit =
+      finalValue -
+      initialInvestment -
+      propertyValue * (propertyData.brokerageFee / 100);
 
     rows.push({
       totalCapital: initialCapital,

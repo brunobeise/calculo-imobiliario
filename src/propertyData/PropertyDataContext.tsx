@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { getInitialValues } from "./propertyDataInivitalValues";
+import { Discharge } from "./PropertyDataDischargesControl";
 
 export const propertyDataContext = createContext<propertyDataContextType>({
   propertyData: {} as PropertyData,
@@ -28,6 +29,7 @@ export type PropertyData = {
   PVDiscountRate: number;
   isHousing: boolean;
   investTheRest: boolean;
+  discharges: Discharge[];
 };
 
 export type propertyDataContextType = {

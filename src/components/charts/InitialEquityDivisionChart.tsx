@@ -14,12 +14,24 @@ export default function InitialEquityDivisionChart({
   labels = [],
   values = [],
 }: InitialEquityDivisionChartProps) {
+  // Filtra valores e labels, removendo aqueles cujo valor é zero
+  const filteredData = values.reduce(
+    (acc, value, index) => {
+      if (value !== 0) {
+        acc.filteredValues.push(value);
+        acc.filteredLabels.push(labels[index]);
+      }
+      return acc;
+    },
+    { filteredValues: [] as number[], filteredLabels: [] as string[] }
+  );
+
   const data = {
-    labels: labels,
+    labels: filteredData.filteredLabels,
     datasets: [
       {
         label: "",
-        data: values,
+        data: filteredData.filteredValues,
         backgroundColor: ["#04335d", "#0057a3", "#007fef"],
         borderWidth: 1,
       },
@@ -29,7 +41,7 @@ export default function InitialEquityDivisionChart({
   const options = {
     layout: {
       padding: {
-        bottom: 20, // Ajusta a margem inferior para dar espaço para a legenda
+        bottom: 20,
       },
     },
     plugins: {
@@ -95,21 +107,27 @@ export default function InitialEquityDivisionChart({
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <Pie data={data} options={options} />
-      <div className="flex justify-around mt-4  w-full">
-        {labels.map((label, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <div
-              className="w-12 h-4"
-              style={{
-                backgroundColor: data.datasets[0].backgroundColor[index],
-              }}
-            ></div>
-            <span className="mt-1 text-[13px]">{label}</span>
+    <div className="flex flex-col items-center justify-center">
+      {filteredData.filteredValues.length > 0 ? (
+        <>
+          <Pie data={data} options={options} />
+          <div className="flex justify-around mt-4  w-[110%]">
+            {filteredData.filteredLabels.map((label, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div
+                  className="w-12 h-4"
+                  style={{
+                    backgroundColor: data.datasets[0].backgroundColor[index],
+                  }}
+                ></div>
+                <span className="mt-1 text-[13px] text-center bg-white">{label}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      ) : (
+        <span>Nenhum dado disponível</span>
+      )}
     </div>
   );
 }

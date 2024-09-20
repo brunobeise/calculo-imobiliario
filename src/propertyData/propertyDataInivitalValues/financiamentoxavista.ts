@@ -18,6 +18,7 @@ const data = {
   PVDiscountRate: 8,
   isHousing: false,
   investTheRest: true,
+  discharges: []
 };
 
 export default data;
