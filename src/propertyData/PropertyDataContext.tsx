@@ -57,6 +57,10 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
+    if (location.pathname === "/") return;
+    if (location.pathname === "/usuario") return;
+    if (location.pathname === "/imobiliaria") return;
+
     const initialValues = useSaveData
       ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
       : getInitialValues(location.pathname);

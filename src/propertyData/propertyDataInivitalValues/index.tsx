@@ -5,5 +5,5 @@ export function getInitialValues(location: string){
     if(location === "/financiamentoxavista") return financiamentoxavista;
       if (location === "/planejamentofinanciamento") return financingPlanning;
 
-      else return financiamentoxavista;
+      else return financingPlanning;
 }
