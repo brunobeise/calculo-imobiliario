@@ -16,8 +16,12 @@ import {
   Tooltip,
   Legend,
   ArcElement,
-
 } from "chart.js";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+dayjs.extend(customParseFormat);
+import "dayjs/locale/pt-br";
+dayjs.locale("pt-br");
 
 ChartJS.register(
   CategoryScale,
@@ -33,10 +37,8 @@ ChartJS.register(
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <CssVarsProvider  theme={theme}>
-  
-        <App />
-     
-    </CssVarsProvider >
+    <CssVarsProvider theme={theme}>
+      <App />
+    </CssVarsProvider>
   </React.StrictMode>
 );

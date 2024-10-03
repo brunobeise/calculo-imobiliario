@@ -4,7 +4,7 @@ import InfoTooltip from "../ui/InfoTooltip";
 
 interface BooleanInputProps {
   label: string;
-  id: string;
+  id?: string;
   checked: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   infoTooltip?: string;

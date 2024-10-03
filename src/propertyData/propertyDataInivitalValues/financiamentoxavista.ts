@@ -1,8 +1,11 @@
+import dayjs from "dayjs";
+
 const data = {
   propertyValue: 500000,
   downPayment: 100000,
   installmentValue: 3477.4,
   initialRentValue: 2500,
+  initialRentMonth: dayjs(),
   financingYears: 30,
   inCashFees: 17000,
   financingFees: 11000,
@@ -18,7 +21,9 @@ const data = {
   PVDiscountRate: 8,
   isHousing: false,
   investTheRest: true,
-  discharges: []
+  discharges: [],
+  initialDate: dayjs(),
+  cdi: undefined
 };
 
 export default data;

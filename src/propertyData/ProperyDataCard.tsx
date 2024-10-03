@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useRef, useState } from "react";
-import {
-  PropertyData,
-  propertyDataContext,
-} from "../propertyData/PropertyDataContext";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { PropertyData, propertyDataContext } from "./PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
 import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
 import React from "react";
@@ -14,6 +11,8 @@ import { toBRL } from "@/lib/formatter";
 import InfoTooltip from "@/components/ui/InfoTooltip";
 import PropertyDataDischargesControl from "./PropertyDataDischargesControl";
 import { useSearchParams } from "react-router-dom";
+import DatePicker from "@/components/inputs/DatePickerInput";
+import dayjs from "dayjs";
 
 export default function PropertyDataCard() {
   const { propertyData, setpropertyData } = useContext(propertyDataContext);
@@ -53,6 +52,8 @@ export default function PropertyDataCard() {
     brokerageFee,
     isHousing,
     investTheRest,
+    cdi,
+    discharges,
   } = propertyData;
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +70,12 @@ export default function PropertyDataCard() {
     setpropertyData(id, Number(value));
   };
 
+  const totalDischargesDownPayment = useMemo(() => {
+    return propertyData.discharges.reduce((acc, val) => {
+      return val.isDownPayment ? acc + val.value : acc;
+    }, 0);
+  }, [propertyData.discharges]);
+
   useEffect(() => {
     if (!afterInitialRender.current) return;
 
@@ -78,8 +85,13 @@ export default function PropertyDataCard() {
       financingYears
     );
 
+    const totalInvestmentDischarges = propertyData.discharges.reduce(
+      (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
+      0
+    );
+
     const outstandingBalance = calcOutstandingBalance(
-      propertyValue - downPayment,
+      propertyValue - downPayment - totalInvestmentDischarges,
       interestRate,
       financingYears,
       12 * finalYear
@@ -97,6 +109,7 @@ export default function PropertyDataCard() {
     interestRate,
     propertyAppreciationRate,
     financingYears,
+    discharges,
   ]);
 
   const excludeInputByRoute = (routes: string[]) => {
@@ -108,7 +121,7 @@ export default function PropertyDataCard() {
       <form className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
         <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
-            Informações do Financiamento
+            Dados do Imóvel e Financiamento
           </h2>
 
           <div className="grid grid-cols-1 gap-5 h-[90%]  gap-5 justify-between">
@@ -121,20 +134,30 @@ export default function PropertyDataCard() {
               }
             />
 
-            <CurrencyInput
-              label="Valor Inicial do aluguel:"
-              id="initialRentValue"
-              value={initialRentValue}
-              onChange={(v) =>
-                handleChangeNumber("initialRentValue", v.target.value)
-              }
-              disabled={isHousing}
-            />
+            <div className="grid grid-cols-2 gap-5">
+              <CurrencyInput
+                label="Valor Inicial do aluguel:"
+                id="initialRentValue"
+                value={initialRentValue}
+                onChange={(v) =>
+                  handleChangeNumber("initialRentValue", v.target.value)
+                }
+                disabled={isHousing}
+              />
+              <DatePicker
+                defaultValue={dayjs(
+                  propertyData.initialRentMonth,
+                  "MM/YYYY"
+                ).format("MM/YYYY")}
+                label="Início do aluguel"
+                onChange={(v) => setpropertyData("initialRentMonth", v)}
+              />
+            </div>
 
             <div className="mb-[-20px]">
               <div className="relative">
                 <CurrencyInput
-                  label="Valor da entrada:"
+                  label="Valor da entrada no ato:"
                   id="downPayment"
                   value={downPayment}
                   onChange={(v) =>
@@ -171,12 +194,23 @@ export default function PropertyDataCard() {
             </div>
 
             <PropertyDataDischargesControl />
+            {totalDischargesDownPayment > 0 && (
+              <div>
+                <CurrencyInput
+                  disabled
+                  label="Total do recurso próprio:"
+                  id="ownresource"
+                  value={totalDischargesDownPayment + propertyData.downPayment}
+                  onChange={() => {}}
+                />
+              </div>
+            )}
           </div>
         </Sheet>
 
         <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
-            Cálculo do Financiamento
+            Detalhes do Financiamento
           </h2>
 
           <div className="grid grid-cols-1 gap-5 h-[90%]  gap-5 justify-between">
@@ -203,15 +237,33 @@ export default function PropertyDataCard() {
               infoTooltip="R$ 150,00 em taxas de administração e seguro foram adicionados automaticamente. Você pode ajustar esse valor manualmente ao realizar uma simulação."
             />
 
-            <CurrencyInput
-              label={`Saldo devedor em ${finalYear} anos:`}
-              id="outstandingBalance"
-              infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
-              value={outstandingBalance}
-              onChange={(v) =>
-                handleChangeNumber("outstandingBalance", v.target.value)
-              }
-            />
+            <div className="grid grid-cols-2 gap-5">
+              <CurrencyInput
+                label={`Total Financiado:`}
+                disabled
+                id="outstandingBalance"
+                infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
+                value={
+                  propertyData.propertyValue -
+                  totalDischargesDownPayment -
+                  propertyData.downPayment
+                }
+                onChange={(v) =>
+                  handleChangeNumber("outstandingBalance", v.target.value)
+                }
+              />
+
+              <CurrencyInput
+                label={`Saldo devedor em ${finalYear} anos:`}
+                disabled
+                id="outstandingBalance"
+                infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
+                value={outstandingBalance}
+                onChange={(v) =>
+                  handleChangeNumber("outstandingBalance", v.target.value)
+                }
+              />
+            </div>
 
             <div
               className={`${
@@ -269,7 +321,7 @@ export default function PropertyDataCard() {
 
         <Sheet variant="outlined" color="neutral" className="p-5 ">
           <h2 className="text-xl text-center mb-3 font-bold ">
-            Rendimento e Aluguel
+            Valorização e Rentabilidade
           </h2>
 
           <div className="grid grid-cols-2 gap-5 h-[90%]  gap-5 justify-between pt-8">
@@ -298,17 +350,6 @@ export default function PropertyDataCard() {
                 }
               />
             )}
-
-            <PercentageInput
-              label="Valorização anual do imóvel:"
-              id="propertyAppreciationRate"
-              value={propertyAppreciationRate}
-              onChange={(v) =>
-                handleChangeNumber("propertyAppreciationRate", v.target.value)
-              }
-              infoTooltip="Percentual de aumento no valor do imóvel a cada ano."
-              wrapperClassName="relative"
-            />
 
             <PercentageInput
               label="Rendimento aplicação no mercado financeiro:"
@@ -344,36 +385,57 @@ export default function PropertyDataCard() {
               }
             />
 
-            <div
-              className={`${
-                !excludeInputByRoute(["/planejamentofinanciamento"])
-                  ? "col-span-2"
-                  : ""
-              }`}
-            >
+            <PercentageInput
+              label="CDI"
+              id="cdi"
+              value={cdi}
+              infoTooltip="Taxa média de juros dos empréstimos entre bancos no Brasil, utilizada para comparar o investimento imobiliário."
+              onChange={(v) => handleChangeNumber("cdi", v.target.value)}
+            />
+
+            <PercentageInput
+              label="Valorização anual do aluguel:"
+              id="rentAppreciationRate"
+              value={rentAppreciationRate}
+              infoTooltip="Taxa percentual de aumento anual do valor do aluguel, baseada na valorização do imóvel e condições de mercado."
+              onChange={(v) =>
+                handleChangeNumber("rentAppreciationRate", v.target.value)
+              }
+            />
+
+            <PercentageInput
+              label="Valorização anual do imóvel:"
+              id="propertyAppreciationRate"
+              value={propertyAppreciationRate}
+              onChange={(v) =>
+                handleChangeNumber("propertyAppreciationRate", v.target.value)
+              }
+              infoTooltip="Percentual de aumento no valor do imóvel a cada ano."
+              wrapperClassName="relative"
+            />
+
+            {excludeInputByRoute(["/planejamentofinanciamento"]) && (
               <PercentageInput
-                label="Valorização anual do aluguel:"
-                id="rentAppreciationRate"
-                value={rentAppreciationRate}
-                infoTooltip="Taxa percentual de aumento anual do valor do aluguel, baseada na valorização do imóvel e condições de mercado."
+                label="Rendimento montante do aluguel:"
+                id="rentMonthlyYieldRate"
+                value={rentMonthlyYieldRate}
                 onChange={(v) =>
-                  handleChangeNumber("rentAppreciationRate", v.target.value)
+                  handleChangeNumber("rentMonthlyYieldRate", v.target.value)
                 }
               />
+            )}
 
-              {excludeInputByRoute(["/planejamentofinanciamento"]) && (
-                <PercentageInput
-                  label="Rendimento montante do aluguel:"
-                  id="rentMonthlyYieldRate"
-                  value={rentMonthlyYieldRate}
-                  onChange={(v) =>
-                    handleChangeNumber("rentMonthlyYieldRate", v.target.value)
-                  }
-                />
-              )}
+            <div>
+              <DatePicker
+                defaultValue={dayjs(propertyData.initialDate, "MM/YYYY").format(
+                  "MM/YYYY"
+                )}
+                label="Data de ínicio do estudo"
+                onChange={(v) => setpropertyData("initialDate", v)}
+              />
             </div>
 
-            <div className="col-span-2">
+            <div>
               <div className="flex items-center h-[40px]">
                 <FormLabel htmlFor="finalYear">Calcular até:</FormLabel>
                 <InfoTooltip text="Define o período de tempo em anos que o cálculo é feito." />

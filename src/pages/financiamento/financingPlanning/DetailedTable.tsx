@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs from "dayjs";
 import { FinancingPlanningDetailedTable } from "./CaseData";
 import DetailedTableComponent from "@/components/structure/DetailedTableStructure";
+import { useContext } from "react";
+import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 
 interface TabelaRendimentoProps {
   detailedTable: FinancingPlanningDetailedTable[];
@@ -8,12 +11,13 @@ interface TabelaRendimentoProps {
 
 export default function DetailedTable(props: TabelaRendimentoProps) {
   const rows = props.detailedTable;
+  const { propertyData } = useContext(propertyDataContext);
 
   const columns = [
     {
       title: "Mês",
       dataIndex: "month",
-      render: (_value: any, _: any, index: number) => index + 1,
+      render: (_value: any, _: any, index: number) => dayjs(propertyData.initialDate, "MM/YYYY").add(index + 1, "month").format("MMM/YYYY"),
     },
     { title: "Capital", dataIndex: "initialCapital" },
     { title: "Valor do Aluguel", dataIndex: "rentValue" },

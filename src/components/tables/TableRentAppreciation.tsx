@@ -19,9 +19,10 @@ export default function TableRentAppreciation(
     let actualRentValue = props.data[0] || 0;
     return props.data.reduce(
       (acc, item, i) => {
-        if (i === 0 || item !== actualRentValue) {
+        const year = i === 0 ? 1 : Math.floor(i / 12) + 1;
+        if ((i === 0 || item !== actualRentValue) && Number.isInteger(year) && item !== 0) {
           acc.push({
-            ano: i === 0 ? 1 : i / 12 + 1,
+            ano: year,
             rentValue: toBRL(item),
             arrecadacaoAnual: toBRL(item * 12),
           });

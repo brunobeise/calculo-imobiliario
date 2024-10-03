@@ -6,6 +6,7 @@ import {
   calcTotalInterestPaid,
 } from "@/lib/calcs";
 import { FinancingPlanningDetailedTable } from "./CaseData";
+import dayjs from "dayjs";
 
 export function calcCaseData(propertyData: PropertyData) {
   const detailedTable = calcDetailedTable(propertyData);
@@ -159,7 +160,20 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
   for (let month = 1; month <= propertyData.finalYear * 12; month++) {
     const yearIndex = Math.floor(month / 12);
+    const totalInvestmentDischarges = propertyData.discharges.reduce(
+      (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
+      0
+    );
 
+    const currentMonthDate = dayjs(propertyData.initialDate, "MM/YYYY").add(
+      month,
+      "month"
+    );
+    const rentIsActive = !currentMonthDate.isBefore(
+      dayjs(propertyData.initialRentMonth, "MM/YYYY")
+    );
+
+    
     if (month % 12 === 1 || month === 1) {
       rentValue = propertyData.isHousing
         ? 0
@@ -170,7 +184,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
           );
     }
 
-    const rentalAmount = rentValue - propertyData.installmentValue;
+    const rentalAmount =
+      (rentIsActive ? rentValue : 0) - propertyData.installmentValue;
 
     let investmentExcess = 0;
     if (rentalAmount < 0) {
@@ -197,7 +212,9 @@ export function calcDetailedTable(propertyData: PropertyData) {
     );
 
     const outstandingBalance = calcOutstandingBalance(
-      propertyData.propertyValue - propertyData.downPayment,
+      propertyData.propertyValue -
+        propertyData.downPayment -
+        totalInvestmentDischarges,
       propertyData.interestRate,
       propertyData.financingYears,
       month
@@ -229,7 +246,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
       initialCapital: initialCapital,
       initialCapitalYield: capitalYield,
       propertyValue: propertyValue,
-      rentValue: rentValue,
+      rentValue: rentIsActive ? rentValue : 0,
       rentalShortfall: totalRentalShortfall,
       rentalAmount: rentalAmount,
       outstandingBalance: outstandingBalance,

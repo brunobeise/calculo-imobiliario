@@ -22,12 +22,21 @@ import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { useForm, Controller } from "react-hook-form";
 import { toBRL } from "@/lib/formatter";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import BooleanInput from "@/components/inputs/BooleanInput";
+import PercentageInput from "@/components/inputs/PercentageInput";
+import DatePicker from "@/components/inputs/DatePickerInput";
+import dayjs from "dayjs";
+import { calculatePresentValue } from "@/lib/calcs";
 
 export interface Discharge {
   initialMonth: number;
   month: number;
   value: number;
   type: string;
+  isDownPayment: boolean;
+  indexType?: string;
+  indexValue?: number;
+  originalValue: number;
 }
 
 export default function PropertyDataDischargesControl() {
@@ -45,17 +54,23 @@ export default function PropertyDataDischargesControl() {
   } = useForm({
     defaultValues: {
       dischargeType: null,
-      month: null,
+      month: dayjs().add(1, "month").format("MM/YYYY"),
       amount: 0,
       installments: 1,
+      isDownPayment: true,
+      indexType: null,
+      indexValue: null,
     },
   });
 
   const onSubmit = (data: {
     dischargeType: string | null;
-    month: number | null;
+    month: string;
     amount: number;
     installments: number | null;
+    isDownPayment: boolean;
+    indexType?: string | null;
+    indexValue?: number | null;
   }) => {
     const typeMap: Record<string, string> = {
       monthly: "Mensal",
@@ -66,12 +81,6 @@ export default function PropertyDataDischargesControl() {
       "three-yearly": "Tri-Anual",
       personalized: "Aporte Único",
     };
-
-    const newDischarges: Discharge[] = [];
-    const finalMonth = propertyData.finalYear * 12;
-    const startMonth = Number(data.month) || 1;
-    const maxInstallments = data.installments || Infinity;
-    let installmentCount = 0;
 
     const increment = (type: string): number => {
       switch (type) {
@@ -92,6 +101,31 @@ export default function PropertyDataDischargesControl() {
       }
     };
 
+    const calculateValueWithInterest = (
+      initialValue: number,
+      indexValue: number,
+      installment: number,
+      installmentType: string
+    ) => {
+      const step = increment(installmentType); 
+      const effectiveRate = Math.pow(1 + indexValue, step) - 1; 
+
+      return initialValue * Math.pow(1 + effectiveRate, installment - 1);
+    };
+
+    const newDischarges: Discharge[] = [];
+
+    const finalMonth = propertyData.finalYear * 12;
+
+    const startMonth =
+      dayjs(data.month, "MM/YYYY").diff(
+        dayjs(dayjs(propertyData.initialDate), "MM/YYYY"),
+        "month"
+      ) + 1;
+
+    const maxInstallments = data.installments || Infinity;
+    let installmentCount = 0;
+
     if (data.dischargeType && data.dischargeType !== "personalized") {
       const step = increment(data.dischargeType);
       for (
@@ -99,11 +133,26 @@ export default function PropertyDataDischargesControl() {
         i <= finalMonth && installmentCount < maxInstallments;
         i += step
       ) {
+        const effectiveIndexValue = data.indexValue ? data.indexValue / 100 : 0;
+
+        const valueWithInterest = data.indexValue
+          ? calculateValueWithInterest(
+              data.amount,
+              effectiveIndexValue,
+              installmentCount + 1,
+              data.dischargeType
+            )
+          : data.amount;
+
         newDischarges.push({
           month: i,
-          value: data.amount,
+          value: valueWithInterest,
           type: typeMap[data.dischargeType],
           initialMonth: startMonth,
+          isDownPayment: data.isDownPayment,
+          indexType: data.indexType || undefined,
+          indexValue: data.indexValue || undefined,
+          originalValue: data.amount,
         });
         installmentCount++;
       }
@@ -113,6 +162,10 @@ export default function PropertyDataDischargesControl() {
         value: data.amount,
         type: `${typeMap[data.dischargeType]} ${startMonth}`,
         initialMonth: startMonth,
+        isDownPayment: data.isDownPayment,
+        indexType: data.indexType || undefined,
+        indexValue: data.indexValue || undefined,
+        originalValue: data.amount,
       });
     }
 
@@ -133,17 +186,14 @@ export default function PropertyDataDischargesControl() {
   };
 
   const handleRemoveDischargeGroup = (group: GroupedDischarge) => {
-    setpropertyData(
-      "discharges",
-      propertyData.discharges.filter(
-        (discharge) =>
-          !(
-            discharge.initialMonth === group.initialMonth &&
-            discharge.value === group.value &&
-            discharge.type === group.type
-          )
-      )
-    );
+    const newDischarges = propertyData.discharges.filter((discharge) => {
+      return (
+        discharge.initialMonth !== group.initialMonth ||
+        discharge.type !== group.type
+      );
+    });
+
+    setpropertyData("discharges", newDischarges);
   };
 
   interface GroupedDischarge extends Omit<Discharge, "month"> {
@@ -153,26 +203,30 @@ export default function PropertyDataDischargesControl() {
 
   const groupDischarges = (discharges: Discharge[]): GroupedDischarge[] => {
     const grouped = discharges.reduce((acc, discharge) => {
-      const key = `${discharge.initialMonth}-${discharge.value}-${discharge.type}`;
+      const key = `${discharge.initialMonth}-${discharge.type}-${discharge.isDownPayment}-${discharge.indexType}`;
+
       if (!acc[key]) {
         acc[key] = {
           initialMonth: discharge.initialMonth,
-          value: discharge.value,
+          value: 0,
           type: discharge.type,
           finalMonth: discharge.month,
-          count: 1,
+          count: 0,
+          isDownPayment: discharge.isDownPayment,
+          indexType: discharge.indexType,
+          originalValue: discharge.originalValue,
         };
-      } else {
-        acc[key].finalMonth = Math.max(acc[key].finalMonth, discharge.month);
-        acc[key].count += 1;
       }
+
+      acc[key].value += discharge.value;
+      acc[key].finalMonth = Math.max(acc[key].finalMonth, discharge.month);
+      acc[key].count += 1;
+
       return acc;
     }, {} as Record<string, GroupedDischarge>);
 
     return Object.values(grouped);
   };
-
-  const selectedDischargeType = watch("dischargeType");
 
   return (
     <Sheet
@@ -184,10 +238,12 @@ export default function PropertyDataDischargesControl() {
         <span className="text-sm">
           <p className="text-lg flex items-center gap-2">
             Aportes Adicionais{" "}
-            <FaMagnifyingGlass
-              onClick={() => setDischargesDetailModal(true)}
-              className="text-sm text-[#a3a3a3] cursor-pointer"
-            />
+            {propertyData.discharges.length > 0 && (
+              <FaMagnifyingGlass
+                onClick={() => setDischargesDetailModal(true)}
+                className="text-sm text-[#a3a3a3] cursor-pointer"
+              />
+            )}
           </p>
           <p className="mt-2">
             Total:
@@ -215,7 +271,8 @@ export default function PropertyDataDischargesControl() {
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th>Mês Inicial</th>
+                <th>Índice</th>
+                <th>Início</th>
                 <th>Parcelas</th>
                 <th>Valor</th>
                 <th className="w-[40px]"></th>
@@ -226,7 +283,12 @@ export default function PropertyDataDischargesControl() {
                 (item, index) => (
                   <tr key={index}>
                     <td>{item.type}</td>
-                    <td>{item.initialMonth}</td>
+                    <td>{item.indexType}</td>
+                    <td>
+                      {dayjs(propertyData.initialDate, "MM/YYYY")
+                        .add(item.initialMonth, "month")
+                        .format("MM/YYYY")}
+                    </td>
                     <td>{item.count}x</td>
                     <td>{toBRL(item.value)}</td>
                     <td className="flex justify-end items-center w-[40px]">
@@ -293,37 +355,35 @@ export default function PropertyDataDischargesControl() {
               </FormControl>
 
               <FormControl error={!!errors.month}>
-                <FormLabel>
-                  {selectedDischargeType === "personalized"
-                    ? "Mês:"
-                    : "Mês inicial"}
-                </FormLabel>
                 <Controller
                   name="month"
                   control={control}
                   rules={{
                     required: "Mês é obrigatório",
-                    min: { value: 1, message: "Mês deve ser maior que 0" },
-                    max: {
-                      value: propertyData.finalYear * 12,
-                      message: `Mês deve ser menor que ${
-                        propertyData.finalYear * 12
-                      }`,
+                    validate: (value) => {
+                      const selectedDate = dayjs(value, "MM/YYYY");
+                      if (!selectedDate.isValid()) {
+                        return "Data inválida";
+                      }
+                      if (
+                        !selectedDate.isAfter(
+                          dayjs(propertyData.initialDate, "MM/YYYY")
+                        )
+                      ) {
+                        return `O mês selecionado deve ser superior a ${dayjs(
+                          propertyData.initialDate,
+                          "MM/YYYY"
+                        ).format("MM/YYYY")}`;
+                      }
+                      return true;
                     },
                   }}
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      type="number"
-                      slotProps={{
-                        input: {
-                          min: 1,
-                          max: propertyData.finalYear * 12,
-                          step: 1,
-                        },
-                      }}
-                      value={field.value ?? undefined}
-                      error={!!errors.month}
+                    <DatePicker
+                      defaultValue={field.value}
+                      noHeight
+                      label="Mês inicial"
+                      onChange={field.onChange}
                     />
                   )}
                 />
@@ -338,38 +398,27 @@ export default function PropertyDataDischargesControl() {
                     <FormLabel>Número de parcelas</FormLabel>
                     <Controller
                       name="installments"
-                      control={control}
                       rules={{
-                        required: "Limite é obrigatório",
+                        required: "Número de parcelas é obrigatório",
                         min: {
                           value: 1,
-                          message: "Limite deve ser maior que 0",
-                        },
-                        max: {
-                          value: propertyData.finalYear * 12,
-                          message: `Mês deve ser menor que ${
-                            propertyData.finalYear * 12
-                          }`,
+                          message: "Valor deve ser maior que 0",
                         },
                       }}
+                      control={control}
                       render={({ field }) => (
                         <Input
                           {...field}
                           type="number"
-                          slotProps={{
-                            input: {
-                              min: 1,
-                              max: propertyData.finalYear * 12,
-                              step: 1,
-                            },
-                          }}
-                          value={field.value ?? undefined}
-                          error={!!errors.month}
+                          value={field.value}
+                          error={!!errors.installments}
                         />
                       )}
                     />
-                    {errors.month && (
-                      <FormHelperText>{errors.month.message}</FormHelperText>
+                    {errors.installments && (
+                      <FormHelperText>
+                        {errors.installments?.message}
+                      </FormHelperText>
                     )}
                   </FormControl>
                 )}
@@ -384,7 +433,8 @@ export default function PropertyDataDischargesControl() {
                   }}
                   render={({ field }) => (
                     <CurrencyInput
-                      label="Valor do aporte:"
+                      noHeight
+                      label="Valor do aporte"
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
@@ -394,6 +444,72 @@ export default function PropertyDataDischargesControl() {
                   <FormHelperText>{errors.amount.message}</FormHelperText>
                 )}
               </FormControl>
+
+              <FormControl className={"my-2"}>
+                <Controller
+                  name="isDownPayment"
+                  control={control}
+                  render={({ field }) => (
+                    <BooleanInput
+                      label="Contar como parte da entrada"
+                      checked={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </FormControl>
+
+              {watch("isDownPayment") && (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormControl error={!!errors.indexType}>
+                    <FormLabel>Tipo do Índice</FormLabel>
+                    <Controller
+                      name="indexType"
+                      control={control}
+                      rules={{ required: "Selecione o tipo do índice" }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          onChange={(_e, v) => field.onChange(v)}
+                          value={field.value}
+                        >
+                          <Option value={"INCC - M"}>INCC - M</Option>
+                          <Option value={"IGP - M"}>IGP - M</Option>
+                          <Option value={"IPCA"}>IPCA</Option>
+                          <Option value={"TR"}>TR</Option>
+                          <Option value={"CDI"}>CDI</Option>
+                        </Select>
+                      )}
+                    />
+                    {errors.indexType && (
+                      <FormHelperText>
+                        {errors.indexType.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                  <FormControl error={!!errors.indexValue}>
+                    <Controller
+                      name="indexValue"
+                      control={control}
+                      rules={{ required: "Coloque o valor da taxa mensal" }}
+                      render={({ field }) => (
+                        <PercentageInput
+                          required={false}
+                          noHeight
+                          onChange={field.onChange}
+                          label="Taxa (mensal)"
+                          value={field.value || ""}
+                        />
+                      )}
+                    />
+                    {errors.indexValue && (
+                      <FormHelperText>
+                        {errors.indexValue.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+              )}
             </DialogContent>
             <DialogActions>
               <Button type="submit" variant="solid" color="primary">
@@ -422,33 +538,50 @@ export default function PropertyDataDischargesControl() {
           variant="outlined"
           role="dialog"
           aria-labelledby="create-discharge-title"
-          sx={{ width: { xs: "90%", sm: 500 } }}
+          sx={{ width: { xs: "90%", sm: 600 } }}
         >
           <DialogTitle>Aportes adicionais</DialogTitle>
           <DialogContent className="overflow-y-auto">
             <Table>
               <thead>
                 <tr>
-                  <th>Mês</th>
+                  <th className="w-[90px]">Mês</th>
+                  <th>Índice Mês</th>
                   <th>Valor</th>
-                  <th></th>
+                  <th>Valor Presente</th>
+                  <th className="w-[30px]"></th>
                 </tr>
               </thead>
               <tbody>
                 {propertyData.discharges
                   ?.sort((a, b) => a.month - b.month)
-                  .map((item, index) => (
-                    <tr key={index}>
-                      <td>{item.month}</td>
-                      <td>{toBRL(item.value)}</td>
-                      <td className="flex justify-end items-center">
-                        <FaTrash
-                          onClick={() => handleRemoveDischarge(index)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                  .map((item, index) => {
+                    const period = item.month;
+                    const presentValue = calculatePresentValue(
+                      [item.value],
+                      propertyData.PVDiscountRate,
+                      [period]
+                    );
+
+                    return (
+                      <tr key={index}>
+                        <td>
+                          {dayjs(propertyData.initialDate, "MM/YYYY")
+                            .add(item.month, "month")
+                            .format("MM/YYYY")}
+                        </td>
+                        <td>{item.indexType + ` ${item.indexValue}%`}</td>
+                        <td>{toBRL(item.value)}</td>
+                        <td>{toBRL(presentValue)}</td>
+                        <td className="flex justify-end items-center">
+                          <FaTrash
+                            onClick={() => handleRemoveDischarge(index)}
+                            style={{ cursor: "pointer" }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
           </DialogContent>

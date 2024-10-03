@@ -16,6 +16,7 @@ interface CurrencyInputProps {
   infoTooltip?: string;
   lock?: boolean;
   setLock?: (value: boolean) => void;
+  noHeight?: boolean;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -29,10 +30,11 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   infoTooltip,
   lock,
   setLock,
+  noHeight,
 }) => {
   return (
     <div className={wrapperClassName}>
-      <div className="flex h-[40px] items-center">
+      <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
         {lock === false && (
           <FaLock
             className="w-[10px] me-1 cursor-pointer"
@@ -61,7 +63,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
           },
         }}
         required={required}
-        disabled={disabled}
+        readOnly={disabled}
       />
     </div>
   );

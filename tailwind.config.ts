@@ -37,9 +37,11 @@ const config: Config = {
       input: "hsl(var(--input))",
       ring: "rgb(var(--ring))",
       white: "#fafaf9",
+      gray: "#bebebe",
       whitefull: "#ffff",
       green: "#239e15",
       red: "#a82222",
+      blackish: "#1c1d21;",
       black: "#000000",
     },
     extend: {

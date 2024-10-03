@@ -4,14 +4,15 @@ import InfoTooltip from "../ui/InfoTooltip";
 
 interface PercentageInputProps {
   label: string;
-  id: string;
-  value: number | string;
+  id?: string;
+  value?: number | string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   min?: number;
   step?: number;
   required?: boolean;
   wrapperClassName?: string;
   infoTooltip?: string;
+  noHeight?: boolean;
 }
 
 const PercentageInput: React.FC<PercentageInputProps> = ({
@@ -24,17 +25,18 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   required = true,
   wrapperClassName,
   infoTooltip,
+  noHeight,
 }) => {
   return (
     <div className={wrapperClassName}>
-      <div className="flex h-[40px] items-center">
+      <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
         <FormLabel htmlFor={id}>{label}</FormLabel>
         {infoTooltip && <InfoTooltip text={infoTooltip} />}
       </div>
 
       <Input
         id={id}
-        value={value === 0 ? "" : value}
+        value={value === 0 || !value ? "" : value}
         onChange={onChange}
         type="number"
         endDecorator="%"

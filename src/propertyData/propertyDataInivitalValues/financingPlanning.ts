@@ -1,8 +1,11 @@
+import dayjs from "dayjs";
+
 const data = {
   propertyValue: 500000,
   downPayment: 125000,
   installmentValue: 3373.77,
   initialRentValue: 2200,
+  initialRentMonth: dayjs().format("MM/YYYY"),
   financingYears: 35,
   inCashFees: 0,
   financingFees: 14000,
@@ -19,6 +22,8 @@ const data = {
   isHousing: false,
   investTheRest: false,
   discharges: [],
+  initialDate: dayjs().format("MM/YYYY"),
+  cdi: undefined,
 };
 
 export default data;
