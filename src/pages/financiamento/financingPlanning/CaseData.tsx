@@ -21,6 +21,7 @@ export interface FinancingPlanningDetailedTable {
 }
 
 export type FinancingPlanningData = {
+  totalInvestment: number;
   investedEquityFinal: number;
   totalProfit: number;
   totalProfitPercent: number;
@@ -46,6 +47,7 @@ export const FinancingPlanningCaseDataProvider = ({
   children: ReactNode;
 }) => {
   const [caseData, setCaseState] = useState<FinancingPlanningData>({
+    totalInvestment: 187742.84,
     totalProfit: 265328.91,
     totalRentalShortfall: 38547.84,
     totalInterestPaid: 0,

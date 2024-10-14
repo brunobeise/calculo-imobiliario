@@ -72,7 +72,7 @@ export default function PropertyDataCard() {
 
   const totalDischargesDownPayment = useMemo(() => {
     return propertyData.discharges.reduce((acc, val) => {
-      return val.isDownPayment ? acc + val.value : acc;
+      return val.isDownPayment ? acc + val.originalValue : acc;
     }, 0);
   }, [propertyData.discharges]);
 
@@ -193,6 +193,16 @@ export default function PropertyDataCard() {
               </div>
             </div>
 
+            <CurrencyInput
+              label="Valor do subsídio:"
+              id="subsidy"
+              value={propertyData.subsidy}
+              onChange={(v) =>
+                handleChangeNumber("subsidy", v.target.value)
+              }
+              disabled={isHousing}
+            />
+
             <PropertyDataDischargesControl />
             {totalDischargesDownPayment > 0 && (
               <div>
@@ -214,6 +224,7 @@ export default function PropertyDataCard() {
           </h2>
 
           <div className="grid grid-cols-1 gap-5 h-[90%]  gap-5 justify-between">
+            
             <PercentageInput
               label="Juros nominal do financiamento:"
               id="interestRate"
@@ -225,17 +236,28 @@ export default function PropertyDataCard() {
               infoTooltip="Percentual nominal dos juros aplicados ao financiamento, que representa a taxa base acordada com a instituição financeira, sem considerar a inflação ou outros ajustes."
             />
 
-            <CurrencyInput
-              lock={installmentValueCalculatorLock}
-              setLock={(value) => setInstallmentValueCalculatorLock(value)}
-              label="Valor da Parcela:"
-              id="installmentValue"
-              value={installmentValue}
-              onChange={(v) =>
-                handleChangeNumber("installmentValue", v.target.value)
-              }
-              infoTooltip="R$ 150,00 em taxas de administração e seguro foram adicionados automaticamente. Você pode ajustar esse valor manualmente ao realizar uma simulação."
-            />
+            <div className="grid grid-cols-2 gap-5">
+              <CurrencyInput
+                lock={installmentValueCalculatorLock}
+                setLock={(value) => setInstallmentValueCalculatorLock(value)}
+                label="Valor da Parcela:"
+                id="installmentValue"
+                value={installmentValue}
+                onChange={(v) =>
+                  handleChangeNumber("installmentValue", v.target.value)
+                }
+                infoTooltip="R$ 150,00 em taxas de administração e seguro foram adicionados automaticamente. Você pode ajustar esse valor manualmente ao realizar uma simulação."
+              />
+
+              <DatePicker
+                defaultValue={dayjs(
+                  propertyData.initialFinancingMonth,
+                  "MM/YYYY"
+                ).format("MM/YYYY")}
+                label="Data de ínicio das parcelas"
+                onChange={(v) => setpropertyData("initialFinancingMonth", v)}
+              />
+            </div>
 
             <div className="grid grid-cols-2 gap-5">
               <CurrencyInput

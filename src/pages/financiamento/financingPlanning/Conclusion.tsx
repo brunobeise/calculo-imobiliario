@@ -29,10 +29,7 @@ export default function Conclusion({ caseData }: ConclusionProps) {
     },
     {
       label: "Valor Investido",
-      value:
-        propertyData.financingFees +
-        propertyData.downPayment +
-        caseData.finalRow.rentalShortfall,
+      value: caseData.totalInvestment,
       valueClass: "text-red",
       tooltipText: "VP: " + toBRL(caseData.investedEquityPresentValue),
     },

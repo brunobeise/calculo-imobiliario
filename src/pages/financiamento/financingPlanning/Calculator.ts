@@ -16,7 +16,8 @@ export function calcCaseData(propertyData: PropertyData) {
     detailedTable.reduce(
       (acc, val) => acc + val.investmentExcessPresentValue,
       0
-    );
+    ) -
+    propertyData.subsidy;
 
   const totalInterestPaid = detailedTable.reduce(
     (acc, val) => acc + val.interestPaid,
@@ -30,6 +31,11 @@ export function calcCaseData(propertyData: PropertyData) {
   );
 
   return {
+    totalInvestment:
+      propertyData.downPayment +
+      propertyData.financingFees +
+      detailedTable[detailedTable.length - 1].rentalShortfall -
+      propertyData.subsidy,
     investedEquity: 0,
     totalProfit: totalProfit.value,
     totalProfitPercent: totalProfit.percent,
@@ -144,8 +150,9 @@ export function calcCapitalGainsTax(
 
 export function calcDetailedTable(propertyData: PropertyData) {
   const rows: FinancingPlanningDetailedTable[] = [];
+
   let initialCapital = 0;
-  let initialInvestment = propertyData.downPayment + propertyData.financingFees;
+  let initialInvestment = propertyData.downPayment - propertyData.subsidy;
   let rentValue = propertyData.initialRentValue;
   let totalRentalShortfall = 0;
 
@@ -158,12 +165,22 @@ export function calcDetailedTable(propertyData: PropertyData) {
     dischargesByMonth[discharge.month] += discharge.value;
   });
 
+  const totalInvestmentDischarges = propertyData.discharges.reduce(
+    (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
+    0
+  );
+
+  let outstandingBalance = calcOutstandingBalance(
+    propertyData.propertyValue -
+      propertyData.downPayment -
+      totalInvestmentDischarges,
+    propertyData.interestRate,
+    propertyData.financingYears,
+    0
+  );
+
   for (let month = 1; month <= propertyData.finalYear * 12; month++) {
     const yearIndex = Math.floor(month / 12);
-    const totalInvestmentDischarges = propertyData.discharges.reduce(
-      (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
-      0
-    );
 
     const currentMonthDate = dayjs(propertyData.initialDate, "MM/YYYY").add(
       month,
@@ -172,8 +189,10 @@ export function calcDetailedTable(propertyData: PropertyData) {
     const rentIsActive = !currentMonthDate.isBefore(
       dayjs(propertyData.initialRentMonth, "MM/YYYY")
     );
+    const installmentIsActive = !currentMonthDate.isBefore(
+      dayjs(propertyData.initialFinancingMonth, "MM/YYYY")
+    );
 
-    
     if (month % 12 === 1 || month === 1) {
       rentValue = propertyData.isHousing
         ? 0
@@ -185,7 +204,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
     }
 
     const rentalAmount =
-      (rentIsActive ? rentValue : 0) - propertyData.installmentValue;
+      (rentIsActive ? rentValue : 0) -
+      (installmentIsActive ? propertyData.installmentValue : 0);
 
     let investmentExcess = 0;
     if (rentalAmount < 0) {
@@ -211,14 +231,16 @@ export function calcDetailedTable(propertyData: PropertyData) {
       Math.floor(month / 12)
     );
 
-    const outstandingBalance = calcOutstandingBalance(
-      propertyData.propertyValue -
-        propertyData.downPayment -
-        totalInvestmentDischarges,
-      propertyData.interestRate,
-      propertyData.financingYears,
-      month
-    );
+    if (installmentIsActive) {
+      outstandingBalance = calcOutstandingBalance(
+        propertyData.propertyValue -
+          propertyData.downPayment -
+          totalInvestmentDischarges,
+        propertyData.interestRate,
+        propertyData.financingYears,
+        month
+      );
+    }
 
     const interestPaid = calcTotalInterestPaid(
       propertyData.propertyValue - propertyData.downPayment,

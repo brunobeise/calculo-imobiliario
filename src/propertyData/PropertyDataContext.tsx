@@ -11,9 +11,11 @@ export const propertyDataContext = createContext<propertyDataContextType>({
 export type PropertyData = {
   propertyValue: number;
   downPayment: number;
+  subsidy: number;
   installmentValue: number;
   initialRentValue: number;
   initialRentMonth: string;
+  initialFinancingMonth: string;
   inCashFees: number;
   financingFees: number;
   monthlyYieldRate: number;

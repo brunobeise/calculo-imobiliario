@@ -3,9 +3,11 @@ import dayjs from "dayjs";
 const data = {
   propertyValue: 500000,
   downPayment: 100000,
+  subsidy: 500,
   installmentValue: 3477.4,
   initialRentValue: 2500,
-  initialRentMonth: dayjs(),
+  initialRentMonth: dayjs().add(1, 'month').format("MM/YYYY"),
+  initialFinancingMonth: dayjs().add(1, 'month').format("MM/YYYY"),
   financingYears: 30,
   inCashFees: 17000,
   financingFees: 11000,
@@ -22,7 +24,7 @@ const data = {
   isHousing: false,
   investTheRest: true,
   discharges: [],
-  initialDate: dayjs(),
+  initialDate: dayjs().format("MM/YYYY"),
   cdi: undefined
 };
 
