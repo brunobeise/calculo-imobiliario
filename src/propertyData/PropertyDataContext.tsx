@@ -1,10 +1,11 @@
-import { ReactNode, createContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
-import { getInitialValues } from "./propertyDataInivitalValues";
 import { Discharge } from "./PropertyDataDischargesControl";
-export const propertyDataContext = createContext<propertyDataContextType>({
-  propertyData: {} as PropertyData,
-  setpropertyData: () => {},
+
+
+export const propertyDataContext = createContext<PropertyDataContextType>({
+  propertyData: undefined, 
+  setPropertyData: () => {},
   setMultiplePropertyData: () => {},
 });
 
@@ -36,13 +37,13 @@ export type PropertyData = {
   cdi?: number;
 };
 
-export type propertyDataContextType = {
-  propertyData: PropertyData;
-  setpropertyData: (
-    campo: keyof PropertyData,
-    valor: PropertyData[keyof PropertyData]
+export type PropertyDataContextType = {
+  propertyData: PropertyData | undefined;
+  setPropertyData: (
+    field: keyof PropertyData,
+    value: PropertyData[keyof PropertyData]
   ) => void;
-  setMultiplePropertyData: (valores: Partial<PropertyData>) => void;
+  setMultiplePropertyData: (values: Partial<PropertyData>) => void;
 };
 
 export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
@@ -51,48 +52,58 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
   const useSaveData = searchParams.get("useSaveData") === "true";
 
   const useSaveDataMap = {
-    "/planejamentofinanciamento": JSON.parse(
-      localStorage.getItem("financingPlanningPropertyData") || ""
+    "/financialplanning": JSON.parse(
+      localStorage.getItem("financingPlanningPropertyData") || "{}"
     ),
   };
 
-  const [propertyData, setImovelState] = useState<PropertyData>(
+  // Initialize propertyData state, allowing undefined
+  const [propertyData, setPropertyDataState] = useState<PropertyData>(
     useSaveData
       ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
-      : getInitialValues(location.pathname)
+      : undefined
   );
 
-  useEffect(() => {
-    if (location.pathname === "/") return;
-    if (location.pathname === "/usuario") return;
-    if (location.pathname === "/imobiliaria") return;
+  // Effect to update propertyData when location changes
+  // useEffect(() => {
+  //   if (location.pathname === "/") return;
+  //   if (location.pathname === "/user") return;
+  //   if (location.pathname === "/realty") return;
 
-    const initialValues = useSaveData
-      ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
-      : getInitialValues(location.pathname);
-    setImovelState(initialValues);
-  }, [location.pathname]);
+  //   const initialValues = useSaveData
+  //     ? useSaveDataMap[location.pathname as keyof typeof useSaveDataMap]
+  //     : getInitialValues(location.pathname);
 
-  const setpropertyData = (
-    campo: keyof PropertyData,
-    valor: PropertyData[keyof PropertyData]
+  //   setPropertyDataState(initialValues);
+  // }, [location.pathname]);
+
+  // Function to set individual property data
+  const setPropertyData = (
+    field: keyof NonNullable<PropertyData>, // Garantimos que o campo só seja usado se não for undefined
+    value: PropertyData[keyof NonNullable<PropertyData>] // Garantimos que o valor corresponde ao tipo da propriedade
   ) => {
-    setImovelState((prevState) => ({
-      ...prevState,
-      [campo]: valor,
-    }));
+    setPropertyDataState((prevState) => {
+      if (!prevState) return prevState; // Se prevState for undefined, não faz nada
+      return {
+        ...prevState,
+        [field]: value,
+      };
+    });
   };
 
-  const setMultiplePropertyData = (valores: Partial<PropertyData>) => {
-    setImovelState((prevState) => ({
-      ...prevState,
-      ...valores,
-    }));
+  // Function to set multiple properties at once
+  const setMultiplePropertyData = (values: Partial<PropertyData>) => {
+    setPropertyDataState((prevState) => {
+      return {
+        ...prevState,
+        ...values,
+      };
+    });
   };
 
   return (
     <propertyDataContext.Provider
-      value={{ propertyData, setpropertyData, setMultiplePropertyData }}
+      value={{ propertyData, setPropertyData, setMultiplePropertyData }}
     >
       {children}
     </propertyDataContext.Provider>

@@ -13,11 +13,16 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
   const rows = props.detailedTable;
   const { propertyData } = useContext(propertyDataContext);
 
+  if (!propertyData) return null;
+
   const columns = [
     {
       title: "Mês",
       dataIndex: "month",
-      render: (_value: any, _: any, index: number) => dayjs(propertyData.initialDate, "MM/YYYY").add(index + 1, "month").format("MMM/YYYY"),
+      render: (_value: any, _: any, index: number) =>
+        dayjs(propertyData.initialDate, "MM/YYYY")
+          .add(index + 1, "month")
+          .format("MMM/YYYY"),
     },
     { title: "Capital", dataIndex: "initialCapital" },
     { title: "Valor do Aluguel", dataIndex: "rentValue" },

@@ -1,9 +1,7 @@
 import { toBRL } from "@/lib/formatter";
-import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { Sheet, Table } from "@mui/joy";
 
 import { useMemo } from "react";
-import { useContext } from "react";
 
 interface TablePropertyAppreciationProps {
   annualCollection?: boolean;
@@ -14,13 +12,12 @@ interface TablePropertyAppreciationProps {
   maxHeight?: number;
   data: number[];
   totalValorization?: boolean;
+  propertyValue: number;
 }
 
 export default function TablePropertyAppreciation(
   props: TablePropertyAppreciationProps
 ) {
-  const { propertyData } = useContext(propertyDataContext);
-
   const rows = useMemo(() => {
     return props.data.reduce(
       (acc, item, i) => {
@@ -29,7 +26,7 @@ export default function TablePropertyAppreciation(
             ano: (i + 1) / 12,
             propertyValue: toBRL(item),
             arrecadacaoAnual: `${(
-              (item / propertyData.propertyValue) * 100 -
+              (item / props.propertyValue) * 100 -
               100
             ).toFixed(2)}%`,
           });
@@ -42,8 +39,7 @@ export default function TablePropertyAppreciation(
         ano: number;
       }[]
     );
-  }, [propertyData.propertyValue, props.data]);
-
+  }, [props.propertyValue, props.data]);
 
   return (
     <Sheet

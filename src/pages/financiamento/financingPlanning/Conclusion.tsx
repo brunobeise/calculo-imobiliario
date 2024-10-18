@@ -10,6 +10,7 @@ interface ConclusionProps {
 
 export default function Conclusion({ caseData }: ConclusionProps) {
   const { propertyData } = useContext(propertyDataContext);
+  if (!propertyData) return null;
 
   const data = [
     {

@@ -38,6 +38,7 @@ const config: Config = {
       ring: "rgb(var(--ring))",
       white: "#fafaf9",
       gray: "#bebebe",
+      grayText: "#545454",
       whitefull: "#ffff",
       green: "#239e15",
       red: "#a82222",

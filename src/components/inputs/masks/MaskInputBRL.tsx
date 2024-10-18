@@ -24,7 +24,7 @@ const MaskInputBRL = React.forwardRef<NumericFormatProps, CustomProps>(
         }}
         thousandSeparator="."
         decimalSeparator=","
-        fixedDecimalScale
+        decimalScale={2}
         valueIsNumericString
         allowLeadingZeros
       />

@@ -27,6 +27,8 @@ const FinancingPlanningReportPreview = forwardRef<
     localStorage.getItem("financingPlanningPropertyData") || ""
   );
 
+  if (!propertyData) return null;
+
   const caseData: FinancingPlanningData = JSON.parse(
     localStorage.getItem("financingPlanningCaseData") || ""
   );
@@ -58,6 +60,17 @@ const FinancingPlanningReportPreview = forwardRef<
       {text}
       {"  "}
       <span className="font-bold">{value + " Anos"}</span>
+    </p>
+  );
+
+  const InfoItemDate = ({ text, value }: { text: string; value: string }) => (
+    <p>
+      {text}
+      {"  "}
+      <span className="font-bold">
+        {" "}
+        {dayjs(value, "MM/YYYY").format("MMM/YYYY")}
+      </span>
     </p>
   );
 
@@ -373,7 +386,7 @@ const FinancingPlanningReportPreview = forwardRef<
         </div>
 
         {caseData.detailedTable[0].rentalAmount < 0 && (
-          <div className="w-full px-12 mb-10 h-[297mm]">
+          <div className="w-full px-12 h-[297mm]">
             <h5 className="underline text-primary text-xl mt-10">
               <strong>Análise Detalhada </strong> Financiamento imobiliário
             </h5>
@@ -891,9 +904,9 @@ const FinancingPlanningReportPreview = forwardRef<
           </div>
         )}
 
-        <div className="w-full">
+        <div className="w-full  h-[297mm]">
           <div className="px-12">
-            <h5 className="underline text-primary text-xl mb-10">
+            <h5 className="underline text-primary text-xl mb-10 mt-10">
               <strong>Análise Detalhada </strong> Financiamento imobiliário
             </h5>
             <div className="flex flex-col gap-5">
@@ -914,46 +927,42 @@ const FinancingPlanningReportPreview = forwardRef<
                 )}
               />
             </div>
-            <div className="w-full mt-10">
+            <div className="w-full mt-4">
               <h3 className="text-xl font-bold  leading-7 mb-2 mt-5 underline">
                 Dados considerados para a análise:
               </h3>
             </div>
 
-            <div className="grid grid-cols-2 gap-10 ">
+            <div className="grid grid-cols-2 gap-10">
               <div>
                 <InfoItemReais
                   text="Valor do imóvel:"
                   value={propertyData.propertyValue}
                 />
-
+                <InfoItemReais
+                  text="Valor do Subsídio:"
+                  value={propertyData.subsidy}
+                />
                 <InfoItemReais
                   text="Valor inicial do Aluguel:"
                   value={propertyData.initialRentValue}
                 />
-
                 <InfoItemPercent
                   text="Valorização anual do imóvel:"
                   value={propertyData.propertyAppreciationRate}
                 />
-
-                {caseData.finalRow.totalCapital > 0 && (
-                  <InfoItemPercent
-                    text="Rendimento médio mensal:"
-                    value={propertyData.monthlyYieldRate}
-                  />
-                )}
-
-                <InfoItemYears
-                  text="Cálculo feito em:"
-                  value={propertyData.finalYear}
-                />
-
                 <InfoItemPercent
-                  text="Valorização do aluguel anual:"
+                  text="Valorização anual do aluguel:"
                   value={propertyData.rentAppreciationRate}
                 />
-
+                <InfoItemDate
+                  text="Início do estudo:"
+                  value={propertyData.initialDate}
+                />
+                <InfoItemDate
+                  text="Aluguel começa a contar em:"
+                  value={propertyData.initialRentMonth}
+                />
                 <InfoItemPercent
                   text="Taxa de desconto (VP):"
                   value={propertyData.PVDiscountRate}
@@ -965,36 +974,46 @@ const FinancingPlanningReportPreview = forwardRef<
                   text="Valor da entrada:"
                   value={propertyData.downPayment}
                 />
-
                 <InfoItemReais
                   text="Taxas do financiamento:"
                   value={propertyData.financingFees}
                 />
-
                 <InfoItemPercent
-                  text="CET do financiamento:"
+                  text="Juros do financiamento:"
                   value={propertyData.interestRate}
                 />
-
                 <InfoItemYears
                   text="Tempo do financiamento:"
                   value={propertyData.financingYears}
                 />
-
                 <InfoItemReais
                   text="Valor da Parcela:"
                   value={propertyData.installmentValue}
                 />
-
                 <InfoItemReais
                   text={`Saldo devedor em ${propertyData.finalYear} anos:`}
                   value={propertyData.outstandingBalance}
+                />
+                <InfoItemDate
+                  text="Início das parcelas:"
+                  value={propertyData.initialFinancingMonth}
                 />
 
                 <InfoItemPercent
                   text="Taxa de corretagem:"
                   value={propertyData.brokerageFee}
                 />
+
+                <InfoItemYears
+                  text="Cálculo feito em:"
+                  value={propertyData.finalYear}
+                />
+                {caseData.finalRow.totalCapital > 0 && (
+                  <InfoItemPercent
+                    text="Rendimento médio mensal:"
+                    value={propertyData.monthlyYieldRate}
+                  />
+                )}
               </div>
             </div>
           </div>

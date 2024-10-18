@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Card, CardContent, FormLabel, Input, Table } from "@mui/joy";
 import ReactLoading from "react-loading";
 import PictureInput from "@/components/inputs/PictureInput";
-import GlobalLoading from "@/components/GlobalLoading";
+import GlobalLoading from "@/components/Loading";
 import { uploadImage } from "@/lib/imgur";
 import { realEstateService } from "@/service/realEstateService";
 import { UserData } from "./UserConfig";

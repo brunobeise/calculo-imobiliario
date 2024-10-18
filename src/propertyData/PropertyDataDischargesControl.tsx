@@ -15,9 +15,9 @@ import {
   Sheet,
   Table,
 } from "@mui/joy";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
-import { propertyDataContext } from "./PropertyDataContext";
+import { PropertyData } from "./PropertyDataContext";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { useForm, Controller } from "react-hook-form";
 import { toBRL } from "@/lib/formatter";
@@ -39,11 +39,18 @@ export interface Discharge {
   originalValue: number;
 }
 
-export default function PropertyDataDischargesControl() {
+export default function PropertyDataDischargesControl({
+  propertyData,
+  setPropertyData,
+}: {
+  propertyData: PropertyData;
+  setPropertyData: (
+    field: keyof PropertyData,
+    value: PropertyData[keyof PropertyData]
+  ) => void;
+}) {
   const [addDischargeModal, setAddDischargeModal] = useState(false);
   const [dischargesDetailModal, setDischargesDetailModal] = useState(false);
-
-  const { propertyData, setpropertyData } = useContext(propertyDataContext);
 
   const {
     control,
@@ -107,8 +114,8 @@ export default function PropertyDataDischargesControl() {
       installment: number,
       installmentType: string
     ) => {
-      const step = increment(installmentType); 
-      const effectiveRate = Math.pow(1 + indexValue, step) - 1; 
+      const step = increment(installmentType);
+      const effectiveRate = Math.pow(1 + indexValue, step) - 1;
 
       return initialValue * Math.pow(1 + effectiveRate, installment - 1);
     };
@@ -169,7 +176,7 @@ export default function PropertyDataDischargesControl() {
       });
     }
 
-    setpropertyData("discharges", [
+    setPropertyData("discharges", [
       ...propertyData.discharges,
       ...newDischarges,
     ]);
@@ -179,7 +186,7 @@ export default function PropertyDataDischargesControl() {
   };
 
   const handleRemoveDischarge = (indexToRemove: number) => {
-    setpropertyData(
+    setPropertyData(
       "discharges",
       propertyData.discharges.filter((_, index) => index !== indexToRemove)
     );
@@ -193,7 +200,7 @@ export default function PropertyDataDischargesControl() {
       );
     });
 
-    setpropertyData("discharges", newDischarges);
+    setPropertyData("discharges", newDischarges);
   };
 
   interface GroupedDischarge extends Omit<Discharge, "month"> {

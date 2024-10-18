@@ -22,9 +22,10 @@ import { Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth";
 import Login from "./pages/Login";
 import UserConfig from "./pages/UserConfig";
-import CaseCard from "./components/shared/CaseCard";
 import DrawerMenu from "./components/DrawerMenu";
 import RealEstateConfig from "./pages/RealEstateConfig";
+import CaseTypeCard from "./components/shared/CaseTypeCard";
+import MyCases from "./pages/MyCases";
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -54,16 +55,18 @@ export default function App() {
 
         <div className="w-full flex justify-center">
           <div className="gap-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 justify-items-center">
-            {financingRoutes.map((i) => (
-              <CaseCard
-                key={i.title}
-                link={i.href}
-                desc={i.description}
-                image={i.image}
-                title={i.title}
-              />
-            ))}
-            <CaseCard
+            {financingRoutes
+              .filter((r) => !r.href.includes("/:id"))
+              .map((i) => (
+                <CaseTypeCard
+                  key={i.title}
+                  link={i.href}
+                  desc={i.description}
+                  image={i.image}
+                  title={i.title}
+                />
+              ))}
+            <CaseTypeCard
               comingSoon
               link={""}
               desc={
@@ -72,7 +75,7 @@ export default function App() {
               image={rural}
               title={"Planejamento para imóvel agrícola"}
             />
-            <CaseCard
+            <CaseTypeCard
               comingSoon
               link={""}
               desc={
@@ -81,7 +84,7 @@ export default function App() {
               image={invest}
               title={"Comprar imóvel vs. investimento"}
             />
-            <CaseCard
+            <CaseTypeCard
               comingSoon
               link={""}
               desc={
@@ -123,6 +126,14 @@ export default function App() {
               element={
                 <PrivateRoute>
                   <UserConfig />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/estudos"
+              element={
+                <PrivateRoute>
+                  <MyCases />
                 </PrivateRoute>
               }
             />

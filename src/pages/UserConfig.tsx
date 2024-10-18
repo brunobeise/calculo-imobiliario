@@ -12,7 +12,7 @@ import { uploadImage } from "@/lib/imgur";
 import UserSignature from "@/components/user/UserSignature";
 import UserSignature2 from "@/components/user/UserSignature2";
 import { userService } from "@/service/userService";
-import GlobalLoading from "@/components/GlobalLoading";
+import GlobalLoading from "@/components/Loading";
 import { Card, CardContent, FormLabel, Input } from "@mui/joy";
 import PictureInput from "@/components/inputs/PictureInput";
 import { RealEstateData } from "./RealEstateConfig";

@@ -16,12 +16,24 @@ export const financingRoutes = [
         <FinancingOrCash />
       </FinanceOrInCashCaseDataProvider>
     ),
-    
+
     image: FinancingOrCashImage,
   },
   {
     title: "Planejamento de Financiamento",
     href: "/planejamentofinanciamento",
+    description:
+      "Faz um plano de aquisição com a estratégia de financiamento imobiliário.",
+    element: (
+      <FinancingPlanningCaseDataProvider>
+        <FinancingPlanning />
+      </FinancingPlanningCaseDataProvider>
+    ),
+    image: FinancingPlanningImage,
+  },
+  {
+    title: "Planejamento de Financiamento",
+    href: "/planejamentofinanciamento/:id",
     description:
       "Faz um plano de aquisição com a estratégia de financiamento imobiliário.",
     element: (

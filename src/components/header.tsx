@@ -17,7 +17,8 @@ export default function Header() {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) return null;
 
-  const title = routes.find((r) => r.href === location.pathname)?.title;
+  const title = routes.find((r) => location.pathname.startsWith(r.href))?.title;
+
   return (
     <div className="flex justify-between p-1">
       <div className="absolute left-[50%] translate-x-[-50%] sm:mt-0  mt-10 text-center ">

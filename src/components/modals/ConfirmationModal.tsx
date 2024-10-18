@@ -14,6 +14,8 @@ interface ConfirmationModalProps {
   onClose: () => void;
   onOk: () => void;
   okLoading?: boolean;
+  yesText?: string;
+  noText?: string;
 }
 
 export default function ConfirmationModal({
@@ -23,6 +25,8 @@ export default function ConfirmationModal({
   onClose,
   open,
   okLoading,
+  yesText,
+  noText,
 }: ConfirmationModalProps) {
   return (
     <Modal open={open} onClose={onClose}>
@@ -40,10 +44,10 @@ export default function ConfirmationModal({
             color="primary"
             onClick={onOk}
           >
-            Sim
+            {yesText || "Sim"}
           </Button>
           <Button variant="plain" color="neutral" onClick={onClose}>
-            Não
+            {noText || "Não"}
           </Button>
         </DialogActions>
       </ModalDialog>

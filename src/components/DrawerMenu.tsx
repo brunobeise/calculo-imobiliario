@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
-import { FaBars, FaHome, FaUser } from "react-icons/fa";
+import { FaBars, FaBook, FaHome, FaUser } from "react-icons/fa";
 import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
 import { Link } from "react-router-dom";
 import ListDivider from "@mui/joy/ListDivider";
@@ -71,6 +71,17 @@ export default function DrawerMenu() {
                 Meus dados
               </Typography>
             </ListItem>
+            <ListDivider />
+            <Link to={"/estudos"} onClick={() => setOpen(false)}>
+              <ListItem className="!ms-5">
+                <ListItemDecorator>
+                  <FaBook />
+                </ListItemDecorator>
+                <Typography className="font-bold !ms-[-10px]">
+                  Meus Estudos
+                </Typography>
+              </ListItem>
+            </Link>
           </Link>
 
           {user?.owner && (

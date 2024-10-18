@@ -13,6 +13,7 @@ interface PercentageInputProps {
   wrapperClassName?: string;
   infoTooltip?: string;
   noHeight?: boolean;
+  placeholder?: string | number;
 }
 
 const PercentageInput: React.FC<PercentageInputProps> = ({
@@ -26,6 +27,7 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   wrapperClassName,
   infoTooltip,
   noHeight,
+  placeholder,
 }) => {
   return (
     <div className={wrapperClassName}>
@@ -35,6 +37,7 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
       </div>
 
       <Input
+        placeholder={placeholder?.toString()}
         id={id}
         value={value === 0 || !value ? "" : value}
         onChange={onChange}
