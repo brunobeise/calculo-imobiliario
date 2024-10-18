@@ -11,6 +11,8 @@ interface ConclusionProps {
 export default function Conclusion({ caseData, context }: ConclusionProps) {
   const { propertyData } = useContext(propertyDataContext);
 
+  if (!propertyData) return null;
+
   const data = [
     {
       label: "Valor do imóvel",

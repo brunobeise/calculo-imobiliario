@@ -21,6 +21,7 @@ export default function FinancingOrCash() {
 
   useEffect(() => {
     const newErrors: propertyDataError[] = [];
+    if (!propertyData) return;
 
     if (propertyData.finalYear > 35 || propertyData.financingYears > 35) {
       newErrors.push({
@@ -36,6 +37,8 @@ export default function FinancingOrCash() {
       setErrors(newErrors);
     }
   }, [propertyData]);
+
+  if (!propertyData) return null;
 
   return (
     <>
@@ -84,6 +87,7 @@ export default function FinancingOrCash() {
                 colspan={12}
               />
               <TablePropertyAppreciation
+                propertyValue={propertyData.propertyValue}
                 data={caseData[context].detailedTable.map(
                   (i) => i.propertyValue
                 )}
