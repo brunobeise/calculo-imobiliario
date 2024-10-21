@@ -27,6 +27,7 @@ export default function DrawerMenu() {
   const { user } = useAuth();
 
   if (!isAuthenticated) return null;
+  if (location.pathname.includes("proposta")) return null;
 
   return (
     <>
@@ -78,7 +79,7 @@ export default function DrawerMenu() {
                   <FaBook />
                 </ListItemDecorator>
                 <Typography className="font-bold !ms-[-10px]">
-                  Meus Estudos
+                  Meus estudos
                 </Typography>
               </ListItem>
             </Link>

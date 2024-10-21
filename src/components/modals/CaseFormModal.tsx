@@ -14,27 +14,21 @@ import {
   Checkbox,
 } from "@mui/joy";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { caseService, CaseStudy } from "@/service/caseService";
+import { caseService } from "@/service/caseService";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import PropertyDataDisplay from "../shared/PropertyDataDisplay";
 import { useNavigate } from "react-router-dom";
 import { CaseStudyTypeLinkMap } from "../shared/CaseCard";
+import { CaseStudy } from "@/types/caseTypes";
 
-interface CreateCaseModalProps {
+interface CaseFormModalProps {
   open: boolean;
   onClose: () => void;
   caseType: string;
   propertyData: PropertyData;
   editChoose: boolean;
   actualCase?: CaseStudy;
-  caseAdded?: (newCase: {
-    id: string;
-    name: string;
-    propertyData: PropertyData;
-    type: string;
-    createdAt: string;
-    shared: boolean;
-  }) => void;
+  caseAdded?: (newCase: CaseStudy) => void;
 }
 
 interface CaseFormData {
@@ -42,7 +36,7 @@ interface CaseFormData {
   shared: boolean;
 }
 
-const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
+const CaseFormModal: React.FC<CaseFormModalProps> = ({
   open,
   onClose,
   caseType,
@@ -101,14 +95,20 @@ const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
     setLoading(true);
     if (!actualCase?.id) return;
     try {
-      const newCase = await caseService.updateCase(actualCase.id, {
+      await caseService.updateCase(actualCase.id, {
         ...data,
         propertyData: propertyData,
         type: caseType,
       });
 
       onClose();
-      caseAdded && caseAdded(newCase);
+      caseAdded &&
+        caseAdded({
+          ...actualCase,
+          ...data,
+          propertyData: propertyData,
+          type: caseType,
+        });
     } catch (error) {
       console.error("Erro ao editar case:", error);
     } finally {
@@ -189,4 +189,4 @@ const CreateCaseModal: React.FC<CreateCaseModalProps> = ({
   );
 };
 
-export default CreateCaseModal;
+export default CaseFormModal;

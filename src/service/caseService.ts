@@ -2,24 +2,11 @@
 import { notify } from "@/notify";
 import { api } from "./api";
 import { handleApiError } from "./errorHandler";
-import { PropertyData } from "@/propertyData/PropertyDataContext";
+import { CaseStudy } from "@/types/caseTypes";
 
-export interface CaseStudy {
-  id?: string;
-  name: string;
-  propertyData: PropertyData;
-  type: string;
-  createdAt?: string;
-  shared?: boolean;
-  user?: {
-    id: string;
-    photo: string;
-    fullName: string;
-  };
-}
 
 export const caseService = {
-  async createCase(data: CaseStudy) {
+  async createCase(data: Partial<CaseStudy>) {
     try {
       const response = await api.post("/cases", data);
       notify("success", "Case criado com sucesso!");
@@ -56,7 +43,7 @@ export const caseService = {
     }
   },
 
-  async updateCase(caseId: string, data: CaseStudy) {
+  async updateCase(caseId: string, data: Partial<CaseStudy>) {
     try {
       const response = await api.put("/cases/" + caseId, data);
       notify("success", "Case atualizado com sucesso!");

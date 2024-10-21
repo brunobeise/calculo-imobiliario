@@ -1,6 +1,6 @@
 import ItemListInput from "@/components/inputs/ItemListInput";
 import PictureInput from "@/components/inputs/PictureInput";
-import TextFieldReportInput from "@/components/inputs/TextFieldReportInput";
+import TextInput from "@/components/inputs/TextInput";
 import { Sheet } from "@mui/joy";
 
 export interface FinaceOrCashReportData {
@@ -25,11 +25,11 @@ export default function FinaceOrCashReportConfig(
         label="Foto Principal do imóvel"
         onChange={(v) => props.setData({ ...props.data, principalPhoto: v })}
       />
-      <TextFieldReportInput
+      <TextInput
         label="Nome do imóvel"
         onChange={(v) => props.setData({ ...props.data, title: v })}
       />
-      <TextFieldReportInput
+      <TextInput
         isTextarea
         label="Descrição do imóvel"
         onChange={(v) => props.setData({ ...props.data, description: v })}

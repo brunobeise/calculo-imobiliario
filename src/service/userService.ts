@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { notify } from "@/notify";
 import { api } from "./api";
-import { UserData } from "@/pages/UserConfig";
 import { handleApiError } from "./errorHandler";
+import { User } from "@/types/userTypes";
 
 export const userService = {
   async getUserData() {
@@ -25,7 +25,7 @@ export const userService = {
     }
   },
 
-  async editUser(userId: string, data: UserData) {
+  async editUser(userId: string, data: Partial<User>) {
     try {
       const response = await api.put("/users/" + userId, data);
       notify("success", "Dados atualizados com sucesso!");
@@ -35,7 +35,7 @@ export const userService = {
     }
   },
 
-  async createUser(data: UserData) {
+  async createUser(data: Partial<User>) {
     try {
       const response = await api.post("/users", data);
       notify("success", "Usuário criado com sucesso!");

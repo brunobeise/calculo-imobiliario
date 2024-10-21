@@ -9,11 +9,12 @@ import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
 import { Link, useLocation } from "react-router-dom";
 import PropertyDataNewCaseForm from "@/propertyData/propertyDataInivitalValues/propertyDataNewCaseForm/PropertyDataNewCaseForm";
-import { CaseStudy, caseService } from "@/service/caseService";
+import { caseService } from "@/service/caseService";
 import dayjs from "dayjs";
 import { Spinner } from "@/components/Loading";
 import { toBRL } from "@/lib/formatter";
 import { CaseStudyTypeLinkMap } from "@/components/shared/CaseCard";
+import { CaseStudy } from "@/types/caseTypes";
 
 interface NewCaseProps {
   setNewCase: (v: boolean) => void;
@@ -26,8 +27,7 @@ export default function NewCase(props: NewCaseProps) {
   const [myCases, setMyCases] = useState<CaseStudy[]>();
   const [realEstateCases, setRealEstateCases] = useState<CaseStudy[]>();
   const location = useLocation();
-  const { propertyData, setMultiplePropertyData } =
-    useContext(propertyDataContext);
+  const { setMultiplePropertyData } = useContext(propertyDataContext);
 
   const getMyCases = async () => {
     const cases = await caseService.getAllCases();
@@ -153,9 +153,13 @@ export default function NewCase(props: NewCaseProps) {
 
       {context === "newCase" && (
         <PropertyDataNewCaseForm
-          finish={() => {
-            if (propertyData) props.setNewCase(false);
-            else {
+          finish={(p) => {
+            console.log(p);
+
+            if (p) {
+              setMultiplePropertyData(p);
+              props.setNewCase(false);
+            } else {
               props.setNewCase(true);
               setContext(undefined);
             }

@@ -1,8 +1,10 @@
 import GlobalLoading from "@/components/Loading";
 import CaseCard from "@/components/shared/CaseCard";
-import { CaseStudy, caseService } from "@/service/caseService";
+import { caseService } from "@/service/caseService";
+import { CaseStudy } from "@/types/caseTypes";
 import { Divider } from "@mui/joy";
 import { useEffect, useState } from "react";
+import { FaBook } from "react-icons/fa";
 
 export const CaseStudyTypeMap = {
   financingPlanning: "Planejamento de Financiamento",
@@ -28,23 +30,31 @@ export default function MyCases() {
     }, {} as Record<string, CaseStudy[]>) || {};
 
   return (
-    <div className="px-12 mt-4">
+    <div className="px-12 ms-6">
       {!cases ? (
         <GlobalLoading />
       ) : (
-        Object.keys(casesByType).map((type) => (
-          <div key={type} className="mb-8">
-            <h2 className="text-xl font-bold mb-4">
-              {CaseStudyTypeMap[type as keyof typeof CaseStudyTypeMap] || type}
-            </h2>
-            <Divider />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-              {casesByType[type].map((caseStudy) => (
-                <CaseCard key={caseStudy.name} caseStudy={caseStudy} />
-              ))}
-            </div>
+        <>
+          <div className="w-full flex justify-center items-center text-primary gap-2  text-2xl mt-[-20px]">
+            <FaBook className="text-xl" />
+            <h2 className="font-bold">Meus estudos</h2>
           </div>
-        ))
+
+          {Object.keys(casesByType).map((type) => (
+            <div key={type} className="mb-8">
+              <h2 className="text-xl font-bold mb-4">
+                {CaseStudyTypeMap[type as keyof typeof CaseStudyTypeMap] ||
+                  type}
+              </h2>
+              <Divider />
+              <div className="flex flex-wrap gap-6 mt-4">
+                {casesByType[type].map((caseStudy) => (
+                  <CaseCard key={caseStudy.name} caseStudy={caseStudy} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </>
       )}
     </div>
   );

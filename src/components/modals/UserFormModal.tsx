@@ -16,47 +16,30 @@ import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import PictureInput from "../inputs/PictureInput";
 import { uploadImage } from "@/lib/imgur";
 import { userService } from "@/service/userService";
+import { User } from "@/types/userTypes";
 
-interface CreateUserModalProps {
+interface UserFormModalProps {
   open: boolean;
   onClose: () => void;
-  userAdded?: (user: {
-    id: string;
-    fullName: string;
-    photo: string;
-    role: string;
-    owner: boolean;
-  }) => void;
+  userAdded?: (user: User) => void;
 }
 
-interface UserFormData {
-  fullName: string;
-  role: string;
-  creci?: string;
-  address?: string;
-  photo?: string;
-  phone: string;
-  whatsapp?: string;
-  instagram?: string;
-  facebook?: string;
-  linkedin?: string;
-  email: string;
-  password?: string;
-  owner: boolean;
-}
-
-const CreateUserModal: React.FC<CreateUserModalProps> = ({ open, onClose, userAdded }) => {
+const UserFormModal: React.FC<UserFormModalProps> = ({
+  open,
+  onClose,
+  userAdded,
+}) => {
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
     reset,
-  } = useForm<UserFormData>();
+  } = useForm<User>();
 
   const [uploadLoading, setUploadLoading] = useState(false);
 
-  const handleFormSubmit: SubmitHandler<UserFormData> = async (data) => {
+  const handleFormSubmit: SubmitHandler<User> = async (data) => {
     setUploadLoading(true);
     try {
       let uploadedPhoto = data.photo;
@@ -275,4 +258,4 @@ const CreateUserModal: React.FC<CreateUserModalProps> = ({ open, onClose, userAd
   );
 };
 
-export default CreateUserModal;
+export default UserFormModal;

@@ -1,40 +1,25 @@
 // components/RealEstateConfig.tsx
 import { useEffect, useState } from "react";
 import { Button, Card, CardContent, FormLabel, Input, Table } from "@mui/joy";
-import ReactLoading from "react-loading";
 import PictureInput from "@/components/inputs/PictureInput";
 import GlobalLoading from "@/components/Loading";
 import { uploadImage } from "@/lib/imgur";
 import { realEstateService } from "@/service/realEstateService";
-import { UserData } from "./UserConfig";
 import { FaCheckCircle } from "react-icons/fa";
 import { IoCloseOutline } from "react-icons/io5";
 import { userService } from "@/service/userService";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { useAuth } from "@/auth";
 import { useNavigate } from "react-router-dom";
-import CreateUserModal from "@/components/modals/CreateUserModal";
 import { IoAddCircleSharp } from "react-icons/io5";
-
-export interface RealEstateData {
-  id?: string;
-  name?: string;
-  address?: string;
-  logo?: string;
-  logo2?: string;
-  users?: {
-    id: string;
-    fullName: string;
-    photo: string;
-    role: string;
-    owner: boolean;
-  }[];
-}
+import { RealEstate } from "@/types/realEstateTypes";
+import { User } from "@/types/userTypes";
+import UserFormModal from "@/components/modals/UserFormModal";
 
 export default function RealEstateConfig() {
   const navigate = useNavigate();
-  const [form, setForm] = useState<RealEstateData>();
-  const [users, setUsers] = useState<UserData[]>([]);
+  const [form, setForm] = useState<Partial<RealEstate>>();
+  const [users, setUsers] = useState<User[]>([]);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [changeAdminUser, setChangeAdminUser] = useState({
@@ -43,7 +28,7 @@ export default function RealEstateConfig() {
     owner: false,
     loading: false,
   });
-  const [createUserModal, setCreateUserModal] = useState(false);
+  const [userFormModal, setUserFormModal] = useState(false);
 
   const { user: User } = useAuth();
 
@@ -198,15 +183,12 @@ export default function RealEstateConfig() {
             </form>
             <div className="mt-10 text-center">
               <Button
+                loading={uploadLoading}
                 disabled={uploadLoading}
                 onClick={handleSave}
                 className="w-32"
               >
-                {uploadLoading ? (
-                  <ReactLoading type="spin" width={20} height={20} />
-                ) : (
-                  <>Salvar</>
-                )}
+                Salvar
               </Button>
             </div>
           </CardContent>
@@ -219,7 +201,7 @@ export default function RealEstateConfig() {
                 Usuários da Imobiliária
               </h2>
               <Button
-                onClick={() => setCreateUserModal(true)}
+                onClick={() => setUserFormModal(true)}
                 endDecorator={<IoAddCircleSharp />}
               >
                 Novo usuário
@@ -302,9 +284,9 @@ export default function RealEstateConfig() {
         onOk={handleAdmin}
       />
 
-      <CreateUserModal
-        open={createUserModal}
-        onClose={() => setCreateUserModal(false)}
+      <UserFormModal
+        open={userFormModal}
+        onClose={() => setUserFormModal(false)}
         userAdded={(user) => setUsers([...users, user])}
       />
     </div>

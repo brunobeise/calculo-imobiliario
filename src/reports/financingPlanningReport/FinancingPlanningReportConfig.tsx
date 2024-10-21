@@ -1,12 +1,12 @@
 import ItemListInput from "@/components/inputs/ItemListInput";
 import PictureInput from "@/components/inputs/PictureInput";
-import TextFieldReportInput from "@/components/inputs/TextFieldReportInput";
+import TextInput from "@/components/inputs/TextInput";
 import { Sheet } from "@mui/joy";
 
 export interface FinancingPlanningReportData {
-  principalPhoto: string;
+  mainPhoto: string;
   description: string;
-  title: string;
+  propertyName: string;
   additionalPhotos: string[];
   features: string[];
 }
@@ -23,14 +23,17 @@ export default function FinancingPlanningReportConfig(
     <Sheet className="grid grid-rows shadow">
       <PictureInput
         label="Foto Principal do imóvel"
-        onChange={(v) => props.setData({ ...props.data, principalPhoto: v })}
+        value={[props.data.mainPhoto]}
+        onChange={(v) => props.setData({ ...props.data, mainPhoto: v })}
       />
-      <TextFieldReportInput
+      <TextInput
+        value={props.data.propertyName}
         label="Nome do imóvel"
-        onChange={(v) => props.setData({ ...props.data, title: v })}
+        onChange={(v) => props.setData({ ...props.data, propertyName: v })}
       />
-      <TextFieldReportInput
+      <TextInput
         isTextarea
+        value={props.data.description}
         label="Descrição do imóvel"
         onChange={(v) => props.setData({ ...props.data, description: v })}
       />

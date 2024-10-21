@@ -7,6 +7,7 @@ interface ButtonConfig {
   icon: React.ReactNode;
   href?: string;
   tooltip?: string;
+  loading?: boolean;
 }
 
 interface FloatingButtonListProps {
@@ -34,6 +35,7 @@ export default function FloatingButtonList({
           ) : (
             <Tooltip placement="left-start" title={button.tooltip || ""}>
               <Button
+                loading={button.loading}
                 className="!rounded-full w-[40px] h-[40px]"
                 onClick={button.onClick}
               >

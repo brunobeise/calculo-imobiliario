@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header";
 import { financingRoutes } from "./routes/financing";
 import { auxiliarRoutes } from "./routes/auxiliar";
-import { relatorioRoutes } from "./routes/reports";
 import { PropertyDataProvider } from "./propertyData/PropertyDataContext";
 import Scrap from "./scrapping/Scrap";
 import { Bounce, ToastContainer } from "react-toastify";
@@ -26,6 +25,7 @@ import DrawerMenu from "./components/DrawerMenu";
 import RealEstateConfig from "./pages/RealEstateConfig";
 import CaseTypeCard from "./components/shared/CaseTypeCard";
 import MyCases from "./pages/MyCases";
+import FinancingPlanningReportSharedPage from "./reports/FinancingPlanningReportSharedPage";
 
 interface PrivateRouteProps {
   children: JSX.Element;
@@ -38,7 +38,7 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
 };
 
 export default function App() {
-  const routes = [...financingRoutes, ...auxiliarRoutes, ...relatorioRoutes];
+  const routes = [...financingRoutes, ...auxiliarRoutes];
 
   function Home() {
     const { isAuthenticated } = useAuth();
@@ -160,6 +160,11 @@ export default function App() {
                 element={<PrivateRoute>{r.element}</PrivateRoute>}
               />
             ))}
+
+            <Route
+              path="proposta/:id"
+              element={<FinancingPlanningReportSharedPage />}
+            />
           </Routes>
         </PropertyDataProvider>
       </BrowserRouter>

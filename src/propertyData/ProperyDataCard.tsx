@@ -87,7 +87,7 @@ export default function PropertyDataCard() {
   };
 
   return (
-    <form className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:mb-[-1rem] mt-24 sm:mt-10 md:p-2 lg:p-5">
+    <form className="grid grid-cols-1 lg:grid-cols-3 gap-3 lg:mb-[-1rem] md:p-2 lg:p-5">
       <Sheet variant="outlined" color="neutral" className="p-5 ">
         <h2 className="text-xl text-center mb-3 font-bold ">
           Dados do Imóvel e Financiamento

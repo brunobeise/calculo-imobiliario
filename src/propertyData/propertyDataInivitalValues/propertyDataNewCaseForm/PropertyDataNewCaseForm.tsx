@@ -1,13 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Stepper from "@mui/joy/Stepper";
 import Step from "@mui/joy/Step";
 import StepIndicator, { stepIndicatorClasses } from "@mui/joy/StepIndicator";
 import { Button, Card } from "@mui/joy";
 import PropertyDataStep1 from "./PropertyDataStep1";
-import {
-  PropertyData,
-  propertyDataContext,
-} from "@/propertyData/PropertyDataContext";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 import PropertyDataStep2 from "./PropertyDataStep2";
 import dayjs from "dayjs";
 import PropertyDataStep3 from "./PropertyDataStep3";
@@ -19,10 +16,9 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 export default function PropertyDataNewCaseForm({
   finish,
 }: {
-  finish: () => void;
+  finish: (p?: PropertyData) => void;
 }) {
   const [activeStep, setActiveStep] = useState(0);
-  const { setMultiplePropertyData } = useContext(propertyDataContext);
   const [form, setform] = useState<PropertyData>({
     discharges: [],
     initialDate: dayjs().format("MM/YYYY"),
@@ -48,13 +44,12 @@ export default function PropertyDataNewCaseForm({
   ];
 
   const handleNext = () => {
-    if (activeStep < steps.length - 1) {
+    if (activeStep !== steps.length - 1) {
       setActiveStep((prevStep) => prevStep + 1);
       return;
     }
 
-    setMultiplePropertyData(form);
-    finish();
+    finish(form);
   };
 
   const handleBack = () => {
@@ -86,7 +81,7 @@ export default function PropertyDataNewCaseForm({
     <div className="flex items-center gap-10">
       <div className="flex flex-col items-start gap-5">
         <Button
-          onClick={finish}
+          onClick={() => finish()}
           startDecorator={<IoIosArrowRoundBack className="text-xl" />}
           variant="plain"
         >

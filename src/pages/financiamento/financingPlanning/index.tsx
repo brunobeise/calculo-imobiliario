@@ -12,11 +12,13 @@ import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import FinancingPlanningNewCase from "../../NewCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import CreateCaseModal from "@/components/modals/CreateCaseModal";
 import { useParams } from "react-router-dom";
-import { caseService, CaseStudy } from "@/service/caseService";
+import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import { CaseStudy } from "@/types/caseTypes";
+import FinancingPlanningReport from "@/reports/financingPlanningReport/FinancingPlanningReport";
+import CaseFormModal from "@/components/modals/CaseFormModal";
 
 export default function FinancingPlanning() {
   const { id } = useParams();
@@ -24,13 +26,37 @@ export default function FinancingPlanning() {
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
   const [errors, setErrors] = useState<propertyDataError[]>([]);
+  const [report, setReport] = useState(false);
   const { caseData, setCaseData } = useContext(caseDataContext);
   const [newCase, setNewCase] = useState(!id);
-  const [createCaseModal, setCreateCaseModal] = useState(false);
+  const [caseFormModal, setCaseFormModal] = useState(false);
   const [actualCase, setActualCase] = useState<CaseStudy>();
   const [getCaseLoading, setGetCaseLoading] = useState(false);
   const [editOrNewCaseModal, setEditOrNewCaseModal] = useState(false);
   const [editChoose, setEditChoose] = useState(false);
+
+  const buttons = [
+    ...(actualCase
+      ? [
+          {
+            onClick: () => setReport(true),
+            icon: <FaFile />,
+            tooltip: "Acessar relatório",
+          },
+        ]
+      : []),
+    {
+      onClick: () => {
+        if (id) {
+          setEditOrNewCaseModal(true);
+        } else {
+          setCaseFormModal(true);
+        }
+      },
+      icon: <FaSave />,
+      tooltip: "Salvar Case",
+    },
+  ];
 
   useEffect(() => {
     if (id) {
@@ -70,40 +96,28 @@ export default function FinancingPlanning() {
   if (newCase)
     return <FinancingPlanningNewCase setNewCase={(v) => setNewCase(v)} />;
 
-  const buttons = [
-    {
-      onClick: () => {
-        if (id) {
-          setEditOrNewCaseModal(true);
-        } else setCreateCaseModal(true);
-      },
-      icon: <FaSave />,
-      tooltip: "Salvar Case",
-    },
-    {
-      onClick: () => {
-        localStorage.setItem(
-          "financingPlanningCaseData",
-          JSON.stringify(caseData)
-        );
-        localStorage.setItem(
-          "financingPlanningPropertyData",
-          JSON.stringify(propertyData)
-        );
-      },
-      icon: <FaFile />,
-      href: "/planejamentofinanciamento/relatorio",
-      tooltip: "Gerar relatório",
-    },
-  ];
-
-  if (getCaseLoading) return <GlobalLoading text="Carregando case..." />;
+  if (getCaseLoading && !actualCase)
+    return <GlobalLoading text="Carregando case..." />;
 
   if (!propertyData) return null;
+
+  if (report && actualCase)
+    return (
+      <FinancingPlanningReport
+        onClose={() => setReport(false)}
+        propertyData={propertyData}
+        caseData={caseData}
+        actualCase={actualCase}
+      />
+    );
 
   return (
     <>
       <div className="relative">
+        <h1 className="scroll-m-20 text-xl text-primary text-center my-3">
+          {actualCase?.name} {actualCase?.propertyName && " - "}
+          {actualCase?.propertyName}
+        </h1>
         <PropertyDataCard />
         <div className="w-full text-center ">
           {errors.length === 0 ? (
@@ -149,11 +163,11 @@ export default function FinancingPlanning() {
         </div>
         <FloatingButtonList buttons={buttons} />
       </div>
-      <CreateCaseModal
+      <CaseFormModal
         actualCase={actualCase}
         editChoose={editChoose}
-        open={createCaseModal}
-        onClose={() => setCreateCaseModal(false)}
+        open={caseFormModal}
+        onClose={() => setCaseFormModal(false)}
         caseType="financingPlanning"
         propertyData={propertyData}
       />
@@ -163,14 +177,14 @@ export default function FinancingPlanning() {
         content="Deseja editar o estudo atual ou criar um novo a partir desses dados?"
         onOk={() => {
           setEditChoose(true);
-          setCreateCaseModal(true);
+          setCaseFormModal(true);
           setEditOrNewCaseModal(false);
         }}
         open={editOrNewCaseModal}
         onClose={() => {
           setEditOrNewCaseModal(false);
           setEditChoose(false);
-          setCreateCaseModal(true);
+          setCaseFormModal(true);
         }}
       />
     </>

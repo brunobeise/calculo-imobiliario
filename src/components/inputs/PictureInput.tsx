@@ -16,7 +16,7 @@ export default function PictureInput({
   multiple = false,
   bordered = false,
 }: PictureReportInputProps) {
-  const [fileNames, setFileNames] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>(value || []);
   const [fileSrcs, setFileSrcs] = useState<string[]>(value || []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +82,7 @@ export default function PictureInput({
                     alt="Preview"
                     className="w-10 h-10 object-cover mr-2"
                   />
-                  <span>{fileNames[index]}</span>
+                  <span>{!fileNames[index].includes("cloudinary") && fileNames[index]}</span>
                 </div>
               ))}
             </div>

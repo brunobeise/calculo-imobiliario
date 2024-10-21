@@ -52,7 +52,7 @@ export default function ItemListInput({
         {items.map((item, index) => (
           <ListItem key={index} className="flex items-center">
             <ListItemText primary={item} />
-            <FaTrash onClick={() => handleDeleteItem(index)}></FaTrash>
+            <FaTrash className="cursor-pointer" onClick={() => handleDeleteItem(index)}></FaTrash>
           </ListItem>
         ))}
       </List>
