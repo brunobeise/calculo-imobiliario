@@ -3,7 +3,7 @@ import { Button, Tooltip } from "@mui/joy";
 import { Link } from "react-router-dom";
 
 interface ButtonConfig {
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement> | undefined;
   icon: React.ReactNode;
   href?: string;
   tooltip?: string;

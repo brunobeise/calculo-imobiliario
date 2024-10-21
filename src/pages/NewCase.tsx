@@ -9,40 +9,41 @@ import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
 import { Link, useLocation } from "react-router-dom";
 import PropertyDataNewCaseForm from "@/propertyData/propertyDataInivitalValues/propertyDataNewCaseForm/PropertyDataNewCaseForm";
-import { caseService } from "@/service/caseService";
 import dayjs from "dayjs";
 import { Spinner } from "@/components/Loading";
 import { toBRL } from "@/lib/formatter";
 import { CaseStudyTypeLinkMap } from "@/components/shared/CaseCard";
-import { CaseStudy } from "@/types/caseTypes";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCases, fetchRealEstateCases } from "@/store/caseReducer";
+import { BsFillHouseFill } from "react-icons/bs";
 
 interface NewCaseProps {
   setNewCase: (v: boolean) => void;
 }
 
 export default function NewCase(props: NewCaseProps) {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [context, setContext] = useState<
     "new" | "exists" | "newCase" | "myCases" | "realEstateCases"
   >();
-  const [myCases, setMyCases] = useState<CaseStudy[]>();
-  const [realEstateCases, setRealEstateCases] = useState<CaseStudy[]>();
+
   const location = useLocation();
   const { setMultiplePropertyData } = useContext(propertyDataContext);
 
-  const getMyCases = async () => {
-    const cases = await caseService.getAllCases();
-    setMyCases(cases);
-  };
-
-  const getRealEstateCases = async () => {
-    const cases = await caseService.getAllRealEstateCases();
-    setRealEstateCases(cases);
-  };
+  const { myCases, realEstateCases, loading } = useSelector(
+    (state: RootState) => ({
+      myCases: state.cases.cases,
+      realEstateCases: state.cases.realEstateCases,
+      loading: state.cases.loading,
+    })
+  );
 
   useEffect(() => {
-    if (context === "myCases") getMyCases();
-    if (context === "realEstateCases") getRealEstateCases();
-  }, [context]);
+    if (context === "myCases") dispatch(fetchCases());
+    if (context === "realEstateCases") dispatch(fetchRealEstateCases());
+  }, [context, dispatch]);
 
   const hasLastCase = () => {
     const storedData = localStorage.getItem("financingPlanningPropertyData");
@@ -65,11 +66,12 @@ export default function NewCase(props: NewCaseProps) {
 
   return (
     <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-      <h2 className="text-primary font-bold text-center text-2xl mb-5 ">
+      <h2 className="text-primary font-bold text-center text-xl mb-5 ">
         {!context && " Iniciar estudo"}
         {context === "new" && "Como deseja começar o estudo?"}
         {context === "exists" && "Continuar estudo"}
         {context === "myCases" && "Meus Estudos"}
+        {context === "realEstateCases" && "Estudos Compartilhados"}
       </h2>
 
       {!context && (
@@ -154,10 +156,14 @@ export default function NewCase(props: NewCaseProps) {
       {context === "newCase" && (
         <PropertyDataNewCaseForm
           finish={(p) => {
-            console.log(p);
-
             if (p) {
-              setMultiplePropertyData(p);
+              setMultiplePropertyData({
+                ...p,
+                subsidy: p.subsidy || 0,
+                initialRentValue: p.initialRentValue || 0,
+                rentAppreciationRate: p.rentAppreciationRate || 0,
+                monthlyYieldRate: p.monthlyYieldRate || 0,
+              });
               props.setNewCase(false);
             } else {
               props.setNewCase(true);
@@ -169,7 +175,7 @@ export default function NewCase(props: NewCaseProps) {
 
       {context === "realEstateCases" && (
         <Card className="w-[500px] h-[400px] shadow-lg overflow-y-auto">
-          {realEstateCases && realEstateCases.length > 0 ? (
+          {realEstateCases.length > 0 ? (
             realEstateCases.map((c) => (
               <ContextSelectorButton
                 icon={<FaFile />}
@@ -196,28 +202,36 @@ export default function NewCase(props: NewCaseProps) {
                   </div>
                 }
                 desc={
-                  <div className="flex items-center mt-4">
-                    <div className="rounded-full overflow-hidden flex justify-center items-center w-[30px] h-[30px]">
-                      <img
-                        src={
-                          c.user?.photo ||
-                          "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
-                        }
-                      />
-                    </div>
-                    <div className="ms-2 flex flex-col">
-                      <span className="text-md text-blackish">
-                        {c.user?.fullName}
+                  <div>
+                    {c.propertyName && (
+                      <span className="flex gap-1 items-center">
+                        <BsFillHouseFill />
+                        {c.propertyName}
                       </span>
-                      <span className="text-md text-grayText">
-                        {dayjs(c.createdAt).format("DD/MM/YYYY")}
-                      </span>
+                    )}
+                    <div className="flex items-center mt-2">
+                      <div className="rounded-full overflow-hidden flex justify-center items-center w-[30px] h-[30px]">
+                        <img
+                          src={
+                            c.user?.photo ||
+                            "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
+                          }
+                        />
+                      </div>
+                      <div className="ms-2 flex flex-col">
+                        <span className="text-md text-blackish">
+                          {c.user?.fullName}
+                        </span>
+                        <span className="text-md text-grayText">
+                          {dayjs(c.createdAt).format("DD/MM/YYYY")}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 }
               />
             ))
-          ) : realEstateCases && realEstateCases.length === 0 ? (
+          ) : !loading ? (
             <p className="text-center font-bold mt-5 px-12">
               Não há nenhum estudo compartilhado pelos seus colegas :(
             </p>
@@ -229,7 +243,7 @@ export default function NewCase(props: NewCaseProps) {
 
       {context === "myCases" && (
         <Card className="w-[500px] h-[400px] shadow-lg overflow-y-auto">
-          {myCases && myCases.length > 0 ? (
+          {myCases.length > 0 ? (
             myCases.map((c) => (
               <Link
                 to={
@@ -263,11 +277,22 @@ export default function NewCase(props: NewCaseProps) {
                       </p>
                     </div>
                   }
-                  desc={dayjs(c.createdAt).format("DD/MM/YYYY")}
+                  desc={
+                    <div className="flex flex-col gap-1">
+                      {c.propertyName && (
+                        <span className="flex gap-1 items-center">
+                          <BsFillHouseFill />
+                          {c.propertyName}
+                        </span>
+                      )}
+
+                      <span> {dayjs(c.createdAt).format("DD/MM/YYYY")}</span>
+                    </div>
+                  }
                 />
               </Link>
             ))
-          ) : myCases && myCases.length === 0 ? (
+          ) : !loading ? (
             <p className="text-center font-bold mt-5">
               Você não tem nenhum estudo :(
             </p>
@@ -278,7 +303,7 @@ export default function NewCase(props: NewCaseProps) {
       )}
 
       {context && (
-        <div className="absolute w-full flex justify-center mt-5">
+        <div className="w-full flex justify-center mt-5">
           <Button
             startDecorator={<FaArrowLeft />}
             onClick={handleBack}

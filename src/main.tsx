@@ -22,6 +22,8 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
 ChartJS.register(
   CategoryScale,
@@ -38,7 +40,9 @@ ChartJS.register(
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <CssVarsProvider theme={theme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </CssVarsProvider>
   </React.StrictMode>
 );

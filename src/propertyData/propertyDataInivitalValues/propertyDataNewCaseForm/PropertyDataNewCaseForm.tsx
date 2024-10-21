@@ -62,7 +62,6 @@ export default function PropertyDataNewCaseForm({
     return (
       (activeStep === 0 && !form.finalYear) ||
       (activeStep === 1 && !form.propertyValue) ||
-      (activeStep === 1 && !form.subsidy) ||
       (activeStep === 1 && !form.propertyAppreciationRate) ||
       (activeStep === 2 && !form.downPayment) ||
       (activeStep === 3 && !form.interestRate) ||
@@ -112,7 +111,7 @@ export default function PropertyDataNewCaseForm({
                 </StepIndicator>
               }
             >
-              <div className="h-[2.5rem] text-center flex items-center">
+              <div className="h-[2.5rem] text-left flex items-center">
                 <span className={`font-bold text-sm`}>{step.label}</span>
               </div>
             </Step>
@@ -120,7 +119,7 @@ export default function PropertyDataNewCaseForm({
         </Stepper>
       </div>
 
-      <Card className="w-[500px] shadow-lg mt-5 p-4 flex flex-col justify-between h-[540px] overflow-y-auto">
+      <Card className="w-[500px] shadow-lg p-4 flex flex-col justify-between h-[540px] overflow-y-auto">
         <form className="flex-grow">
           {activeStep === 0 && (
             <PropertyDataStep1 form={form} setForm={setForm} />

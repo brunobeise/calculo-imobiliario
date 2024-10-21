@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { FaPrint, FaSave } from "react-icons/fa";
+import { FaExternalLinkAlt, FaPrint, FaSave } from "react-icons/fa";
 import FinancingPlanningReportConfig, {
   FinancingPlanningReportData,
 } from "./FinancingPlanningReportConfig";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import { FaArrowRotateLeft } from "react-icons/fa6";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { FinancingPlanningData } from "@/pages/financiamento/financingPlanning/CaseData";
 import { CaseStudy } from "@/types/caseTypes";
 import { caseService } from "@/service/caseService";
 import { uploadImage } from "@/lib/imgur";
+import { Divider } from "@mui/joy";
 
 interface FinancingPlanningReportProps {
   propertyData: PropertyData;
@@ -76,12 +76,13 @@ export default function FinancingPlanningReport({
 
   const buttons = [
     {
-      icon: <FaArrowRotateLeft />,
-      tooltip: "Voltar ao estudo",
+      icon: <FaExternalLinkAlt className="!text-[1.1rem]" />,
+      tooltip: "Acessar link compartilhado",
       onClick: onClose,
+      href: "/proposta/" + actualCase.id,
     },
     {
-      onClick: () => handlePrint,
+      onClick: (e: unknown) => handlePrint(e),
       icon: <FaPrint />,
       tooltip: "Gerar PDF",
     },
@@ -94,24 +95,27 @@ export default function FinancingPlanningReport({
   ];
 
   return (
-    <div className="flex pt-10 px-10 gap-5">
-      <div>
-        <FinancingPlanningReportPreview
-          propertyData={propertyData}
-          caseData={caseData}
-          configData={configData}
-          ref={componentRef}
-        />
-      </div>
-      <div className="w-full" style={{ position: "relative" }}>
-        <div style={{ position: "sticky", top: "10px" }}>
-          <FinancingPlanningReportConfig
-            data={configData}
-            setData={(d) => setConfigData(d)}
+    <div>
+      <Divider />
+      <div className="flex pt-10 px-10 gap-5">
+        <div>
+          <FinancingPlanningReportPreview
+            propertyData={propertyData}
+            caseData={caseData}
+            configData={configData}
+            ref={componentRef}
           />
         </div>
+        <div className="w-full" style={{ position: "relative" }}>
+          <div style={{ position: "sticky", top: "10px" }}>
+            <FinancingPlanningReportConfig
+              data={configData}
+              setData={(d) => setConfigData(d)}
+            />
+          </div>
+        </div>
+        <FloatingButtonList buttons={buttons} />
       </div>
-      <FloatingButtonList buttons={buttons} />
     </div>
   );
 }

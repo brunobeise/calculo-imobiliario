@@ -1,23 +1,24 @@
 import GlobalLoading from "@/components/Loading";
 import CaseCard from "@/components/shared/CaseCard";
-import { caseService } from "@/service/caseService";
-import { CaseStudy } from "@/types/caseTypes";
-import { Divider } from "@mui/joy";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaBook } from "react-icons/fa";
+import { Divider } from "@mui/joy";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { fetchCases } from "@/store/caseReducer";
+import { CaseStudy } from "@/types/caseTypes";
 
 export const CaseStudyTypeMap = {
   financingPlanning: "Planejamento de Financiamento",
 };
 
 export default function MyCases() {
-  const [cases, setCases] = useState<CaseStudy[]>();
+  const dispatch = useDispatch<AppDispatch>();
+  const { cases, loading } = useSelector((state: RootState) => state.cases);
 
   useEffect(() => {
-    caseService.getAllCases().then((result) => {
-      setCases(result);
-    });
-  }, []);
+    dispatch(fetchCases());
+  }, [dispatch]);
 
   const casesByType =
     cases?.reduce((acc, caseStudy) => {
@@ -31,7 +32,7 @@ export default function MyCases() {
 
   return (
     <div className="px-12 ms-6">
-      {!cases ? (
+      {loading && cases?.length === 0 ? (
         <GlobalLoading />
       ) : (
         <>

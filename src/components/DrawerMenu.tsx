@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { FaBars, FaBook, FaHome, FaUser } from "react-icons/fa";
 import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ListDivider from "@mui/joy/ListDivider";
 import { FaCalculator } from "react-icons/fa";
 import { financingRoutes } from "@/routes/financing";
@@ -20,11 +20,13 @@ import { MdOutlineRealEstateAgent } from "react-icons/md";
 
 export default function DrawerMenu() {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
   const [open, setOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
 
   const { user } = useAuth();
+  
 
   if (!isAuthenticated) return null;
   if (location.pathname.includes("proposta")) return null;
@@ -119,23 +121,25 @@ export default function DrawerMenu() {
           </ListItem>
           {casesOpen && (
             <List>
-              {financingRoutes.map((i) => (
-                <>
-                  <Link onClick={() => setOpen(false)} to={i.href}>
-                    <ListItem
-                      onClick={() => setCasesOpen(!casesOpen)}
-                      className="cursor-pointer !px-6"
-                      nested
-                      sx={{ my: 1 }}
-                    >
-                      <Typography className="font-bold !ms-[10px]">
-                        {i.title}
-                      </Typography>
-                    </ListItem>
-                  </Link>
-                  <ListDivider />
-                </>
-              ))}
+              {financingRoutes
+                .filter((r) => !r.href.includes("/:id"))
+                .map((i) => (
+                  <>
+                    <Link onClick={() => setOpen(false)} to={i.href}>
+                      <ListItem
+                        onClick={() => setCasesOpen(!casesOpen)}
+                        className="cursor-pointer !px-6"
+                        nested
+                        sx={{ my: 1 }}
+                      >
+                        <Typography className="font-bold !ms-[10px]">
+                          {i.title}
+                        </Typography>
+                      </ListItem>
+                    </Link>
+                    <ListDivider />
+                  </>
+                ))}
             </List>
           )}
         </List>

@@ -10,6 +10,7 @@ import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
 import rural from "@/assets/rurallfinancing.png";
 import invest from "@/assets/financingOrInvest.png";
 import obra from "@/assets/jurosdeobra.png";
+import avista from "@/assets/financiamentoxavista.png";
 export interface Route {
   title: string;
   href: string;
@@ -66,6 +67,15 @@ export default function App() {
                   title={i.title}
                 />
               ))}
+            <CaseTypeCard
+              comingSoon
+              link={""}
+              desc={
+                "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista."
+              }
+              image={avista}
+              title={"Financiamento vs. Compra à Vista"}
+            />
             <CaseTypeCard
               comingSoon
               link={""}

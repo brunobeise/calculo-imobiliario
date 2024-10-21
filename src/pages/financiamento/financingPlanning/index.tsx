@@ -6,22 +6,33 @@ import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
-import { FaFile, FaSave } from "react-icons/fa";
+import { FaBook, FaFile, FaSave } from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import FinancingPlanningNewCase from "../../NewCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { CaseStudy } from "@/types/caseTypes";
 import FinancingPlanningReport from "@/reports/financingPlanningReport/FinancingPlanningReport";
 import CaseFormModal from "@/components/modals/CaseFormModal";
+import {
+  Button,
+  Divider,
+  Tab,
+  tabClasses,
+  TabList,
+  Tabs,
+  Tooltip,
+} from "@mui/joy";
+import { MdRestartAlt } from "react-icons/md";
 
 export default function FinancingPlanning() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
@@ -36,15 +47,6 @@ export default function FinancingPlanning() {
   const [editChoose, setEditChoose] = useState(false);
 
   const buttons = [
-    ...(actualCase
-      ? [
-          {
-            onClick: () => setReport(true),
-            icon: <FaFile />,
-            tooltip: "Acessar relatório",
-          },
-        ]
-      : []),
     {
       onClick: () => {
         if (id) {
@@ -103,21 +105,133 @@ export default function FinancingPlanning() {
 
   if (report && actualCase)
     return (
-      <FinancingPlanningReport
-        onClose={() => setReport(false)}
-        propertyData={propertyData}
-        caseData={caseData}
-        actualCase={actualCase}
-      />
+      <>
+        <div className="absolute top-[1rem] left-[4rem] z-10">
+          <Tooltip title="Recomeçar estudo" placement="left-end">
+            <Button
+              variant="plain"
+              className="!p-0 !px-1"
+              onClick={() => {
+                setNewCase(true);
+                setActualCase(undefined);
+                navigate("/planejamentofinanciamento");
+              }}
+            >
+              <MdRestartAlt className="text-xl text-grayText" />
+            </Button>
+          </Tooltip>
+        </div>
+        <Tabs
+          defaultValue={"case"}
+          aria-label="tabs"
+          sx={{ bgcolor: "transparent" }}
+          className="!absolute !right-[2rem] top-[2rem]"
+        >
+          <TabList
+            disableUnderline
+            sx={{
+              justifyContent: "center",
+              p: 0.5,
+              gap: 0.5,
+              borderRadius: "xl",
+              bgcolor: "transparent",
+              [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                boxShadow: "sm",
+                bgcolor: "background.surface",
+              },
+            }}
+          >
+            <div onClick={() => setReport(false)}>
+              <Tab className="!text-primary" value="case">
+                <FaBook className="text-sm" />{" "}
+                <span className="font-bold"> Estudo </span>{" "}
+              </Tab>
+            </div>
+            <div onClick={() => setReport(true)}>
+              <Tab className="!text-primary" value="report">
+                <FaFile className="text-sm" />{" "}
+                <span className="font-bold">Relatório </span>
+              </Tab>
+            </div>
+          </TabList>
+        </Tabs>
+        <h1 className="scroll-m-20 text-xl text-primary text-center mt-3">
+          {actualCase?.name} {actualCase?.propertyName && " - "}
+          {actualCase?.propertyName}
+        </h1>
+        <Divider className="!mt-3" />
+        <FinancingPlanningReport
+          onClose={() => setReport(false)}
+          propertyData={propertyData}
+          caseData={caseData}
+          actualCase={actualCase}
+        />
+      </>
     );
 
   return (
     <>
-      <div className="relative">
-        <h1 className="scroll-m-20 text-xl text-primary text-center my-3">
-          {actualCase?.name} {actualCase?.propertyName && " - "}
-          {actualCase?.propertyName}
-        </h1>
+      {actualCase && (
+        <>
+          <Tabs
+            defaultValue={"case"}
+            aria-label="tabs"
+            sx={{ bgcolor: "transparent" }}
+            className="!absolute !right-[2rem] top-[2rem]"
+          >
+            <TabList
+              disableUnderline
+              sx={{
+                justifyContent: "center",
+                p: 0.5,
+                gap: 0.5,
+                borderRadius: "xl",
+                bgcolor: "transparent",
+                [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                  boxShadow: "sm",
+                  bgcolor: "background.surface",
+                },
+              }}
+            >
+              <div onClick={() => setReport(false)}>
+                <Tab className="!text-primary" value="case">
+                  <FaBook className="text-sm" />{" "}
+                  <span className="font-bold"> Estudo </span>{" "}
+                </Tab>
+              </div>
+              <div onClick={() => setReport(true)}>
+                <Tab className="!text-primary" value="report">
+                  <FaFile className="text-sm" />{" "}
+                  <span className="font-bold">Relatório </span>
+                </Tab>
+              </div>
+            </TabList>
+          </Tabs>
+          <h1 className="scroll-m-20 text-xl text-primary text-center mt-3">
+            {actualCase?.name} {actualCase?.propertyName && " - "}
+            {actualCase?.propertyName}
+          </h1>
+          <Divider className="!mt-3" />
+        </>
+      )}
+
+      <div className="absolute top-[1rem] left-[4rem] z-10">
+        <Tooltip title="Recomeçar estudo" placement="left-end">
+          <Button
+            variant="plain"
+            className="!p-0 !px-1"
+            onClick={() => {
+              setNewCase(true);
+              setActualCase(undefined);
+              navigate("/planejamentofinanciamento");
+            }}
+          >
+            <MdRestartAlt className="text-xl text-grayText" />
+          </Button>
+        </Tooltip>
+      </div>
+
+      <div className={`${actualCase ? 'relative' : 'relative mt-5'}`}>
         <PropertyDataCard />
         <div className="w-full text-center ">
           {errors.length === 0 ? (
