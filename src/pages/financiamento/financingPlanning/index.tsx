@@ -122,7 +122,7 @@ export default function FinancingPlanning() {
           </Tooltip>
         </div>
         <Tabs
-          defaultValue={"case"}
+          defaultValue={"report"}
           aria-label="tabs"
           sx={{ bgcolor: "transparent" }}
           className="!absolute !right-[2rem] top-[2rem]"
