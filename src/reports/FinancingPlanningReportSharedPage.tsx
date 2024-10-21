@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import { calcCaseData } from "@/pages/financiamento/financingPlanning/Calculator";
+import { Helmet } from "react-helmet";
 
 export default function FinancingPlanningReportSharedPage() {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,24 @@ export default function FinancingPlanningReportSharedPage() {
   if (!actualCase) return <GlobalLoading text="Carregando relatório..." />;
 
   const caseData = calcCaseData(actualCase.propertyData);
+
+  <Helmet>
+    <title>Proposta Imobiliária - {actualCase.name}</title>
+    <meta
+      property="og:title"
+      content={`Proposta Imobiliária - ${actualCase.name}`}
+    />
+    <meta
+      property="og:description"
+      content="Veja os detalhes da proposta imobiliária e calcule o valor ideal para sua propriedade."
+    />
+   
+    <meta
+      property="og:image"
+      content={actualCase.mainPhoto}
+    />
+    <meta property="og:type" content="website" />
+  </Helmet>;
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#525659]">
