@@ -6,7 +6,7 @@ export interface RealEstate {
   address: string;
   logo?: string;
   logo2?: string;
-  users: User[];
+  users?: User[];
   createdAt: Date;
   updatedAt: Date;
 }

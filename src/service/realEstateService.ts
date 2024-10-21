@@ -15,7 +15,7 @@ export const realEstateService = {
     }
   },
 
-  async editRealEstate(realEstateId: string, data: RealEstate) {
+  async editRealEstate(realEstateId: string, data: Partial<RealEstate>) {
     try {
       const response = await api.put("/realestates/" + realEstateId, data);
       notify("success", "Dados atualizados com sucesso!");
