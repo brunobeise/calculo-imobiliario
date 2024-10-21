@@ -14,11 +14,13 @@ import CalculationTable from "../components/preview/CalculationTable";
 import dayjs from "dayjs";
 import { InvestmentAccumulationChart } from "@/components/charts/InvestmentAccumulationChart";
 import { CDIComparation } from "@/components/charts/CDIComparation";
+import { User } from "@/types/userTypes";
 
 interface FinancingPlanningReportPreviewProps {
   configData: FinancingPlanningReportData;
   propertyData?: PropertyData;
   caseData?: FinancingPlanningData;
+  user?: User;
 }
 
 const FinancingPlanningReportPreview = forwardRef<
@@ -26,7 +28,7 @@ const FinancingPlanningReportPreview = forwardRef<
   FinancingPlanningReportPreviewProps
 >(
   (
-    { configData, propertyData, caseData }: FinancingPlanningReportPreviewProps,
+    { configData, propertyData, caseData, user }: FinancingPlanningReportPreviewProps,
     ref
   ) => {
     if (!propertyData) return null;
@@ -93,7 +95,7 @@ const FinancingPlanningReportPreview = forwardRef<
         <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
           <div className="w-full h-[297mm]">
             <div className="bg-primary w-full flex items-center">
-              <UserSignature2 getUser desc={configData.propertyName} />
+              <UserSignature2 getUser={!user} userData={user} desc={configData.propertyName} />
             </div>
             <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
               <img className="w-full h-full" src={configData.mainPhoto} />

@@ -14,7 +14,7 @@ export default function FinancingPlanningReportSharedPage() {
 
   useEffect(() => {
     if (id) {
-      caseService.getCaseById(id).then((response) => {
+      caseService.getCaseToProposal(id).then((response) => {
         if (response) {
           setActualCase(response);
           localStorage.setItem(
@@ -35,6 +35,7 @@ export default function FinancingPlanningReportSharedPage() {
       <div className="bg-white shadow-lg">
         <FinancingPlanningReportPreview
           propertyData={actualCase?.propertyData}
+          user={actualCase.user}
           caseData={caseData}
           configData={{
             mainPhoto: actualCase?.mainPhoto || "",

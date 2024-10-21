@@ -43,6 +43,15 @@ export const caseService = {
     }
   },
 
+  async getCaseToProposal(caseId: string) {
+    try {
+      const response = await api.get<CaseStudy>("/proposal-case/" + caseId);
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Não foi possível buscar o case.");
+    }
+  },
+
   async updateCase(caseId: string, data: Partial<CaseStudy>) {
     try {
       const response = await api.put("/cases/" + caseId, data);
