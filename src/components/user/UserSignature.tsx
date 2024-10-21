@@ -6,14 +6,14 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { IconButton } from "@mui/joy";
-import { UserData } from "@/pages/UserConfig";
+import { User } from "@/types/userTypes";
 
 interface UserSignatureProps {
-  userData?: UserData;
+  userData?: User;
 }
 
 export default function UserSignature(props: UserSignatureProps) {
-  const userSaved: UserData = localStorage.getItem("userData")
+  const userSaved: User = localStorage.getItem("userData")
     ? JSON.parse(localStorage.getItem("userData")!)
     : {};
 

@@ -1,18 +1,18 @@
-import { UserData } from "@/pages/UserConfig";
 import { userService } from "@/service/userService";
+import { User } from "@/types/userTypes";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import Loading from "react-loading";
 
 interface UserSignatureProps {
-  userData?: UserData;
+  userData?: User;
   title?: string;
   desc?: string;
   getUser?: boolean;
 }
 
 export default function UserSignature2(props: UserSignatureProps) {
-  const [userSaved, setUserSaved] = useState<UserData>();
+  const [userSaved, setUserSaved] = useState<User>();
 
   useEffect(() => {
     if (props.getUser) {
@@ -36,7 +36,8 @@ export default function UserSignature2(props: UserSignatureProps) {
     photo: props.userData?.photo || userSaved?.photo,
     role: props.userData?.role || userSaved?.role,
     creci: props.userData?.creci || userSaved?.creci,
-    address: props.userData?.realEstate?.address || userSaved?.realEstate?.address,
+    address:
+      props.userData?.realEstate?.address || userSaved?.realEstate?.address,
     phone: props.userData?.phone || userSaved?.phone,
     whatsapp: props.userData?.whatsapp || userSaved?.whatsapp,
     instagram: props.userData?.instagram || userSaved?.instagram,

@@ -1,7 +1,7 @@
-import { UserData } from "@/pages/UserConfig";
+import { User } from "@/types/userTypes";
 
-export default function getUserData(){
-    return localStorage.getItem("userData")
-        ? JSON.parse(localStorage.getItem("userData")!) as UserData
-        : {} as UserData;
+export default function getUserData() {
+  return localStorage.getItem("userData")
+    ? (JSON.parse(localStorage.getItem("userData")!) as User)
+    : ({} as User);
 }

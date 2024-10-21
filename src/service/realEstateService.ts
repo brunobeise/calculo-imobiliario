@@ -1,8 +1,8 @@
 // services/realEstateService.ts
 import { notify } from "@/notify";
 import { api } from "./api";
-import { RealEstateData } from "@/pages/RealEstateConfig";
 import { handleApiError } from "./errorHandler";
+import { RealEstate } from "@/types/realEstateTypes";
 
 export const realEstateService = {
   async getRealEstateData() {
@@ -15,7 +15,7 @@ export const realEstateService = {
     }
   },
 
-  async editRealEstate(realEstateId: string, data: RealEstateData) {
+  async editRealEstate(realEstateId: string, data: RealEstate) {
     try {
       const response = await api.put("/realestates/" + realEstateId, data);
       notify("success", "Dados atualizados com sucesso!");
