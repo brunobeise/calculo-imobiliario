@@ -28,7 +28,12 @@ const FinancingPlanningReportPreview = forwardRef<
   FinancingPlanningReportPreviewProps
 >(
   (
-    { configData, propertyData, caseData, user }: FinancingPlanningReportPreviewProps,
+    {
+      configData,
+      propertyData,
+      caseData,
+      user,
+    }: FinancingPlanningReportPreviewProps,
     ref
   ) => {
     if (!propertyData) return null;
@@ -90,12 +95,19 @@ const FinancingPlanningReportPreview = forwardRef<
     return (
       <div
         ref={ref}
-        className="lg:col-span-7 uw:col-span-6 !w-[210mm] shadow light !bg-whitefull mb-[1000px]"
+        className="lg:col-span-7 uw:col-span-6 max-w-[210mm] max-w-full shadow light !bg-whitefull scale-[0.6] lg:scale-100"
+        style={{
+          transformOrigin: "top center",
+        }}
       >
         <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
           <div className="w-full h-[297mm]">
             <div className="bg-primary w-full flex items-center">
-              <UserSignature2 getUser={!user} userData={user} desc={configData.propertyName} />
+              <UserSignature2
+                getUser={!user}
+                userData={user}
+                desc={configData.propertyName}
+              />
             </div>
             <div className="h-[460px] overflow-hidden flex justify-center items-center relative w-full">
               <img className="w-full h-full" src={configData.mainPhoto} />
@@ -111,12 +123,12 @@ const FinancingPlanningReportPreview = forwardRef<
                 anos{" "}
               </strong>
             </div>
-            <div className="grid grid-cols-7 mt-10 w-full px-14 text-primary">
+            <div className="grid grid-cols-7 mt-10 w-full px-4 lg:px-14 text-primary">
               <div className="col-span-3 relative mt-20 ms-5">
-                <span className="absolute font-bold text-3xl top-[4.4rem] left-[6rem]">
+                <span className="absolute font-bold text-3xl top-[4.2rem] lg:top-[4.4rem] left-[6rem]">
                   {caseData.totalProfitPercent.toFixed(2) + "%"}
                 </span>
-                <span className="absolute font-bold text-3xl top-[4.4rem] left-[-1.5rem]">
+                <span className="absolute font-bold text-3xl top-[4.2rem] lg:top-[4.4rem]  left-[-1.5rem]">
                   {(
                     caseData.totalProfitPercent / propertyData.finalYear
                   ).toFixed(2) + "%"}
@@ -218,7 +230,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 caseData={caseData}
               />
             </div>
-            <div className="w-full px-12 mt-5 grid grid-cols-2 gap-10 ">
+            <div className="w-full px-4 lg:px-12 mt-5 grid grid-cols-2 gap-4 lg:gap-10 ">
               <div>
                 <h6 className="font-bold text-2xl ">Cenário de Compra</h6>
                 <div className="h-[0.5px] bg-primary mt-2" />
@@ -313,13 +325,13 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
             <div className="w-full px-12 mt-10 mb-10">
               <div className=" w-full mt-5 relative">
-                <div className="text-primary absolute top-[4.8rem] left-[1rem] flex flex-col items-center gap-1">
+                <div className="text-primary absolute top-[4.8rem] left-[-1.5rem] lg:left-[0rem] flex flex-col items-center gap-1">
                   <span className="text-xl font-bold">
                     {toBRL(propertyData.propertyValue)}
                   </span>
                   <span className="mt-[-10px]">valor do imóvel</span>
                 </div>
-                <div className="text-primary absolute top-[4.8rem] left-[11.5rem] flex flex-col items-center gap-1">
+                <div className="text-primary absolute top-[4.8rem] left-[9rem] lg:left-[10.9rem] flex flex-col items-center gap-1">
                   <span className="text-xl font-bold">
                     {toBRL(
                       propertyData.propertyValue - propertyData.downPayment
@@ -327,25 +339,25 @@ const FinancingPlanningReportPreview = forwardRef<
                   </span>
                   <span className="mt-[-10px]">valor financiado</span>
                 </div>
-                <div className="text-primary absolute top-[4.8rem] left-[23.7rem] flex flex-col items-center gap-1">
+                <div className="text-primary absolute top-[4.8rem] left-[20rem] lg:left-[22.7rem] flex flex-col items-center gap-1">
                   <span className="text-xl font-bold">
                     {propertyData.financingYears + " anos"}
                   </span>
                   <span className="mt-[-10px]">financiamento</span>
                 </div>
-                <div className="text-primary absolute top-[4.5rem] left-[35.5rem] flex flex-col items-center gap-1">
+                <div className="text-primary absolute top-[4.5rem] left-[31rem] lg:left-[33.5rem] flex flex-col items-center gap-1">
                   <span>parcelas de </span>
                   <span className="text-xl font-bold mt-[-5px]">
                     {toBRL(propertyData.installmentValue)}
                   </span>
                 </div>
-                <div className="text-primary absolute top-[15.8rem] left-[1rem] flex flex-col items-center gap-1">
+                <div className="text-primary absolute top-[15.8rem]  left-[-2rem] lg:left-[-0rem] flex flex-col items-center gap-1">
                   <span className="text-xl font-bold">
                     {toBRL(propertyData.downPayment)}
                   </span>
                   <span className="mt-[-10px]">entrada</span>
                 </div>
-                <p className="absolute text-primary w-[500px] right-0 bottom-[-30px]">
+                <p className="absolute text-primary w-[500px] right-0 bottom-[0rem]  text-sm lg:text-md">
                   O valor da parcela é estipulado pela{" "}
                   <strong> tabela PRICE </strong>. Como as primeiras parcelas da
                   tabela SAC são mais altas, optar pela tabela PRICE acaba sendo
@@ -369,7 +381,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 <strong>
                   {" "}
                   o financiamento imobiliário apresenta-se como uma opção
-                  vantajosa.
+                  vantajosa.{" "}
                 </strong>
                 Observa-se um retorno significativo, tornando-se uma alternativa
                 eficaz para maximizar os ganhos financeiros em investimentos no
@@ -960,13 +972,13 @@ const FinancingPlanningReportPreview = forwardRef<
                 />
               </div>
               <div className="w-full mt-4">
-                <h3 className="text-xl font-bold  leading-7 mb-2 mt-5 underline">
+                <h3 className="text-xl font-bold  leading-7 mb-4 mt-5 underline">
                   Dados considerados para a análise:
                 </h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-10">
-                <div>
+              <div className="grid grid-cols-2 gap-10 text-sm">
+                <div className="flex flex-col gap-1">
                   <InfoItemReais
                     text="Valor do imóvel:"
                     value={propertyData.propertyValue}
@@ -1001,7 +1013,7 @@ const FinancingPlanningReportPreview = forwardRef<
                   />
                 </div>
 
-                <div>
+                <div className="flex flex-col gap-1">
                   <InfoItemReais
                     text="Valor da entrada:"
                     value={propertyData.downPayment}

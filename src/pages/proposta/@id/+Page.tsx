@@ -19,22 +19,20 @@ export default function FinancingPlanningReportSharedPage() {
         {/* Image shown when sharing on social sites (Twitter, WhatsApp, ...) */}
         <title>{proposalData.name}</title>
       </Head>
-      <div className="flex justify-center items-center min-h-screen bg-[#525659]">
-        <div className="bg-white shadow-lg">
-          <FinancingPlanningReportPreview
-            propertyData={proposalData?.propertyData}
-            user={proposalData.user}
-            caseData={caseData}
-            configData={{
-              mainPhoto: proposalData?.mainPhoto || "",
-              additionalPhotos: proposalData?.additionalPhotos || [],
-              description: proposalData?.description || "",
-              features: proposalData?.features || [],
-              propertyName: proposalData?.propertyName || "",
-            }}
-            ref={componentRef}
-          />
-        </div>
+      <div className="flex justify-center items-center justify-center w-full min-h-screen bg-[#525659]">
+        <FinancingPlanningReportPreview
+          propertyData={proposalData?.propertyData}
+          user={proposalData.user}
+          caseData={caseData}
+          configData={{
+            mainPhoto: proposalData?.mainPhoto || "",
+            additionalPhotos: proposalData?.additionalPhotos || [],
+            description: proposalData?.description || "",
+            features: proposalData?.features || [],
+            propertyName: proposalData?.propertyName || "",
+          }}
+          ref={componentRef}
+        />
       </div>
     </>
   );
