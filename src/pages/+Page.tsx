@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
+import logo from "@/assets/imobDeal.png";
 import rural from "@/assets/rurallfinancing.png";
 import invest from "@/assets/financingOrInvest.png";
 import obra from "@/assets/jurosdeobra.png";
@@ -24,8 +24,9 @@ export default function App() {
   function Welcome() {
     return (
       <div>
-        <div className="flex justify-center mb-10">
+        <div className="flex items-center mb-10 flex-col">
           <img className="w-[120px]" src={logo} />
+          <span className="text-primary">Imob<span className="font-bold">Deal</span></span>
         </div>
 
         <div className="w-full flex justify-center">

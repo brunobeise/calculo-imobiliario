@@ -7,7 +7,7 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 import { FaBars, FaBook, FaHome, FaUser } from "react-icons/fa";
-import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
+import logo from "@/assets/imobDeal.png";
 import ListDivider from "@mui/joy/ListDivider";
 import { FaCalculator } from "react-icons/fa";
 import { financingRoutes } from "@/routes/financing";
@@ -51,8 +51,11 @@ export default function DrawerMenu() {
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="w-full flex justify-center mt-5 mb-5">
+        <div className="flex items-center my-4 flex-col">
           <img className="w-[100px]" src={logo} />
+          <span className="text-primary">
+            Imob<span className="font-bold">Deal</span>
+          </span>
         </div>
         <List size="lg">
           <a href={"/"} onClick={() => setOpen(false)}>
