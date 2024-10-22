@@ -95,7 +95,7 @@ const FinancingPlanningReportPreview = forwardRef<
     return (
       <div
         ref={ref}
-        className="lg:col-span-7 uw:col-span-6 max-w-[210mm] max-w-full shadow light !bg-whitefull scale-[0.6] lg:scale-100"
+        className="lg:col-span-7 uw:col-span-6 !max-w-[210mm] shadow light !bg-whitefull scale-[0.6] lg:scale-100"
         style={{
           transformOrigin: "top center",
         }}
