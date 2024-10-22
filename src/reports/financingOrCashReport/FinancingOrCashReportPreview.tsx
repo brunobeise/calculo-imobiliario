@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import UserSignature2 from "@/components/user/UserSignature2";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { financingOrCashData } from "@/pages/financiamento/financingOrCash/CaseData";
+import { financingOrCashData } from "@/pages/financingOrCash/CaseData";
 import lucroAnualFinal from "./assets/lucro-anual-total.svg";
 import entendaOFinancimento from "./assets/entenda-o-financimento.svg";
 import { toBRL } from "@/lib/formatter";

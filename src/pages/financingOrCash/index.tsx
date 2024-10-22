@@ -2,15 +2,15 @@
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import Conclusion from "./Conclusion";
-import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
+import ErrorAlert, { propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
-import DetailedTable from "@/pages/financiamento/financingOrCash/DetailedTable";
+import DetailedTable from "@/pages/financingOrCash/DetailedTable";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
 import { Button, Tab, TabList, Tabs, tabClasses } from "@mui/joy";
 import { FaFile } from "react-icons/fa";
-import { Link } from "react-router-dom";
+
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 
 export default function FinancingOrCash() {
@@ -103,7 +103,7 @@ export default function FinancingOrCash() {
               <DetailedTable detailedTable={caseData[context].detailedTable} />
             </div>
             <div className="fixed bottom-4 right-4 z-10">
-              <Link to={"/financiamentoxavista/relatorio"}>
+              <a href={"/financiamentoxavista/relatorio"}>
                 <Button
                   onClick={() => {
                     localStorage.setItem(
@@ -119,7 +119,7 @@ export default function FinancingOrCash() {
                 >
                   <FaFile className="text-4xl" />
                 </Button>
-              </Link>
+              </a>
             </div>
           </>
         ) : (

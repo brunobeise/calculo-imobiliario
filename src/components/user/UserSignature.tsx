@@ -4,7 +4,7 @@ import {
   FaLinkedin,
   FaWhatsapp,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+
 import { IconButton } from "@mui/joy";
 import { User } from "@/types/userTypes";
 
@@ -73,26 +73,26 @@ export default function UserSignature(props: UserSignatureProps) {
         </div>
         <div className="mt-5">
           <div className="flex ga-x-3">
-            <Link to={data.whatsapp || ""} target="_blank">
+            <a href={data.whatsapp || ""} target="_blank">
               <IconButton>
                 <FaWhatsapp size="22px" />
               </IconButton>
-            </Link>
-            <Link to={data.instagram || ""} target="_blank">
+            </a>
+            <a href={data.instagram || ""} target="_blank">
               <IconButton>
                 <FaInstagram size="22px" />
               </IconButton>
-            </Link>
-            <Link to={data.facebook || ""} target="_blank">
+            </a>
+            <a href={data.facebook || ""} target="_blank">
               <IconButton>
                 <FaFacebookSquare size="22px" />
               </IconButton>
-            </Link>
-            <Link to={data.linkedin || ""} target="_blank">
+            </a>
+            <a href={data.linkedin || ""} target="_blank">
               <IconButton>
                 <FaLinkedin size="22px" />
               </IconButton>
-            </Link>
+            </a>
           </div>
           <div className="bg-primary w-full h-[1.2px]"></div>
           <p className="text-center">{formatPhoneNumber(data.phone || "")}</p>

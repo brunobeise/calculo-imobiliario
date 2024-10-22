@@ -25,6 +25,15 @@ export const caseService = {
     }
   },
 
+  async getAllProposals() {
+    try {
+      const response = await api.get<string[]>("/all-proposals");
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Não foi possível buscar os cases.");
+    }
+  },
+
   async getAllRealEstateCases() {
     try {
       const response = await api.get<CaseStudy[]>("/cases-by-real-estate");

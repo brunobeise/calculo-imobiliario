@@ -1,12 +1,13 @@
-import { useLocation } from "react-router-dom";
+
 import { useEffect } from "react";
 import { financingRoutes } from "@/routes/financing";
 import { auxiliarRoutes } from "@/routes/auxiliar";
 import { useAuth } from "@/auth";
+import { usePageContext } from "vike-react/usePageContext";
+
 
 export default function Header() {
-  const location = useLocation();
-
+  const location = usePageContext().urlPathname;
   const routes = [...financingRoutes, ...auxiliarRoutes];
 
   useEffect(() => {
@@ -16,9 +17,9 @@ export default function Header() {
   const { isAuthenticated } = useAuth();
   if (!isAuthenticated) return null;
 
-  if (location.pathname.includes("proposta")) return null;
+  if (location.includes("proposta")) return null;
 
-  const title = routes.find((r) => location.pathname.startsWith(r.href))?.title;
+  const title = routes.find((r) => location.startsWith(r.href))?.title;
 
   return (
     <div className="flex justify-between p-1 mt-2">

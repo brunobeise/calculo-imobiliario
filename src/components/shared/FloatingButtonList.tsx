@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Tooltip } from "@mui/joy";
-import { Link } from "react-router-dom";
+
 
 interface ButtonConfig {
   onClick?: React.MouseEventHandler<HTMLAnchorElement> | undefined;
@@ -22,7 +22,7 @@ export default function FloatingButtonList({
       {buttons.map((button, index) => (
         <div key={index}>
           {button.href ? (
-            <Link to={button.href}>
+            <a href={button.href}>
               <Tooltip placement="left-start" title={button.tooltip || ""}>
                 <Button
                   className="!rounded-full w-[40px] h-[40px]"
@@ -31,7 +31,7 @@ export default function FloatingButtonList({
                   <span className="text-xl">{button.icon}</span>
                 </Button>
               </Tooltip>
-            </Link>
+            </a>
           ) : (
             <Tooltip placement="left-start" title={button.tooltip || ""}>
               <Button

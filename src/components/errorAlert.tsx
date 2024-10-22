@@ -6,7 +6,7 @@ export interface propertyDataError {
   title: string;
 }
 
-export function ErrorAlert(props: propertyDataError) {
+export default function ErrorAlert(props: propertyDataError) {
   return (
     <Alert
       startDecorator={<IoWarning size="30px" />}

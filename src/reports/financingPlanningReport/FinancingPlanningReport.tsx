@@ -1,13 +1,12 @@
 import { useRef, useState } from "react";
-import { useReactToPrint } from "react-to-print";
-import { FaExternalLinkAlt, FaPrint, FaSave } from "react-icons/fa";
+import { FaExternalLinkAlt, FaSave } from "react-icons/fa";
 import FinancingPlanningReportConfig, {
   FinancingPlanningReportData,
 } from "./FinancingPlanningReportConfig";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinancingPlanningData } from "@/pages/financiamento/financingPlanning/CaseData";
+import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { CaseStudy } from "@/types/caseTypes";
 import { caseService } from "@/service/caseService";
 import { uploadImage } from "@/lib/imgur";
@@ -70,10 +69,6 @@ export default function FinancingPlanningReport({
       });
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
-
   const buttons = [
     {
       icon: <FaExternalLinkAlt className="!text-[1.1rem]" />,
@@ -81,11 +76,7 @@ export default function FinancingPlanningReport({
       onClick: onClose,
       href: "/proposta/" + actualCase.id,
     },
-    {
-      onClick: (e: unknown) => handlePrint(e),
-      icon: <FaPrint />,
-      tooltip: "Gerar PDF",
-    },
+
     {
       onClick: () => handleEditCase(),
       icon: <FaSave />,

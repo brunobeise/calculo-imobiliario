@@ -10,14 +10,13 @@ import { IoCloseOutline } from "react-icons/io5";
 import { userService } from "@/service/userService";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { useAuth } from "@/auth";
-import { useNavigate } from "react-router-dom";
+import { navigate } from "vike/client/router";
 import { IoAddCircleSharp } from "react-icons/io5";
 import { RealEstate } from "@/types/realEstateTypes";
 import { User } from "@/types/userTypes";
 import UserFormModal from "@/components/modals/UserFormModal";
 
 export default function RealEstateConfig() {
-  const navigate = useNavigate();
   const [form, setForm] = useState<Partial<RealEstate>>();
   const [users, setUsers] = useState<User[]>([]);
   const [uploadLoading, setUploadLoading] = useState(false);

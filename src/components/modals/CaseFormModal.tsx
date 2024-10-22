@@ -17,7 +17,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { caseService } from "@/service/caseService";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import PropertyDataDisplay from "../shared/PropertyDataDisplay";
-import { useNavigate } from "react-router-dom";
+import { navigate } from "vike/client/router";
 import { CaseStudyTypeLinkMap } from "../shared/CaseCard";
 import { CaseStudy } from "@/types/caseTypes";
 
@@ -53,8 +53,6 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
     reset,
     watch,
   } = useForm<CaseFormData>();
-
-  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 

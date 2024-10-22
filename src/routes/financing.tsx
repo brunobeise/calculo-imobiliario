@@ -1,5 +1,5 @@
-import FinancingPlanning from "@/pages/financiamento/financingPlanning";
-import { FinancingPlanningCaseDataProvider } from "@/pages/financiamento/financingPlanning/CaseData";
+import FinancingPlanning from "@/pages/planejamentofinanciamento/@id/+Page";
+import { FinancingPlanningCaseDataProvider } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import FinancingPlanningImage from "@/assets/financingPlanning.png";
 
 export const financingRoutes = [

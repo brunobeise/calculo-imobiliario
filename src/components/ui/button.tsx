@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
-import { Link } from "react-router-dom";
+
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
@@ -64,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <>
         {href ? (
-          <Link to={href}>
+          <a href={href}>
             <Comp
               className={cn(buttonVariants({ variant, size, className }))}
               ref={ref}
@@ -72,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             >
               {Icon && <Icon className="mr-2 h-4 w-4" />} {text}
             </Comp>
-          </Link>
+          </a>
         ) : (
           <Comp
             className={cn(buttonVariants({ variant, size, className }))}

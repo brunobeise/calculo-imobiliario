@@ -8,7 +8,6 @@ import {
 import { useState } from "react";
 import { FaBars, FaBook, FaHome, FaUser } from "react-icons/fa";
 import logo from "@/assets/CÁLCULO-IMOBILIÁRIO.png";
-import { Link, useLocation } from "react-router-dom";
 import ListDivider from "@mui/joy/ListDivider";
 import { FaCalculator } from "react-icons/fa";
 import { financingRoutes } from "@/routes/financing";
@@ -17,19 +16,19 @@ import { RiLogoutBoxRLine } from "react-icons/ri";
 import { useAuth } from "@/auth";
 import Cookies from "js-cookie";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
+import { usePageContext } from "vike-react/usePageContext";
 
 export default function DrawerMenu() {
   const { isAuthenticated } = useAuth();
-  const location = useLocation();
+  const location = usePageContext().urlPathname;
 
   const [open, setOpen] = useState(false);
   const [casesOpen, setCasesOpen] = useState(false);
 
   const { user } = useAuth();
-  
 
   if (!isAuthenticated) return null;
-  if (location.pathname.includes("proposta")) return null;
+  if (location.includes("proposta")) return null;
 
   return (
     <>
@@ -56,16 +55,16 @@ export default function DrawerMenu() {
           <img className="w-[100px]" src={logo} />
         </div>
         <List size="lg">
-          <Link to={"/"} onClick={() => setOpen(false)}>
+          <a href={"/"} onClick={() => setOpen(false)}>
             <ListItem className="!ms-5">
               <ListItemDecorator>
                 <FaHome />
               </ListItemDecorator>
               <Typography className="font-bold !ms-[-10px]">Home</Typography>
             </ListItem>
-          </Link>
+          </a>
           <ListDivider />
-          <Link to={"/usuario"} onClick={() => setOpen(false)}>
+          <a href={"/usuario"} onClick={() => setOpen(false)}>
             <ListItem className="!ms-5">
               <ListItemDecorator>
                 <FaUser />
@@ -75,7 +74,7 @@ export default function DrawerMenu() {
               </Typography>
             </ListItem>
             <ListDivider />
-            <Link to={"/estudos"} onClick={() => setOpen(false)}>
+            <a href={"/estudos"} onClick={() => setOpen(false)}>
               <ListItem className="!ms-5">
                 <ListItemDecorator>
                   <FaBook />
@@ -84,13 +83,13 @@ export default function DrawerMenu() {
                   Meus estudos
                 </Typography>
               </ListItem>
-            </Link>
-          </Link>
+            </a>
+          </a>
 
           {user?.owner && (
             <>
               <ListDivider />
-              <Link to={"/imobiliaria"} onClick={() => setOpen(false)}>
+              <a href={"/imobiliaria"} onClick={() => setOpen(false)}>
                 <ListItem className="!ms-5">
                   <ListItemDecorator>
                     <MdOutlineRealEstateAgent />
@@ -99,7 +98,7 @@ export default function DrawerMenu() {
                     Imobiliária
                   </Typography>
                 </ListItem>
-              </Link>
+              </a>
             </>
           )}
           <ListDivider />
@@ -125,7 +124,7 @@ export default function DrawerMenu() {
                 .filter((r) => !r.href.includes("/:id"))
                 .map((i) => (
                   <>
-                    <Link onClick={() => setOpen(false)} to={i.href}>
+                    <a onClick={() => setOpen(false)} href={i.href}>
                       <ListItem
                         onClick={() => setCasesOpen(!casesOpen)}
                         className="cursor-pointer !px-6"
@@ -136,7 +135,7 @@ export default function DrawerMenu() {
                           {i.title}
                         </Typography>
                       </ListItem>
-                    </Link>
+                    </a>
                     <ListDivider />
                   </>
                 ))}

@@ -8,7 +8,7 @@ import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisio
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
 import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import { FinancingPlanningReportData } from "./FinancingPlanningReportConfig";
-import { FinancingPlanningData } from "@/pages/financiamento/financingPlanning/CaseData";
+import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import InfoRow from "../components/preview/InfoRow";
 import CalculationTable from "../components/preview/CalculationTable";
 import dayjs from "dayjs";

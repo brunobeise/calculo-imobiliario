@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
-import { ErrorAlert, propertyDataError } from "@/components/errorAlert";
+import ErrorAlert, { propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
@@ -12,7 +12,6 @@ import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import FinancingPlanningNewCase from "../../NewCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import { useNavigate, useParams } from "react-router-dom";
 import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
@@ -29,10 +28,12 @@ import {
   Tooltip,
 } from "@mui/joy";
 import { MdRestartAlt } from "react-icons/md";
+import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from "vike/client/router";
 
 export default function FinancingPlanning() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const pageContext = usePageContext();
+  const { id } = pageContext.routeParams;
 
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
@@ -231,7 +232,7 @@ export default function FinancingPlanning() {
         </Tooltip>
       </div>
 
-      <div className={`${actualCase ? 'relative' : 'relative mt-5'}`}>
+      <div className={`${actualCase ? "relative" : "relative mt-5"}`}>
         <PropertyDataCard />
         <div className="w-full text-center ">
           {errors.length === 0 ? (

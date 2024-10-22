@@ -7,7 +7,6 @@ import { FaFile, FaFileInvoice, FaHistory, FaUsers } from "react-icons/fa";
 import { FaArrowLeft, FaFilePen } from "react-icons/fa6";
 import { propertyDataContext } from "@/propertyData/PropertyDataContext";
 import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
-import { Link, useLocation } from "react-router-dom";
 import PropertyDataNewCaseForm from "@/propertyData/propertyDataInivitalValues/propertyDataNewCaseForm/PropertyDataNewCaseForm";
 import dayjs from "dayjs";
 import { Spinner } from "@/components/Loading";
@@ -29,7 +28,6 @@ export default function NewCase(props: NewCaseProps) {
     "new" | "exists" | "newCase" | "myCases" | "realEstateCases"
   >();
 
-  const location = useLocation();
   const { setMultiplePropertyData } = useContext(propertyDataContext);
 
   const { myCases, realEstateCases, loading } = useSelector(
@@ -245,8 +243,8 @@ export default function NewCase(props: NewCaseProps) {
         <Card className="w-[500px] h-[400px] shadow-lg overflow-y-auto">
           {myCases.length > 0 ? (
             myCases.map((c) => (
-              <Link
-                to={
+              <a
+                href={
                   CaseStudyTypeLinkMap[
                     c.type as keyof typeof CaseStudyTypeLinkMap
                   ] +
@@ -290,7 +288,7 @@ export default function NewCase(props: NewCaseProps) {
                     </div>
                   }
                 />
-              </Link>
+              </a>
             ))
           ) : !loading ? (
             <p className="text-center font-bold mt-5">

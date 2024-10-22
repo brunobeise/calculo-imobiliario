@@ -1,6 +1,6 @@
 import { Chip, Divider, Typography } from "@mui/joy";
 import dayjs from "dayjs";
-import { Link } from "react-router-dom";
+
 import { toBRL } from "@/lib/formatter";
 import { MdFileOpen } from "react-icons/md";
 import { FaLink } from "react-icons/fa6";
@@ -77,13 +77,13 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
           />
           <FaTrash className="text-md  cursor-pointer" />
           <FaMagnifyingGlass className="text-md cursor-pointer" />
-          <Link to={"/proposta/" + caseStudy.id}>
+          <a href={"/proposta/" + caseStudy.id}>
             <FaExternalLinkAlt className="text-md cursor-pointer" />
-          </Link>
+          </a>
 
           <FaLink className="text-xl cursor-pointer" />
-          <Link
-            to={
+          <a
+            href={
               CaseStudyTypeLinkMap[
                 casestudy.type as keyof typeof CaseStudyTypeLinkMap
               ] +
@@ -92,7 +92,7 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
             }
           >
             <MdFileOpen className="text-xl" />
-          </Link>
+          </a>
         </div>
       </div>
 

@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 interface CaseCardProps {
   title: string;
   image: string;
@@ -15,7 +13,6 @@ export default function CaseTypeCard({
   comingSoon = false,
   link,
 }: CaseCardProps) {
-  
   const cardContent = (
     <div
       className={`relative overflow-hidden min-w-[260px] max-w-[260px] text-center h-[420px] bg-white rounded-[10px] duration-300 pt-5 ${
@@ -49,5 +46,5 @@ export default function CaseTypeCard({
     </div>
   );
 
-  return comingSoon ? cardContent : <Link to={link}>{cardContent}</Link>;
+  return comingSoon ? cardContent : <a href={link}>{cardContent}</a>;
 }
