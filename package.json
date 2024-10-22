@@ -14,6 +14,9 @@
   "engines": {
     "node": ">=20"
   },
+   "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "^x.x.x"
+  },
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",
