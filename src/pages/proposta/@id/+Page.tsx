@@ -36,3 +36,5 @@ export default function FinancingPlanningReportSharedPage() {
     </>
   );
 }
+
+export const isr = { expiration: 15 };

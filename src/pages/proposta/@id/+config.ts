@@ -1,12 +1,15 @@
 import vikeReact from "vike-react/config";
+import type { Config } from "vike/types";
 
 // https://vike.dev/config
 export default {
   extends: [vikeReact],
   prerender: true,
-  meta: {
-    isr: {
-      expiration: 60, 
-    },
+  isr: { expiration: 15 },
+  // Target Edge instead of Serverless
+  edge: true,
+  // append headers to all responses
+  headers: {
+    "X-Header": "value",
   },
-};
+} satisfies Config;

@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import vike from "vike/plugin";
 import path from "path";
-import vercel from "vite-plugin-vercel";
+import vercel from 'vite-plugin-vercel';
 
 export default defineConfig({
   resolve: {
@@ -38,7 +38,7 @@ export default defineConfig({
     vike({ prerender: true }),
     vercel({
       isr: {
-        expiration: 60,
+        expiration: 60, // Configura o ISR para expirar a cada 60 segundos
       },
     }),
   ],
