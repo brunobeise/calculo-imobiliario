@@ -4,5 +4,9 @@ import vikeReact from "vike-react/config";
 export default {
   extends: [vikeReact],
   prerender: true,
-  isr: { expiration: 60 },
+  meta: {
+    isr: {
+      expiration: 60, 
+    },
+  },
 };
