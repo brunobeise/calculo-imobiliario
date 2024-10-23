@@ -34,17 +34,4 @@ export default defineConfig({
     },
   },
   plugins: [react(), vike({ prerender: true }), vercel()],
-  vercel: {
-    headers: [
-      {
-        source: "/proposta/*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=15, s-maxage=15, stale-while-revalidate",
-          },
-        ],
-      },
-    ],
-  },
 });
