@@ -21,6 +21,7 @@ interface FinancingPlanningReportPreviewProps {
   propertyData?: PropertyData;
   caseData?: FinancingPlanningData;
   user?: User;
+  preview?: boolean;
 }
 
 const FinancingPlanningReportPreview = forwardRef<
@@ -33,6 +34,7 @@ const FinancingPlanningReportPreview = forwardRef<
       propertyData,
       caseData,
       user,
+      preview,
     }: FinancingPlanningReportPreviewProps,
     ref
   ) => {
@@ -95,13 +97,17 @@ const FinancingPlanningReportPreview = forwardRef<
     return (
       <div
         ref={ref}
-        className="lg:col-span-7 uw:col-span-6 !max-w-[210mm] shadow light !bg-whitefull scale-[0.6] lg:scale-100"
+        className={`max-w-[210mm] shadow !bg-whitefull ${
+          !preview
+            ? " absolute scale-[0.58] lg:scale-100 top-0 left-[50%] lg:left-[50%] translate-x-[-50%]"
+            : ""
+        }`}
         style={{
           transformOrigin: "top center",
         }}
       >
         <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
-          <div className="w-full h-[297mm]">
+          <div className="w-full ">
             <div className="bg-primary w-full flex items-center">
               <UserSignature2
                 getUser={!user}
@@ -117,7 +123,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 </p>
               </div>
             </div>
-            <div className="bg-primary mt-10 text-white flex justify-center p-1 mx-14 text-[1.4rem]">
+            <div className="bg-primary  mt-10 text-white flex justify-center p-1 mx-14 text-[1.4rem]">
               <strong>
                 Melhor Cenário de Compra / Projeção em {propertyData.finalYear}{" "}
                 anos{" "}
@@ -125,17 +131,20 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
             <div className="grid grid-cols-7 mt-10 w-full px-4 lg:px-14 text-primary">
               <div className="col-span-3 relative mt-20 ms-5">
-                <span className="absolute font-bold text-3xl top-[4.2rem] lg:top-[4.4rem] left-[6rem]">
+                <span className="absolute font-bold text-2xl lg:text-3xl top-[4.7rem] lg:top-[4.4rem] left-[7rem] lg:left-[6rem]">
                   {caseData.totalProfitPercent.toFixed(2) + "%"}
                 </span>
-                <span className="absolute font-bold text-3xl top-[4.2rem] lg:top-[4.4rem]  left-[-1.5rem]">
+                <span className="absolute font-bold text-2xl lg:text-3xl top-[4.7rem] lg:top-[4.4rem] left-[0rem]  lg:left-[-1.5rem]">
                   {(
                     caseData.totalProfitPercent / propertyData.finalYear
                   ).toFixed(2) + "%"}
                 </span>
-                <img className="w-[250px] absolute" src={lucroAnualFinal} />
+                <img
+                  className="w-[200px] lg:w-[250px] absolute left-[2rem] top-[1.5rem] lg:top-[0] lg:left-[0]"
+                  src={lucroAnualFinal}
+                />
               </div>
-              <div className="min-h-[345px] flex items-center col-span-4 ">
+              <div className="min-h-[345px] flex items-center col-span-4 me-4 lg:me-0">
                 <div className="text-xl w-full ">
                   <InfoRow
                     valueClass="text-green"
@@ -220,9 +229,9 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           </div>
 
-          <div className="h-[297mm]">
+          <div className="my-10">
             <div className="w-full px-12 mt-10">
-              <h1 className="text-2xl font-bold mb-4 mt-4 underline">
+              <h1 className="text-2xl font-bold mb-6 mt-4 underline">
                 Entenda o Cálculo
               </h1>
               <CalculationTable
@@ -230,8 +239,8 @@ const FinancingPlanningReportPreview = forwardRef<
                 caseData={caseData}
               />
             </div>
-            <div className="w-full px-4 lg:px-12 mt-5 grid grid-cols-2 gap-4 lg:gap-10 ">
-              <div>
+            <div className="w-full px-6 lg:px-12 mt-5 grid grid-cols-12 gap-4 lg:gap-10 ">
+              <div className="col-span-5 lg:col-span-6">
                 <h6 className="font-bold text-2xl ">Cenário de Compra</h6>
                 <div className="h-[0.5px] bg-primary mt-2" />
                 <div className="flex  text-primary">
@@ -267,7 +276,7 @@ const FinancingPlanningReportPreview = forwardRef<
                   </span>
                 </div>
               </div>
-              <div>
+              <div className="col-span-7 lg:col-span-6">
                 <h6 className="text-2xl text-primary">
                   <strong>Cenário de Venda</strong>{" "}
                   <span className="text-xl">
@@ -371,11 +380,8 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           </div>
 
-          <div className="h-[297mm]">
+          <div>
             <div className="w-full mt-10 px-12">
-              <h5 className="underline text-primary text-xl mt-5">
-                <strong>Análise Detalhada </strong> Financiamento imobiliário
-              </h5>
               <p className="text-primary mt-5 text-lg">
                 A análise demonstra que, ao focar no lucro final,
                 <strong>
@@ -421,11 +427,7 @@ const FinancingPlanningReportPreview = forwardRef<
           </div>
 
           {caseData.detailedTable[0].rentalAmount < 0 && (
-            <div className="w-full px-12 h-[297mm]">
-              <h5 className="underline text-primary text-xl mt-10">
-                <strong>Análise Detalhada </strong> Financiamento imobiliário
-              </h5>
-
+            <div className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
                 Conversão do investimento excedente para valor presente
               </p>
@@ -609,10 +611,7 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
           {caseData.finalRow.totalCapital > 0 && (
-            <div className="w-full px-12 h-[297mm]">
-              <h5 className="underline text-primary text-xl mt-5">
-                <strong>Análise Detalhada </strong> Financiamento imobiliário
-              </h5>
+            <div className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
                 Reinvestimento do Lucro Mensal: Aluguel - Parcela em Renda Fixa
               </p>
@@ -790,10 +789,7 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
           {!!propertyData.cdi && propertyData.cdi !== 0 && (
-            <div className="w-full px-12 h-[297mm]">
-              <h5 className="underline text-primary text-xl mt-5">
-                <strong>Análise Detalhada </strong> Financiamento imobiliário
-              </h5>
+            <div className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
                 Comparativo com CDI e Reinvestimento do Lucro Mensal
               </p>
@@ -948,11 +944,8 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
 
-          <div className="w-full  h-[297mm]">
+          <div className="w-full  ">
             <div className="px-12">
-              <h5 className="underline text-primary text-xl mb-10 mt-10">
-                <strong>Análise Detalhada </strong> Financiamento imobiliário
-              </h5>
               <div className="flex flex-col gap-5">
                 <CompleteAnalysisChart
                   investedEquityValues={caseData.detailedTable.map(

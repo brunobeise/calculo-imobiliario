@@ -16,10 +16,9 @@ export default function FinancingPlanningReportSharedPage() {
   return (
     <>
       <Head>
-        {/* Image shown when sharing on social sites (Twitter, WhatsApp, ...) */}
         <title>{proposalData.name}</title>
       </Head>
-      <div className="flex justify-center items-center justify-center w-full min-h-screen bg-[#525659]">
+      <div className="relative w-full bg-[#525659] lg:h-[5600px]">
         <FinancingPlanningReportPreview
           propertyData={proposalData?.propertyData}
           user={proposalData.user}
@@ -36,14 +35,4 @@ export default function FinancingPlanningReportSharedPage() {
       </div>
     </>
   );
-}
-
-export { documentProps };
-
-function documentProps({
-  documentProps,
-}: {
-  documentProps: { title: string; description: string };
-}) {
-  return documentProps;
 }

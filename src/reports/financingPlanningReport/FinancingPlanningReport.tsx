@@ -89,15 +89,16 @@ export default function FinancingPlanningReport({
     <div>
       <Divider />
       <div className="flex pt-10 px-10 gap-5">
-        <div>
+        <div className="relative">
           <FinancingPlanningReportPreview
+            preview
             propertyData={propertyData}
             caseData={caseData}
             configData={configData}
             ref={componentRef}
           />
         </div>
-        <div className="w-full" style={{ position: "relative" }}>
+        <div className="w-full relative">
           <div style={{ position: "sticky", top: "10px" }}>
             <FinancingPlanningReportConfig
               data={configData}

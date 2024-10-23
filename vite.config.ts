@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import vike from "vike/plugin";
 import path from "path";
+import vercel from "vite-plugin-vercel";
 
 export default defineConfig({
   resolve: {
@@ -32,5 +33,13 @@ export default defineConfig({
       usePolling: true,
     },
   },
-  plugins: [react(), vike({ prerender: true })],
+  plugins: [
+    react(),
+    vike({ prerender: true }),
+    vercel({
+      isr: {
+        expiration: 60,
+      },
+    }),
+  ],
 });

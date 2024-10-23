@@ -1,7 +1,7 @@
 import { caseService } from "@/service/caseService";
 import { PageContext } from "vike/types";
 
-export { data, passToClient };
+export { data };
 
 async function data(pageContext: PageContext) {
   const proposalData = await caseService.getCaseToProposal(
@@ -10,5 +10,3 @@ async function data(pageContext: PageContext) {
 
   return proposalData;
 }
-
-const passToClient = ["proposalData", "documentProps"];
