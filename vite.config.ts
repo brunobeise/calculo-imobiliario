@@ -37,7 +37,7 @@ export default defineConfig({
   vercel: {
     headers: [
       {
-        source: "/proposta/:id",
+        source: "/proposta/*",
         headers: [
           {
             key: "Cache-Control",
