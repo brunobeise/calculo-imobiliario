@@ -8,7 +8,4 @@ export default {
   prerender: true,
   isr: { expiration: 15 },
   edge: false,
-  headers: {
-    "Cache-Control": "public, max-age=15, s-maxage=15, stale-while-revalidate",
-  },
 } satisfies Config;
