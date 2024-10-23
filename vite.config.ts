@@ -33,13 +33,5 @@ export default defineConfig({
       usePolling: true,
     },
   },
-  plugins: [
-    react(),
-    vike({ prerender: true }),
-    vercel({
-      isr: {
-        "/proposta/:id": { expiration: 10 }, 
-      },
-    }),
-  ],
+  plugins: [react(), vike({ prerender: true }), vercel()],
 });
