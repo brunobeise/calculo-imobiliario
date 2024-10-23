@@ -278,7 +278,7 @@ export default function PropertyDataDischargesControl({
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th>Índice</th>
+
                 <th>Início</th>
                 <th>Parcelas</th>
                 <th>Valor</th>
@@ -290,7 +290,7 @@ export default function PropertyDataDischargesControl({
                 (item, index) => (
                   <tr key={index}>
                     <td>{item.type}</td>
-                    <td>{item.indexType}</td>
+
                     <td>
                       {dayjs(propertyData.initialDate, "MM/YYYY")
                         .add(item.initialMonth, "month")
@@ -473,7 +473,6 @@ export default function PropertyDataDischargesControl({
                     <Controller
                       name="indexType"
                       control={control}
-                      rules={{ required: "Selecione o tipo do índice" }}
                       render={({ field }) => (
                         <Select
                           {...field}
@@ -498,14 +497,12 @@ export default function PropertyDataDischargesControl({
                     <Controller
                       name="indexValue"
                       control={control}
-                      rules={{ required: "Coloque o valor da taxa mensal" }}
                       render={({ field }) => (
                         <PercentageInput
                           required={false}
                           noHeight
                           onChange={field.onChange}
                           label="Taxa (mensal)"
-                          value={field.value || ""}
                         />
                       )}
                     />
@@ -553,14 +550,14 @@ export default function PropertyDataDischargesControl({
               <thead>
                 <tr>
                   <th className="w-[90px]">Mês</th>
-                  <th>Índice Mês</th>
+                  <th>Índice</th>
                   <th>Valor</th>
                   <th>Valor Presente</th>
                   <th className="w-[30px]"></th>
                 </tr>
               </thead>
               <tbody>
-                {propertyData.discharges
+                {[...propertyData.discharges]
                   ?.sort((a, b) => a.month - b.month)
                   .map((item, index) => {
                     const period = item.month;
@@ -577,7 +574,10 @@ export default function PropertyDataDischargesControl({
                             .add(item.month, "month")
                             .format("MM/YYYY")}
                         </td>
-                        <td>{item.indexType + ` ${item.indexValue}%`}</td>
+                        <td>
+                          {(item.indexType || "Nenhum") +
+                            ` ${item.indexValue ? item.indexValue + "%" : ""}`}
+                        </td>
                         <td>{toBRL(item.value)}</td>
                         <td>{toBRL(presentValue)}</td>
                         <td className="flex justify-end items-center">

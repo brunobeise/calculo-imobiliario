@@ -41,11 +41,15 @@ export function calcOutstandingBalance(
     const taxaMensal = interestRate / 100 / 12;
     const totalParcelas = totalAnosFinanciamento * 12;
 
-    const outstandingBalance =
+    let outstandingBalance =
         valorFinanciado *
         ((Math.pow(1 + taxaMensal, totalParcelas) -
             Math.pow(1 + taxaMensal, pagamentosRealizados)) /
             (Math.pow(1 + taxaMensal, totalParcelas) - 1));
+
+    if (outstandingBalance < 0) {
+      outstandingBalance = 0;
+    }        
 
     return outstandingBalance;
 }

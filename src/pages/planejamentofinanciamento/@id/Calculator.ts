@@ -203,9 +203,15 @@ export function calcDetailedTable(propertyData: PropertyData) {
           );
     }
 
+     const installmentValue =
+       outstandingBalance > 0 && installmentIsActive
+         ? propertyData.installmentValue
+         : 0;
+ 
+
     const rentalAmount =
       (rentIsActive ? rentValue : 0) -
-      (installmentIsActive ? propertyData.installmentValue : 0);
+      (installmentIsActive ? installmentValue : 0);
 
     let investmentExcess = 0;
     if (rentalAmount < 0) {
@@ -231,7 +237,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
       Math.floor(month / 12)
     );
 
-    if (installmentIsActive) {
+    if (outstandingBalance > 0 && installmentIsActive) {
       outstandingBalance = calcOutstandingBalance(
         propertyData.propertyValue -
           propertyData.downPayment -
@@ -240,15 +246,21 @@ export function calcDetailedTable(propertyData: PropertyData) {
         propertyData.financingYears,
         month
       );
+    } else {
+      outstandingBalance = 0;
     }
 
-    const interestPaid = calcTotalInterestPaid(
-      propertyData.propertyValue - propertyData.downPayment,
-      propertyData.interestRate,
-      propertyData.financingYears,
-      propertyData.installmentValue,
-      month
-    );
+   
+   const interestPaid =
+     outstandingBalance > 0
+       ? calcTotalInterestPaid(
+           propertyData.propertyValue - propertyData.downPayment,
+           propertyData.interestRate,
+           propertyData.financingYears,
+           propertyData.installmentValue,
+           month
+         )
+       : 0;
 
     const finalValue = initialCapital + propertyValue - outstandingBalance;
 

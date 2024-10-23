@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { PropertyData, propertyDataContext } from "./PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
 import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
@@ -18,7 +18,6 @@ export default function PropertyDataCard() {
 
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
     useState(false);
-  const afterInitialRender = useRef(false);
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -39,10 +38,9 @@ export default function PropertyDataCard() {
     return propertyData?.discharges.reduce((acc, val) => {
       return val.isDownPayment ? acc + val.originalValue : acc;
     }, 0);
-  }, [propertyData?.discharges]);
+  }, [propertyData]);
 
   useEffect(() => {
-    if (!afterInitialRender.current) return;
     if (!propertyData) return;
 
     const installmentValue = calcInstallmentValue(
@@ -78,6 +76,7 @@ export default function PropertyDataCard() {
     propertyData?.propertyAppreciationRate,
     propertyData?.financingYears,
     propertyData?.discharges,
+    installmentValueCalculatorLock,
   ]);
 
   if (!propertyData) return null;
@@ -168,11 +167,7 @@ export default function PropertyDataCard() {
             </div>
           </div>
 
-          <div
-            className={
-              totalDischargesDownPayment ? "grid grid-cols-2 gap-5" : ""
-            }
-          >
+          <div className={"grid grid-cols-2 gap-5"}>
             <CurrencyInput
               label="Valor do subsídio:"
               id="subsidy"
@@ -181,17 +176,17 @@ export default function PropertyDataCard() {
               disabled={propertyData.isHousing}
             />
 
-            {totalDischargesDownPayment > 0 && (
-              <div>
-                <CurrencyInput
-                  disabled
-                  label="Total do recurso próprio:"
-                  id="ownresource"
-                  value={totalDischargesDownPayment + propertyData.downPayment}
-                  onChange={() => {}}
-                />
-              </div>
-            )}
+            <CurrencyInput
+              disabled
+              label="Total do recurso próprio:"
+              id="ownresource"
+              value={
+                totalDischargesDownPayment +
+                propertyData.downPayment +
+                propertyData.subsidy
+              }
+              onChange={() => {}}
+            />
           </div>
 
           <PropertyDataDischargesControl
