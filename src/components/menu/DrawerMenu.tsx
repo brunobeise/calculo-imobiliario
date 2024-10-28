@@ -16,12 +16,13 @@ import { useAuth } from "@/auth";
 import { usePageContext } from "vike-react/usePageContext";
 import ListDivider from "@mui/joy/ListDivider";
 import { financingRoutes } from "@/routes/financing";
+import { useMenu } from "./MenuContext";
 
 export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const { isAuthenticated, user } = useAuth();
   const pageContext = usePageContext();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [backdropVisible, setBackdropVisible] = useState(false);
+
+  const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
   const [casesOpen, setCasesOpen] = useState(false);
 
   if (!isAuthenticated || pageContext.urlPathname.includes("proposta"))
@@ -33,8 +34,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
         <Button
           className="!absolute translate-x-[10px] translate-y-[10px] !bg-[#f0f0f0] !text-primary h-min"
           onClick={() => {
-            setMenuOpen(true);
-            setBackdropVisible(true); // Exibe o backdrop ao abrir o menu
+            toggleMenu(true);
+            toggleBackdrop(true); // Exibe o backdrop ao abrir o menu
           }}
         >
           <FaBars />
@@ -46,8 +47,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 z-20"
           onClick={() => {
-            setMenuOpen(false);
-            setBackdropVisible(false);
+            toggleMenu(false);
+            toggleBackdrop(false);
           }}
         ></div>
       )}
@@ -69,8 +70,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           <a
             href={"/"}
             onClick={() => {
-              setBackdropVisible(false);
-              setMenuOpen(false);
+              toggleBackdrop(false);
+              toggleMenu(false);
             }}
           >
             <ListItem
@@ -93,7 +94,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           <ListDivider />
 
           {/* Meus Dados */}
-          <a href={"/usuario"} onClick={() => setBackdropVisible(false)}>
+          <a href={"/usuario"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
                 pageContext.urlPathname === "/usuario" ? "!text-grayText" : ""
@@ -114,7 +115,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           <ListDivider />
 
           {/* Meus Estudos */}
-          <a href={"/estudos"} onClick={() => setBackdropVisible(false)}>
+          <a href={"/estudos"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
                 pageContext.urlPathname === "/estudos" ? "!text-grayText" : ""
@@ -137,10 +138,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           {user?.owner && (
             <>
               <ListDivider />
-              <a
-                href={"/imobiliaria"}
-                onClick={() => setBackdropVisible(false)}
-              >
+              <a href={"/imobiliaria"} onClick={() => toggleBackdrop(false)}>
                 <ListItem
                   className={`!ms-5 ${
                     pageContext.urlPathname === "/imobiliaria"
@@ -190,8 +188,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 .map((i) => (
                   <a
                     onClick={() => {
-                      setMenuOpen(false);
-                      setBackdropVisible(false);
+                      toggleMenu(false);
+                      toggleBackdrop(false);
                     }}
                     href={i.href}
                     key={i.href}

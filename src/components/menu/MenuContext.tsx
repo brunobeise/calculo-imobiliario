@@ -1,7 +1,9 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 interface MenuContextType {
-  isOpen: boolean;
-  toggleMenu: () => void;
+  menuOpen: boolean;
+  toggleMenu: (v: boolean) => void;
+  backdropVisible: boolean;
+  toggleBackdrop: (v: boolean) => void;
 }
 
 const MenuContext = createContext<MenuContextType | undefined>(undefined);
@@ -15,12 +17,16 @@ export function useMenu() {
 }
 
 export function MenuProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [backdropVisible, setBackdropVisible] = useState(false);
 
-  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const toggleMenu = (v: boolean) => setMenuOpen(v);
+  const toggleBackdrop = (v: boolean) => setBackdropVisible(v);
 
   return (
-    <MenuContext.Provider value={{ isOpen, toggleMenu }}>
+    <MenuContext.Provider
+      value={{ menuOpen, toggleMenu, backdropVisible, toggleBackdrop }}
+    >
       {children}
     </MenuContext.Provider>
   );

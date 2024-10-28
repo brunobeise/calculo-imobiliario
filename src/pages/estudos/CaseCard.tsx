@@ -18,9 +18,11 @@ import { fetchCases } from "@/store/caseReducer";
 import CaseFormModal from "@/components/modals/CaseFormModal";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import CaseSessionsModal from "./CaseSessionsModal";
+import { useMenu } from "@/components/menu/MenuContext";
 
 const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { toggleBackdrop, toggleMenu} = useMenu()
 
   const [casestudy, setCaseStudy] = useState(caseStudy);
   const [editOrNewCaseModal, setEditOrNewCaseModal] = useState(false);
@@ -142,7 +144,7 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
             </span>
           </Tooltip>
 
-          <Tooltip title="Abrir Caso" placement="bottom">
+          <Tooltip title="Abrir Estudo" placement="bottom">
             <span>
               <a
                 href={
@@ -152,6 +154,10 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
                   "/" +
                   casestudy.id
                 }
+                onClick={() => {
+                  toggleMenu(false)
+                  toggleBackdrop(false)
+                }}
               >
                 <MdFileOpen className="text-xl cursor-pointer" />
               </a>
