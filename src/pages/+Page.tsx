@@ -23,7 +23,7 @@ export default function App() {
 
   function Welcome() {
     return (
-      <div>
+      <div className="w-full">
         <div className="flex items-center mb-10 flex-col">
           <img className="w-[120px]" src={logo} />
           <span className="text-primary">Imob<span className="font-bold">Deal</span></span>

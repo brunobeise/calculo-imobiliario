@@ -3,7 +3,7 @@ import { notify } from "@/notify";
 import { api } from "./api";
 import { handleApiError } from "./errorHandler";
 import { CaseStudy } from "@/types/caseTypes";
-
+import { Session } from "@/types/sessionTypes";
 
 export const caseService = {
   async createCase(data: Partial<CaseStudy>) {
@@ -25,9 +25,18 @@ export const caseService = {
     }
   },
 
+  async getAllCaseSessions(caseId: string) {
+    try {
+      const response = await api.get<Session[]>("/cases-sessions/" + caseId);
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Não foi possível buscar os cases.");
+    }
+  },
+
   async getAllProposals() {
     try {
-      const response = await api.get<string[]>("/all-proposals");
+      const response = await api.get<string[]>("/proposals");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar os cases.");

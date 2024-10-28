@@ -15,14 +15,10 @@ export const userService = {
   },
 
   async getUserPermissions() {
-    try {
-      const response = await api.get<{ id: string; owner: boolean }>(
-        "/permissions"
-      );
-      return response.data;
-    } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar dados do usuário.");
-    }
+    const response = await api.get<{ id: string; owner: boolean }>(
+      "/permissions"
+    );
+    return response.data;
   },
 
   async editUser(userId: string, data: Partial<User>) {

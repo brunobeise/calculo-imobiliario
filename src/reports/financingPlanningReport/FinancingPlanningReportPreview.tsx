@@ -22,8 +22,15 @@ interface FinancingPlanningReportPreviewProps {
   caseData?: FinancingPlanningData;
   user?: User;
   preview?: boolean;
+  page1Ref?: React.RefObject<HTMLDivElement>;
+  page2Ref?: React.RefObject<HTMLDivElement>;
+  page3Ref?: React.RefObject<HTMLDivElement>;
+  page4Ref?: React.RefObject<HTMLDivElement>;
+  page5Ref?: React.RefObject<HTMLDivElement>;
+  page6Ref?: React.RefObject<HTMLDivElement>;
 }
 
+// Componente principal
 const FinancingPlanningReportPreview = forwardRef<
   HTMLDivElement,
   FinancingPlanningReportPreviewProps
@@ -35,6 +42,12 @@ const FinancingPlanningReportPreview = forwardRef<
       caseData,
       user,
       preview,
+      page1Ref,
+      page2Ref,
+      page3Ref,
+      page4Ref,
+      page5Ref,
+      page6Ref,
     }: FinancingPlanningReportPreviewProps,
     ref
   ) => {
@@ -107,7 +120,7 @@ const FinancingPlanningReportPreview = forwardRef<
         }}
       >
         <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
-          <div className="w-full ">
+          <div ref={page1Ref} className="w-full ">
             <div className="bg-primary w-full flex items-center">
               <UserSignature2
                 getUser={!user}
@@ -229,7 +242,7 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           </div>
 
-          <div className="my-10">
+          <div ref={page2Ref} className="my-10">
             <div className="w-full px-12 mt-10">
               <h1 className="text-2xl font-bold mb-6 mt-4 underline">
                 Entenda o Cálculo
@@ -380,7 +393,7 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           </div>
 
-          <div>
+          <div ref={page3Ref}>
             <div className="w-full mt-10 px-12">
               <p className="text-primary mt-5 text-lg">
                 A análise demonstra que, ao focar no lucro final,
@@ -427,7 +440,7 @@ const FinancingPlanningReportPreview = forwardRef<
           </div>
 
           {caseData.detailedTable[0].rentalAmount < 0 && (
-            <div className="w-full px-12 ">
+            <div ref={page4Ref} className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
                 Conversão do investimento excedente para valor presente
               </p>
@@ -610,8 +623,9 @@ const FinancingPlanningReportPreview = forwardRef<
               </div>
             </div>
           )}
+
           {caseData.finalRow.totalCapital > 0 && (
-            <div className="w-full px-12 ">
+            <div ref={page5Ref} className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
                 Reinvestimento do Lucro Mensal: Aluguel - Parcela em Renda Fixa
               </p>
@@ -788,6 +802,7 @@ const FinancingPlanningReportPreview = forwardRef<
               />
             </div>
           )}
+
           {!!propertyData.cdi && propertyData.cdi !== 0 && (
             <div className="w-full px-12 ">
               <p className="text-primary mt-2 mb-5">
@@ -945,7 +960,8 @@ const FinancingPlanningReportPreview = forwardRef<
           )}
 
           <div className="w-full  ">
-            <div className="px-12">
+            <div ref={page6Ref} className="px-12 mt-10">
+              <h5 className="font-bold underline mb-4 text-lg">Análise Gráfica Detalhada</h5>
               <div className="flex flex-col gap-5">
                 <CompleteAnalysisChart
                   investedEquityValues={caseData.detailedTable.map(

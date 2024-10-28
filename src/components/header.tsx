@@ -20,9 +20,10 @@ export default function Header() {
   if (location.includes("proposta")) return null;
 
   const title = routes.find((r) => location.startsWith(r.href))?.title;
+  
 
   return (
-    <div className="flex justify-between p-1 mt-2">
+    <div className="flex justify-between p-1 mt-2 h-[40px]">
       <div className="absolute left-[50%] translate-x-[-50%] sm:mt-0  mt-10 text-center ">
         <h1 className="scroll-m-20 text-3xl font-extrabold font-bold">
           {title || ""}

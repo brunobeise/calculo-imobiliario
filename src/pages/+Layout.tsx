@@ -31,7 +31,6 @@ import theme from "@/theme";
 import { AuthProvider } from "@/auth";
 import { PropertyDataProvider } from "@/propertyData/PropertyDataContext";
 import { Bounce, ToastContainer } from "react-toastify";
-import DrawerMenu from "@/components/DrawerMenu";
 import Header from "@/components/header";
 import { FinancingPlanningCaseDataProvider } from "./planejamentofinanciamento/@id/CaseData";
 import dayjs from "dayjs";
@@ -39,34 +38,49 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
+import "react-toastify/dist/ReactToastify.css";
+import { MenuProvider } from "@/components/menu/MenuContext";
+import DrawerMenu from "@/components/menu/DrawerMenu";
+import { usePageContext } from "vike-react/usePageContext";
 
 export { Layout };
 
 function Layout({ children }: { children: ReactNode }) {
+  const pageContext = usePageContext();
+  const isCaseMenuRoute =
+    pageContext.urlPathname.includes("planejamentofinanciamento") ||
+    pageContext.urlPathname === "/";
+
   return (
     <CssVarsProvider theme={theme}>
       <AuthProvider>
         <PropertyDataProvider>
           <Provider store={store}>
-            <ToastContainer
-              position="top-center"
-              autoClose={2500}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-              transition={Bounce}
-            />
-            <Header />
-            <DrawerMenu />
             <FinancingPlanningCaseDataProvider>
-              {children}
+              <ToastContainer
+                position="top-center"
+                autoClose={2500}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition={Bounce}
+              />
+              <MenuProvider>
+                <div className="flex">
+                  {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
+                  <div className={`flex flex-col overflow-y-auto w-full ${!isCaseMenuRoute ? 'ms-64' : ''}`}>
+                    <Header />
+                    {children}
+                  </div>
+                </div>
+              </MenuProvider>
             </FinancingPlanningCaseDataProvider>
-          </Provider>{" "}
+          </Provider>
         </PropertyDataProvider>
       </AuthProvider>
     </CssVarsProvider>

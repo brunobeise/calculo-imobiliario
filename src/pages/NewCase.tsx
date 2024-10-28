@@ -11,11 +11,11 @@ import PropertyDataNewCaseForm from "@/propertyData/propertyDataInivitalValues/p
 import dayjs from "dayjs";
 import { Spinner } from "@/components/Loading";
 import { toBRL } from "@/lib/formatter";
-import { CaseStudyTypeLinkMap } from "@/components/shared/CaseCard";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCases, fetchRealEstateCases } from "@/store/caseReducer";
 import { BsFillHouseFill } from "react-icons/bs";
+import { CaseStudyTypeLinkMap } from "@/lib/maps";
 
 interface NewCaseProps {
   setNewCase: (v: boolean) => void;

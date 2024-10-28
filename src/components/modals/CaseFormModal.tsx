@@ -11,15 +11,15 @@ import {
   FormHelperText,
   FormControl,
   Typography,
-  Checkbox,
 } from "@mui/joy";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { caseService } from "@/service/caseService";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import PropertyDataDisplay from "../shared/PropertyDataDisplay";
 import { navigate } from "vike/client/router";
-import { CaseStudyTypeLinkMap } from "../shared/CaseCard";
 import { CaseStudy } from "@/types/caseTypes";
+import BooleanInput from "../inputs/BooleanInput";
+import { CaseStudyTypeLinkMap } from "@/lib/maps";
 
 interface CaseFormModalProps {
   open: boolean;
@@ -45,13 +45,15 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
   editChoose,
   actualCase,
 }) => {
+  
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
     reset,
-    watch,
+    control,
   } = useForm<CaseFormData>();
 
   const [loading, setLoading] = useState(false);
@@ -59,7 +61,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
   useEffect(() => {
     if (editChoose && actualCase) {
       setValue("name", actualCase?.name);
-      setValue("shared", actualCase?.shared || false);
+      setValue("shared", actualCase?.shared);
     } else reset();
   }, [editChoose, reset, actualCase, setValue]);
 
@@ -123,7 +125,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
         sx={{ width: { xs: "90%", sm: 500 } }}
       >
         <DialogTitle id="create-case-title">
-          {editChoose ? "Editar Case" : "Criar Case"}
+          {editChoose ? "Editar estudo" : "Novo estudo"}
         </DialogTitle>
         <Divider />
         <DialogContent className="!p-2 !overflow-x-hidden">
@@ -136,7 +138,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
           >
             <FormControl error={!!errors.name}>
               <Typography component="label" htmlFor="name" mb={1}>
-                Nome do Case *
+                Nome do estudo *
               </Typography>
               <Input
                 id="name"
@@ -152,10 +154,16 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
             </FormControl>
 
             <FormControl>
-              <Checkbox
-                checked={watch("shared")}
-                {...register("shared")}
-                label="Compartilhar com colegas"
+              <Controller
+                name="shared"
+                control={control}
+                render={({field}) => (
+                  <BooleanInput
+                    onChange={(e) => field.onChange(e.target.checked)}
+                    checked={field.value}
+                    label="Compartilhar com colegas"
+                  />
+                )}
               />
             </FormControl>
 

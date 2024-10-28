@@ -22,7 +22,7 @@ export default function FloatingButtonList({
       {buttons.map((button, index) => (
         <div key={index}>
           {button.href ? (
-            <a href={button.href}>
+            <a href={button.href} target="_blank">
               <Tooltip placement="left-start" title={button.tooltip || ""}>
                 <Button
                   className="!rounded-full w-[40px] h-[40px]"

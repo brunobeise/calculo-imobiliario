@@ -1,5 +1,6 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { User } from "./userTypes";
+import { Session } from "./sessionTypes";
 
 export interface CaseStudy {
   id: string;
@@ -15,4 +16,6 @@ export interface CaseStudy {
   additionalPhotos: string[];
   features: string[];
   user: User;
+  isArchived: boolean;
+  sessions?: Session[];
 }

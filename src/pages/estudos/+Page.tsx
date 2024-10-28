@@ -1,5 +1,4 @@
 import GlobalLoading from "@/components/Loading";
-import CaseCard from "@/components/shared/CaseCard";
 import { useEffect } from "react";
 import { FaBook } from "react-icons/fa";
 import { Divider } from "@mui/joy";
@@ -7,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchCases } from "@/store/caseReducer";
 import { CaseStudy } from "@/types/caseTypes";
+import CaseCard from "./CaseCard";
 
 export const CaseStudyTypeMap = {
   financingPlanning: "Planejamento de Financiamento",
@@ -33,10 +33,10 @@ export default function MyCases() {
   return (
     <div className="px-12 ms-6">
       {loading && cases?.length === 0 ? (
-        <GlobalLoading />
+        <GlobalLoading text="Carregando seus estudos..." hasDrawer />
       ) : (
         <>
-          <div className="w-full flex justify-center items-center text-primary gap-2  text-2xl mt-[-20px]">
+          <div className="w-full flex justify-center items-center text-primary gap-2  text-2xl">
             <FaBook className="text-xl" />
             <h2 className="font-bold">Meus estudos</h2>
           </div>

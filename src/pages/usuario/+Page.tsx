@@ -67,7 +67,7 @@ export default function UserConfig() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <GlobalLoading />;
+  if (loading) return <GlobalLoading hasDrawer text="Carregando dados do usuário..." />;
 
   return (
     <>
@@ -75,8 +75,8 @@ export default function UserConfig() {
         <FaUser className="text-xl" />
         <h2 className="font-bold">Meus dados</h2>
       </div>
-      <div className="grid grid-cols-2 px-10 mt-10 gap-x-5">
-        <div>
+      <div className="grid grid-cols-12 px-10 mt-10 gap-x-5">
+        <div className="col-span-5">
           <form>
             <Card>
               <CardContent>
@@ -201,7 +201,7 @@ export default function UserConfig() {
             </Card>
           </form>
         </div>
-        <Card className="h-min">
+        <Card className="h-min col-span-7">
           <CardContent className="mt-4">
             <div className="flex justify-center flex-col gap-10 items-center">
               <UserSignature userData={form} />

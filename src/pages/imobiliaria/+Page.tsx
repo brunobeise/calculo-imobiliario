@@ -119,7 +119,7 @@ export default function RealEstateConfig() {
     });
   };
 
-  if (loading && !form) return <GlobalLoading />;
+  if (loading && !form) return <GlobalLoading hasDrawer text="Carregando dados da imobiliária..." />;
 
   return (
     <div>

@@ -6,7 +6,7 @@ import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
-import { FaBook, FaFile, FaSave } from "react-icons/fa";
+import { FaBook, FaEdit, FaFile, FaSave } from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
@@ -46,6 +46,7 @@ export default function FinancingPlanning() {
   const [getCaseLoading, setGetCaseLoading] = useState(false);
   const [editOrNewCaseModal, setEditOrNewCaseModal] = useState(false);
   const [editChoose, setEditChoose] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const buttons = [
     {
@@ -56,9 +57,19 @@ export default function FinancingPlanning() {
           setCaseFormModal(true);
         }
       },
-      icon: <FaSave />,
-      tooltip: "Salvar Case",
+      icon: id ? <FaEdit /> : <FaSave />,
+      tooltip: id ? "Editar Case" : "Salvar Case",
     },
+    ...(actualCase
+      ? [
+          {
+            onClick: () => handleSave(),
+            icon: <FaSave />,
+            tooltip: "Salvar Case",
+            loading: saveLoading,
+          },
+        ]
+      : []),
   ];
 
   useEffect(() => {
@@ -104,10 +115,22 @@ export default function FinancingPlanning() {
 
   if (!propertyData) return null;
 
+  const handleSave = async () => {
+    setSaveLoading(true);
+    if (!actualCase?.id) return;
+    try {
+      await caseService.updateCase(actualCase.id, {
+        propertyData: propertyData,
+      });
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
   if (report && actualCase)
     return (
       <>
-        <div className="absolute top-[1rem] left-[4rem] z-10">
+        <div className="absolute  top-[0.6rem] left-[4rem] z-10">
           <Tooltip title="Recomeçar estudo" placement="left-end">
             <Button
               variant="plain"
@@ -216,7 +239,7 @@ export default function FinancingPlanning() {
         </>
       )}
 
-      <div className="absolute top-[1rem] left-[4rem] z-10">
+      <div className="absolute top-[0.6rem] left-[4rem] z-10">
         <Tooltip title="Recomeçar estudo" placement="left-end">
           <Button
             variant="plain"
