@@ -66,7 +66,13 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
         </div>
         <List size="lg">
           {/* Home */}
-          <a href={"/"} onClick={() => setBackdropVisible(false)}>
+          <a
+            href={"/"}
+            onClick={() => {
+              setBackdropVisible(false);
+              setMenuOpen(false);
+            }}
+          >
             <ListItem
               className={`!ms-5 ${
                 pageContext.urlPathname === "/" ? "!text-grayText" : ""
