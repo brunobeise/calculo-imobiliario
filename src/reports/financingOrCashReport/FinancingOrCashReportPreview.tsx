@@ -62,7 +62,7 @@ const financingOrCashReportPreview = forwardRef<
   return (
     <div
       ref={ref}
-      className="lg:col-span-7 uw:col-span-6 !w-[210mm] shadow light !bg-whitefull mb-[1000px]"
+      className="!w-[210mm] shadow light !bg-whitefull"
     >
       <div className="!bg-whitefull flex flex-col items-center w-full overflow-hidden !m-0">
         <div className="bg-primary w-full flex items-center">

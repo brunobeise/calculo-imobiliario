@@ -8,7 +8,7 @@ export default function GlobalLoading({
   hasDrawer?: boolean;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-25 pointer-events-none flex flex-col gap-4">
+    <div className="fixed inset-0 z-[99999999999999999] flex items-center justify-center bg-black bg-opacity-25 pointer-events-none flex flex-col gap-4">
       <Loading
         className={hasDrawer ? "ms-64" : ""}
         type="spin"

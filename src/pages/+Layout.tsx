@@ -51,9 +51,6 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("planejamentofinanciamento") ||
     pageContext.urlPathname === "/";
 
-    console.log(isCaseMenuRoute);
-    
-
   return (
     <CssVarsProvider theme={theme}>
       <AuthProvider>
@@ -77,11 +74,9 @@ function Layout({ children }: { children: ReactNode }) {
                 <div className="flex">
                   {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
                   <div
-                    className={`flex flex-col overflow-y-auto w-full ${
+                    className={`flex flex-col w-full ${
                       !isCaseMenuRoute &&
-                      !pageContext.urlPathname.includes(
-                        "/proposta"
-                      )
+                      !pageContext.urlPathname.includes("/proposta")
                         ? "ms-64"
                         : ""
                     }`}

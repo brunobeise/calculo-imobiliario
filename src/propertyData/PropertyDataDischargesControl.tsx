@@ -66,7 +66,7 @@ export default function PropertyDataDischargesControl({
       installments: 1,
       isDownPayment: true,
       indexType: null,
-      indexValue: null,
+      indexValue: 0,
     },
   });
 
@@ -77,7 +77,7 @@ export default function PropertyDataDischargesControl({
     installments: number | null;
     isDownPayment: boolean;
     indexType?: string | null;
-    indexValue?: number | null;
+    indexValue?: number;
   }) => {
     const typeMap: Record<string, string> = {
       monthly: "Mensal",
@@ -501,8 +501,9 @@ export default function PropertyDataDischargesControl({
                         <PercentageInput
                           required={false}
                           noHeight
-                          value={field.value || ''}
-                          onChange={field.onChange}
+                          min={0}
+                          value={field.value ?? 0}
+                          onChange={(e) => field.onChange(e || 0)}
                           label="Taxa (mensal)"
                         />
                       )}
