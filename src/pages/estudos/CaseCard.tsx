@@ -135,7 +135,7 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
               <FaLink
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    "https://app.imodeal.com.br/proposta/" + caseStudy.id
+                    "https://app.imobdeal.com.br/proposta/" + caseStudy.id
                   );
                   notify("info", "Link copiado para o clipboard");
                 }}

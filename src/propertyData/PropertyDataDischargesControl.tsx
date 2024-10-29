@@ -501,6 +501,7 @@ export default function PropertyDataDischargesControl({
                         <PercentageInput
                           required={false}
                           noHeight
+                          value={field.value || ''}
                           onChange={field.onChange}
                           label="Taxa (mensal)"
                         />
