@@ -236,8 +236,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
       Math.floor(month / 12)
     );
 
-    if (outstandingBalance > 0 && installmentIsActive) {
-     
+    if (outstandingBalance > 0) {
+      if(installmentIsActive)
       outstandingBalance = calcOutstandingBalance(
         propertyData.propertyValue -
           propertyData.downPayment -
