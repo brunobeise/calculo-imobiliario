@@ -180,11 +180,7 @@ export default function PropertyDataCard() {
               disabled
               label="Total do recurso próprio:"
               id="ownresource"
-              value={
-                totalDischargesDownPayment +
-                propertyData.downPayment +
-                propertyData.subsidy
-              }
+              value={totalDischargesDownPayment + propertyData.downPayment}
               onChange={() => {}}
             />
           </div>
@@ -243,7 +239,8 @@ export default function PropertyDataCard() {
               value={
                 propertyData.propertyValue -
                 totalDischargesDownPayment -
-                propertyData.downPayment
+                propertyData.downPayment -
+                propertyData.subsidy
               }
               onChange={(v) =>
                 handleChangeNumber("outstandingBalance", v.target.value)

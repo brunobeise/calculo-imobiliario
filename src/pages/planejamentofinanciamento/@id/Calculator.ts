@@ -173,7 +173,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
   let outstandingBalance = calcOutstandingBalance(
     propertyData.propertyValue -
       propertyData.downPayment -
-      totalInvestmentDischarges,
+      totalInvestmentDischarges -
+      propertyData.subsidy,
     propertyData.interestRate,
     propertyData.financingYears,
     0
@@ -207,7 +208,6 @@ export function calcDetailedTable(propertyData: PropertyData) {
       ? propertyData.installmentValue
       : 0;
 
-
     const rentalAmount = (rentIsActive ? rentValue : 0) - installmentValue;
 
     let investmentExcess = 0;
@@ -238,7 +238,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
       outstandingBalance = calcOutstandingBalance(
         propertyData.propertyValue -
           propertyData.downPayment -
-          totalInvestmentDischarges,
+          totalInvestmentDischarges -
+          propertyData.subsidy,
         propertyData.interestRate,
         propertyData.financingYears,
         month
