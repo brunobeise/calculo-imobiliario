@@ -18,7 +18,7 @@ export default function ContextSelectorButton(
         onClick={props.onClick}
         className="w-full p-5 flex flex-col justify-center cursor-pointer hover:shadow-md"
       >
-        <div className="flex items-center">
+        <div className="flex items-center justify-between">
           <div className={props.extra ? "w-[45%]" : "w-[100%]"}>
             <div className="text-primary font-bold flex gap-2 items-center mb-1">
               <span className="text-md"> {props.icon && props.icon}</span>

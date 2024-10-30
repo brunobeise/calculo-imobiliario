@@ -203,15 +203,12 @@ export function calcDetailedTable(propertyData: PropertyData) {
           );
     }
 
-     const installmentValue =
-       outstandingBalance > 0 && installmentIsActive
-         ? propertyData.installmentValue
-         : 0;
- 
+    const installmentValue = installmentIsActive
+      ? propertyData.installmentValue
+      : 0;
 
-    const rentalAmount =
-      (rentIsActive ? rentValue : 0) -
-      (installmentIsActive ? installmentValue : 0);
+
+    const rentalAmount = (rentIsActive ? rentValue : 0) - installmentValue;
 
     let investmentExcess = 0;
     if (rentalAmount < 0) {
@@ -250,17 +247,16 @@ export function calcDetailedTable(propertyData: PropertyData) {
       outstandingBalance = 0;
     }
 
-   
-   const interestPaid =
-     outstandingBalance > 0
-       ? calcTotalInterestPaid(
-           propertyData.propertyValue - propertyData.downPayment,
-           propertyData.interestRate,
-           propertyData.financingYears,
-           propertyData.installmentValue,
-           month
-         )
-       : 0;
+    const interestPaid =
+      outstandingBalance > 0
+        ? calcTotalInterestPaid(
+            propertyData.propertyValue - propertyData.downPayment,
+            propertyData.interestRate,
+            propertyData.financingYears,
+            propertyData.installmentValue,
+            month
+          )
+        : 0;
 
     const finalValue = initialCapital + propertyValue - outstandingBalance;
 

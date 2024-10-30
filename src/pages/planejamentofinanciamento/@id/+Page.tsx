@@ -10,7 +10,7 @@ import { FaBook, FaEdit, FaFile, FaSave } from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
-import FinancingPlanningNewCase from "../../NewCase";
+import NewCase from "../../../components/newCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
@@ -107,8 +107,7 @@ export default function FinancingPlanning() {
     }
   }, [propertyData]);
 
-  if (newCase)
-    return <FinancingPlanningNewCase setNewCase={(v) => setNewCase(v)} />;
+  if (newCase) return <NewCase setNewCase={(v) => setNewCase(v)} />;
 
   if (getCaseLoading && !actualCase)
     return <GlobalLoading text="Carregando case..." />;
