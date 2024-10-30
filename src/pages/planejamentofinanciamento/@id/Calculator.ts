@@ -210,6 +210,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
     const rentalAmount = (rentIsActive ? rentValue : 0) - installmentValue;
 
+    if (month < 10) console.log(month, installmentIsActive);
+
     let investmentExcess = 0;
     if (rentalAmount < 0) {
       investmentExcess = rentalAmount * -1;
@@ -234,7 +236,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
       Math.floor(month / 12)
     );
 
-    if (outstandingBalance > 0) {
+    if (outstandingBalance > 0 && installmentIsActive) {
+     
       outstandingBalance = calcOutstandingBalance(
         propertyData.propertyValue -
           propertyData.downPayment -
