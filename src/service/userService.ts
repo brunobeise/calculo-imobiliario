@@ -7,7 +7,7 @@ import { User } from "@/types/userTypes";
 export const userService = {
   async getUserData() {
     try {
-      const response = await api.get("/user-data");
+      const response = await api.get<User>("/user-data");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar dados do usuário.");

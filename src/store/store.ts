@@ -1,10 +1,14 @@
 // /store/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import casesReducer from "./caseReducer";
+import userReducer from "./userReducer";
+import realEstateReducer from "./realEstateReducer"
 
 export const store = configureStore({
   reducer: {
     cases: casesReducer,
+    user: userReducer,
+    realEstate: realEstateReducer
   },
 });
 

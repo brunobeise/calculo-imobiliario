@@ -4,7 +4,7 @@ import { Divider } from "@mui/joy";
 
 interface PageStructureProps {
   header: ReactNode;
-  contentHeader: ReactNode;
+  contentHeader?: ReactNode;
   content: ReactNode;
   loading?: boolean;
   footer?: ReactNode;
@@ -12,7 +12,7 @@ interface PageStructureProps {
 
 export default function PageStructure(props: PageStructureProps) {
   return (
-    <div className="bg-[#f1f2f4] border-l border-gray p-4 flex flex-col h-screen overflow-y-hidden">
+    <div className="bg-background p-4 flex flex-col h-screen overflow-y-hidden">
       <div>{props.header}</div>
       <div
         className={`bg-whitefull mt-6 rounded-lg p-5 flex flex-col h-full overflow-y-hidden relative ${
@@ -20,7 +20,7 @@ export default function PageStructure(props: PageStructureProps) {
         }`}
       >
         {props.contentHeader}
-        <Divider className="!my-5" />
+        {props.contentHeader && <Divider className="!my-5" />}
 
         <div className="h-fit overflow-y-auto">
           {props.loading ? <PageLoading /> : props.content}

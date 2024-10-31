@@ -50,6 +50,7 @@ function useVisibility(ref: React.RefObject<HTMLElement>) {
 export default function FinancingPlanningReportSharedPage() {
   const proposalData = useData<CaseStudy>();
   const componentRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const caseData = calcCaseData(proposalData.propertyData);
   const auth = useAuth();
 
@@ -83,6 +84,23 @@ export default function FinancingPlanningReportSharedPage() {
   }, []);
 
   useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      if (entries[0].contentRect) {
+        const { width, height } = entries[0].contentRect;
+        setDimensions({ width, height });
+      }
+    });
+
+    if (componentRef.current) {
+      resizeObserver.observe(componentRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  console.log(`h-[${dimensions.height}px]`);
+
+  useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       const currentSessionTime = sessionTimeRef.current;
 
@@ -98,7 +116,6 @@ export default function FinancingPlanningReportSharedPage() {
       };
 
       event.preventDefault();
-      console.log(import.meta.env.PUBLIC_ENV__API_URL + "/proposal-session");
 
       if (!auth.isAuthenticated)
         navigator.sendBeacon(
@@ -127,7 +144,10 @@ export default function FinancingPlanningReportSharedPage() {
         <title>{proposalData.name}</title>
       </Head>
 
-      <div className="relative w-full bg-[#525659] lg:h-[5600px]">
+      <div
+        className="relative w-full lg:bg-[#525659]"
+        style={{ height: `${dimensions.height}px` }}
+      >
         {auth.isAuthenticated && (
           <div className="fixed text-primary ms-10 bg-white p-3 rounded mt-10 w-[270px] text-sm hidden lg:block">
             <h2 className="mb-2 flex items-center gap-2 text-xl">

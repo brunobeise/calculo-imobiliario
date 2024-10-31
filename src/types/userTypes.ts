@@ -22,4 +22,5 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   cases?: CaseStudy[];
+  casesCount?: number;
 }

@@ -17,7 +17,7 @@ const config: Config = {
       padding: "2rem",
     },
     colors: {
-      background: "hsl(var(--background))",
+      background: "#f1f2f4",
       foreground: "hsl(var(--foreground))",
       card: "hsl(var(--card))",
       cardForeground: "hsl(var(--card-foreground))",

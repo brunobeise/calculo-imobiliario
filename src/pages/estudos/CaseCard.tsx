@@ -58,8 +58,19 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
 
   return (
     <div
+      onClick={() => {
+        const url =
+          CaseStudyTypeLinkMap[
+            casestudy.type as keyof typeof CaseStudyTypeLinkMap
+          ] +
+          "/" +
+          casestudy.id;
+        toggleMenu(false);
+        toggleBackdrop(false);
+        window.location.href = url;
+      }}
       className={`relative overflow-hidden h-[280px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-20 flex flex-col 
-                  bg-white hover:shadow-lg`}
+                  bg-white cursor-pointer hover:shadow-xl`}
     >
       <div className="absolute w-full top-0 left-0">
         <div className="h-[150px] overflow-hidden flex justify-center items-top relative w-full">
@@ -68,7 +79,13 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
         </div>
       </div>
       <Dropdown>
-        <MenuButton className="!absolute !top-1 !right-1 w-min !rounded-full !p-0 !px-1 !border-none">
+        <MenuButton
+          variant="outlined"
+          onClick={(event) => {
+            event.stopPropagation();
+          }}
+          className="!absolute !top-1 !right-1 w-min !rounded-full !p-0 !px-1 !border-none"
+        >
           <FaEllipsisV className="text-grayText" />
         </MenuButton>
         <Menu size="sm">
