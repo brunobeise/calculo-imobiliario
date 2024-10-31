@@ -7,7 +7,6 @@ import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { MdSpatialTracking } from "react-icons/md";
 
-// Função para monitorar o tempo de visibilidade de cada página
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
   const visibilityTimer = useRef<NodeJS.Timeout | null>(null);
@@ -98,8 +97,6 @@ export default function FinancingPlanningReportSharedPage() {
     return () => resizeObserver.disconnect();
   }, []);
 
-  console.log(`h-[${dimensions.height}px]`);
-
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       const currentSessionTime = sessionTimeRef.current;
@@ -189,6 +186,10 @@ export default function FinancingPlanningReportSharedPage() {
             description: proposalData?.description || "",
             features: proposalData?.features || [],
             propertyName: proposalData?.propertyName || "",
+            pageViewMap:
+              proposalData.pageViewMap.length === 0
+                ? [true, true, true, true, true, true, true, true]
+                : proposalData.pageViewMap,
           }}
           ref={componentRef}
           page1Ref={page1Ref}

@@ -18,4 +18,5 @@ export interface CaseStudy {
   user: User;
   isArchived: boolean;
   sessions?: Session[];
+  pageViewMap: boolean[];
 }

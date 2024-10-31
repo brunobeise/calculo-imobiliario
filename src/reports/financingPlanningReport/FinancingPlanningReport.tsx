@@ -34,6 +34,10 @@ export default function FinancingPlanningReport({
     description: actualCase.description || "",
     additionalPhotos: actualCase.additionalPhotos,
     features: actualCase.features,
+    pageViewMap:
+      actualCase.pageViewMap.length === 0
+        ? [true, true, true, true, true, true, true, true]
+        : actualCase.pageViewMap,
   });
 
   const handleEditCase = async () => {

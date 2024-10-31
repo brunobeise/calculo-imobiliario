@@ -56,9 +56,12 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
     }
   };
 
+  const isAnyModalOpen = editOrNewCaseModal || sessionsModal || deleteModal;
+
   return (
     <div
       onClick={() => {
+        if (isAnyModalOpen) return;
         const url =
           CaseStudyTypeLinkMap[
             casestudy.type as keyof typeof CaseStudyTypeLinkMap
@@ -89,22 +92,41 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
           <FaEllipsisV className="text-grayText" />
         </MenuButton>
         <Menu size="sm">
-          <MenuItem onClick={() => setEditOrNewCaseModal(true)}>
+          <MenuItem
+            onClick={(e) => {
+              setEditOrNewCaseModal(true);
+              e.stopPropagation();
+            }}
+          >
             <FaPen className="mr-2" /> Editar
           </MenuItem>
-          <MenuItem onClick={() => setDeleteModal(true)}>
+          <MenuItem
+            onClick={(e) => {
+              setDeleteModal(true);
+              e.stopPropagation();
+            }}
+          >
             <FaTrash className="mr-2" /> Excluir
           </MenuItem>
-          <MenuItem onClick={() => setSessionsModal(true)}>
+          <MenuItem
+            onClick={(e) => {
+              setSessionsModal(true);
+              e.stopPropagation();
+            }}
+          >
             <FaMagnifyingGlass className="mr-2" /> Detalhes da Sessão
           </MenuItem>
           <MenuItem
-            onClick={() => window.open(`/proposta/${caseStudy.id}`, "_blank")}
+            onClick={(e) => {
+              window.open(`/proposta/${caseStudy.id}`, "_blank");
+              e.stopPropagation();
+            }}
           >
             <FaExternalLinkAlt className="mr-2" /> Abrir Proposta
           </MenuItem>
           <MenuItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               navigator.clipboard.writeText(
                 "https://app.imobdeal.com.br/proposta/" + caseStudy.id
               );
@@ -114,7 +136,8 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
             <FaLink className="mr-2" /> Copiar Link
           </MenuItem>
           <MenuItem
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               const url =
                 CaseStudyTypeLinkMap[
                   casestudy.type as keyof typeof CaseStudyTypeLinkMap
@@ -155,7 +178,6 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
         {dayjs(casestudy.createdAt).format("DD/MM/YYYY")}
       </div>
 
-      {/* Modais */}
       <CaseFormModal
         actualCase={casestudy}
         editChoose={true}
