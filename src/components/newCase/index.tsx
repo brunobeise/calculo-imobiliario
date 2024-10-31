@@ -27,7 +27,7 @@ export default function NewCase(props: NewCaseProps) {
 
   const { myCases, realEstateCases, loading } = useSelector(
     (state: RootState) => ({
-      myCases: state.cases.cases,
+      myCases: state.cases.myCases,
       realEstateCases: state.cases.realEstateCases,
       loading: state.cases.loading,
     })
