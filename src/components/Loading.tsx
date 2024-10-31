@@ -23,6 +23,14 @@ export default function GlobalLoading({
   );
 }
 
+export function PageLoading() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none flex flex-col gap-4 z-[10]">
+      <Loading type="balls" color={"#103759"} width={40} height={40} />
+    </div>
+  );
+}
+
 export function Spinner() {
   return (
     <div className="w-full h-full flex justify-center items-center">

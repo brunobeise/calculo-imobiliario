@@ -35,14 +35,13 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           className="!absolute translate-x-[10px] translate-y-[10px] !bg-[#f0f0f0] !text-primary h-min"
           onClick={() => {
             toggleMenu(true);
-            toggleBackdrop(true); // Exibe o backdrop ao abrir o menu
+            toggleBackdrop(true);
           }}
         >
           <FaBars />
         </Button>
       )}
 
-      {/* Overlay para o backdrop */}
       {backdropVisible && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 z-20"
@@ -53,7 +52,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
         ></div>
       )}
 
-      {/* Menu principal */}
       <div
         className={`w-64 z-[1000] fixed top-0 left-0 h-full bg-white text-primary transform transition-transform ${
           menuOpen || !isCaseMenu ? "translate-x-0" : "-translate-x-full"
@@ -66,7 +64,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           </span>
         </div>
         <List size="lg">
-          {/* Home */}
           <a
             href={"/"}
             onClick={() => {
@@ -93,7 +90,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           </a>
           <ListDivider />
 
-          {/* Meus Dados */}
           <a href={"/usuario"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
@@ -114,7 +110,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           </a>
           <ListDivider />
 
-          {/* Meus Estudos */}
           <a href={"/estudos"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
@@ -134,7 +129,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </ListItem>
           </a>
 
-          {/* Imobiliária */}
           {user?.owner && (
             <>
               <ListDivider />
@@ -164,7 +158,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           )}
           <ListDivider />
 
-          {/* Cases */}
           <ListItem
             endAction={
               casesOpen ? (
@@ -212,7 +205,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </List>
           )}
         </List>
-        {/* Botão de logout */}
         <List size="lg" className="!absolute bottom-0">
           <ListItem
             onClick={() => {

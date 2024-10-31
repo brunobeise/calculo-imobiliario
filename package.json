@@ -20,10 +20,11 @@
   "dependencies": {
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.19.0",
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@fontsource/roboto": "^5.1.0",
     "@hookform/resolvers": "^3.3.4",
-    "@mui/icons-material": "^5.14.11",
+    "@mui/icons-material": "^5.16.7",
     "@mui/joy": "^5.0.0-beta.48",
     "@mui/material": "^5.16.7",
     "@mui/styled-engine": "^5.14.14",
@@ -60,10 +61,10 @@
     "lucide-react": "^0.316.0",
     "node-cloc": "^0.1.0",
     "print-react-component": "^1.0.1",
-    "react": "^18.2.0",
+    "react": "^17.0.0 || ^18.0.0",
     "react-beforeunload": "^2.6.0",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.53.0",
     "react-icons": "^5.0.1",
@@ -101,5 +102,9 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-vercel": "^9.0.3"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   }
 }

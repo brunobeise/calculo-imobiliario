@@ -20,7 +20,7 @@ export default function FinancingPlanningReportConfig(
   props: FinancingPlanningReportConfigProps
 ) {
   return (
-    <Sheet className="grid grid-rows shadow">
+    <Sheet className="grid grid-rows shadow w-[500px]">
       <PictureInput
         label="Foto Principal do imóvel"
         value={[props.data.mainPhoto]}
@@ -40,6 +40,7 @@ export default function FinancingPlanningReportConfig(
       <PictureInput
         label="Fotos Adicionais do imóvel"
         multiple
+        value={props.data.additionalPhotos}
         onChange={(v) =>
           props.setData({
             ...props.data,

@@ -4,6 +4,7 @@ import { api } from "./api";
 import { handleApiError } from "./errorHandler";
 import { CaseStudy } from "@/types/caseTypes";
 import { Session } from "@/types/sessionTypes";
+import { PaginatedResult } from "@/store/store";
 
 export const caseService = {
   async createCase(data: Partial<CaseStudy>) {
@@ -16,9 +17,11 @@ export const caseService = {
     }
   },
 
-  async getAllCases() {
+  async getAllCases(queryString: string) {
     try {
-      const response = await api.get<CaseStudy[]>("/cases");
+      const response = await api.get<PaginatedResult<CaseStudy>>(
+        "/cases?" + queryString
+      );
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar os cases.");

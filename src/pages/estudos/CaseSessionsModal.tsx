@@ -102,7 +102,7 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
   const sessions =
     useSelector(
       (state: RootState) =>
-        state.cases.cases.find((c) => c.id === props.caseId)?.sessions
+        state.cases.myCases.find((c) => c.id === props.caseId)?.sessions
     ) || [];
   const loading = useSelector((state: RootState) => state.cases.sessionLoading);
 
@@ -123,7 +123,7 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
       >
         <>
           <Typography className="text-center" level="h4">
-            Visualizações no relatório
+            Visualizações
           </Typography>
           {sessions.length > 0 ? (
             <Table aria-label="session table">

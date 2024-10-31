@@ -1,12 +1,12 @@
-import { Chip, Divider, Tooltip, Typography } from "@mui/joy";
+import {
+  Chip,
+  Typography,
+  Menu,
+  MenuItem,
+  Dropdown,
+  MenuButton,
+} from "@mui/joy";
 import dayjs from "dayjs";
-
-import { toBRL } from "@/lib/formatter";
-import { MdFileOpen } from "react-icons/md";
-import { FaLink } from "react-icons/fa6";
-import { FaExternalLinkAlt, FaPen } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { useState } from "react";
 import { CaseStudy } from "@/types/caseTypes";
 import { notify } from "@/notify";
@@ -19,10 +19,20 @@ import CaseFormModal from "@/components/modals/CaseFormModal";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import CaseSessionsModal from "./CaseSessionsModal";
 import { useMenu } from "@/components/menu/MenuContext";
+import {
+  FaEllipsisV,
+  FaExternalLinkAlt,
+  FaPen,
+  FaTrash,
+  FaLink,
+} from "react-icons/fa";
+import { MdFileOpen } from "react-icons/md";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import placehodler from "./placeholder.jpg";
 
 const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { toggleBackdrop, toggleMenu} = useMenu()
+  const { toggleBackdrop, toggleMenu } = useMenu();
 
   const [casestudy, setCaseStudy] = useState(caseStudy);
   const [editOrNewCaseModal, setEditOrNewCaseModal] = useState(false);
@@ -48,39 +58,70 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
 
   return (
     <div
-      className={`relative overflow-hidden w-[260px]  rounded-[10px] duration-300 px-5 pt-3 pb-20 flex flex-col 
-          shadow-[inset_0_-3em_3em_rgba(0,0,0,0.05),0_0_0_2px_rgb(190,190,190),0.3em_0.3em_0.5em_rgba(0,0,0,0.3)] hover:shadow-[inset_0_-3em_3em_rgba(0,0,0,0.12),0_0_0_2px_rgb(190,190,190),0.3em_0.3em_1em_rgba(0,0,0,0.3)]"
-      }`}
+      className={`relative overflow-hidden h-[280px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-20 flex flex-col 
+                  bg-white hover:shadow-lg`}
     >
-      <div className="mb-2">
-        <div className="flex mb-2 ">
-          <Typography className="!font-bold !text-primary" level="h4">
-            {casestudy.name}
-          </Typography>
+      <div className="absolute w-full top-0 left-0">
+        <div className="h-[150px] overflow-hidden flex justify-center items-top relative w-full">
+          <img className="w-full" src={casestudy.mainPhoto || placehodler} />
+          <div className="absolute bottom-0 h-[50px] w-full bg-gradient-to-t from-[#000000de] to-transparent flex items-center px-10 text-lg font-light" />
         </div>
-        <Divider />
       </div>
-      <div className="mb-2 text-primary">
-        <h3>{casestudy.propertyName}</h3>
+      <Dropdown>
+        <MenuButton className="!absolute !top-1 !right-1 w-min !rounded-full !p-0 !px-1 !border-none">
+          <FaEllipsisV className="text-grayText" />
+        </MenuButton>
+        <Menu size="sm">
+          <MenuItem onClick={() => setEditOrNewCaseModal(true)}>
+            <FaPen className="mr-2" /> Editar
+          </MenuItem>
+          <MenuItem onClick={() => setDeleteModal(true)}>
+            <FaTrash className="mr-2" /> Excluir
+          </MenuItem>
+          <MenuItem onClick={() => setSessionsModal(true)}>
+            <FaMagnifyingGlass className="mr-2" /> Detalhes da Sessão
+          </MenuItem>
+          <MenuItem
+            onClick={() => window.open(`/proposta/${caseStudy.id}`, "_blank")}
+          >
+            <FaExternalLinkAlt className="mr-2" /> Abrir Proposta
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigator.clipboard.writeText(
+                "https://app.imobdeal.com.br/proposta/" + caseStudy.id
+              );
+              notify("info", "Link copiado para o clipboard");
+            }}
+          >
+            <FaLink className="mr-2" /> Copiar Link
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              const url =
+                CaseStudyTypeLinkMap[
+                  casestudy.type as keyof typeof CaseStudyTypeLinkMap
+                ] +
+                "/" +
+                casestudy.id;
+              toggleMenu(false);
+              toggleBackdrop(false);
+              window.open(url, "_blank");
+            }}
+          >
+            <MdFileOpen className="mr-2" /> Abrir Estudo
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+
+      <div className="mb-4 mt-4">
+        <Typography className="font-bold text-lg text-gray-800" level="h4">
+          {casestudy.name}
+        </Typography>
+        <Typography level="body-sm">{casestudy.propertyName}</Typography>
       </div>
-      <div className="text-[0.85em] text-blackish mb-2">
-        <p>
-          <strong>Valor do imóvel:</strong>{" "}
-          {toBRL(casestudy.propertyData.propertyValue)}
-        </p>
-        <p>
-          <strong>Entrada:</strong> {toBRL(casestudy.propertyData.downPayment)}
-        </p>
-        <p>
-          <strong>Parcelas:</strong>{" "}
-          {toBRL(casestudy.propertyData.installmentValue)}
-        </p>
-        <p className="mt-2">
-          <strong>Criado em:</strong>{" "}
-          {dayjs(casestudy.createdAt).format("MM/DD/YYYY")}
-        </p>
-      </div>
-      <div className="absolute left-4 bottom-14">
+
+      <div className="absolute bottom-4 left-4">
         {casestudy.shared && (
           <Chip
             size="sm"
@@ -92,79 +133,12 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
           </Chip>
         )}
       </div>
-      <div className="absolute w-[260px] left-0 bottom-0 mb-2 px-2">
-        <Divider className="!mt-2 !mb-2" />
-        <div className="flex justify-evenly gap-2 items-center py-1 text-blackish px-2">
-          <Tooltip title="Editar" placement="bottom">
-            <span>
-              <FaPen
-                onClick={() => setEditOrNewCaseModal(true)}
-                className="text-md cursor-pointer"
-              />
-            </span>
-          </Tooltip>
 
-          <Tooltip title="Excluir" placement="bottom">
-            <span>
-              <FaTrash
-                onClick={() => setDeleteModal(true)}
-                className="text-md cursor-pointer"
-              />
-            </span>
-          </Tooltip>
-
-          <Tooltip title="Visualizar Detalhes de sessão" placement="bottom">
-            <span>
-              <FaMagnifyingGlass
-                onClick={() => setSessionsModal(true)}
-                className="text-md cursor-pointer"
-              />
-            </span>
-          </Tooltip>
-
-          <Tooltip title="Abrir link da proposta" placement="bottom">
-            <span>
-              <a target="_blank" href={"/proposta/" + caseStudy.id}>
-                <FaExternalLinkAlt className="text-md cursor-pointer" />
-              </a>
-            </span>
-          </Tooltip>
-
-          <Tooltip title="Copiar link" placement="bottom">
-            <span>
-              <FaLink
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    "https://app.imobdeal.com.br/proposta/" + caseStudy.id
-                  );
-                  notify("info", "Link copiado para o clipboard");
-                }}
-                className="text-xl cursor-pointer"
-              />
-            </span>
-          </Tooltip>
-
-          <Tooltip title="Abrir Estudo" placement="bottom">
-            <span>
-              <a
-                href={
-                  CaseStudyTypeLinkMap[
-                    casestudy.type as keyof typeof CaseStudyTypeLinkMap
-                  ] +
-                  "/" +
-                  casestudy.id
-                }
-                onClick={() => {
-                  toggleMenu(false)
-                  toggleBackdrop(false)
-                }}
-              >
-                <MdFileOpen className="text-xl cursor-pointer" />
-              </a>
-            </span>
-          </Tooltip>
-        </div>
+      <div className="absolute bottom-4 right-4 text-gray text-sm">
+        {dayjs(casestudy.createdAt).format("DD/MM/YYYY")}
       </div>
+
+      {/* Modais */}
       <CaseFormModal
         actualCase={casestudy}
         editChoose={true}

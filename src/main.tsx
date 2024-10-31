@@ -20,6 +20,8 @@ dayjs.extend(customParseFormat);
 import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
 
+
+
 ChartJS.register(
   CategoryScale,
   LinearScale,

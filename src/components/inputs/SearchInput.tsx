@@ -1,9 +1,11 @@
-import { Input, InputProps } from "@mui/joy";
+import { FormLabel, Input, InputProps } from "@mui/joy";
 import { ChangeEvent, useRef } from "react";
+import { FaSearch } from "react-icons/fa";
 
 type DebounceProps = {
   handleDebounce: (value: string) => void;
   debounceTimeout: number;
+  label?: string;
 };
 
 export default function SearchInput(props: InputProps & DebounceProps) {
@@ -18,6 +20,19 @@ export default function SearchInput(props: InputProps & DebounceProps) {
     }, debounceTimeout);
   };
 
-  return <Input {...other} onChange={handleChange} />;
+  return (
+    <div className="flex flex-col gap-2">
+      {props.label && (
+        <FormLabel htmlFor={props.label} className="mr-2">
+          {props.label}
+        </FormLabel>
+      )}
+      <Input
+        id={props.label}
+        endDecorator={<FaSearch className="text-gray" />}
+        {...other}
+        onChange={handleChange}
+      />
+    </div>
+  );
 }
-

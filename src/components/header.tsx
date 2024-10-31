@@ -1,10 +1,8 @@
-
 import { useEffect } from "react";
 import { financingRoutes } from "@/routes/financing";
 import { auxiliarRoutes } from "@/routes/auxiliar";
 import { useAuth } from "@/auth";
 import { usePageContext } from "vike-react/usePageContext";
-
 
 export default function Header() {
   const location = usePageContext().urlPathname;
@@ -18,9 +16,11 @@ export default function Header() {
   if (!isAuthenticated) return null;
 
   if (location.includes("proposta")) return null;
+  if (location.includes("estudos")) return null;
+  if (location.includes("usuario")) return null;
+  if (location.includes("imobiliaria")) return null;
 
   const title = routes.find((r) => location.startsWith(r.href))?.title;
-  
 
   return (
     <div className="flex justify-between p-1 mt-2 h-[40px]">

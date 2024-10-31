@@ -88,7 +88,7 @@ export default function FinancingPlanningReport({
   return (
     <div>
       <Divider />
-      <div className="pt-10 px-10 gap-5 flex">
+      <div className="pt-10 px-10 gap-5 flex  justify-center">
         <FinancingPlanningReportPreview
           preview
           propertyData={propertyData}

@@ -82,7 +82,10 @@ export default function PictureInput({
                     alt="Preview"
                     className="w-10 h-10 object-cover mr-2"
                   />
-                  <span>{!fileNames[index].includes("cloudinary") && fileNames[index]}</span>
+                  <span>
+                    {!fileNames[index].includes("cloudinary") &&
+                      fileNames[index]}
+                  </span>
                 </div>
               ))}
             </div>
@@ -97,7 +100,9 @@ export default function PictureInput({
                   alt="Preview"
                   className="w-10 h-10 object-cover mr-2"
                 />
-                <span>{fileNames[index]}</span>
+                <span>
+                  {!fileNames[index].includes("cloudinary") && fileNames[index]}
+                </span>
               </div>
             ))}
           </div>

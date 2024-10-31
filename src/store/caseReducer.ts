@@ -3,11 +3,14 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { caseService } from "@/service/caseService";
 import { CaseStudy } from "@/types/caseTypes";
+import { FetchCasesParams } from "@/types/paramsTypes";
+import { PaginatedResult } from "./store";
 import { Session } from "@/types/sessionTypes";
 
 // Define o estado inicial
 interface CasesState {
-  cases: CaseStudy[];
+  myCases: CaseStudy[];
+  myCasesLastPage: number | undefined;
   realEstateCases: CaseStudy[];
   loading: boolean;
   sessionLoading: boolean;
@@ -15,25 +18,39 @@ interface CasesState {
 }
 
 const initialState: CasesState = {
-  cases: [],
+  myCases: [],
+  myCasesLastPage: undefined,
   realEstateCases: [],
   loading: false,
   sessionLoading: false,
   error: null,
 };
 
-export const fetchCases = createAsyncThunk(
-  "cases/fetchCases",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await caseService.getAllCases();
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+export const fetchCases = createAsyncThunk<
+  PaginatedResult<CaseStudy> | undefined,
+  FetchCasesParams | undefined
+>("cases/fetchCases", async (params = {}, { rejectWithValue }) => {
+  try {
+    const validParams = params || {};
+    const queryString = new URLSearchParams(
+      Object.entries(validParams).reduce((acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString();
+    const response = await caseService.getAllCases(queryString);
 
+    if (response) {
+      return response;
+    } else {
+      return undefined;
+    }
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data ?? error.message);
+  }
+});
 export const fetchRealEstateCases = createAsyncThunk(
   "cases/fetchRealEstateCases",
   async (_, { rejectWithValue }) => {
@@ -70,8 +87,14 @@ export const casesSlice = createSlice({
       })
       .addCase(
         fetchCases.fulfilled,
-        (state, action: PayloadAction<CaseStudy[] | undefined>) => {
-          state.cases = action.payload || [];
+        (
+          state,
+          action: PayloadAction<PaginatedResult<CaseStudy> | undefined>
+        ) => {
+          console.log(action.payload);
+
+          state.myCases = action.payload?.data || [];
+          state.myCasesLastPage = action.payload?.meta.lastPage;
           state.loading = false;
         }
       )
@@ -108,14 +131,15 @@ export const casesSlice = createSlice({
       .addCase(
         fetchCaseSessions.fulfilled,
         (state, action: PayloadAction<Session[] | undefined>) => {
-          if (action.payload && action.payload.length > 0) {
-            state.cases = state.cases.map((c) => {
+          if (action.payload && action.payload.length > 0 && state.myCases) {
+            state.myCases = state.myCases.map((c) => {
               if (c.id === action.payload![0].caseId) {
                 return { ...c, sessions: action.payload };
               }
               return c;
             });
           }
+
           state.sessionLoading = false;
         }
       )
