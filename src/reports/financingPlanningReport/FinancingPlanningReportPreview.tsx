@@ -382,7 +382,14 @@ const FinancingPlanningReportPreview = forwardRef<
                   <div className="text-primary absolute top-[4.8rem] left-[9rem] xl:left-[10.9rem] flex flex-col items-center gap-1">
                     <span className="text-xl font-bold">
                       {toBRL(
-                        propertyData.propertyValue - propertyData.downPayment
+                        propertyData.propertyValue -
+                          propertyData?.discharges.reduce((acc, val) => {
+                            return val.isDownPayment
+                              ? acc + val.originalValue
+                              : acc;
+                          }, 0) -
+                          propertyData.downPayment -
+                          propertyData.subsidy
                       )}
                     </span>
                     <span className="mt-[-10px]">valor financiado</span>

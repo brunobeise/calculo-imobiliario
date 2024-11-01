@@ -20,7 +20,7 @@ export const loginService = {
         password,
       });
 
-      Cookies.set("token", response.data.token);
+      Cookies.set("token", response.data.token, { expires: 3650 });
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
