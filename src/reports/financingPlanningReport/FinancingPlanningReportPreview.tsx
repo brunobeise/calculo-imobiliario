@@ -1015,7 +1015,7 @@ const FinancingPlanningReportPreview = forwardRef<
             )}
 
           {isPageViewActive(6) && (
-            <div ref={page7Ref} className="w-full  ">
+            <div ref={page7Ref} className="w-full mb-10 ">
               <div ref={page6Ref} className="px-12 mt-10">
                 <h5 className="font-bold underline mb-4 text-lg">
                   Análise Gráfica Detalhada
@@ -1038,118 +1038,119 @@ const FinancingPlanningReportPreview = forwardRef<
                     )}
                   />
                 </div>
-                <div className="w-full mt-4">
-                  <h3 className="text-xl font-bold  leading-7 mb-4 mt-5 underline">
-                    Dados considerados para a análise:
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-2 gap-10 text-sm">
-                  <div className="flex flex-col gap-1">
-                    <InfoItemReais
-                      text="Valor do imóvel:"
-                      value={propertyData.propertyValue}
-                    />
-                    <InfoItemReais
-                      text="Valor do Subsídio:"
-                      value={propertyData.subsidy}
-                    />
-                    <InfoItemReais
-                      text="Valor inicial do Aluguel:"
-                      value={propertyData.initialRentValue}
-                    />
-                    <InfoItemPercent
-                      text="Valorização anual do imóvel:"
-                      value={propertyData.propertyAppreciationRate}
-                    />
-                    <InfoItemPercent
-                      text="Valorização anual do aluguel:"
-                      value={propertyData.rentAppreciationRate}
-                    />
-                    <InfoItemDate
-                      text="Início do estudo:"
-                      value={propertyData.initialDate}
-                    />
-                    <InfoItemDate
-                      text="Aluguel começa a contar em:"
-                      value={propertyData.initialRentMonth}
-                    />
-                    <InfoItemPercent
-                      text="Taxa de desconto (VP):"
-                      value={propertyData.PVDiscountRate}
-                    />
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <InfoItemReais
-                      text="Valor da entrada:"
-                      value={propertyData.downPayment}
-                    />
-                    <InfoItemReais
-                      text="Taxas do financiamento:"
-                      value={propertyData.financingFees}
-                    />
-                    <InfoItemPercent
-                      text="Juros do financiamento:"
-                      value={propertyData.interestRate}
-                    />
-                    <InfoItemYears
-                      text="Tempo do financiamento:"
-                      value={propertyData.financingYears}
-                    />
-                    <InfoItemReais
-                      text="Valor da Parcela:"
-                      value={propertyData.installmentValue}
-                    />
-                    <InfoItemReais
-                      text={`Saldo devedor em ${propertyData.finalYear} anos:`}
-                      value={propertyData.outstandingBalance}
-                    />
-                    <InfoItemDate
-                      text="Início das parcelas:"
-                      value={propertyData.initialFinancingMonth}
-                    />
-
-                    <InfoItemPercent
-                      text="Taxa de corretagem:"
-                      value={propertyData.brokerageFee}
-                    />
-
-                    <InfoItemYears
-                      text="Cálculo feito em:"
-                      value={propertyData.finalYear}
-                    />
-                    {caseData.finalRow.totalCapital > 0 && (
-                      <InfoItemPercent
-                        text="Rendimento médio mensal:"
-                        value={propertyData.monthlyYieldRate}
-                      />
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           )}
 
-          {(configData.additionalPhotos.length > 0 ||
-            configData.features.length > 0) &&
-            isPageViewActive(7) && (
-              <div ref={page8Ref} className="w-full mt-10 px-12">
-                <h3 className="text-xl font-bold  leading-7 mb-2 mt-12 underline">
-                  Características do imóvel:
+          {isPageViewActive(7) && (
+            <div ref={page8Ref} className="w-full mt-10 px-12">
+              <div className="w-full mt-4">
+                <h3 className="text-xl font-bold  leading-7 mb-4 mt-5 underline">
+                  Dados considerados para a análise:
                 </h3>
-                {configData.features.map((f) => (
-                  <span className="mx-2 text-primary">• {f}</span>
-                ))}
-                <div className="columns-2 mt-5">
-                  {configData.additionalPhotos.map((p) => (
-                    <div className="relative overflow-hidden rounded-lg border border-4 border-primary my-2">
-                      <img src={p} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
+              </div>
+              <div className="grid grid-cols-2 gap-10 text-sm mb-12">
+                <div className="flex flex-col gap-1">
+                  <InfoItemReais
+                    text="Valor do imóvel:"
+                    value={propertyData.propertyValue}
+                  />
+                  <InfoItemReais
+                    text="Valor do Subsídio:"
+                    value={propertyData.subsidy}
+                  />
+                  <InfoItemReais
+                    text="Valor inicial do Aluguel:"
+                    value={propertyData.initialRentValue}
+                  />
+                  <InfoItemPercent
+                    text="Valorização anual do imóvel:"
+                    value={propertyData.propertyAppreciationRate}
+                  />
+                  <InfoItemPercent
+                    text="Valorização anual do aluguel:"
+                    value={propertyData.rentAppreciationRate}
+                  />
+                  <InfoItemDate
+                    text="Início do estudo:"
+                    value={propertyData.initialDate}
+                  />
+                  <InfoItemDate
+                    text="Aluguel começa a contar em:"
+                    value={propertyData.initialRentMonth}
+                  />
+                  <InfoItemPercent
+                    text="Taxa de desconto (VP):"
+                    value={propertyData.PVDiscountRate}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <InfoItemReais
+                    text="Valor da entrada:"
+                    value={propertyData.downPayment}
+                  />
+                  <InfoItemReais
+                    text="Taxas do financiamento:"
+                    value={propertyData.financingFees}
+                  />
+                  <InfoItemPercent
+                    text="Juros do financiamento:"
+                    value={propertyData.interestRate}
+                  />
+                  <InfoItemYears
+                    text="Tempo do financiamento:"
+                    value={propertyData.financingYears}
+                  />
+                  <InfoItemReais
+                    text="Valor da Parcela:"
+                    value={propertyData.installmentValue}
+                  />
+                  <InfoItemReais
+                    text={`Saldo devedor em ${propertyData.finalYear} anos:`}
+                    value={propertyData.outstandingBalance}
+                  />
+                  <InfoItemDate
+                    text="Início das parcelas:"
+                    value={propertyData.initialFinancingMonth}
+                  />
+
+                  <InfoItemPercent
+                    text="Taxa de corretagem:"
+                    value={propertyData.brokerageFee}
+                  />
+
+                  <InfoItemYears
+                    text="Cálculo feito em:"
+                    value={propertyData.finalYear}
+                  />
+                  {caseData.finalRow.totalCapital > 0 && (
+                    <InfoItemPercent
+                      text="Rendimento mercado financeiro:"
+                      value={propertyData.monthlyYieldRate}
+                    />
+                  )}
                 </div>
               </div>
-            )}
+              {configData.additionalPhotos.length > 0 && (
+                <>
+                  <h3 className="text-xl font-bold  leading-7 mb-2 underline">
+                    Características do imóvel:
+                  </h3>
+                  {configData.features.map((f) => (
+                    <span className="mx-2 text-primary">• {f}</span>
+                  ))}
+                  <div className="columns-2 mt-5">
+                    {configData.additionalPhotos.map((p) => (
+                      <div className="relative overflow-hidden rounded-lg border border-4 border-primary my-2">
+                        <img src={p} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
