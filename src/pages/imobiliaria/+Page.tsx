@@ -260,7 +260,7 @@ export default function RealEstateConfig() {
 
   return (
     <>
-      <PageStructure loading={loading} content={content} header={header} />;
+      <PageStructure loading={loading} content={content} header={header} />
       <ConfirmationModal
         open={!!changeAdminUser.userId}
         onClose={() =>

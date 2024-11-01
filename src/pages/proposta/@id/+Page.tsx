@@ -86,7 +86,9 @@ export default function FinancingPlanningReportSharedPage() {
     const resizeObserver = new ResizeObserver((entries) => {
       if (entries[0].contentRect) {
         const { width, height } = entries[0].contentRect;
-        setDimensions({ width, height });
+        const adjustedHeight =
+          window.innerWidth <= 768 ? height * 0.58 : height;
+        setDimensions({ width, height: adjustedHeight });
       }
     });
 
@@ -134,6 +136,8 @@ export default function FinancingPlanningReportSharedPage() {
     page5TimeVisible,
     page6TimeVisible,
   ]);
+
+  console.log(dimensions.height);
 
   return (
     <>

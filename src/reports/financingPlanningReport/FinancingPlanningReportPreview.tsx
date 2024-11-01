@@ -120,7 +120,7 @@ const FinancingPlanningReportPreview = forwardRef<
     return (
       <div
         ref={ref}
-        className={`w-[210mm] shadow !bg-whitefull ${
+        className={`lg:max-w-[210mm] shadow !bg-whitefull ${
           !preview
             ? " absolute scale-[0.58] xl:scale-100 top-0 left-[50%] xl:left-[50%] translate-x-[-50%]"
             : ""
