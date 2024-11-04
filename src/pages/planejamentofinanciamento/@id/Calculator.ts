@@ -152,7 +152,10 @@ export function calcDetailedTable(propertyData: PropertyData) {
   const rows: FinancingPlanningDetailedTable[] = [];
 
   let initialCapital = 0;
-  let initialInvestment = propertyData.downPayment - propertyData.subsidy;
+  let initialInvestment =
+    propertyData.downPayment +
+    propertyData.financingFees -
+    propertyData.subsidy;
   let rentValue = propertyData.initialRentValue;
   let totalRentalShortfall = 0;
 
@@ -235,16 +238,16 @@ export function calcDetailedTable(propertyData: PropertyData) {
     );
 
     if (outstandingBalance > 0) {
-      if(installmentIsActive)
-      outstandingBalance = calcOutstandingBalance(
-        propertyData.propertyValue -
-          propertyData.downPayment -
-          totalInvestmentDischarges -
-          propertyData.subsidy,
-        propertyData.interestRate,
-        propertyData.financingYears,
-        month
-      );
+      if (installmentIsActive)
+        outstandingBalance = calcOutstandingBalance(
+          propertyData.propertyValue -
+            propertyData.downPayment -
+            totalInvestmentDischarges -
+            propertyData.subsidy,
+          propertyData.interestRate,
+          propertyData.financingYears,
+          month
+        );
     } else {
       outstandingBalance = 0;
     }
