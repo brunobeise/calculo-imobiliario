@@ -7,6 +7,7 @@ import {
   Table,
   IconButton,
   Sheet,
+  Chip,
 } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,6 +16,7 @@ import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchCaseSessions } from "@/store/caseReducer";
+import { formatTime } from "@/lib/formatter";
 
 interface CaseSessionsModal {
   open: boolean;
@@ -40,7 +42,9 @@ function SessionRow(props: {
     "Divisão do capital",
     "Explicação valor presente",
     "Reinvestimento do Lucro Mensal",
+    "Comparação com CDI",
     "Análise Gráfica Detalhada",
+    "Dados do imóvel",
   ];
 
   return (
@@ -58,8 +62,20 @@ function SessionRow(props: {
           </IconButton>
         </td>
 
-        <td>{session.sessionTime}s</td>
+        <td>{formatTime(session.sessionTime)}</td>
         <td>{dayjs(session.createdAt).format("DD/MM/YYYY - HH:mm:ss")}</td>
+        <td>
+          {session.isNew && (
+            <Chip
+              size="sm"
+              className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe]"
+              variant="solid"
+              color="neutral"
+            >
+              Novo
+            </Chip>
+          )}
+        </td>
       </tr>
       {isOpen && (
         <tr>
@@ -80,10 +96,10 @@ function SessionRow(props: {
                   </tr>
                 </thead>
                 <tbody>
-                  {Array.from({ length: 6 }, (_, i) => i + 1).map((page) => (
+                  {Array.from({ length: 8 }, (_, i) => i + 1).map((page) => (
                     <tr key={`page${page}`}>
                       <td>{pageTitles[page - 1]}</td>{" "}
-                      <td>{session[`page${page}TimeVisible`] + "s" || "??"}</td>
+                      <td>{formatTime(session[`page${page}TimeVisible`])}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -133,6 +149,7 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
 
                   <th>Tempo de sessão</th>
                   <th>Data</th>
+                  <th className="w-[80px]"></th>
                 </tr>
               </thead>
               <tbody>
@@ -151,8 +168,8 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
               <Spinner />
             </>
           ) : (
-            <span className="font-bold text-center mt-10">
-              Nenhuma visualização até o momento :(
+            <span className="text-center mt-10">
+              Nenhuma visualização até o momento
             </span>
           )}
         </>

@@ -3,6 +3,7 @@ import { notify } from "@/notify";
 import { api } from "./api";
 import { handleApiError } from "./errorHandler";
 import { RealEstate } from "@/types/realEstateTypes";
+import { User } from "@/types/userTypes";
 
 export const realEstateService = {
   async getRealEstateData() {
@@ -29,9 +30,9 @@ export const realEstateService = {
     }
   },
 
-  async getUsersByRealEstateId(realEstateId: string) {
+  async getUsersByRealEstateId() {
     try {
-      const response = await api.get(`/realestates/${realEstateId}/users`);
+      const response = await api.get<User[]>(`/realestate-users`);
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

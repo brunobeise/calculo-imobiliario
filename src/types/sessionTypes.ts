@@ -7,4 +7,5 @@ export interface Session {
   [key: `page${number}TimeVisible`]: number | null;
   createdAt: Date;
   case: CaseStudy;
+  isNew: boolean;
 }

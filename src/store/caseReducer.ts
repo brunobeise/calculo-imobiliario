@@ -3,7 +3,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { caseService } from "@/service/caseService";
 import { CaseStudy } from "@/types/caseTypes";
-import { FetchCasesParams } from "@/types/paramsTypes";
+import {
+  FetchCasesParams,
+  FetchRealEstateCasesParams,
+} from "@/types/paramsTypes";
 import { PaginatedResult } from "./store";
 import { Session } from "@/types/sessionTypes";
 
@@ -12,7 +15,9 @@ interface CasesState {
   myCases: CaseStudy[];
   myCasesLastPage: number | undefined;
   realEstateCases: CaseStudy[];
-  loading: boolean;
+  realEstateCasesLastPage: number | undefined;
+  realEstateCasesLoading: boolean;
+  myCasesLoading: boolean;
   sessionLoading: boolean;
   error: string | null;
 }
@@ -21,7 +26,9 @@ const initialState: CasesState = {
   myCases: [],
   myCasesLastPage: undefined,
   realEstateCases: [],
-  loading: false,
+  realEstateCasesLastPage: undefined,
+  realEstateCasesLoading: false,
+  myCasesLoading: false,
   sessionLoading: false,
   error: null,
 };
@@ -51,17 +58,26 @@ export const fetchCases = createAsyncThunk<
     return rejectWithValue(error.response?.data ?? error.message);
   }
 });
-export const fetchRealEstateCases = createAsyncThunk(
-  "cases/fetchRealEstateCases",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await caseService.getAllRealEstateCases();
-      return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data);
-    }
+export const fetchRealEstateCases = createAsyncThunk<
+  PaginatedResult<CaseStudy> | undefined,
+  FetchRealEstateCasesParams | undefined
+>("cases/fetchRealEstateCases", async (params = {}, { rejectWithValue }) => {
+  try {
+    const validParams = params || {};
+    const queryString = new URLSearchParams(
+      Object.entries(validParams).reduce((acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString();
+    const response = await caseService.getAllRealEstateCases(queryString);
+    return response;
+  } catch (error: any) {
+    return rejectWithValue(error.response.data);
   }
-);
+});
 
 export const fetchCaseSessions = createAsyncThunk(
   "cases/fetchCaseSessions",
@@ -82,7 +98,7 @@ export const casesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchCases.pending, (state) => {
-        state.loading = true;
+        state.myCasesLoading = true;
         state.error = null;
       })
       .addCase(
@@ -95,30 +111,34 @@ export const casesSlice = createSlice({
 
           state.myCases = action.payload?.data || [];
           state.myCasesLastPage = action.payload?.meta.lastPage;
-          state.loading = false;
+          state.myCasesLoading = false;
         }
       )
       .addCase(fetchCases.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false;
+        state.myCasesLoading = false;
         state.error = action.payload;
       });
 
     builder
       .addCase(fetchRealEstateCases.pending, (state) => {
-        state.loading = true;
+        state.realEstateCasesLoading = true;
         state.error = null;
       })
       .addCase(
         fetchRealEstateCases.fulfilled,
-        (state, action: PayloadAction<CaseStudy[] | undefined>) => {
-          state.realEstateCases = action.payload || [];
-          state.loading = false;
+        (
+          state,
+          action: PayloadAction<PaginatedResult<CaseStudy> | undefined>
+        ) => {
+          state.realEstateCases = action.payload?.data || [];
+          state.realEstateCasesLastPage = action.payload?.meta.lastPage;
+          state.realEstateCasesLoading = false;
         }
       )
       .addCase(
         fetchRealEstateCases.rejected,
         (state, action: PayloadAction<any>) => {
-          state.loading = false;
+          state.realEstateCasesLoading = false;
           state.error = action.payload;
         }
       );

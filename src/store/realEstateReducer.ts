@@ -29,6 +29,19 @@ export const fetchRealEstateData = createAsyncThunk<
   }
 });
 
+export const fetchRealEstateUsers = createAsyncThunk<
+  User[],
+  void,
+  { rejectValue: string }
+>("realEstate/fetchRealEstateUsers", async (_, { rejectWithValue }) => {
+  try {
+    const response = await realEstateService.getUsersByRealEstateId();
+    return response || [];
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data ?? error.message);
+  }
+});
+
 export const editRealEstateData = createAsyncThunk<
   RealEstate | undefined,
   RealEstate,
@@ -88,6 +101,28 @@ export const realEstateSlice = createSlice({
       );
 
     builder
+      .addCase(fetchRealEstateUsers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(
+        fetchRealEstateUsers.fulfilled,
+        (state, action: PayloadAction<User[]>) => {
+          state.loading = false;
+          state.realEstateData = {
+            ...state.realEstateData!,
+            users: action.payload,
+          };
+        }
+      )
+      .addCase(
+        fetchRealEstateUsers.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.loading = false;
+          state.error = action.payload || "Erro ao buscar dados da imobiliária";
+        }
+      );
+
+    builder
       .addCase(editRealEstateData.pending, (state) => {
         state.loading = true;
       })
@@ -108,6 +143,7 @@ export const realEstateSlice = createSlice({
   },
 });
 
-export const { setRealEstateData, addUser, updateUserAdmin } = realEstateSlice.actions;
+export const { setRealEstateData, addUser, updateUserAdmin } =
+  realEstateSlice.actions;
 
 export default realEstateSlice.reducer;

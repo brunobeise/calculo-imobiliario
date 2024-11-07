@@ -25,13 +25,13 @@ export default function NewCase(props: NewCaseProps) {
 
   const { setMultiplePropertyData } = useContext(propertyDataContext);
 
-  const { myCases, realEstateCases, loading } = useSelector(
-    (state: RootState) => ({
+  const { myCases, realEstateCases, loading, realEstateCasesLastPage } =
+    useSelector((state: RootState) => ({
       myCases: state.cases.myCases,
       realEstateCases: state.cases.realEstateCases,
-      loading: state.cases.loading,
-    })
-  );
+      loading: state.cases.myCasesLoading || state.cases.realEstateCasesLoading,
+      realEstateCasesLastPage: state.cases.realEstateCasesLastPage,
+    }));
 
   useEffect(() => {
     if (context === "myCases") dispatch(fetchCases());
@@ -64,7 +64,6 @@ export default function NewCase(props: NewCaseProps) {
         {context === "new" && "Como deseja começar o estudo?"}
         {context === "exists" && "Continuar estudo"}
         {context === "myCases" && "Meus Estudos"}
-        {context === "realEstateCases" && "Estudos Compartilhados"}
       </h2>
 
       {!context && <NewCaseOptions setContext={setContext} />}
@@ -108,6 +107,7 @@ export default function NewCase(props: NewCaseProps) {
 
       {context === "realEstateCases" && (
         <RealEstateCases
+          totalPages={realEstateCasesLastPage || 0}
           realEstateCases={realEstateCases}
           loading={loading}
           setMultiplePropertyData={setMultiplePropertyData}
@@ -137,13 +137,3 @@ export default function NewCase(props: NewCaseProps) {
     </div>
   );
 }
-
-// NewCaseManualOptions Component
-
-// NewCaseOptions Component
-
-// ExistingCaseOptions Component
-
-// MyCases Component
-
-// RealEstateCases Component

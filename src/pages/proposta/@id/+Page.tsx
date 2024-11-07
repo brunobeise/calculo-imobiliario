@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
 import { CaseStudy } from "@/types/caseTypes";
@@ -5,7 +6,7 @@ import FinancingPlanningReportPreview from "@/reports/financingPlanningReport/Fi
 import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
-import { MdSpatialTracking } from "react-icons/md";
+import { nanoid } from "nanoid";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -15,7 +16,6 @@ function useVisibility(ref: React.RefObject<HTMLElement>) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Inicia o contador se a página estiver visível
           visibilityTimer.current = setInterval(() => {
             setTimeVisible((prevTime) => prevTime + 1);
           }, 1000);
@@ -52,6 +52,7 @@ export default function FinancingPlanningReportSharedPage() {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const caseData = calcCaseData(proposalData.propertyData);
   const auth = useAuth();
+  const [sessionId] = useState(nanoid(7));
 
   const [sessionTime, setSessionTime] = useState(0);
   const sessionTimeRef = useRef(sessionTime);
@@ -62,6 +63,8 @@ export default function FinancingPlanningReportSharedPage() {
   const page4Ref = useRef(null);
   const page5Ref = useRef(null);
   const page6Ref = useRef(null);
+  const page7Ref = useRef(null);
+  const page8Ref = useRef(null);
 
   const page1TimeVisible = useVisibility(page1Ref);
   const page2TimeVisible = useVisibility(page2Ref);
@@ -69,9 +72,14 @@ export default function FinancingPlanningReportSharedPage() {
   const page4TimeVisible = useVisibility(page4Ref);
   const page5TimeVisible = useVisibility(page5Ref);
   const page6TimeVisible = useVisibility(page6Ref);
+  const page7TimeVisible = useVisibility(page7Ref);
+  const page8TimeVisible = useVisibility(page8Ref);
 
   useEffect(() => {
     sessionTimeRef.current = sessionTime;
+    if (sessionTime % 3 === 0) {
+      saveSessionData();
+    }
   }, [sessionTime]);
 
   useEffect(() => {
@@ -81,6 +89,29 @@ export default function FinancingPlanningReportSharedPage() {
 
     return () => clearInterval(sessionTimer);
   }, []);
+
+  const saveSessionData = () => {
+    const currentSessionTime = sessionTimeRef.current;
+    const dataToSend = {
+      sessionTime: currentSessionTime,
+      caseId: proposalData.id,
+      id: sessionId,
+      page1TimeVisible,
+      page2TimeVisible,
+      page3TimeVisible,
+      page4TimeVisible,
+      page5TimeVisible,
+      page6TimeVisible,
+      page7TimeVisible,
+      page8TimeVisible,
+    };
+
+    if (!auth.isAuthenticated)
+      navigator.sendBeacon(
+        import.meta.env.PUBLIC_ENV__API_URL + "/proposal-session",
+        JSON.stringify(dataToSend)
+      );
+  };
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
@@ -101,26 +132,8 @@ export default function FinancingPlanningReportSharedPage() {
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      const currentSessionTime = sessionTimeRef.current;
-
-      const dataToSend = {
-        sessionTime: currentSessionTime,
-        caseId: proposalData.id,
-        page1TimeVisible,
-        page2TimeVisible,
-        page3TimeVisible,
-        page4TimeVisible,
-        page5TimeVisible,
-        page6TimeVisible,
-      };
-
       event.preventDefault();
-
-      if (!auth.isAuthenticated)
-        navigator.sendBeacon(
-          import.meta.env.PUBLIC_ENV__API_URL + "/proposal-session",
-          JSON.stringify(dataToSend)
-        );
+      saveSessionData();
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -135,9 +148,11 @@ export default function FinancingPlanningReportSharedPage() {
     page4TimeVisible,
     page5TimeVisible,
     page6TimeVisible,
-  ]);
+    page7TimeVisible,
+    page8TimeVisible,
 
-  console.log(dimensions.height);
+    saveSessionData,
+  ]);
 
   return (
     <>
@@ -149,37 +164,6 @@ export default function FinancingPlanningReportSharedPage() {
         className="relative w-full lg:bg-[#525659]"
         style={{ height: `${dimensions.height}px` }}
       >
-        {auth.isAuthenticated && (
-          <div className="fixed text-primary ms-10 bg-white p-3 rounded mt-10 w-[270px] text-sm hidden lg:block">
-            <h2 className="mb-2 flex items-center gap-2 text-xl">
-              {" "}
-              {"Tracking"}{" "}
-              <MdSpatialTracking className="text-xl mt-1 opacity-100 animate-pulse" />
-            </h2>
-            <h2 className="mb-2 flex items-center gap-2 text-lg">
-              {"Usuário logado detectado"}
-            </h2>
-            <small>
-              *Usuários que não estiverem logados não terão acesso a este
-              exemplo.
-            </small>{" "}
-            <br />
-            <small className="">
-              *Esta seção é apenas ilustrativa, e nenhum dado de sessão será
-              coletado ou enviado.
-            </small>
-            <p className="mt-2"> Tempo de sessão: {sessionTime} segundos</p>
-            <p className="mt-2">
-              {" "}
-              Página 1 - Visível por: {page1TimeVisible} segundos
-            </p>
-            <p> Página 2 - Visível por: {page2TimeVisible} segundos</p>
-            <p> Página 3 - Visível por: {page3TimeVisible} segundos</p>
-            <p> Página 4 - Visível por: {page4TimeVisible} segundos</p>
-            <p> Página 5 - Visível por: {page5TimeVisible} segundos</p>
-            <p> Página 6 - Visível por: {page6TimeVisible} segundos</p>
-          </div>
-        )}
         <FinancingPlanningReportPreview
           propertyData={proposalData?.propertyData}
           user={proposalData.user}
@@ -202,6 +186,8 @@ export default function FinancingPlanningReportSharedPage() {
           page4Ref={page4Ref}
           page5Ref={page5Ref}
           page6Ref={page6Ref}
+          page7Ref={page7Ref}
+          page8Ref={page8Ref}
         />
       </div>
     </>

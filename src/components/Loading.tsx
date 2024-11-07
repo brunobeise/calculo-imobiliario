@@ -34,7 +34,7 @@ export function PageLoading() {
 export function Spinner() {
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <Loading type="spin" color={"#103759"} width={30} height={30} />
+      <Loading type="balls" color={"#103759"} width={30} height={30} />
     </div>
   );
 }

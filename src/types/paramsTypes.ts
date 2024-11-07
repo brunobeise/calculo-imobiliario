@@ -8,3 +8,11 @@ export interface FetchCasesParams {
   orderBy?: string;
   limit?: number;
 }
+
+export interface FetchRealEstateCasesParams {
+  search?: string;
+  type?: string;
+  currentPage?: number;
+  limit?: number;
+  userId?: string;
+}
