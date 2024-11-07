@@ -14,6 +14,7 @@ import {
   addUser,
   editRealEstateData,
   fetchRealEstateData,
+  fetchRealEstateUsers,
   updateUserAdmin,
 } from "@/store/realEstateReducer";
 import PageStructure from "@/components/structure/PageStructure";
@@ -88,6 +89,7 @@ export default function RealEstateConfig() {
 
     if (!realEstateData) {
       dispatch(fetchRealEstateData());
+      dispatch(fetchRealEstateUsers());
     } else {
       setForm(realEstateData);
     }
@@ -128,7 +130,7 @@ export default function RealEstateConfig() {
 
   const content = (
     <div>
-      <div className="mb-10 px-10">
+      <div className="mb-10 px-12 my-10">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold mb-4">Usuários da Imobiliária</h2>{" "}
           <Button
@@ -139,65 +141,61 @@ export default function RealEstateConfig() {
           </Button>
         </div>
 
-        {realEstateData && realEstateData.users ? (
-          <Table size="lg">
-            <thead>
-              <tr>
-                <th className="w-[60px]"></th>
-                <th>Nome</th>
-                <th className="w-[350px]">Email</th>
-                <th>Cargo</th>
-                <th>Estudos</th>
-                <th className="w-[80px]">Admin</th>
-              </tr>
-            </thead>
-            <tbody>
-              {realEstateData.users.map((user) => (
-                <tr key={user.id}>
-                  <td className="w-[60px]">
-                    <div className="rounded-full overflow-hidden flex justify-center items-center w-[40px] h-[40px]">
-                      <img
-                        src={
-                          user.photo ||
-                          "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
-                        }
-                      />
-                    </div>
-                  </td>
-                  <td>
-                    <strong>{user.fullName}</strong>
-                  </td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{user.casesCount}</td>
-                  <td
-                    onClick={() => {
-                      if (user.id !== User?.id)
-                        setChangeAdminUser({
-                          text: user.owner
-                            ? `${user.fullName} não poderá mais fazer alterações na imobiliária.`
-                            : `${user.fullName} poderá fazer alterações na imobiliária.`,
-                          userId: user.id!,
-                          owner: user.owner!,
-                          loading: false,
-                        });
-                    }}
-                    className={`w-[80px]" ${
-                      User.id !== user.id ? "cursor-pointer" : ""
-                    }
+        <Table size="lg">
+          <thead>
+            <tr>
+              <th className="w-[60px]"></th>
+              <th>Nome</th>
+              <th className="w-[350px]">Email</th>
+              <th>Cargo</th>
+              <th>Estudos</th>
+              <th className="w-[80px]">Admin</th>
+            </tr>
+          </thead>
+          <tbody>
+            {realEstateData?.users?.map((user) => (
+              <tr key={user.id}>
+                <td className="w-[60px]">
+                  <div className="rounded-full overflow-hidden flex justify-center items-center w-[40px] h-[40px]">
+                    <img
+                      src={
+                        user.photo ||
+                        "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
+                      }
+                    />
+                  </div>
+                </td>
+                <td>
+                  <strong>{user.fullName}</strong>
+                </td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{user.casesCount}</td>
+                <td
+                  onClick={() => {
+                    if (user.id !== User?.id)
+                      setChangeAdminUser({
+                        text: user.owner
+                          ? `${user.fullName} não poderá mais fazer alterações na imobiliária.`
+                          : `${user.fullName} poderá fazer alterações na imobiliária.`,
+                        userId: user.id!,
+                        owner: user.owner!,
+                        loading: false,
+                      });
+                  }}
+                  className={`w-[80px]" ${
+                    User.id !== user.id ? "cursor-pointer" : ""
+                  }
                         `}
-                  >
-                    <div className="w-full flex justify-center">
-                      {user.owner ? <FaCheckCircle /> : <IoCloseOutline />}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : (
-          <p>Nenhum usuário encontrado.</p>
-        )}
+                >
+                  <div className="w-full flex justify-center">
+                    {user.owner ? <FaCheckCircle /> : <IoCloseOutline />}
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
       <form>
         <div className="grid grid-cols-6 gap-x-5 gap-y-4">

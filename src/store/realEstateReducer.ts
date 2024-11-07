@@ -88,10 +88,19 @@ export const realEstateSlice = createSlice({
       .addCase(
         fetchRealEstateData.fulfilled,
         (state, action: PayloadAction<RealEstate | undefined>) => {
-          state.realEstateData = action.payload || undefined;
+          if (action.payload) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { users, ...otherData } = action.payload;
+
+            state.realEstateData = {
+              ...state.realEstateData,
+              ...otherData,
+            };
+          }
           state.loading = false;
         }
       )
+
       .addCase(
         fetchRealEstateData.rejected,
         (state, action: PayloadAction<string | undefined>) => {
