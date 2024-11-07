@@ -18,7 +18,7 @@ import Pagination from "@/components/shared/Pagination";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.cases.loading);
+  const loading = useSelector((state: RootState) => state.cases.myCasesLoading);
   const data = useSelector((state: RootState) => state.cases.myCases);
   const lastPage = useSelector(
     (state: RootState) => state.cases.myCasesLastPage
@@ -139,7 +139,6 @@ export default function MyCases() {
         className="w-[300px]"
         debounceTimeout={500}
         handleDebounce={(v) => setSearch(v)}
-        value={search}
       />
       <div className="flex items-center text-gray text-md gap-3">
         <div className="flex gap-2 me-4">
