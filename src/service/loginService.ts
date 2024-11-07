@@ -31,10 +31,10 @@ export const loginService = {
     }
   },
 
-  async setPassword(userId: string, newPassword: string) {
+  async setPassword(email: string, newPassword: string) {
     try {
       const response = await api.post("/auth/set-password", {
-        userId,
+        email,
         newPassword,
       });
 
@@ -42,7 +42,37 @@ export const loginService = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       notify("error", error.response.data.error);
-      throw new Error(error.response?.data?.error || "Failed to set password");
+      throw new Error(error.response?.data?.error || "Falha ao resetar senha");
+    }
+  },
+
+  async resetPassword(email: string) {
+    try {
+      const response = await api.post("/auth/reset-password", {
+        email,
+      });
+
+      notify("info", "Email com o código enviado para " + email);
+      return response.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      notify("error", error.response.data.error);
+      throw new Error(error.response?.data?.error || "Falha ao resetar senha");
+    }
+  },
+
+  async verifyCode(email: string, code: string) {
+    try {
+      const response = await api.post("/auth/verify-code", {
+        email,
+        code,
+      });
+      return response.data;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      notify("error", error.response.data.error);
+      throw new Error(error.response?.data?.error || "Falha ao resetar senha");
     }
   },
 };
