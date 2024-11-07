@@ -2,8 +2,8 @@ import { Divider, Sheet } from "@mui/joy";
 import { ReactNode } from "react";
 
 interface ContextSelectorButtonProps {
-  title: string;
-  desc: ReactNode;
+  title?: ReactNode;
+  desc?: ReactNode;
   icon?: ReactNode;
   extra?: ReactNode;
   onClick?: () => void;

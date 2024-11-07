@@ -30,7 +30,13 @@ import { MdFileOpen } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import placehodler from "./placeholder.jpg";
 
-const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
+const CaseCard = ({
+  caseStudy,
+  realEstateCase,
+}: {
+  caseStudy: CaseStudy;
+  realEstateCase?: boolean;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const { toggleBackdrop, toggleMenu } = useMenu();
 
@@ -62,15 +68,29 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
     <div
       onClick={() => {
         if (isAnyModalOpen) return;
-        const url =
-          CaseStudyTypeLinkMap[
-            casestudy.type as keyof typeof CaseStudyTypeLinkMap
-          ] +
-          "/" +
-          casestudy.id;
-        toggleMenu(false);
-        toggleBackdrop(false);
-        window.location.href = url;
+
+        if (!realEstateCase) {
+          const url =
+            CaseStudyTypeLinkMap[
+              casestudy.type as keyof typeof CaseStudyTypeLinkMap
+            ] +
+            "/" +
+            casestudy.id;
+          toggleMenu(false);
+          toggleBackdrop(false);
+          window.location.href = url;
+        } else {
+          localStorage.setItem(
+            "financingPlanningPropertyData",
+            JSON.stringify(casestudy.propertyData)
+          );
+          const url =
+            CaseStudyTypeLinkMap[
+              casestudy.type as keyof typeof CaseStudyTypeLinkMap
+            ] + "?newCase=false";
+
+          window.location.href = url;
+        }
       }}
       className={`relative overflow-hidden h-[280px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-20 flex flex-col 
                   bg-white cursor-pointer hover:shadow-xl`}
@@ -94,28 +114,30 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
         <Menu size="sm">
           <MenuItem
             onClick={(e) => {
-              setEditOrNewCaseModal(true);
-              e.stopPropagation();
-            }}
-          >
-            <FaPen className="mr-2" /> Editar
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              setDeleteModal(true);
-              e.stopPropagation();
-            }}
-          >
-            <FaTrash className="mr-2" /> Excluir
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
               setSessionsModal(true);
               e.stopPropagation();
             }}
           >
             <FaMagnifyingGlass className="mr-2" /> Detalhes da Sessão
           </MenuItem>
+          {!realEstateCase && (
+            <MenuItem
+              onClick={(e) => {
+                e.stopPropagation();
+                const url =
+                  CaseStudyTypeLinkMap[
+                    casestudy.type as keyof typeof CaseStudyTypeLinkMap
+                  ] +
+                  "/" +
+                  casestudy.id;
+                toggleMenu(false);
+                toggleBackdrop(false);
+                window.open(url, "_blank");
+              }}
+            >
+              <MdFileOpen className="mr-2" /> Abrir Estudo
+            </MenuItem>
+          )}
           <MenuItem
             onClick={(e) => {
               window.open(`/proposta/${caseStudy.id}`, "_blank");
@@ -135,21 +157,22 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
           >
             <FaLink className="mr-2" /> Copiar Link
           </MenuItem>
+
           <MenuItem
             onClick={(e) => {
+              setEditOrNewCaseModal(true);
               e.stopPropagation();
-              const url =
-                CaseStudyTypeLinkMap[
-                  casestudy.type as keyof typeof CaseStudyTypeLinkMap
-                ] +
-                "/" +
-                casestudy.id;
-              toggleMenu(false);
-              toggleBackdrop(false);
-              window.open(url, "_blank");
             }}
           >
-            <MdFileOpen className="mr-2" /> Abrir Estudo
+            <FaPen className="mr-2" /> Editar
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              setDeleteModal(true);
+              e.stopPropagation();
+            }}
+          >
+            <FaTrash className="mr-2" /> Excluir
           </MenuItem>
         </Menu>
       </Dropdown>
@@ -162,15 +185,33 @@ const CaseCard = ({ caseStudy }: { caseStudy: CaseStudy }) => {
       </div>
 
       <div className="absolute bottom-4 left-4">
-        {casestudy.shared && (
-          <Chip
-            size="sm"
-            className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe]"
-            variant="solid"
-            color="neutral"
-          >
-            Compartilhado
-          </Chip>
+        {realEstateCase ? (
+          <div className="flex items-center text-sm">
+            <div className="rounded-full overflow-hidden flex justify-center items-center w-[30px] h-[30px]">
+              <img
+                src={
+                  caseStudy.user?.photo ||
+                  "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
+                }
+              />
+            </div>
+            <div className="ms-2 flex flex-col">
+              <span className="text-md text-blackish max-w-[120px]">
+                {caseStudy.user?.fullName}
+              </span>
+            </div>
+          </div>
+        ) : (
+          casestudy.shared && (
+            <Chip
+              size="sm"
+              className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe]"
+              variant="solid"
+              color="neutral"
+            >
+              Compartilhado
+            </Chip>
+          )
         )}
       </div>
 

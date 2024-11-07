@@ -8,6 +8,7 @@ interface CoWorkerSelectProps {
   value: string;
   onChange: (value: string) => void;
   label?: string;
+  placeholder?: string;
 }
 
 export default function CoWorkerSelect(props: CoWorkerSelectProps) {
@@ -28,6 +29,7 @@ export default function CoWorkerSelect(props: CoWorkerSelectProps) {
       value={props.value}
       onChange={props.onChange}
       label={props.label}
+      placeholder={props.placeholder}
     />
   );
 }

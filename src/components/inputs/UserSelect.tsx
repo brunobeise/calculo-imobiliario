@@ -8,6 +8,7 @@ interface UserSelectProps {
   users: User[];
   loading?: boolean;
   label?: string;
+  placeholder?: string;
 }
 
 export default function UserSelect(props: UserSelectProps) {
@@ -15,6 +16,7 @@ export default function UserSelect(props: UserSelectProps) {
     <div>
       <FormLabel htmlFor={"user__select"}>{props.label}</FormLabel>
       <Select
+        placeholder={props.placeholder}
         id="user__select"
         onChange={(_, v) => props.onChange(v as string)}
       >
@@ -30,7 +32,7 @@ export default function UserSelect(props: UserSelectProps) {
         {!props.loading ? (
           <>
             {props.users.map((user) => (
-              <Option value={user.id}>
+              <Option key={user.id} value={user.id}>
                 <Sheet className="w-full p-2 flex flex-col justify-center cursor-pointer hover:shadow-md">
                   <div className="flex items-center">
                     <div className="rounded-full overflow-hidden flex justify-center items-center w-[30px] h-[30px]">

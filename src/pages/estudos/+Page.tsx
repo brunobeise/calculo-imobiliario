@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { FaBook } from "react-icons/fa";
+import { FaBook, FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { FormLabel, Option, Select, Table } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { fetchCases } from "@/store/caseReducer";
+import { fetchCases, fetchRealEstateCases } from "@/store/caseReducer";
 import CaseCard from "./CaseCard";
 import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
@@ -15,22 +16,40 @@ import { FaSortAmountUp } from "react-icons/fa";
 import PageStructure from "@/components/structure/PageStructure";
 import CaseTableRow from "./CaseTableRow";
 import Pagination from "@/components/shared/Pagination";
+import ContextSelectorButton from "@/components/shared/ContextSelectorButton";
+import { FaShareAltSquare } from "react-icons/fa";
+import CoWorkerSelect from "@/components/inputs/CoWorkerSelect";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
-  const loading = useSelector((state: RootState) => state.cases.myCasesLoading);
-  const data = useSelector((state: RootState) => state.cases.myCases);
+
+  const [casesContext, setCasesContext] = useState<
+    "myCases" | "realEstateCases"
+  >("myCases");
+  const [casesContextDropdown, setCasesContextDropdown] = useState(false);
+
   const lastPage = useSelector(
-    (state: RootState) => state.cases.myCasesLastPage
+    (state: RootState) =>
+      state.cases[
+        casesContext === "myCases"
+          ? "myCasesLastPage"
+          : "realEstateCasesLastPage"
+      ]
   );
+
+  const loading = useSelector(
+    (state: RootState) =>
+      state.cases[
+        casesContext === "myCases" ? "myCasesLoading" : "realEstateCasesLoading"
+      ]
+  );
+  const data = useSelector((state: RootState) => state.cases[casesContext]);
 
   const [minDate, setMinDate] = useState(() => {
     return localStorage.getItem("minDate") || dayjs().format("MM/YYYY");
   });
   const [maxDate, setMaxDate] = useState(dayjs().format("MM/YYYY"));
-  const [search, setSearch] = useState(() => {
-    return localStorage.getItem("search") || "";
-  });
+  const [search, setSearch] = useState("");
   const [type, setType] = useState(() => {
     return localStorage.getItem("type") || "financingPlanning";
   });
@@ -49,6 +68,7 @@ export default function MyCases() {
   const [showMode, setShowMode] = useState<"table" | "cards">(() => {
     return (localStorage.getItem("showMode") as "table" | "cards") || "cards";
   });
+  const [filterByUser, setFilterByUser] = useState("");
 
   useEffect(() => {
     const queryParams = {
@@ -60,9 +80,11 @@ export default function MyCases() {
       orderBy,
       limit,
       type,
+      userId: filterByUser,
     };
-
-    dispatch(fetchCases(queryParams));
+    if (casesContext === "myCases") dispatch(fetchCases(queryParams));
+    if (casesContext === "realEstateCases")
+      dispatch(fetchRealEstateCases(queryParams));
   }, [
     dispatch,
     minDate,
@@ -73,6 +95,8 @@ export default function MyCases() {
     orderBy,
     limit,
     type,
+    casesContext,
+    filterByUser,
   ]);
 
   useEffect(() => {
@@ -95,11 +119,63 @@ export default function MyCases() {
     showMode,
   ]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [casesContext]);
+
+  const CasesContextSelect = () => (
+    <div className="bg-white absolute top-14 shadow-lg w-max z-[2]">
+      <ContextSelectorButton
+        onClick={() => {
+          setCasesContext("myCases");
+          setCasesContextDropdown(false);
+        }}
+        title={
+          <div className="flex items-center text-primary gap-2">
+            <FaBook className="text-sm" />
+            <h3 className="font-bold !text-sm">Meus Estudos</h3>
+          </div>
+        }
+      />
+      <ContextSelectorButton
+        onClick={() => {
+          setCasesContext("realEstateCases");
+          setCasesContextDropdown(false);
+        }}
+        title={
+          <div className="flex items-center text-primary gap-2">
+            <FaShareAltSquare className="text-sm" />
+            <h3 className="font-bold !text-sm">Compartilhados comigo</h3>
+          </div>
+        }
+      />
+    </div>
+  );
+
   const header = (
     <div className="flex justify-between">
-      <div className="flex ms-4 items-center text-primary gap-2  text-2xl mt-5">
-        <FaBook className="text-xl" />
-        <h2 className="font-bold">Meus estudos</h2>
+      <div className="flex ms-4 items-center text-primary gap-2  text-2xl mt-5 relative">
+        {casesContext === "myCases" && <FaBook className="text-xl" />}
+        {casesContext === "realEstateCases" && (
+          <FaShareAltSquare className="text-md" />
+        )}
+        <h2 className="font-bold">
+          {casesContext === "myCases" && "Meus estudos"}{" "}
+          {casesContext === "realEstateCases" && "Compartilhados comigo"}
+        </h2>
+        {!casesContextDropdown ? (
+          <FaCaretDown
+            onClick={() => setCasesContextDropdown(true)}
+            className="cursor-pointer text-[1.2rem]"
+          />
+        ) : (
+          <FaCaretUp
+            onClick={() => setCasesContextDropdown(false)}
+            className="cursor-pointer text-[1.2rem]"
+          />
+        )}
+
+        {casesContextDropdown && <CasesContextSelect />}
       </div>
       <div className="flex gap-5 items-end">
         <div className="flex flex-col gap-2 me-4">
@@ -118,48 +194,70 @@ export default function MyCases() {
             </Option>
           </Select>
         </div>
-        <DatePicker
-          label="De:"
-          onChange={(v) => setMinDate(v)}
-          defaultValue={minDate}
-        />
-        <DatePicker
-          label="Até:"
-          onChange={(v) => setMaxDate(v)}
-          defaultValue={maxDate}
-        />
+        {casesContext !== "realEstateCases" && (
+          <>
+            <DatePicker
+              label="De:"
+              onChange={(v) => setMinDate(v)}
+              defaultValue={minDate}
+            />
+            <DatePicker
+              label="Até:"
+              onChange={(v) => setMaxDate(v)}
+              defaultValue={maxDate}
+            />
+          </>
+        )}
       </div>
     </div>
   );
 
   const contentHeader = (
     <div className={"flex justify-between"}>
-      <SearchInput
-        placeholder="Pesquisar"
-        className="w-[300px]"
-        debounceTimeout={500}
-        handleDebounce={(v) => setSearch(v)}
-      />
+      <div className="flex gap-5 items-end">
+        <SearchInput
+          placeholder="Pesquisar"
+          className="w-[300px]"
+          debounceTimeout={500}
+          handleDebounce={(v) => setSearch(v)}
+        />
+        {casesContext === "realEstateCases" && (
+          <div className="w-[300px]">
+            <CoWorkerSelect
+              placeholder="Filtrar por colega"
+              value={filterByUser}
+              onChange={(v) => setFilterByUser(v)}
+            />
+          </div>
+        )}
+      </div>
+
       <div className="flex items-center text-gray text-md gap-3">
-        <div className="flex gap-2 me-4">
-          <FormLabel className="!text-[0.8rem]">Ordenar por:</FormLabel>
-          <Select
-            onChange={(_, v) => setOrderBy(v || "")}
-            className="w-[100px]"
-            size="sm"
-            defaultValue={orderBy}
-          >
-            <Option value={"name"}>Nome</Option>
-            <Option value={"createdAt"}>Data</Option>
-          </Select>
-        </div>
-        <span className="cursor-pointer me-4">
-          {sortDirection === "asc" ? (
-            <FaSortAmountUp onClick={() => setSortDirection("desc")} />
-          ) : (
-            <FaSortAmountDown onClick={() => setSortDirection("asc")} />
-          )}
-        </span>
+        {casesContext !== "realEstateCases" && (
+          <div className="flex gap-2 me-4">
+            <FormLabel className="!text-[0.8rem]">Ordenar por:</FormLabel>
+            <Select
+              onChange={(_, v) => setOrderBy(v || "")}
+              className="w-[100px]"
+              size="sm"
+              defaultValue={orderBy}
+            >
+              <Option value={"name"}>Nome</Option>
+              <Option value={"createdAt"}>Data</Option>
+            </Select>
+          </div>
+        )}
+
+        {casesContext !== "realEstateCases" && (
+          <span className="cursor-pointer me-4">
+            {sortDirection === "asc" ? (
+              <FaSortAmountUp onClick={() => setSortDirection("desc")} />
+            ) : (
+              <FaSortAmountDown onClick={() => setSortDirection("asc")} />
+            )}
+          </span>
+        )}
+
         <IoGrid
           onClick={() => setShowMode("cards")}
           className=" cursor-pointer"
@@ -177,7 +275,11 @@ export default function MyCases() {
       {showMode === "cards" ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 uw:grid-cols-8 gap-6 p-2 pe-4">
           {data.map((caseStudy) => (
-            <CaseCard key={caseStudy.name} caseStudy={caseStudy} />
+            <CaseCard
+              realEstateCase={casesContext === "realEstateCases"}
+              key={caseStudy.name}
+              caseStudy={caseStudy}
+            />
           ))}
         </div>
       ) : (

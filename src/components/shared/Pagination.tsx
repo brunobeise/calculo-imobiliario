@@ -42,13 +42,9 @@ const Pagination = ({
   return (
     <div className="relative h-[40px]">
       <div className="flex justify-center items-center space-x-2 mt-4">
-        {currentPage !== totalPages && totalPages !== 0 && (
+        {totalPages !== 0 && currentPage !== 1 && (
           <button
-            className={`px-3 py-1 rounded-full  w-8 h-8 flex justify-center items-center ${
-              currentPage === 1
-                ? "bg-grayScale-200 cursor-not-allowed"
-                : "bg-grayScale-100 hover:bg-grayScale-200"
-            }`}
+            className={`px-3 py-1 rounded-full  w-8 h-8 flex justify-center items-center bg-grayScale-100 hover:bg-grayScale-200`}
             onClick={() => onPageChange(currentPage - 1)}
           >
             <span>

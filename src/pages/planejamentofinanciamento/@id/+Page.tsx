@@ -1,6 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
-import { propertyDataContext } from "@/propertyData/PropertyDataContext";
+import {
+  PropertyData,
+  propertyDataContext,
+} from "@/propertyData/PropertyDataContext";
 import ErrorAlert, { propertyDataError } from "@/components/errorAlert";
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
@@ -47,6 +50,17 @@ export default function FinancingPlanning() {
   const [editOrNewCaseModal, setEditOrNewCaseModal] = useState(false);
   const [editChoose, setEditChoose] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+
+  useEffect(() => {
+    if (pageContext.urlParsed.search.newCase === "false") {
+      setNewCase(false);
+      setMultiplePropertyData(
+        JSON.parse(
+          localStorage.getItem("financingPlanningPropertyData")!
+        ) as PropertyData
+      );
+    }
+  }, [pageContext.urlParsed.search]);
 
   const buttons = [
     {
