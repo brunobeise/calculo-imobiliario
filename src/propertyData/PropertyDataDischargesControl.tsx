@@ -124,11 +124,11 @@ export default function PropertyDataDischargesControl({
 
     const finalMonth = propertyData.finalYear * 12;
 
-    const startMonth =
-      dayjs(data.month, "MM/YYYY").diff(
-        dayjs(dayjs(propertyData.initialDate), "MM/YYYY"),
-        "month"
-      ) + 1;
+   const startMonth =
+     dayjs(data.month, "MM/YYYY").diff(
+       dayjs(propertyData.initialDate, "MM/YYYY"),
+       "month"
+     );
 
     const maxInstallments = data.installments || Infinity;
     let installmentCount = 0;
