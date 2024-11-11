@@ -206,7 +206,8 @@ const FinancingPlanningReportPreview = forwardRef<
                         caseData.finalRow.propertyValue -
                         caseData.finalRow.outstandingBalance -
                         caseData.brokerageFee -
-                        caseData.capitalGainsTax
+                        caseData.capitalGainsTax +
+                        caseData.finalRow.totalCapital
                       }
                       isTitle
                     />
