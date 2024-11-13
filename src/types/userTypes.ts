@@ -24,3 +24,9 @@ export interface User {
   cases?: CaseStudy[];
   casesCount?: number;
 }
+
+export interface UserSelectOption {
+  id: string;
+  fullName: string;
+  photo: string;
+}

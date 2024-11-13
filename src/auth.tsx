@@ -16,6 +16,7 @@ interface AuthContextType {
   user: {
     id: string;
     owner: boolean;
+    admin: boolean;
   };
 }
 
@@ -28,16 +29,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const token = decodeToken();
 
-  const [user, setUser] = useState<{ id: string; owner: boolean }>(() => {
+  const [user, setUser] = useState<{
+    id: string;
+    owner: boolean;
+    admin: boolean;
+  }>(() => {
     if (token) {
       return {
         id: token.userId,
         owner: Cookies.get("owner") === "true",
+        admin: Cookies.get("admin") === "true",
       };
     }
     return {
-      id: "", 
+      id: "",
       owner: false,
+      admin: false,
     };
   });
 
@@ -59,6 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (permissions) {
         setUser(permissions);
         Cookies.set("owner", permissions.owner.toString());
+        Cookies.set("admin", permissions.admin.toString());
       }
       return permissions;
     } catch (error) {

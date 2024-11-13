@@ -10,7 +10,7 @@ function Page() {
     404: "A página que você está procurando não foi encontrada.",
     500: "Ocorreu um erro interno no servidor.",
     403: "Você não tem permissão para acessar esta página.",
-    410: "Esse relatório não está mais disponível :(",
+    410: "Essa proposta não está mais disponível :(",
     default: "Ocorreu um erro inesperado.",
   };
 

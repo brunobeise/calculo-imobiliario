@@ -6,7 +6,8 @@ import Cookies from "js-cookie";
 export function handleApiError(error: any, defaultErrorMessage: string) {
   if (error.response?.data?.authError) {
     Cookies.remove("token");
-    window.location.href = '/'
+    window.location.href = "/";
+    return;
   }
   notify("error", error.response?.data?.error || defaultErrorMessage);
   throw new Error(defaultErrorMessage + ": " + error.message);

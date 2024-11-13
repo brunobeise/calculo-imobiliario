@@ -10,6 +10,7 @@ export interface CaseStudy {
   type: string;
   createdAt: Date;
   shared: boolean;
+  status: string;
   propertyName?: string;
   mainPhoto?: string;
   description?: string;

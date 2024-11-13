@@ -10,7 +10,7 @@ export const caseService = {
   async createCase(data: Partial<CaseStudy>) {
     try {
       const response = await api.post("/cases", data);
-      notify("success", "Case criado com sucesso!");
+      notify("success", "Estudo criado com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao criar case.");
@@ -78,7 +78,7 @@ export const caseService = {
   async updateCase(caseId: string, data: Partial<CaseStudy>) {
     try {
       const response = await api.put("/cases/" + caseId, data);
-      notify("success", "Case atualizado com sucesso!");
+      notify("success", "Estudo atualizado com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao atualizar o case.");
@@ -88,9 +88,20 @@ export const caseService = {
   async deleteCase(caseId: string) {
     try {
       await api.delete("/cases/" + caseId);
-      notify("success", "Case deletado com sucesso!");
+      notify("success", "Estudo deletado com sucesso!");
     } catch (error: any) {
       handleApiError(error, "Erro ao deletar o case.");
+    }
+  },
+
+  async getAllAdminCases(queryString: string) {
+    try {
+      const response = await api.get<PaginatedResult<CaseStudy>>(
+        "/admin/cases?" + queryString
+      );
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Não foi possível buscar os cases.");
     }
   },
 };

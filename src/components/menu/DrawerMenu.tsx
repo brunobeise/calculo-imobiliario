@@ -7,6 +7,7 @@ import {
 } from "@mui/joy";
 import { useState } from "react";
 import { FaBars, FaBook, FaHome, FaUser, FaCalculator } from "react-icons/fa";
+import { BiSolidDashboard } from "react-icons/bi";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
@@ -63,7 +64,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             Imob<span className="font-bold">Deal</span>
           </span>
         </div>
-        <List size="lg">
+        <List size="lg" >
           <a
             href={"/"}
             onClick={() => {
@@ -72,8 +73,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             }}
           >
             <ListItem
-              className={`!ms-5 ${
-                pageContext.urlPathname === "/" ? "!text-grayText" : ""
+              className={`!ms-5  ${
+                pageContext.urlPathname === "/" ? "!text-primary" : ""
               }`}
             >
               <ListItemDecorator>
@@ -81,10 +82,37 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/" ? "!text-grayText" : ""
+                  pageContext.urlPathname === "/" ? "!text-primary" : ""
                 }`}
               >
                 Home
+              </Typography>
+            </ListItem>
+          </a>
+          <ListDivider />
+          <a
+            href={"/dashboard"}
+            onClick={() => {
+              toggleBackdrop(false);
+              toggleMenu(false);
+            }}
+          >
+            <ListItem
+              className={`!ms-5 ${
+                pageContext.urlPathname === "/dashboard" ? "!text-primary" : ""
+              }`}
+            >
+              <ListItemDecorator>
+                <BiSolidDashboard />
+              </ListItemDecorator>
+              <Typography
+                className={`font-bold !ms-[-10px] ${
+                  pageContext.urlPathname === "/dashboard"
+                    ? "!text-primary"
+                    : ""
+                }`}
+              >
+                Dashboard
               </Typography>
             </ListItem>
           </a>
@@ -93,7 +121,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           <a href={"/usuario"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
-                pageContext.urlPathname === "/usuario" ? "!text-grayText" : ""
+                pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
               }`}
             >
               <ListItemDecorator>
@@ -101,7 +129,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/usuario" ? "!text-grayText" : ""
+                  pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
                 }`}
               >
                 Meus dados
@@ -113,7 +141,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           <a href={"/estudos"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
-                pageContext.urlPathname === "/estudos" ? "!text-grayText" : ""
+                pageContext.urlPathname === "/estudos" ? "!text-primary" : ""
               }`}
             >
               <ListItemDecorator>
@@ -121,10 +149,10 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/estudos" ? "!text-grayText" : ""
+                  pageContext.urlPathname === "/estudos" ? "!text-primary" : ""
                 }`}
               >
-                Meus estudos
+                Estudos
               </Typography>
             </ListItem>
           </a>
@@ -136,7 +164,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 <ListItem
                   className={`!ms-5 ${
                     pageContext.urlPathname === "/imobiliaria"
-                      ? "!text-grayText"
+                      ? "!text-primary"
                       : ""
                   }`}
                 >
@@ -146,7 +174,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                   <Typography
                     className={`font-bold !ms-[-10px] ${
                       pageContext.urlPathname === "/imobiliaria"
-                        ? "!text-grayText"
+                        ? "!text-primary"
                         : ""
                     }`}
                   >
@@ -190,7 +218,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                     <ListItem
                       className={`cursor-pointer !px-6 ${
                         pageContext.urlPathname === i.href
-                          ? "!text-grayText"
+                          ? "!text-primary"
                           : ""
                       }`}
                       nested

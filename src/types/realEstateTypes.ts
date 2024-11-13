@@ -10,3 +10,9 @@ export interface RealEstate {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface RealEstateSelectOption {
+  id: string;
+  name: string;
+  logo: string;
+}

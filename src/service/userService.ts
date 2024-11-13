@@ -15,9 +15,11 @@ export const userService = {
   },
 
   async getUserPermissions() {
-    const response = await api.get<{ id: string; owner: boolean }>(
-      "/permissions"
-    );
+    const response = await api.get<{
+      id: string;
+      owner: boolean;
+      admin: boolean;
+    }>("/permissions");
     return response.data;
   },
 

@@ -19,6 +19,7 @@ export default function Header() {
   if (location.includes("estudos")) return null;
   if (location.includes("usuario")) return null;
   if (location.includes("imobiliaria")) return null;
+   if (location.includes("dashboard")) return null;
 
   const title = routes.find((r) => location.startsWith(r.href))?.title;
 

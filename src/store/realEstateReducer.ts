@@ -1,17 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { realEstateService } from "@/service/realEstateService";
-import { RealEstate } from "@/types/realEstateTypes";
-import { User } from "@/types/userTypes";
+import { RealEstate, RealEstateSelectOption } from "@/types/realEstateTypes";
+import { User, UserSelectOption } from "@/types/userTypes";
 
 interface RealEstateState {
   realEstateData: RealEstate | undefined;
+  realEstateSelectOptions: RealEstateSelectOption[];
+  realEstateSelectOptionsLoading: boolean;
+  realEstateUsersSelectOptions: UserSelectOption[];
+  realEstateUsersSelectOptionsLoading: boolean;
   loading: boolean;
   error: string | undefined;
 }
 
 const initialState: RealEstateState = {
   realEstateData: undefined,
+  realEstateSelectOptions: [],
+  realEstateSelectOptionsLoading: false,
+  realEstateUsersSelectOptions: [],
+  realEstateUsersSelectOptionsLoading: false,
   loading: false,
   error: undefined,
 };
@@ -41,6 +49,45 @@ export const fetchRealEstateUsers = createAsyncThunk<
     return rejectWithValue(error.response?.data ?? error.message);
   }
 });
+
+export const fetchRealEstateSelectOptions = createAsyncThunk<
+  RealEstateSelectOption[],
+  void,
+  { rejectValue: string }
+>("realEstate/fetchRealEstateSelectOptions", async (_, { rejectWithValue }) => {
+  try {
+    const response = await realEstateService.getRealEstateSelectOptions();
+    return response || [];
+  } catch (error: any) {
+    return rejectWithValue(error.response?.data ?? error.message);
+  }
+});
+
+export const fetchRealEstateUsersSelectOptions = createAsyncThunk<
+  UserSelectOption[],
+  string,
+  { rejectValue: string }
+>(
+  "realEstate/fetchRealEstateUsersSelectOptions",
+  async (realEstateId, { rejectWithValue }) => {
+    try {
+      const response = await realEstateService.getUsersByRealEstateId(
+        realEstateId
+      );
+      return (
+        response?.map((user) => {
+          return {
+            fullName: user.fullName!,
+            id: user.id!,
+            photo: user.photo!,
+          };
+        }) || []
+      );
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data ?? error.message);
+    }
+  }
+);
 
 export const editRealEstateData = createAsyncThunk<
   RealEstate | undefined,
@@ -127,6 +174,44 @@ export const realEstateSlice = createSlice({
         fetchRealEstateUsers.rejected,
         (state, action: PayloadAction<string | undefined>) => {
           state.loading = false;
+          state.error = action.payload || "Erro ao buscar dados da imobiliária";
+        }
+      );
+
+    builder
+      .addCase(fetchRealEstateSelectOptions.pending, (state) => {
+        state.realEstateSelectOptionsLoading = true;
+      })
+      .addCase(
+        fetchRealEstateSelectOptions.fulfilled,
+        (state, action: PayloadAction<RealEstateSelectOption[]>) => {
+          state.realEstateSelectOptionsLoading = false;
+          state.realEstateSelectOptions = action.payload;
+        }
+      )
+      .addCase(
+        fetchRealEstateSelectOptions.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.realEstateSelectOptionsLoading = false;
+          state.error = action.payload || "Erro ao buscar dados da imobiliária";
+        }
+      );
+
+    builder
+      .addCase(fetchRealEstateUsersSelectOptions.pending, (state) => {
+        state.realEstateUsersSelectOptionsLoading = true;
+      })
+      .addCase(
+        fetchRealEstateUsersSelectOptions.fulfilled,
+        (state, action: PayloadAction<UserSelectOption[]>) => {
+          state.realEstateUsersSelectOptionsLoading = false;
+          state.realEstateUsersSelectOptions = action.payload;
+        }
+      )
+      .addCase(
+        fetchRealEstateUsersSelectOptions.rejected,
+        (state, action: PayloadAction<string | undefined>) => {
+          state.realEstateUsersSelectOptionsLoading = false;
           state.error = action.payload || "Erro ao buscar dados da imobiliária";
         }
       );

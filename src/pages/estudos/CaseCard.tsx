@@ -1,10 +1,11 @@
+/* eslint-disable no-unexpected-multiline */
 import {
-  Chip,
   Typography,
   Menu,
   MenuItem,
   Dropdown,
   MenuButton,
+  Tooltip,
 } from "@mui/joy";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -29,13 +30,17 @@ import {
 import { MdFileOpen } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import placehodler from "./placeholder.jpg";
+import { IoShareSocialSharp } from "react-icons/io5";
+import StatusTag from "@/components/shared/CaseStatusTag";
 
 const CaseCard = ({
   caseStudy,
   realEstateCase,
+  adminCase,
 }: {
   caseStudy: CaseStudy;
   realEstateCase?: boolean;
+  adminCase?: boolean;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { toggleBackdrop, toggleMenu } = useMenu();
@@ -92,7 +97,7 @@ const CaseCard = ({
           window.location.href = url;
         }
       }}
-      className={`relative overflow-hidden h-[280px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-20 flex flex-col 
+      className={`relative overflow-hidden min-h-[260px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-10 flex flex-col 
                   bg-white cursor-pointer hover:shadow-xl`}
     >
       <div className="absolute w-full top-0 left-0">
@@ -103,40 +108,44 @@ const CaseCard = ({
       </div>
       <Dropdown>
         <MenuButton
-          variant="outlined"
+          variant="solid"
           onClick={(event) => {
             event.stopPropagation();
           }}
-          className="!absolute !top-1 !right-1 w-min !rounded-full !p-0 !px-1 !border-none"
+          size="sm"
+          className="!absolute !top-1 !right-1 !px-1   !text-primary border !border-none !bg-white rounded-full shadow-lg hover:!bg-grayScale-100"
         >
-          <FaEllipsisV className="text-grayText" />
+          <FaEllipsisV />
         </MenuButton>
         <Menu size="sm">
-          <MenuItem
-            onClick={(e) => {
-              setSessionsModal(true);
-              e.stopPropagation();
-            }}
-          >
-            <FaMagnifyingGlass className="mr-2" /> Detalhes da Sessão
-          </MenuItem>
           {!realEstateCase && (
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                const url =
-                  CaseStudyTypeLinkMap[
-                    casestudy.type as keyof typeof CaseStudyTypeLinkMap
-                  ] +
-                  "/" +
-                  casestudy.id;
-                toggleMenu(false);
-                toggleBackdrop(false);
-                window.open(url, "_blank");
-              }}
-            >
-              <MdFileOpen className="mr-2" /> Abrir Estudo
-            </MenuItem>
+            <>
+              <MenuItem
+                onClick={(e) => {
+                  setSessionsModal(true);
+                  e.stopPropagation();
+                }}
+              >
+                <FaMagnifyingGlass className="mr-2" /> Visualizar Sessões
+              </MenuItem>
+
+              <MenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const url =
+                    CaseStudyTypeLinkMap[
+                      casestudy.type as keyof typeof CaseStudyTypeLinkMap
+                    ] +
+                    "/" +
+                    casestudy.id;
+                  toggleMenu(false);
+                  toggleBackdrop(false);
+                  window.open(url, "_blank");
+                }}
+              >
+                <MdFileOpen className="mr-2" /> Abrir Estudo
+              </MenuItem>
+            </>
           )}
           <MenuItem
             onClick={(e) => {
@@ -158,63 +167,85 @@ const CaseCard = ({
             <FaLink className="mr-2" /> Copiar Link
           </MenuItem>
 
-          <MenuItem
-            onClick={(e) => {
-              setEditOrNewCaseModal(true);
-              e.stopPropagation();
-            }}
-          >
-            <FaPen className="mr-2" /> Editar
-          </MenuItem>
-          <MenuItem
-            onClick={(e) => {
-              setDeleteModal(true);
-              e.stopPropagation();
-            }}
-          >
-            <FaTrash className="mr-2" /> Excluir
-          </MenuItem>
+          {!realEstateCase && (
+            <>
+              <MenuItem
+                onClick={(e) => {
+                  setEditOrNewCaseModal(true);
+                  e.stopPropagation();
+                }}
+              >
+                <FaPen className="mr-2" /> Editar
+              </MenuItem>
+              <MenuItem
+                onClick={(e) => {
+                  setDeleteModal(true);
+                  e.stopPropagation();
+                }}
+              >
+                <FaTrash className="mr-2" /> Excluir
+              </MenuItem>
+            </>
+          )}
         </Menu>
       </Dropdown>
-
-      <div className="mb-4 mt-4">
-        <Typography className="font-bold text-lg text-gray-800" level="h4">
+      {casestudy.shared && (
+        <Tooltip title="Estudo compartilhado">
+          <div className=" text-primary border !absolute !top-2 !left-2 !p-[3px] !border-none !bg-white rounded-full shadow-lg">
+            <IoShareSocialSharp className="text-md" />
+          </div>
+        </Tooltip>
+      )}
+      <div className="mt-4 mb-2">
+        <Typography className="font-bold text-gray-800 !text-lg" level="h4">
           {casestudy.name}
         </Typography>
         <Typography level="body-sm">{casestudy.propertyName}</Typography>
       </div>
-
-      <div className="absolute bottom-4 left-4">
-        {realEstateCase ? (
-          <div className="flex items-center text-sm">
-            <div className="rounded-full overflow-hidden flex justify-center items-center w-[30px] h-[30px]">
-              <img
-                src={
-                  caseStudy.user?.photo ||
-                  "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
-                }
-              />
-            </div>
-            <div className="ms-2 flex flex-col">
-              <span className="text-md text-blackish max-w-[120px]">
-                {caseStudy.user?.fullName}
-              </span>
-            </div>
-          </div>
-        ) : (
-          casestudy.shared && (
-            <Chip
-              size="sm"
-              className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe]"
-              variant="solid"
-              color="neutral"
-            >
-              Compartilhado
-            </Chip>
-          )
-        )}
+      <div className="mb-4">
+        {realEstateCase ||
+          (adminCase && (
+            <StatusTag
+              status={casestudy.status}
+              id={casestudy.id}
+              onChange={(s) => setCaseStudy({ ...casestudy, status: s })}
+            />
+          ))}
       </div>
-
+      <div className="absolute bottom-4 left-4">
+        {realEstateCase ||
+          (adminCase ? (
+            <div className="flex items-center text-sm">
+              <div className="rounded-full overflow-hidden flex justify-center items-center w-[20px] h-[20px]">
+                <img
+                  src={
+                    caseStudy.user?.photo ||
+                    "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
+                  }
+                />
+              </div>
+              <div className="ms-2 flex flex-col">
+                <span className="!text-md text-blackish">
+                  {caseStudy.user?.fullName &&
+                    `${
+                      caseStudy.user.fullName.split(" ")[0]
+                    } ${caseStudy.user.fullName
+                      .split(" ")
+                      [caseStudy.user.fullName.split(" ").length - 1].charAt(
+                        0
+                      )}.`}
+                </span>
+              </div>
+            </div>
+          ) : (
+            <StatusTag
+              status={casestudy.status}
+              id={casestudy.id}
+              onChange={(s) => setCaseStudy({ ...casestudy, status: s })}
+              enableEdit
+            />
+          ))}
+      </div>
       <div className="absolute bottom-4 right-4 text-gray text-sm">
         {dayjs(casestudy.createdAt).format("DD/MM/YYYY")}
       </div>

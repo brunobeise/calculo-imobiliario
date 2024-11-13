@@ -33,6 +33,7 @@ import {
 import { MdRestartAlt } from "react-icons/md";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
+import StatusTag from "@/components/shared/CaseStatusTag";
 
 export default function FinancingPlanning() {
   const pageContext = usePageContext();
@@ -187,7 +188,7 @@ export default function FinancingPlanning() {
             <div onClick={() => setReport(true)}>
               <Tab className="!text-primary" value="report">
                 <FaFile className="text-sm" />{" "}
-                <span className="font-bold">Relatório </span>
+                <span className="font-bold">Proposta </span>
               </Tab>
             </div>
           </TabList>
@@ -196,6 +197,15 @@ export default function FinancingPlanning() {
           {actualCase?.name} {actualCase?.propertyName && " - "}
           {actualCase?.propertyName}
         </h1>
+
+        <div className="absolute left-[1rem]  top-[3.5rem]">
+          <StatusTag
+            status={actualCase.status}
+            id={actualCase.id}
+            enableEdit
+            onChange={(s) => setActualCase({ ...actualCase, status: s })}
+          />
+        </div>
         <Divider className="!mt-3" />
         <FinancingPlanningReport
           onClose={() => setReport(false)}
@@ -239,7 +249,7 @@ export default function FinancingPlanning() {
               <div onClick={() => setReport(true)}>
                 <Tab className="!text-primary" value="report">
                   <FaFile className="text-sm" />{" "}
-                  <span className="font-bold">Relatório </span>
+                  <span className="font-bold">Proposta </span>
                 </Tab>
               </div>
             </TabList>
@@ -248,6 +258,14 @@ export default function FinancingPlanning() {
             {actualCase?.name} {actualCase?.propertyName && " - "}
             {actualCase?.propertyName}
           </h1>
+          <div className="absolute left-[1rem]  top-[3.5rem]">
+            <StatusTag
+              status={actualCase.status}
+              id={actualCase.id}
+              enableEdit
+              onChange={(s) => setActualCase({ ...actualCase, status: s })}
+            />
+          </div>
           <Divider className="!mt-3" />
         </>
       )}

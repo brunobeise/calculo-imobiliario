@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { fetchCaseSessions } from "@/store/caseReducer";
 import { formatTime } from "@/lib/formatter";
+import { navigate } from "vike/client/router";
+import { CaseStudyTypeLinkMap } from "@/lib/maps";
 
 interface CaseSessionsModal {
   open: boolean;
@@ -24,10 +26,11 @@ interface CaseSessionsModal {
   caseId: string;
 }
 
-function SessionRow(props: {
+export function SessionRow(props: {
   session: Session;
   openSessionId: number | null;
   setOpenSessionId: (id: number | null) => void;
+  showName?: boolean;
 }) {
   const { session, openSessionId, setOpenSessionId } = props;
   const isOpen = openSessionId === session.id;
@@ -61,7 +64,22 @@ function SessionRow(props: {
             {isOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </td>
-
+        {props.showName && (
+          <td
+            onClick={() =>
+              navigate(
+                CaseStudyTypeLinkMap[
+                  session.case.type as keyof typeof CaseStudyTypeLinkMap
+                ] +
+                  "/" +
+                  session.case.id
+              )
+            }
+            className="cursor-pointer hover:!text-grayScale-900"
+          >
+            {session.case?.name}
+          </td>
+        )}
         <td>{formatTime(session.sessionTime)}</td>
         <td>{dayjs(session.createdAt).format("DD/MM/YYYY - HH:mm:ss")}</td>
         <td>

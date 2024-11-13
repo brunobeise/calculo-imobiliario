@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import "../index.css";
 import "@/assets/fonts/font.css";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import annotationPlugin from "chartjs-plugin-annotation";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,7 +23,8 @@ ChartJS.register(
   Tooltip,
   Legend,
   ChartDataLabels,
-  ArcElement
+  ArcElement,
+  annotationPlugin
 );
 import { Provider } from "react-redux";
 import { store } from "@/store/store";

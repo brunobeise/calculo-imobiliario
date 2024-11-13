@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Input, FormLabel } from "@mui/joy";
 import InfoTooltip from "../ui/InfoTooltip";
 
@@ -29,6 +29,19 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   noHeight,
   placeholder,
 }) => {
+  const [inputValue, setInputValue] = useState<string>("");
+  useEffect(() => {
+    setInputValue(
+      value !== undefined ? value.toString().replace(".", ",") : ""
+    );
+  }, [value]);
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value.replace(",", ".");
+    setInputValue(event.target.value);
+    onChange({ ...event, target: { ...event.target, value: newValue } });
+  };
+
   return (
     <div className={wrapperClassName}>
       <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
@@ -39,9 +52,9 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
       <Input
         placeholder={placeholder?.toString()}
         id={id}
-        value={value === 0 || !value ? "" : value}
-        onChange={onChange}
-        type="number"
+        value={inputValue}
+        onChange={handleInputChange}
+        type="text"
         endDecorator="%"
         slotProps={{
           input: {

@@ -2,13 +2,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import casesReducer from "./caseReducer";
 import userReducer from "./userReducer";
-import realEstateReducer from "./realEstateReducer"
+import realEstateReducer from "./realEstateReducer";
+import adminDashboardReducer from "./dashboard/adminDashboardReducer";
+import ownerDashboardReducer from './dashboard/ownerDashboardReducer'
+import userDashboardReducer from "./dashboard/userDashboardReducer";
 
 export const store = configureStore({
   reducer: {
+    userDashboard: userDashboardReducer,
+    ownerDashboard: ownerDashboardReducer,
+    adminDashboard: adminDashboardReducer,
     cases: casesReducer,
     user: userReducer,
-    realEstate: realEstateReducer
+    realEstate: realEstateReducer,
   },
 });
 

@@ -115,15 +115,20 @@ export default function RealEstateConfig() {
     });
   };
 
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) {
+    navigate("/");
+    return null;
+  }
+
   const header = (
     <div className="flex justify-between items-center">
       <div className="w-full flex items-center text-primary gap-2  text-2xl ms-4 mt-8 mb-3">
         <MdOutlineRealEstateAgent className="text-xl" />
         <h2 className="font-bold">Imobiliária</h2>
       </div>
-      <div className="flex gap-5 justify-center items-center h-max me-10">
-        <img className="h-[50px]" src={form?.logo} alt="" />
-        <h2 className="font-bold text-4xl text-nowrap">{form?.name}</h2>
+      <div className="flex gap-3 justify-center items-center h-max me-10">
+        <img className="h-[40px]" src={realEstateData?.logo} alt="" />
       </div>
     </div>
   );

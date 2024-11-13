@@ -4,7 +4,11 @@ import { FaBook, FaCaretDown, FaCaretUp } from "react-icons/fa";
 import { FormLabel, Option, Select, Table } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { fetchCases, fetchRealEstateCases } from "@/store/caseReducer";
+import {
+  fetchAdminCases,
+  fetchCases,
+  fetchRealEstateCases,
+} from "@/store/caseReducer";
 import CaseCard from "./CaseCard";
 import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
@@ -19,12 +23,15 @@ import Pagination from "@/components/shared/Pagination";
 import ContextSelectorButton from "@/components/shared/ContextSelectorButton";
 import { FaShareAltSquare } from "react-icons/fa";
 import CoWorkerSelect from "@/components/inputs/CoWorkerSelect";
+import { useAuth } from "@/auth";
+import { navigate } from "vike/client/router";
+import { RiAdminFill } from "react-icons/ri";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
 
   const [casesContext, setCasesContext] = useState<
-    "myCases" | "realEstateCases"
+    "myCases" | "realEstateCases" | "adminCases"
   >("myCases");
   const [casesContextDropdown, setCasesContextDropdown] = useState(false);
 
@@ -33,6 +40,8 @@ export default function MyCases() {
       state.cases[
         casesContext === "myCases"
           ? "myCasesLastPage"
+          : casesContext === "adminCases"
+          ? "adminCasesLastPage"
           : "realEstateCasesLastPage"
       ]
   );
@@ -40,7 +49,11 @@ export default function MyCases() {
   const loading = useSelector(
     (state: RootState) =>
       state.cases[
-        casesContext === "myCases" ? "myCasesLoading" : "realEstateCasesLoading"
+        casesContext === "myCases"
+          ? "myCasesLoading"
+          : casesContext === "adminCases"
+          ? "adminCasesLoading"
+          : "realEstateCasesLoading"
       ]
   );
   const data = useSelector((state: RootState) => state.cases[casesContext]);
@@ -83,6 +96,7 @@ export default function MyCases() {
       userId: filterByUser,
     };
     if (casesContext === "myCases") dispatch(fetchCases(queryParams));
+    if (casesContext === "adminCases") dispatch(fetchAdminCases(queryParams));
     if (casesContext === "realEstateCases")
       dispatch(fetchRealEstateCases(queryParams));
   }, [
@@ -133,7 +147,7 @@ export default function MyCases() {
         title={
           <div className="flex items-center text-primary gap-2">
             <FaBook className="text-sm" />
-            <h3 className="font-bold !text-sm">Meus Estudos</h3>
+            <h3 className="font-bold !text-sm">Meus estudos</h3>
           </div>
         }
       />
@@ -145,12 +159,32 @@ export default function MyCases() {
         title={
           <div className="flex items-center text-primary gap-2">
             <FaShareAltSquare className="text-sm" />
-            <h3 className="font-bold !text-sm">Compartilhados comigo</h3>
+            <h3 className="font-bold !text-sm">Estudos compartilhados</h3>
           </div>
         }
       />
+      {user.admin && (
+        <ContextSelectorButton
+          onClick={() => {
+            setCasesContext("adminCases");
+            setCasesContextDropdown(false);
+          }}
+          title={
+            <div className="flex items-center text-primary gap-2">
+              <RiAdminFill className="text-sm" />
+              <h3 className="font-bold !text-sm">Todos Estudos</h3>
+            </div>
+          }
+        />
+      )}
     </div>
   );
+
+  const { isAuthenticated, user } = useAuth();
+  if (!isAuthenticated) {
+    navigate("/");
+    return null;
+  }
 
   const header = (
     <div className="flex justify-between">
@@ -159,9 +193,11 @@ export default function MyCases() {
         {casesContext === "realEstateCases" && (
           <FaShareAltSquare className="text-md" />
         )}
+        {casesContext === "adminCases" && <RiAdminFill className="text-md" />}
         <h2 className="font-bold">
           {casesContext === "myCases" && "Meus estudos"}{" "}
-          {casesContext === "realEstateCases" && "Compartilhados comigo"}
+          {casesContext === "realEstateCases" && "Estudos compartilhados"}
+          {casesContext === "adminCases" && "Todos estudos"}
         </h2>
         {!casesContextDropdown ? (
           <FaCaretDown
@@ -276,6 +312,7 @@ export default function MyCases() {
         <div className="grid grid-cols-2 lg:grid-cols-4 uw:grid-cols-8 gap-6 p-2 pe-4">
           {data.map((caseStudy) => (
             <CaseCard
+              adminCase={casesContext === "adminCases"}
               realEstateCase={casesContext === "realEstateCases"}
               key={caseStudy.name}
               caseStudy={caseStudy}

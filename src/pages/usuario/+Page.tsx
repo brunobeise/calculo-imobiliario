@@ -17,8 +17,12 @@ import { User } from "@/types/userTypes";
 import PageStructure from "@/components/structure/PageStructure";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import UserSignature2 from "@/components/user/UserSignature2";
+import { useAuth } from "@/auth";
+import { navigate } from "vike/client/router";
 
 export default function UserConfig() {
+  const { isAuthenticated } = useAuth();
+
   const dispatch = useDispatch<AppDispatch>();
   const { userData, loading } = useSelector((state: RootState) => state.user);
   const [form, setForm] = useState<User>({
@@ -69,6 +73,11 @@ export default function UserConfig() {
   useEffect(() => {
     if (userData) setForm(userData);
   }, [userData]);
+
+  if (!isAuthenticated) {
+    navigate("/");
+    return null;
+  }
 
   const header = (
     <div className="w-full flex items-center text-primary gap-2  text-2xl ms-4 mt-8 mb-3">

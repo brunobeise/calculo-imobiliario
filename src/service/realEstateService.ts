@@ -2,7 +2,7 @@
 import { notify } from "@/notify";
 import { api } from "./api";
 import { handleApiError } from "./errorHandler";
-import { RealEstate } from "@/types/realEstateTypes";
+import { RealEstate, RealEstateSelectOption } from "@/types/realEstateTypes";
 import { User } from "@/types/userTypes";
 
 export const realEstateService = {
@@ -30,9 +30,24 @@ export const realEstateService = {
     }
   },
 
-  async getUsersByRealEstateId() {
+  async getUsersByRealEstateId(realEstateId: string = "undefined") {
     try {
-      const response = await api.get<User[]>(`/realestate-users`);
+      const response = await api.get<User[]>(
+        "/realestate-users/" + (realEstateId || "undefined")
+      );
+      return response.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      handleApiError(
+        error.response?.data?.error,
+        "Não foi possível obter os usuários da imobiliária."
+      );
+    }
+  },
+
+  async getRealEstateSelectOptions() {
+    try {
+      const response = await api.get<RealEstateSelectOption[]>(`/realestates`);
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
