@@ -13,19 +13,19 @@ interface CoWorkerSelectProps {
 
 export default function CoWorkerSelect(props: CoWorkerSelectProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const { realEstateData, loading } = useSelector(
+  const { realEstateUsers, loading } = useSelector(
     (state: RootState) => state.realEstate
   );
   useEffect(() => {
-    if (!realEstateData) {
+    if (!realEstateUsers) {
       dispatch(fetchRealEstateUsers());
     }
-  }, [dispatch, realEstateData]);
+  }, [dispatch, realEstateUsers]);
 
   return (
     <UserSelect
       loading={loading}
-      users={realEstateData?.users || []}
+      users={realEstateUsers || []}
       value={props.value}
       onChange={props.onChange}
       label={props.label}

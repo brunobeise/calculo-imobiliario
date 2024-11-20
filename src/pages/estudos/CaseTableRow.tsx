@@ -22,7 +22,6 @@ import { MdFileOpen } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import dayjs from "dayjs";
 
-
 const CaseTableRow = ({ caseStudy }: { caseStudy: Proposal }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { toggleBackdrop, toggleMenu } = useMenu();
@@ -130,6 +129,7 @@ const CaseTableRow = ({ caseStudy }: { caseStudy: Proposal }) => {
 
       {/* Modais */}
       <CaseFormModal
+        subType="Planejamento de Financiamento"
         actualCase={casestudy}
         editChoose={true}
         caseAdded={(c) => setCaseStudy({ ...casestudy, ...c })}
