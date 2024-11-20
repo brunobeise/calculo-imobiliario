@@ -2,7 +2,7 @@ import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { User } from "./userTypes";
 import { Session } from "./sessionTypes";
 
-export interface CaseStudy {
+export interface Proposal {
   id: string;
   name: string;
   userId: string;
@@ -16,6 +16,15 @@ export interface CaseStudy {
   description?: string;
   additionalPhotos: string[];
   features: string[];
+  suites?: string;
+  bathrooms?: string;
+  parkingSpaces?: string;
+  builtArea?: string;
+  landArea?: string;
+  address?: string;
+  cod?: string;
+  subType: string;
+
   user: User;
   isArchived: boolean;
   sessions?: Session[];

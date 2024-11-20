@@ -1,4 +1,6 @@
 import { toBRL } from "@/lib/formatter";
+import SectionTitle from "./SectionTitle";
+import { GrLineChart } from "react-icons/gr";
 
 interface CalculationTableProps {
   propertyData: {
@@ -12,66 +14,84 @@ interface CalculationTableProps {
       rentalAmount: number;
     }[];
   };
+  color: string;
+  secondary: string;
 }
 
 const CalculationTable = ({
   propertyData,
   caseData,
+  color,
+  secondary,
 }: CalculationTableProps) => {
   return (
-    <table className="min-w-full">
-      <thead className="text-primary">
-        <tr>
-          <th className="px-4 py-2 border-r border-b border-primary text-left"></th>
-          <th className="px-4 py-2 border-r border-b border-primary text-left">
-            <div className="flex flex-col">
-              <strong>Valorização Imóvel</strong>
-              <span className="text-sm font-normal">
-                {propertyData.propertyAppreciationRate}%
-              </span>
-            </div>
-          </th>
-          <th className="px-4 py-2 border-r border-b border-primary text-left">
-            <div className="flex flex-col">
-              <strong>Projeção Aluguel</strong>
-              <span className="text-sm font-normal">
-                {propertyData.rentMonthlyYieldRate * 10}%
-              </span>
-            </div>
-          </th>
-          <th className="px-4 py-2 border-b border-primary text-left">
-            <div className="flex flex-col">
-              <strong>Diferença</strong>
-              <span className="text-sm font-normal">aluguel - parcela</span>
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {caseData.detailedTable.map((item, i) => {
-          if ((i - 1) % 12 === 0)
-            return (
-              <tr className="text-primary" key={i}>
-                <td className="px-4 py-2 border-r border-primary">
-                  Ano {(i - 1) / 12 + 1}
-                </td>
-                <td className="px-4 py-2 border-r border-primary">
-                  {toBRL(
-                    item.propertyValue *
-                      (1 + propertyData.propertyAppreciationRate / 100)
-                  )}
-                </td>
-                <td className="px-4 py-2 border-r border-primary">
-                  {toBRL(item.rentValue)}
-                </td>
-                <td className="px-4 py-2 border-primary">
-                  {toBRL(item.rentalAmount)}
-                </td>
-              </tr>
-            );
-        })}
-      </tbody>
-    </table>
+    <>
+      <SectionTitle
+        color={color}
+        secondary={secondary}
+        title="Valorização do Imóvel e Projeção do Aluguel"
+        icon={<GrLineChart />}
+      />
+      <table
+        style={{ color, outlineColor: secondary, borderColor: secondary }}
+        className="min-w-full outline outline-1 rounded-3xl"
+      >
+        <thead>
+          <tr>
+            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left"></th>
+            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left">
+              <div className="flex flex-col">
+                <strong>Valorização Imóvel</strong>
+                <span className="text-sm font-normal">
+                  {propertyData.propertyAppreciationRate}%
+                </span>
+              </div>
+            </th>
+            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left">
+              <div className="flex flex-col">
+                <strong>Projeção Aluguel</strong>
+                <span className="text-sm font-normal">
+                  {propertyData.rentMonthlyYieldRate * 10}%
+                </span>
+              </div>
+            </th>
+            <th style={{borderColor: secondary}} className="px-4 py-3 border-b text-left">
+              <div className="flex flex-col">
+                <strong>Diferença</strong>
+                <span className="text-sm font-normal">aluguel - parcela</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {caseData.detailedTable.map((item, i) => {
+            if ((i - 1) % 12 === 0)
+              return (
+                <tr style={{ color }} key={i}>
+                  <td
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-3 border-r border-t font-bold"
+                  >
+                    Ano {(i - 1) / 12 + 1}
+                  </td>
+                  <td   style={{ color, borderColor: secondary }}  className="px-4 py-3 border-r border-t">
+                    {toBRL(
+                      item.propertyValue *
+                        (1 + propertyData.propertyAppreciationRate / 100)
+                    )}
+                  </td>
+                  <td   style={{ color, borderColor: secondary }} className="px-4 py-3 border-r border-t">
+                    {toBRL(item.rentValue)}
+                  </td>
+                  <td   style={{ color, borderColor: secondary }} className="px-4 py-3 border-t">
+                    {toBRL(item.rentalAmount)}
+                  </td>
+                </tr>
+              );
+          })}
+        </tbody>
+      </table>
+    </>
   );
 };
 

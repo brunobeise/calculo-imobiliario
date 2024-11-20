@@ -18,7 +18,7 @@ export const realEstateService = {
 
   async editRealEstate(realEstateId: string, data: Partial<RealEstate>) {
     try {
-      const response = await api.put("/realestates/" + realEstateId, data);
+      const response = await api.put("/realestates/" + realEstateId, {...data, users: undefined});
       notify("success", "Dados atualizados com sucesso!");
       return response.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

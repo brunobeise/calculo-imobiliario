@@ -3,11 +3,10 @@ import ContextSelectorButton from "../shared/ContextSelectorButton";
 import { FaHistory, FaUsers } from "react-icons/fa";
 import { FaFilePen } from "react-icons/fa6";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
+import { NewCaseContext } from ".";
 
 interface ExistingCaseOptionsProps {
-  setContext: (
-    v: "new" | "exists" | "newCase" | "myCases" | "realEstateCases" | undefined
-  ) => void;
+  setContext: (v: NewCaseContext) => void;
   setMultiplePropertyData: (data: PropertyData) => void;
   setNewCase: (v: boolean) => void;
   hasLastCase: boolean;

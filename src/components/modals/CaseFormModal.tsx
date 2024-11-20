@@ -17,7 +17,7 @@ import { caseService } from "@/service/caseService";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import PropertyDataDisplay from "../shared/PropertyDataDisplay";
 import { navigate } from "vike/client/router";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import BooleanInput from "../inputs/BooleanInput";
 import { CaseStudyTypeLinkMap } from "@/lib/maps";
 
@@ -25,15 +25,17 @@ interface CaseFormModalProps {
   open: boolean;
   onClose: () => void;
   caseType: string;
+  subType: string;
   propertyData: PropertyData;
   editChoose: boolean;
-  actualCase?: CaseStudy;
-  caseAdded?: (newCase: CaseStudy) => void;
+  actualCase?: Proposal;
+  caseAdded?: (newCase: Proposal) => void;
 }
 
 interface CaseFormData {
   name: string;
   shared: boolean;
+  propertyName: string;
 }
 
 const CaseFormModal: React.FC<CaseFormModalProps> = ({
@@ -44,9 +46,8 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
   propertyData,
   editChoose,
   actualCase,
+  subType,
 }) => {
-  
-
   const {
     register,
     handleSubmit,
@@ -62,6 +63,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
     if (editChoose && actualCase) {
       setValue("name", actualCase?.name);
       setValue("shared", actualCase?.shared);
+      setValue("propertyName", actualCase?.propertyName || "");
     } else reset();
   }, [editChoose, reset, actualCase, setValue]);
 
@@ -153,11 +155,25 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
               )}
             </FormControl>
 
+            <FormControl error={!!errors.name}>
+              <Typography component="label" htmlFor="propertyName" mb={1}>
+                Nome do imóvel
+              </Typography>
+              <Input
+                id="propertyName"
+                {...register("propertyName")}
+                error={!!errors.propertyName}
+              />
+              {errors.propertyName && (
+                <FormHelperText>{errors.propertyName.message}</FormHelperText>
+              )}
+            </FormControl>
+
             <FormControl>
               <Controller
                 name="shared"
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <BooleanInput
                     onChange={(e) => field.onChange(e.target.checked)}
                     checked={field.value}
@@ -167,7 +183,10 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
               />
             </FormControl>
 
-            <PropertyDataDisplay propertyData={propertyData} />
+            <PropertyDataDisplay
+              subType={subType}
+              propertyData={propertyData}
+            />
           </form>
         </DialogContent>
         <Divider />

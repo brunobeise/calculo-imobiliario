@@ -16,7 +16,6 @@ export default function PropertyDataStep3({
       <h4 className="font-bold text-center">Entrada</h4>
 
       <div className="flex flex-col gap-5">
-        {/* Campo: Valor da entrada no ato */}
         <div className="mb-[-20px]">
           <div className="relative">
             <CurrencyInput

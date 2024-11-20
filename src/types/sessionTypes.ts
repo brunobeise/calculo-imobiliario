@@ -1,4 +1,4 @@
-import { CaseStudy } from "./caseTypes";
+import { Proposal } from "./proposalTypes";
 
 export interface Session {
   id: number;
@@ -6,6 +6,6 @@ export interface Session {
   caseId: string;
   [key: `page${number}TimeVisible`]: number | null;
   createdAt: Date;
-  case: CaseStudy;
+  case: Proposal;
   isNew: boolean;
 }

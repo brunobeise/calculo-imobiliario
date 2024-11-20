@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import FinancingPlanningReportPreview from "@/reports/financingPlanningReport/FinancingPlanningReportPreview";
 import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 import { Head } from "vike-react/Head";
@@ -47,7 +47,7 @@ function useVisibility(ref: React.RefObject<HTMLElement>) {
 }
 
 export default function FinancingPlanningReportSharedPage() {
-  const proposalData = useData<CaseStudy>();
+  const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const caseData = calcCaseData(proposalData.propertyData);
@@ -165,19 +165,34 @@ export default function FinancingPlanningReportSharedPage() {
         style={{ height: `${dimensions.height}px` }}
       >
         <FinancingPlanningReportPreview
+          custom={{
+            backgroundColor:
+              proposalData.user.realEstate?.backgroundColor || "",
+            primaryColor: proposalData.user.realEstate?.primaryColor || "",
+            secondaryColor: proposalData.user.realEstate?.secondaryColor || "",
+            headerType: proposalData.user.realEstate?.headerType || 1,
+          }}
           propertyData={proposalData?.propertyData}
           user={proposalData.user}
           caseData={caseData}
           configData={{
-            mainPhoto: proposalData?.mainPhoto || "",
-            additionalPhotos: proposalData?.additionalPhotos || [],
-            description: proposalData?.description || "",
-            features: proposalData?.features || [],
-            propertyName: proposalData?.propertyName || "",
+            propertyName: proposalData.propertyName || "",
+            mainPhoto: proposalData.mainPhoto || "",
+            description: proposalData.description || "",
+            additionalPhotos: proposalData.additionalPhotos,
+            features: proposalData.features,
             pageViewMap:
               proposalData.pageViewMap.length === 0
                 ? [true, true, true, true, true, true, true, true]
                 : proposalData.pageViewMap,
+            address: proposalData.address,
+            bathrooms: proposalData.bathrooms,
+            builtArea: proposalData.builtArea,
+            cod: proposalData.cod,
+            landArea: proposalData.landArea,
+            parkingSpaces: proposalData.parkingSpaces,
+            suites: proposalData.suites,
+            subType: proposalData.subType,
           }}
           ref={componentRef}
           page1Ref={page1Ref}

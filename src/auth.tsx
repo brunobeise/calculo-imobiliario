@@ -8,6 +8,10 @@ import {
 } from "react";
 import { userService } from "./service/userService";
 import { decodeToken } from "./lib/jwt-decode";
+import { useDispatch } from "react-redux";
+import { fetchUserData } from "./store/userReducer";
+import { AppDispatch } from "./store/store";
+import { fetchRealEstateData } from "./store/realEstateReducer";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -26,6 +30,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return !!Cookies.get("token");
   });
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const token = decodeToken();
 
@@ -67,6 +73,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(permissions);
         Cookies.set("owner", permissions.owner.toString());
         Cookies.set("admin", permissions.admin.toString());
+        dispatch(fetchUserData());
+        dispatch(fetchRealEstateData());
       }
       return permissions;
     } catch (error) {

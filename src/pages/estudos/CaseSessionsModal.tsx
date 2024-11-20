@@ -41,13 +41,13 @@ export function SessionRow(props: {
 
   const pageTitles = [
     "Introdução",
-    "Entenda o cálculo",
+    "Pagamento e retorno esperado",
+    "Cálculo do investimento",
     "Divisão do capital",
-    "Explicação valor presente",
-    "Reinvestimento do Lucro Mensal",
-    "Comparação com CDI",
+    "Conversão para valor presente",
+    "Reinvestimento em Renda Fixa",
     "Análise Gráfica Detalhada",
-    "Dados do imóvel",
+    "Descrição do imóvel",
   ];
 
   return (

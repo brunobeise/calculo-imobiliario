@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, FormLabel, Input, Table } from "@mui/joy";
+import { Button, FormLabel, IconButton, Input, Table } from "@mui/joy";
 import PictureInput from "@/components/inputs/PictureInput";
-import { FaCheckCircle, FaSave } from "react-icons/fa";
-import { IoCloseOutline, IoAddCircleSharp } from "react-icons/io5";
+import { FaCheckCircle, FaEdit, FaSave } from "react-icons/fa";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import UserFormModal from "@/components/modals/UserFormModal";
 import { useAuth } from "@/auth";
@@ -11,24 +10,32 @@ import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage } from "@/lib/imgur";
 import {
-  addUser,
   editRealEstateData,
   fetchRealEstateData,
   fetchRealEstateUsers,
-  updateUserAdmin,
 } from "@/store/realEstateReducer";
 import PageStructure from "@/components/structure/PageStructure";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 import { userService } from "@/service/userService";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
+import Paper from "@/components/shared/Paper";
+import { useForm, Controller } from "react-hook-form";
+import { RealEstateFormData } from "@/types/realEstateTypes";
+import { IoAddCircleSharp, IoCloseOutline } from "react-icons/io5";
+import SelectHeaderTypeModal from "./SelectHeaderTypeModal";
+import UserSignature from "@/components/user/UserSignature";
+import SelectColorsModal from "./SelectColorsModal";
 
 export default function RealEstateConfig() {
   const dispatch = useDispatch<AppDispatch>();
-  const { realEstateData, loading } = useSelector(
+  const { realEstateData, loading, realEstateUsers } = useSelector(
     (state: RootState) => state.realEstate
   );
-  const [form, setForm] = useState(realEstateData);
 
+  const { control, handleSubmit, watch, reset, setValue } =
+    useForm<RealEstateFormData>();
+
+  const { user: User, isAuthenticated } = useAuth();
   const [changeAdminUser, setChangeAdminUser] = useState({
     text: "",
     userId: "",
@@ -36,49 +43,27 @@ export default function RealEstateConfig() {
     loading: false,
   });
   const [userFormModal, setUserFormModal] = useState(false);
+  const [selectHeaderTypeModal, setSelectHeaderTypeModal] = useState(false);
+  const [selectColorsModal, setSelectColorsModal] = useState(false);
 
-  const { user: User } = useAuth();
+  const onSubmit = async (data: RealEstateFormData) => {
+    let uploadLogo = data.logo;
+    let uploadLogo2 = data.logo2;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const id = e.target.id;
-    const value = e.target.value;
-
-    setForm((prevForm) => {
-      if (!prevForm) return prevForm;
-      return {
-        ...prevForm,
-        [id]: value,
-      };
-    });
-  };
-
-  const handleSave = async () => {
-    if (!form || !form.id) return;
-
-    let uploadLogo = form.logo;
-    let uploadLogo2 = form.logo2;
-
-    if (form.logo && !form.logo.includes("res.cloudinary.com")) {
-      uploadLogo = await uploadImage(form.logo);
+    if (data.logo && !data.logo.includes("res.cloudinary.com")) {
+      uploadLogo = await uploadImage(data.logo);
     }
-    if (form.logo2 && !form.logo2.includes("res.cloudinary.com")) {
-      uploadLogo2 = await uploadImage(form.logo2);
+    if (data.logo2 && !data.logo2.includes("res.cloudinary.com")) {
+      uploadLogo2 = await uploadImage(data.logo2);
     }
 
     dispatch(
       editRealEstateData({
-        ...form,
-        users: undefined,
+        ...data,
         logo: uploadLogo,
         logo2: uploadLogo2,
       })
     );
-
-    setForm({
-      ...form,
-      logo: uploadLogo,
-      logo2: uploadLogo2,
-    });
   };
 
   useEffect(() => {
@@ -86,27 +71,22 @@ export default function RealEstateConfig() {
       navigate("/");
       return;
     }
+    dispatch(fetchRealEstateData());
+    dispatch(fetchRealEstateUsers());
+  }, [User, dispatch]);
 
-    if (!realEstateData) {
-      dispatch(fetchRealEstateData());
-      dispatch(fetchRealEstateUsers());
-    } else {
-      setForm(realEstateData);
+  useEffect(() => {
+    if (realEstateData) {
+      reset(realEstateData);
     }
-  }, [User, realEstateData, dispatch]);
+  }, [realEstateData, reset]);
 
   const handleAdmin = async () => {
-    setChangeAdminUser({
-      ...changeAdminUser,
-      loading: true,
-    });
-
+    setChangeAdminUser((prev) => ({ ...prev, loading: true }));
     await userService.editUser(changeAdminUser.userId, {
       owner: !changeAdminUser.owner,
     });
-
-    dispatch(updateUserAdmin(changeAdminUser.userId));
-
+    // dispatch(updateUserAdmin(changeAdminUser.userId));
     setChangeAdminUser({
       text: "",
       userId: "",
@@ -115,7 +95,16 @@ export default function RealEstateConfig() {
     });
   };
 
-  const { isAuthenticated } = useAuth();
+  const handleColorChange = (colors: {
+    primaryColor: string;
+    secondaryColor: string;
+    backgroundColor: string;
+  }) => {
+    setValue("primaryColor", colors.primaryColor);
+    setValue("secondaryColor", colors.secondaryColor);
+    setValue("backgroundColor", colors.backgroundColor);
+  };
+
   if (!isAuthenticated) {
     navigate("/");
     return null;
@@ -127,16 +116,16 @@ export default function RealEstateConfig() {
         <MdOutlineRealEstateAgent className="text-xl" />
         <h2 className="font-bold">Imobiliária</h2>
       </div>
-      <div className="flex gap-3 justify-center items-center h-max me-10">
-        <img className="h-[40px]" src={realEstateData?.logo} alt="" />
-      </div>
     </div>
   );
 
   const content = (
-    <div>
-      <div className="mb-10 px-12 my-10">
-        <div className="flex justify-between items-center">
+    <div className="p-4 flex flex-col gap-y-5">
+      <div className="flex gap-3 justify-center items-center h-max me-10">
+        <img className="h-[50px]" src={watch("logo")} alt="" />
+      </div>
+      <Paper className="p-7">
+        <div className="flex justify-between items-center ps-2">
           <h2 className="text-xl font-bold mb-4">Usuários da Imobiliária</h2>{" "}
           <Button
             onClick={() => setUserFormModal(true)}
@@ -145,7 +134,6 @@ export default function RealEstateConfig() {
             Novo usuário
           </Button>
         </div>
-
         <Table size="lg">
           <thead>
             <tr>
@@ -153,12 +141,12 @@ export default function RealEstateConfig() {
               <th>Nome</th>
               <th className="w-[350px]">Email</th>
               <th>Cargo</th>
-              <th>Estudos</th>
+              <th>Propostas</th>
               <th className="w-[80px]">Admin</th>
             </tr>
           </thead>
           <tbody>
-            {realEstateData?.users?.map((user) => (
+            {realEstateUsers.map((user) => (
               <tr key={user.id}>
                 <td className="w-[60px]">
                   <div className="rounded-full overflow-hidden flex justify-center items-center w-[40px] h-[40px]">
@@ -190,8 +178,7 @@ export default function RealEstateConfig() {
                   }}
                   className={`w-[80px]" ${
                     User.id !== user.id ? "cursor-pointer" : ""
-                  }
-                        `}
+                  }`}
                 >
                   <div className="w-full flex justify-center">
                     {user.owner ? <FaCheckCircle /> : <IoCloseOutline />}
@@ -201,63 +188,114 @@ export default function RealEstateConfig() {
             ))}
           </tbody>
         </Table>
-      </div>
-      <form>
-        <div className="grid grid-cols-6 gap-x-5 gap-y-4">
-          <div className="col-span-3">
-            <FormLabel htmlFor="name">Nome da Imobiliária:</FormLabel>
-            <Input
-              onChange={handleChange}
-              type="text"
-              id="name"
-              value={form?.name || ""}
-              required
-            />
+      </Paper>
+      <Paper className="p-7">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-12 gap-x-5 gap-y-5">
+            <div className="col-span-6">
+              <FormLabel htmlFor="name">Nome da Imobiliária:</FormLabel>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => <Input {...field} required />}
+              />
+            </div>
+            <div className="col-span-6">
+              <FormLabel htmlFor="address">Endereço:</FormLabel>
+              <Controller
+                name="address"
+                control={control}
+                render={({ field }) => <Input {...field} required />}
+              />
+            </div>
+            <div className="col-span-12 relative">
+              <FormLabel htmlFor="name">Layout do cabeçalho: </FormLabel>
+              <div className="mt-2 relative flex gap-2 items-start">
+                <div className="border border-gray  w-[210mm]">
+                  <UserSignature
+                    title="Assinatura Exemplo"
+                    desc="Nome do imóvel"
+                    type={watch("headerType")}
+                    primaryColor={watch("primaryColor")}
+                    secondaryColor={watch("secondaryColor")}
+                    backgroundColor={watch("backgroundColor")}
+                  />{" "}
+                </div>
+                <IconButton
+                  variant="soft"
+                  size="sm"
+                  className="!rounded-full"
+                  onClick={() => setSelectHeaderTypeModal(true)}
+                >
+                  <FaEdit className="!text-xl text-grayText " />
+                </IconButton>{" "}
+              </div>
+            </div>
+            <div className="col-span-12 grid grid-cols-6 gap-5 flex items-center">
+              <FormLabel className="col-span-6">Cores da imobiliária</FormLabel>
+              <div className="col-span-1">
+                <FormLabel htmlFor="primaryColor">Cor Primária</FormLabel>
+                <Controller
+                  name="primaryColor"
+                  control={control}
+                  render={({ field }) => <Input type="color" {...field} />}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormLabel htmlFor="secondaryColor">Cor Secundária</FormLabel>
+                <Controller
+                  name="secondaryColor"
+                  control={control}
+                  render={({ field }) => <Input type="color" {...field} />}
+                />
+              </div>
+              <div className="col-span-1">
+                <FormLabel htmlFor="backgroundColor">Cor de Fundo</FormLabel>
+                <Controller
+                  name="backgroundColor"
+                  control={control}
+                  render={({ field }) => <Input type="color" {...field} />}
+                />
+              </div>
+              <div className="col-span-2">
+                <Button
+                  onClick={() => setSelectColorsModal(true)}
+                  variant="soft"
+                >
+                  Visualizar proposta de exemplo
+                </Button>
+              </div>
+            </div>
+
+            <div className="col-span-12 grid grid-cols-2 gap-4">
+              <Controller
+                name="logo"
+                control={control}
+                render={({ field }) => (
+                  <PictureInput
+                    bordered
+                    label="Logo Principal:"
+                    value={field.value ? [field.value] : []}
+                    onChange={(v) => field.onChange(v)}
+                  />
+                )}
+              />
+              <Controller
+                name="logo2"
+                control={control}
+                render={({ field }) => (
+                  <PictureInput
+                    bordered
+                    label="Logo Secundário:"
+                    value={field.value ? [field.value] : []}
+                    onChange={(v) => field.onChange(v)}
+                  />
+                )}
+              />
+            </div>
           </div>
-          <div className="col-span-3">
-            <FormLabel htmlFor="address">Endereço:</FormLabel>
-            <Input
-              onChange={handleChange}
-              type="text"
-              id="address"
-              value={form?.address || ""}
-              required
-            />
-          </div>
-          <div className="col-span-6">
-            <PictureInput
-              bordered
-              value={form?.logo ? [form?.logo] : []}
-              label="Logo Principal:"
-              onChange={(v) =>
-                setForm((prevForm) => {
-                  if (!prevForm) return prevForm;
-                  return {
-                    ...prevForm,
-                    logo: v,
-                  };
-                })
-              }
-            />
-          </div>
-          <div className="col-span-6">
-            <PictureInput
-              bordered
-              value={form?.logo2 ? [form?.logo2] : []}
-              label="Logo Secundário:"
-              onChange={(v) =>
-                setForm((prevForm) => {
-                  if (!prevForm) return prevForm;
-                  return {
-                    ...prevForm,
-                    logo2: v,
-                  };
-                })
-              }
-            />
-          </div>
-        </div>
-      </form>
+        </form>
+      </Paper>
     </div>
   );
 
@@ -282,10 +320,47 @@ export default function RealEstateConfig() {
       <UserFormModal
         open={userFormModal}
         onClose={() => setUserFormModal(false)}
-        userAdded={(user) => dispatch(addUser(user))}
+        // userAdded={(user) => dispatch(addUser(user))}
       />
       <FloatingButtonList
-        buttons={[{ loading: loading, onClick: handleSave, icon: <FaSave /> }]}
+        buttons={[
+          {
+            loading: loading,
+            onClick: handleSubmit(onSubmit),
+            icon: <FaSave />,
+          },
+        ]}
+      />
+      <Controller
+        name="headerType"
+        control={control}
+        render={({ field }) => (
+          <SelectHeaderTypeModal
+            primaryColor={watch("primaryColor")}
+            secondaryColor={watch("secondaryColor")}
+            backgroundColor={watch("backgroundColor")}
+            setValue={(v) => field.onChange(v)}
+            open={selectHeaderTypeModal}
+            onClose={() => setSelectHeaderTypeModal(false)}
+            value={field.value}
+          />
+        )}
+      />
+      <Controller
+        name="headerType"
+        control={control}
+        render={({ field }) => (
+          <SelectColorsModal
+            primaryColor={watch("primaryColor")}
+            secondaryColor={watch("secondaryColor")}
+            backgroundColor={watch("backgroundColor")}
+            setValue={(v) => field.onChange(v)}
+            open={selectColorsModal}
+            onClose={() => setSelectColorsModal(false)}
+            value={field.value}
+            onChangeColors={handleColorChange}
+          />
+        )}
       />
     </>
   );

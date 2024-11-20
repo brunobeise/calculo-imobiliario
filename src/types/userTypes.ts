@@ -1,5 +1,5 @@
 
-import { CaseStudy } from "./caseTypes";
+import { Proposal } from "./proposalTypes";
 import { RealEstate } from "./realEstateTypes";
 
 export interface User {
@@ -21,7 +21,7 @@ export interface User {
   realEstate?: RealEstate;
   createdAt: Date;
   updatedAt: Date;
-  cases?: CaseStudy[];
+  cases?: Proposal[];
   casesCount?: number;
 }
 

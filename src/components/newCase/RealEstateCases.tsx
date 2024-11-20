@@ -1,5 +1,5 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import { Card } from "@mui/joy";
 import ContextSelectorButton from "../shared/ContextSelectorButton";
 import { FaFile, FaSearch } from "react-icons/fa";
@@ -15,7 +15,7 @@ import { AppDispatch } from "@/store/store";
 import CoWorkerSelect from "../inputs/CoWorkerSelect";
 
 interface RealEstateCasesProps {
-  realEstateCases: CaseStudy[];
+  realEstateCases: Proposal[];
   loading: boolean;
   setMultiplePropertyData: (data: PropertyData) => void;
   setNewCase: (v: boolean) => void;

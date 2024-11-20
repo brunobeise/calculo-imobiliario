@@ -288,6 +288,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
       interestPaid: interestPaid,
       finalValue: finalValue,
       monthlyProfit: monthlyProfit,
+      investmentExcess: investmentExcess,
       investmentExcessPresentValue: investmentExcessPresentValue,
     });
 

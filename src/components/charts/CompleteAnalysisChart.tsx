@@ -5,6 +5,8 @@ export default function CompleteAnalysisChart(props: {
   outstandingBalanceValues?: number[];
   investedEquityValues?: number[];
   profitValues?: number[];
+  color: string;
+  title: string;
 }) {
   const options = {
     responsive: true,
@@ -42,8 +44,8 @@ export default function CompleteAnalysisChart(props: {
     datasets.push({
       label: "Patrimônio Renda Fixa",
       data: props.investedEquityValues,
-      borderColor: "#1e476b",
-      backgroundColor: "#1e476b",
+      borderColor: "#ff6347",
+      backgroundColor: "#ff6347",
       pointRadius: 0,
     });
   }
@@ -88,5 +90,18 @@ export default function CompleteAnalysisChart(props: {
     datasets,
   };
 
-  return <Line options={options} data={data} />;
+  return (
+    <div style={{ borderColor: props.color }} className="rounded-2xl border">
+      <div
+        style={{ borderColor: props.color }}
+        className="border-b w-full px-10 py-5"
+      >
+        <h5 style={{ color: props.color }}>
+          <strong>{props.title}</strong>
+        </h5>
+      </div>
+
+      <Line className="p-5" options={options} data={data} />
+    </div>
+  );
 }

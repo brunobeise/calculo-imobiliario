@@ -1,14 +1,26 @@
-import { User } from "./userTypes";
-
 export interface RealEstate {
   id?: string;
   name: string;
   address: string;
   logo?: string;
   logo2?: string;
-  users?: User[];
   createdAt: Date;
   updatedAt: Date;
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  headerType: number;
+}
+
+export interface RealEstateFormData {
+  name: string;
+  address: string;
+  logo: string;
+  logo2: string;
+  primaryColor: string;
+  secondaryColor: string;
+  backgroundColor: string;
+  headerType: number;
 }
 
 export interface RealEstateSelectOption {

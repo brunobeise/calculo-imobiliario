@@ -3,18 +3,20 @@ import { toBRL } from "@/lib/formatter";
 import { Pie } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 import "chartjs-plugin-datalabels";
+import chroma from "chroma-js";
 Chart.register(...registerables);
 
 interface InitialEquityDivisionChartProps {
   labels: string[];
   values: number[];
+  color: string;
 }
 
 export default function InitialEquityDivisionChart({
   labels = [],
   values = [],
+  color,
 }: InitialEquityDivisionChartProps) {
-  // Filtra valores e labels, removendo aqueles cujo valor é zero
   const filteredData = values.reduce(
     (acc, value, index) => {
       if (value !== 0) {
@@ -32,7 +34,30 @@ export default function InitialEquityDivisionChart({
       {
         label: "",
         data: filteredData.filteredValues,
-        backgroundColor: ["#04335d", "#0057a3", "#007fef"],
+        backgroundColor: (() => {
+          const luminance = chroma(color).luminance();
+
+          if (luminance > 0.9) {
+            return [
+              color,
+              chroma(color).darken(1).hex(),
+              chroma(color).darken(2).hex(),
+            ];
+          } else if (luminance < 0.1) {
+            return [
+              color,
+              chroma(color).brighten(1).hex(),
+              chroma(color).brighten(2).hex(),
+            ];
+          } else {
+            return [
+              color,
+              chroma(color).brighten(0.8).hex(),
+              chroma(color).darken(0.8).hex(),
+            ];
+          }
+        })(),
+
         borderWidth: 1,
       },
     ],
@@ -46,11 +71,21 @@ export default function InitialEquityDivisionChart({
     },
     plugins: {
       datalabels: {
-        color: "#fff",
-        formatter: (value: number) => {
-          return toBRL(value);
+        color: chroma(color).luminance() > 0.7 ? "#000000" : "#FFFFFF",
+        formatter: (value: number, context: any) => {
+          const label = context.chart.data.labels[context.dataIndex];
+          return `${label}\n${toBRL(value)}`;
         },
+        font: {
+          size: 10,
+          weight: "bold" as const,
+        },
+
+        padding: 5,
+        backgroundColor: chroma(color).darken(0.3).hex(),
+        borderRadius: 4,
       },
+
       tooltip: {
         callbacks: {
           label: function (context: any) {
@@ -82,26 +117,6 @@ export default function InitialEquityDivisionChart({
       },
       legend: {
         display: false,
-        position: "bottom" as const,
-        labels: {
-          usePointStyle: true,
-          generateLabels: (chart: any) => {
-            const data = chart.data;
-            if (data.labels && data.datasets.length) {
-              return data.labels.map((label: any, i: number) => {
-                const meta = chart.getDatasetMeta(0);
-                const style = meta.controller.getStyle(i);
-                return {
-                  text: label,
-                  fillStyle: style.backgroundColor,
-                  hidden: !chart.getDataVisibility(i),
-                  index: i,
-                };
-              });
-            }
-            return [];
-          },
-        },
       },
     },
   };
@@ -110,17 +125,17 @@ export default function InitialEquityDivisionChart({
     <div className="flex flex-col items-center justify-center">
       {filteredData.filteredValues.length > 0 ? (
         <>
-          <Pie data={data} options={options} />
-          <div className="flex justify-around mt-4  w-[110%]">
+          <Pie className="w-full h-full" data={data} options={options} />
+          <div className="flex justify-around mt-4 ">
             {filteredData.filteredLabels.map((label, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div
-                  className="w-12 h-4"
+                  className="w-12 h-4 mx-10"
                   style={{
                     backgroundColor: data.datasets[0].backgroundColor[index],
                   }}
                 ></div>
-                <span className="mt-1 text-[13px] text-center bg-white">{label}</span>
+                <span className="mt-1 text-[13px] text-center">{label}</span>
               </div>
             ))}
           </div>

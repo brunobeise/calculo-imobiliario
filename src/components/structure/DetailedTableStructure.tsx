@@ -34,7 +34,7 @@ const DetailedTableComponent: React.FC<DetailedTableComponentProps> = ({
   }, [columns, rows]);
 
   return (
-    <div className="col-span-12 lg:px-2">
+    <div className="col-span-12 lg:px-2 bg-whitefull">
       <h2 className="text-xl text-center font-bold my-2">Tabela Detalhada</h2>
       <Sheet
         sx={{

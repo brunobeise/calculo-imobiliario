@@ -1,10 +1,10 @@
 // pages/product/@id/+Head.js
 
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import { useData } from "vike-react/useData"; // or vike-{vue,solid}
 
 export function Head() {
-  const proposalData = useData<CaseStudy>();
+  const proposalData = useData<Proposal>();
 
   const title = proposalData.propertyName
     ? `Proposta para ${proposalData.propertyName}`

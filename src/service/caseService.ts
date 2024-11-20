@@ -2,12 +2,12 @@
 import { notify } from "@/notify";
 import { api } from "./api";
 import { handleApiError } from "./errorHandler";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import { Session } from "@/types/sessionTypes";
 import { PaginatedResult } from "@/store/store";
 
 export const caseService = {
-  async createCase(data: Partial<CaseStudy>) {
+  async createCase(data: Partial<Proposal>) {
     try {
       const response = await api.post("/cases", data);
       notify("success", "Estudo criado com sucesso!");
@@ -19,7 +19,7 @@ export const caseService = {
 
   async getAllCases(queryString: string) {
     try {
-      const response = await api.get<PaginatedResult<CaseStudy>>(
+      const response = await api.get<PaginatedResult<Proposal>>(
         "/cases?" + queryString
       );
       return response.data;
@@ -48,7 +48,7 @@ export const caseService = {
 
   async getAllRealEstateCases(queryString: string) {
     try {
-      const response = await api.get<PaginatedResult<CaseStudy>>(
+      const response = await api.get<PaginatedResult<Proposal>>(
         "/cases-by-real-estate?" + queryString
       );
       return response.data;
@@ -59,7 +59,7 @@ export const caseService = {
 
   async getCaseById(caseId: string) {
     try {
-      const response = await api.get<CaseStudy>("/cases/" + caseId);
+      const response = await api.get<Proposal>("/cases/" + caseId);
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar o case.");
@@ -68,14 +68,14 @@ export const caseService = {
 
   async getCaseToProposal(caseId: string) {
     try {
-      const response = await api.get<CaseStudy>("/proposal-case/" + caseId);
+      const response = await api.get<Proposal>("/proposal-case/" + caseId);
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Não foi possível buscar o case.");
     }
   },
 
-  async updateCase(caseId: string, data: Partial<CaseStudy>) {
+  async updateCase(caseId: string, data: Partial<Proposal>) {
     try {
       const response = await api.put("/cases/" + caseId, data);
       notify("success", "Estudo atualizado com sucesso!");
@@ -96,7 +96,7 @@ export const caseService = {
 
   async getAllAdminCases(queryString: string) {
     try {
-      const response = await api.get<PaginatedResult<CaseStudy>>(
+      const response = await api.get<PaginatedResult<Proposal>>(
         "/admin/cases?" + queryString
       );
       return response.data;

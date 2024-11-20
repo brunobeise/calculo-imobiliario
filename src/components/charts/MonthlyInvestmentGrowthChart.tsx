@@ -1,36 +1,15 @@
 import { toBRL } from "@/lib/formatter";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend
-);
+import { Line } from "react-chartjs-2";
 
 export function MonthlyInvestmentGrowthChart(props: {
   rentValues: number[];
   initialCapitalYields: number[];
   installmentValues: number[];
   monthlyInvestmentValues?: number[];
+  color: string;
 }) {
   const allValuesAreZero = (arr: number[]) => arr.every((value) => value === 0);
-
 
   const calculatedData = props.rentValues.map(
     (rentValue, index) =>
@@ -39,7 +18,6 @@ export function MonthlyInvestmentGrowthChart(props: {
       props.installmentValues[index]
   );
 
-  // Definindo o label dinamicamente com base nos dados de rendimento
   const label = allValuesAreZero(props.initialCapitalYields)
     ? "Aluguel - Parcela"
     : "Rendimento + Aluguel - Parcela";
@@ -71,17 +49,16 @@ export function MonthlyInvestmentGrowthChart(props: {
     labels: calculatedData.map((_v, i) => i),
     datasets: [
       {
-        fill: false, // Removendo o preenchimento
-        label: label, // Usando o label dinâmico
+        fill: false,
+        label: label,
         data: calculatedData,
-        borderColor: "#002f57",
-        backgroundColor: "#002f57",
+        borderColor: props.color,
+        backgroundColor: props.color,
         pointRadius: 0,
       },
     ],
   };
 
-  // Adicionando a linha do MonthlyInvestment, caso seja passada
   if (
     props.monthlyInvestmentValues &&
     props.monthlyInvestmentValues.length > 0
@@ -90,7 +67,7 @@ export function MonthlyInvestmentGrowthChart(props: {
       fill: false,
       label: "Investimento Mensal (VP)",
       data: props.monthlyInvestmentValues,
-      borderColor: "#ff6347", // Cor diferente para distinguir
+      borderColor: "#ff6347",
       backgroundColor: "#ff6347",
       pointRadius: 0,
     });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, FormLabel, SvgIcon } from "@mui/joy";
 
 interface PictureReportInputProps {
@@ -30,6 +30,10 @@ export default function PictureInput({
     }
   };
 
+  useEffect(() => {
+    if (value) setFileSrcs(value);
+  }, [value]);
+
   return (
     <div
       className={`p-3 rounded overflow-hidden  ${
@@ -40,12 +44,13 @@ export default function PictureInput({
         <FormLabel htmlFor={label} className="mr-2">
           {label}
         </FormLabel>
-        <div className="flex items-center mt-2 !cursor-pointer">
+        <div className="flex items-center mt-2">
           <Button
             role={undefined}
             tabIndex={-1}
             variant="outlined"
             color="neutral"
+            className="text-nowrap"
             startDecorator={
               <SvgIcon>
                 <svg
@@ -77,15 +82,7 @@ export default function PictureInput({
             <div className="flex items-center ml-4">
               {fileSrcs.map((src, index) => (
                 <div key={index} className="flex items-center mr-4">
-                  <img
-                    src={src}
-                    alt="Preview"
-                    className="w-10 h-10 object-cover mr-2"
-                  />
-                  <span>
-                    {!fileNames[index].includes("cloudinary") &&
-                      fileNames[index]}
-                  </span>
+                  <img src={src} alt="Preview" className="h-10 mr-2" />
                 </div>
               ))}
             </div>

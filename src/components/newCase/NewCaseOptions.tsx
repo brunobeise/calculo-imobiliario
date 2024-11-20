@@ -1,11 +1,10 @@
 import { Card } from "@mui/joy";
 import ContextSelectorButton from "../shared/ContextSelectorButton";
 import { TbFileDownload, TbFilePlus } from "react-icons/tb";
+import { NewCaseContext } from ".";
 
 interface NewCaseOptionsProps {
-  setContext: (
-    v: "new" | "exists" | "newCase" | "myCases" | "realEstateCases" | undefined
-  ) => void;
+  setContext: (v: NewCaseContext) => void;
 }
 
 export default function NewCaseOptions({ setContext }: NewCaseOptionsProps) {

@@ -6,19 +6,14 @@ import { BsFillHouseFill } from "react-icons/bs";
 import dayjs from "dayjs";
 import { Spinner } from "../Loading";
 import { CaseStudyTypeLinkMap } from "@/lib/maps";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 
 interface MyCasesProps {
-  myCases: CaseStudy[];
+  myCases: Proposal[];
   loading: boolean;
-  setNewCase: (v: boolean) => void;
 }
 
-export default function MyCases({
-  myCases,
-  loading,
-  setNewCase,
-}: MyCasesProps) {
+export default function MyCases({ myCases, loading }: MyCasesProps) {
   return (
     <Card className="w-[500px] h-[400px] shadow-lg overflow-y-auto">
       {myCases.length > 0 ? (
@@ -35,9 +30,6 @@ export default function MyCases({
           >
             <ContextSelectorButton
               icon={<FaFile />}
-              onClick={() => {
-                setNewCase(false);
-              }}
               title={c.name}
               extra={
                 <div className="flex flex-col text-sm ms-5">

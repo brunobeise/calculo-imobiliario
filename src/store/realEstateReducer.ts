@@ -10,6 +10,8 @@ interface RealEstateState {
   realEstateSelectOptionsLoading: boolean;
   realEstateUsersSelectOptions: UserSelectOption[];
   realEstateUsersSelectOptionsLoading: boolean;
+  realEstateUsers: User[];
+  realEstateUsersLoading: boolean;
   loading: boolean;
   error: string | undefined;
 }
@@ -20,6 +22,8 @@ const initialState: RealEstateState = {
   realEstateSelectOptionsLoading: false,
   realEstateUsersSelectOptions: [],
   realEstateUsersSelectOptionsLoading: false,
+  realEstateUsers: [],
+  realEstateUsersLoading: false,
   loading: false,
   error: undefined,
 };
@@ -91,7 +95,7 @@ export const fetchRealEstateUsersSelectOptions = createAsyncThunk<
 
 export const editRealEstateData = createAsyncThunk<
   RealEstate | undefined,
-  RealEstate,
+  Partial<RealEstate>,
   { rejectValue: string }
 >(
   "realEstate/editRealEstateData",
@@ -116,16 +120,6 @@ export const realEstateSlice = createSlice({
     setRealEstateData: (state, action: PayloadAction<RealEstate>) => {
       state.realEstateData = action.payload;
     },
-    addUser: (state, action: PayloadAction<User>) => {
-      state.realEstateData?.users?.push(action.payload);
-    },
-    updateUserAdmin: (state, action: PayloadAction<string>) => {
-      if (state.realEstateData?.users) {
-        state.realEstateData.users = state.realEstateData.users.map((user) =>
-          user.id === action.payload ? { ...user, owner: !user.owner } : user
-        );
-      }
-    },
   },
   extraReducers: (builder) => {
     builder
@@ -135,15 +129,8 @@ export const realEstateSlice = createSlice({
       .addCase(
         fetchRealEstateData.fulfilled,
         (state, action: PayloadAction<RealEstate | undefined>) => {
-          if (action.payload) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { users, ...otherData } = action.payload;
+          state.realEstateData = action.payload;
 
-            state.realEstateData = {
-              ...state.realEstateData,
-              ...otherData,
-            };
-          }
           state.loading = false;
         }
       )
@@ -158,22 +145,19 @@ export const realEstateSlice = createSlice({
 
     builder
       .addCase(fetchRealEstateUsers.pending, (state) => {
-        state.loading = true;
+        state.realEstateUsersLoading = true;
       })
       .addCase(
         fetchRealEstateUsers.fulfilled,
         (state, action: PayloadAction<User[]>) => {
-          state.loading = false;
-          state.realEstateData = {
-            ...state.realEstateData!,
-            users: action.payload,
-          };
+          state.realEstateUsersLoading = false;
+          state.realEstateUsers = action.payload;
         }
       )
       .addCase(
         fetchRealEstateUsers.rejected,
         (state, action: PayloadAction<string | undefined>) => {
-          state.loading = false;
+          state.realEstateUsersLoading = false;
           state.error = action.payload || "Erro ao buscar dados da imobiliária";
         }
       );
@@ -237,7 +221,6 @@ export const realEstateSlice = createSlice({
   },
 });
 
-export const { setRealEstateData, addUser, updateUserAdmin } =
-  realEstateSlice.actions;
+export const { setRealEstateData } = realEstateSlice.actions;
 
 export default realEstateSlice.reducer;

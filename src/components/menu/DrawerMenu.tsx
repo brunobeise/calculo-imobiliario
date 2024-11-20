@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
-import { FaBars, FaBook, FaHome, FaUser, FaCalculator } from "react-icons/fa";
+import { FaBars, FaHome, FaUser, FaCalculator, FaFileAlt } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
@@ -145,14 +145,14 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               }`}
             >
               <ListItemDecorator>
-                <FaBook />
+                <FaFileAlt />
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
                   pageContext.urlPathname === "/estudos" ? "!text-primary" : ""
                 }`}
               >
-                Estudos
+                Propostas
               </Typography>
             </ListItem>
           </a>
@@ -200,7 +200,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             <ListItemDecorator>
               <FaCalculator />
             </ListItemDecorator>
-            <Typography className="font-bold !ms-[-10px]">Cases</Typography>
+            <Typography className="font-bold !ms-[-10px]">Cenários</Typography>
           </ListItem>
           {casesOpen && (
             <List>

@@ -2,7 +2,7 @@
 // /store/cases/casesSlice.ts
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { caseService } from "@/service/caseService";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import {
   FetchCasesParams,
   FetchRealEstateCasesParams,
@@ -12,11 +12,11 @@ import { Session } from "@/types/sessionTypes";
 
 // Define o estado inicial
 interface CasesState {
-  myCases: CaseStudy[];
+  myCases: Proposal[];
   myCasesLastPage: number | undefined;
-  realEstateCases: CaseStudy[];
+  realEstateCases: Proposal[];
   realEstateCasesLastPage: number | undefined;
-  adminCases: CaseStudy[];
+  adminCases: Proposal[];
   adminCasesLastPage: number | undefined;
   realEstateCasesLoading: boolean;
   myCasesLoading: boolean;
@@ -40,7 +40,7 @@ const initialState: CasesState = {
 };
 
 export const fetchCases = createAsyncThunk<
-  PaginatedResult<CaseStudy> | undefined,
+  PaginatedResult<Proposal> | undefined,
   FetchCasesParams | undefined
 >("cases/fetchCases", async (params = {}, { rejectWithValue }) => {
   try {
@@ -62,7 +62,7 @@ export const fetchCases = createAsyncThunk<
 });
 
 export const fetchRealEstateCases = createAsyncThunk<
-  PaginatedResult<CaseStudy> | undefined,
+  PaginatedResult<Proposal> | undefined,
   FetchRealEstateCasesParams | undefined
 >("cases/fetchRealEstateCases", async (params = {}, { rejectWithValue }) => {
   try {
@@ -83,7 +83,7 @@ export const fetchRealEstateCases = createAsyncThunk<
 });
 
 export const fetchAdminCases = createAsyncThunk<
-  PaginatedResult<CaseStudy> | undefined,
+  PaginatedResult<Proposal> | undefined,
   FetchCasesParams | undefined
 >("cases/fetchAdminCases", async (params = {}, { rejectWithValue }) => {
   try {
@@ -129,7 +129,7 @@ export const casesSlice = createSlice({
         fetchCases.fulfilled,
         (
           state,
-          action: PayloadAction<PaginatedResult<CaseStudy> | undefined>
+          action: PayloadAction<PaginatedResult<Proposal> | undefined>
         ) => {
           state.myCases = action.payload?.data || [];
           state.myCasesLastPage = action.payload?.meta.lastPage;
@@ -150,7 +150,7 @@ export const casesSlice = createSlice({
         fetchRealEstateCases.fulfilled,
         (
           state,
-          action: PayloadAction<PaginatedResult<CaseStudy> | undefined>
+          action: PayloadAction<PaginatedResult<Proposal> | undefined>
         ) => {
           state.realEstateCases = action.payload?.data || [];
           state.realEstateCasesLastPage = action.payload?.meta.lastPage;
@@ -174,7 +174,7 @@ export const casesSlice = createSlice({
         fetchAdminCases.fulfilled,
         (
           state,
-          action: PayloadAction<PaginatedResult<CaseStudy> | undefined>
+          action: PayloadAction<PaginatedResult<Proposal> | undefined>
         ) => {
           state.adminCases = action.payload?.data || [];
           state.adminCasesLastPage = action.payload?.meta.lastPage;

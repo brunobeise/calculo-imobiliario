@@ -466,7 +466,7 @@ export default function PropertyDataDischargesControl({
                 />
               </FormControl>
 
-              {watch("isDownPayment") && (
+             
                 <div className="grid grid-cols-2 gap-4">
                   <FormControl error={!!errors.indexType}>
                     <FormLabel>Tipo do Índice</FormLabel>
@@ -515,7 +515,7 @@ export default function PropertyDataDischargesControl({
                     )}
                   </FormControl>
                 </div>
-              )}
+            
             </DialogContent>
             <DialogActions>
               <Button type="submit" variant="solid" color="primary">

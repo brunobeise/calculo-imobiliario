@@ -1,6 +1,6 @@
 import { Chip, Menu, MenuItem, Dropdown, MenuButton } from "@mui/joy";
 import { useState } from "react";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import { notify } from "@/notify";
 import { CaseStudyTypeLinkMap } from "@/lib/maps";
 import { caseService } from "@/service/caseService";
@@ -23,7 +23,7 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import dayjs from "dayjs";
 
 
-const CaseTableRow = ({ caseStudy }: { caseStudy: CaseStudy }) => {
+const CaseTableRow = ({ caseStudy }: { caseStudy: Proposal }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { toggleBackdrop, toggleMenu } = useMenu();
 

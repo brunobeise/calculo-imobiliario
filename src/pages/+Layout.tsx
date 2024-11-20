@@ -33,7 +33,6 @@ import theme from "@/theme";
 import { AuthProvider } from "@/auth";
 import { PropertyDataProvider } from "@/propertyData/PropertyDataContext";
 import { Bounce, ToastContainer } from "react-toastify";
-import Header from "@/components/header";
 import { FinancingPlanningCaseDataProvider } from "./planejamentofinanciamento/@id/CaseData";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -55,9 +54,9 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <CssVarsProvider theme={theme}>
-      <AuthProvider>
-        <PropertyDataProvider>
-          <Provider store={store}>
+      <Provider store={store}>
+        <AuthProvider>
+          <PropertyDataProvider>
             <FinancingPlanningCaseDataProvider>
               <ToastContainer
                 position="top-center"
@@ -83,15 +82,14 @@ function Layout({ children }: { children: ReactNode }) {
                         : ""
                     }`}
                   >
-                    <Header />
                     {children}
                   </div>
                 </div>
               </MenuProvider>
             </FinancingPlanningCaseDataProvider>
-          </Provider>
-        </PropertyDataProvider>
-      </AuthProvider>
+          </PropertyDataProvider>
+        </AuthProvider>
+      </Provider>
     </CssVarsProvider>
   );
 }

@@ -147,7 +147,7 @@ export default function MyCases() {
         title={
           <div className="flex items-center text-primary gap-2">
             <FaBook className="text-sm" />
-            <h3 className="font-bold !text-sm">Meus estudos</h3>
+            <h3 className="font-bold !text-sm">Minhas Propostas</h3>
           </div>
         }
       />
@@ -159,7 +159,7 @@ export default function MyCases() {
         title={
           <div className="flex items-center text-primary gap-2">
             <FaShareAltSquare className="text-sm" />
-            <h3 className="font-bold !text-sm">Estudos compartilhados</h3>
+            <h3 className="font-bold !text-sm">Propostas compartilhadas</h3>
           </div>
         }
       />
@@ -172,7 +172,7 @@ export default function MyCases() {
           title={
             <div className="flex items-center text-primary gap-2">
               <RiAdminFill className="text-sm" />
-              <h3 className="font-bold !text-sm">Todos Estudos</h3>
+              <h3 className="font-bold !text-sm">Todas Propostas</h3>
             </div>
           }
         />
@@ -195,9 +195,9 @@ export default function MyCases() {
         )}
         {casesContext === "adminCases" && <RiAdminFill className="text-md" />}
         <h2 className="font-bold">
-          {casesContext === "myCases" && "Meus estudos"}{" "}
-          {casesContext === "realEstateCases" && "Estudos compartilhados"}
-          {casesContext === "adminCases" && "Todos estudos"}
+          {casesContext === "myCases" && "Minhas Propostas"}{" "}
+          {casesContext === "realEstateCases" && "Propostas Compartilhadas"}
+          {casesContext === "adminCases" && "Todos propostas"}
         </h2>
         {!casesContextDropdown ? (
           <FaCaretDown
@@ -215,7 +215,7 @@ export default function MyCases() {
       </div>
       <div className="flex gap-5 items-end">
         <div className="flex flex-col gap-2 me-4">
-          <FormLabel htmlFor="case-type-select">Tipo de estudo:</FormLabel>
+          <FormLabel htmlFor="case-type-select">Tipo de proposta:</FormLabel>
           <Select
             onChange={(_, v) => setType(v || "financingPlanning")}
             id="case-type-select"
@@ -343,7 +343,7 @@ export default function MyCases() {
       )}
       {!loading && data.length === 0 && (
         <div className="w-full text-center">
-          <span className=" text-gray">nenhum estudo encontrado</span>
+          <span className=" text-gray">nenhum proposta encontrado</span>
         </div>
       )}
     </>

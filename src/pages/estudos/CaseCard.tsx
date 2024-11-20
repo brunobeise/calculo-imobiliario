@@ -9,7 +9,7 @@ import {
 } from "@mui/joy";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { CaseStudy } from "@/types/caseTypes";
+import { Proposal } from "@/types/proposalTypes";
 import { notify } from "@/notify";
 import { CaseStudyTypeLinkMap } from "@/lib/maps";
 import { caseService } from "@/service/caseService";
@@ -38,7 +38,7 @@ const CaseCard = ({
   realEstateCase,
   adminCase,
 }: {
-  caseStudy: CaseStudy;
+  caseStudy: Proposal;
   realEstateCase?: boolean;
   adminCase?: boolean;
 }) => {

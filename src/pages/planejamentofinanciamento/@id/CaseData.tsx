@@ -17,6 +17,7 @@ export interface FinancingPlanningDetailedTable {
   monthlyProfit: number;
   propertyValue: number;
   rentalShortfall: number;
+  investmentExcess: number;
   investmentExcessPresentValue: number;
 }
 

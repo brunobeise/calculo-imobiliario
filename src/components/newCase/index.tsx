@@ -11,17 +11,29 @@ import { ExistingCaseOptions } from "./ExistingCaseOptions";
 import RealEstateCases from "./RealEstateCases";
 import MyCases from "./MyCases";
 import { FaArrowLeft } from "react-icons/fa";
+import SubTypeOptions from "./SubTypeOptions";
+import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
 
 interface NewCaseProps {
   setNewCase: (v: boolean) => void;
+  setSubType: (v: string) => void;
 }
+
+export type NewCaseContext =
+  | "new"
+  | "exists"
+  | "newAdvancedCase"
+  | "myCases"
+  | "realEstateCases"
+  | "subType"
+  | "template"
+  | "manual"
+  | "newSimplificatedCase";
 
 export default function NewCase(props: NewCaseProps) {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [context, setContext] = useState<
-    "new" | "exists" | "newCase" | "myCases" | "realEstateCases"
-  >();
+  const [context, setContext] = useState<NewCaseContext>();
 
   const { setMultiplePropertyData } = useContext(propertyDataContext);
 
@@ -63,18 +75,14 @@ export default function NewCase(props: NewCaseProps) {
         {!context && " Iniciar estudo"}
         {context === "new" && "Como deseja começar o estudo?"}
         {context === "exists" && "Continuar estudo"}
-        {context === "myCases" && "Meus Estudos"}
+        {context === "myCases" && "Meus estudos"}{" "}
+        {context === "template" && "Qual tipo do estudo?"}{" "}
+        {context === "manual" && "Qual tipo do estudo?"}{" "}
       </h2>
 
       {!context && <NewCaseOptions setContext={setContext} />}
 
-      {context === "new" && (
-        <NewCaseManualOptions
-          setContext={setContext}
-          setMultiplePropertyData={setMultiplePropertyData}
-          setNewCase={props.setNewCase}
-        />
-      )}
+      {context === "new" && <NewCaseManualOptions setContext={setContext} />}
 
       {context === "exists" && (
         <ExistingCaseOptions
@@ -85,8 +93,10 @@ export default function NewCase(props: NewCaseProps) {
         />
       )}
 
-      {context === "newCase" && (
+      {(context === "newAdvancedCase" ||
+        context === "newSimplificatedCase") && (
         <PropertyDataNewCaseForm
+          subType={context === "newAdvancedCase" ? "Avançado" : "Simplificado"}
           finish={(p) => {
             if (p) {
               setMultiplePropertyData({
@@ -115,25 +125,37 @@ export default function NewCase(props: NewCaseProps) {
         />
       )}
 
-      {context === "myCases" && (
-        <MyCases
-          myCases={myCases}
-          loading={loading}
-          setNewCase={props.setNewCase}
+      {context === "myCases" && <MyCases myCases={myCases} loading={loading} />}
+
+      {(context === "template" || context === "manual") && (
+        <SubTypeOptions
+          onSelect={(v: string) => {
+            if (context === "template") {
+              setMultiplePropertyData(getInitialValues(location.pathname));
+              props.setSubType(v);
+              props.setNewCase(false);
+            } else if (context === "manual") {
+              v === "Simplificado"
+                ? setContext("newSimplificatedCase")
+                : setContext("newAdvancedCase");
+            }
+          }}
         />
       )}
 
-      {context && context !== "newCase" && (
-        <div className="w-full flex justify-center mt-5">
-          <Button
-            startDecorator={<FaArrowLeft />}
-            onClick={handleBack}
-            variant="plain"
-          >
-            Voltar
-          </Button>
-        </div>
-      )}
+      {context &&
+        context !== "newSimplificatedCase" &&
+        context !== "newAdvancedCase" && (
+          <div className="w-full flex justify-center mt-5">
+            <Button
+              startDecorator={<FaArrowLeft />}
+              onClick={handleBack}
+              variant="plain"
+            >
+              Voltar
+            </Button>
+          </div>
+        )}
     </div>
   );
 }

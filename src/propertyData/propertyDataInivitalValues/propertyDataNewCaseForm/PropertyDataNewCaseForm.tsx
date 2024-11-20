@@ -15,8 +15,10 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 
 export default function PropertyDataNewCaseForm({
   finish,
+  subType,
 }: {
   finish: (p?: PropertyData) => void;
+  subType: string;
 }) {
   const [activeStep, setActiveStep] = useState(0);
   const [form, setform] = useState<PropertyData>({
@@ -34,15 +36,6 @@ export default function PropertyDataNewCaseForm({
     });
   };
 
-  const steps = [
-    { label: "Início do Estudo" },
-    { label: "Informações do Imóvel" },
-    { label: "Entrada" },
-    { label: "Detalhes do Financiamento" },
-    { label: "Aluguel" },
-    { label: "Valorização e Rentabilidade" },
-  ];
-
   const handleNext = () => {
     if (activeStep !== steps.length - 1) {
       setActiveStep((prevStep) => prevStep + 1);
@@ -58,22 +51,43 @@ export default function PropertyDataNewCaseForm({
     }
   };
 
+  const isAdvancedMode = subType === "Avançado";
+
+  const steps = isAdvancedMode
+    ? [
+        { label: "Início do Estudo" },
+        { label: "Informações do Imóvel" },
+        { label: "Entrada" },
+        { label: "Detalhes do Financiamento" },
+        { label: "Aluguel" },
+        { label: "Valorização e Rentabilidade" },
+      ]
+    : [{ label: "Início" }, { label: "Entrada" }, { label: "Financiamento" }];
+
   const disableNextButton = () => {
-    return (
-      (activeStep === 0 && !form.finalYear) ||
-      (activeStep === 1 && !form.propertyValue) ||
-      (activeStep === 1 && !form.propertyAppreciationRate) ||
-      (activeStep === 2 && !form.downPayment) ||
-      (activeStep === 3 && !form.interestRate) ||
-      (activeStep === 3 && !form.installmentValue) ||
-      (activeStep === 3 && !form.financingFees) ||
-      (activeStep === 3 && !form.financingYears) ||
-      (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
-      (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
-      (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
-      (activeStep === 5 && !form.PVDiscountRate) ||
-      (activeStep === 5 && !form.brokerageFee)
-    );
+    if (isAdvancedMode)
+      return (
+        (activeStep === 0 && !form.finalYear) ||
+        (activeStep === 1 && !form.propertyValue) ||
+        (activeStep === 1 && !form.propertyAppreciationRate) ||
+        (activeStep === 2 && !form.downPayment) ||
+        (activeStep === 3 && !form.interestRate) ||
+        (activeStep === 3 && !form.installmentValue) ||
+        (activeStep === 3 && !form.financingFees) ||
+        (activeStep === 3 && !form.financingYears) ||
+        (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
+        (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
+        (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
+        (activeStep === 5 && !form.PVDiscountRate) ||
+        (activeStep === 5 && !form.brokerageFee)
+      );
+    else
+      return (
+        (activeStep === 0 && !form.propertyValue) ||
+        (activeStep === 1 && !form.downPayment) ||
+        (activeStep === 2 && !form.installmentValue) ||
+        (activeStep === 2 && !form.financingFees)
+      );
   };
 
   return (
@@ -121,23 +135,56 @@ export default function PropertyDataNewCaseForm({
 
       <Card className="w-[500px] shadow-lg p-4 flex flex-col justify-between h-[540px] overflow-y-auto">
         <form className="flex-grow">
-          {activeStep === 0 && (
-            <PropertyDataStep1 form={form} setForm={setForm} />
-          )}
-          {activeStep === 1 && (
-            <PropertyDataStep2 form={form} setForm={setForm} />
-          )}
-          {activeStep === 2 && (
-            <PropertyDataStep3 form={form} setForm={setForm} />
-          )}
-          {activeStep === 3 && (
-            <PropertyDataStep4 form={form} setForm={setForm} />
-          )}
-          {activeStep === 4 && (
-            <PropertyDataStep5 form={form} setForm={setForm} />
-          )}
-          {activeStep === 5 && (
-            <PropertyDataStep6 form={form} setForm={setForm} />
+          {isAdvancedMode ? (
+            <>
+              {activeStep === 0 && (
+                <PropertyDataStep1 form={form} setForm={setForm} />
+              )}
+              {activeStep === 1 && (
+                <PropertyDataStep2 form={form} setForm={setForm} />
+              )}
+              {activeStep === 2 && (
+                <PropertyDataStep3 form={form} setForm={setForm} />
+              )}
+              {activeStep === 3 && (
+                <PropertyDataStep4 form={form} setForm={setForm} />
+              )}
+              {activeStep === 4 && (
+                <PropertyDataStep5 form={form} setForm={setForm} />
+              )}
+              {activeStep === 5 && (
+                <PropertyDataStep6 form={form} setForm={setForm} />
+              )}
+            </>
+          ) : (
+            <>
+              {activeStep === 0 && (
+                <PropertyDataStep2
+                  simplificated
+                  form={form}
+                  setForm={setForm}
+                />
+              )}
+              {activeStep === 1 && (
+                <PropertyDataStep3 form={form} setForm={setForm} />
+              )}
+              {activeStep === 2 && (
+                <PropertyDataStep4
+                  simplificated
+                  form={form}
+                  setForm={setForm}
+                />
+              )}
+              {activeStep === 3 && (
+                <PropertyDataStep4 form={form} setForm={setForm} />
+              )}
+              {activeStep === 4 && (
+                <PropertyDataStep5 form={form} setForm={setForm} />
+              )}
+              {activeStep === 5 && (
+                <PropertyDataStep6 form={form} setForm={setForm} />
+              )}
+            </>
           )}
         </form>
 
