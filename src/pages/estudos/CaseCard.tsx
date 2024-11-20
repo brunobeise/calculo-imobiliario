@@ -251,6 +251,7 @@ const CaseCard = ({
       </div>
 
       <CaseFormModal
+        subType={casestudy.subType}
         actualCase={casestudy}
         editChoose={true}
         caseAdded={(c) => setCaseStudy({ ...casestudy, ...c })}
