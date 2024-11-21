@@ -52,7 +52,7 @@ export default function ConsideredData(props: ConsideredDataProps) {
           <p>Valor da Parcela: {toBRL(propertyData.installmentValue)}</p>
           <p>
             Saldo devedor em {propertyData.finalYear} anos:{" "}
-            {toBRL(propertyData.outstandingBalance)}
+            {toBRL(caseData.finalRow.outstandingBalance)}
           </p>
           <p>
             Início das parcelas:{" "}
