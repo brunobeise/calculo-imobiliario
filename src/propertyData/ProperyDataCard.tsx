@@ -2,7 +2,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { PropertyData, propertyDataContext } from "./PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
-import { FormLabel, Input, Sheet, Slider } from "@mui/joy";
+import { FormLabel, Input, Radio, RadioGroup, Sheet, Slider } from "@mui/joy";
 import React from "react";
 import PercentageInput from "@/components/inputs/PercentageInput";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
@@ -25,7 +25,7 @@ export default function PropertyDataCard({
   const { propertyData, setPropertyData } = useContext(propertyDataContext);
 
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
-    useState(false);
+    useState(true);
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -54,7 +54,8 @@ export default function PropertyDataCard({
     const installmentValue = calcInstallmentValue(
       propertyData.propertyValue - propertyData.downPayment,
       propertyData.interestRate,
-      propertyData.financingYears
+      propertyData.financingYears,
+      propertyData.amortizationType
     );
 
     const totalInvestmentDischarges = propertyData.discharges.reduce(
@@ -84,6 +85,7 @@ export default function PropertyDataCard({
     propertyData?.propertyAppreciationRate,
     propertyData?.financingYears,
     propertyData?.discharges,
+    propertyData?.amortizationType,
     installmentValueCalculatorLock,
   ]);
 
@@ -253,10 +255,34 @@ export default function PropertyDataCard({
               />
             )}
 
+            {!isFieldHidden("amortizationType") && (
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Modelo de amortização:
+                </label>
+                <RadioGroup
+                  name="amortizationType"
+                  value={propertyData.amortizationType}
+                  onChange={(event) =>
+                    setPropertyData("amortizationType", event.target.value)
+                  }
+                >
+                  <div className="flex gap-10">
+                    <Radio value="PRICE" label="PRICE" />
+                    <Radio value="SAC" label="SAC" />
+                  </div>
+                </RadioGroup>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-5">
               {!isFieldHidden("installmentValue") && (
                 <CurrencyInput
-                  lock={installmentValueCalculatorLock}
+                  lock={
+                    propertyData.amortizationType === "PRICE"
+                      ? installmentValueCalculatorLock
+                      : undefined
+                  }
                   setLock={(value) => setInstallmentValueCalculatorLock(value)}
                   label="Valor da Parcela:"
                   id="installmentValue"
@@ -282,9 +308,10 @@ export default function PropertyDataCard({
 
             <div
               className={`${
-                isFieldHidden("totalFinanced") &&
-                isFieldHidden("outstandingBalance") &&
-                "grid grid-cols-2 gap-5"
+                !isFieldHidden("totalFinanced") &&
+                !isFieldHidden("outstandingBalance")
+                  ? "grid grid-cols-2 gap-5"
+                  : ""
               }`}
             >
               {!isFieldHidden("totalFinanced") && (

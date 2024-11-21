@@ -173,6 +173,16 @@ export function calcDetailedTable(propertyData: PropertyData) {
     0
   );
 
+  const totalMonths = propertyData.financingYears * 12;
+  const amortizationFixed =
+    propertyData.amortizationType === "SAC"
+      ? (propertyData.propertyValue -
+          propertyData.downPayment -
+          totalInvestmentDischarges -
+          propertyData.subsidy) /
+        totalMonths
+      : 0;
+
   let outstandingBalance = calcOutstandingBalance(
     propertyData.propertyValue -
       propertyData.downPayment -
@@ -207,9 +217,27 @@ export function calcDetailedTable(propertyData: PropertyData) {
           );
     }
 
-    const installmentValue = installmentIsActive
-      ? propertyData.installmentValue
-      : 0;
+    let installmentValue = 0;
+
+    if (installmentIsActive) {
+      if (propertyData.amortizationType === "PRICE") {
+        installmentValue = propertyData.installmentValue;
+        outstandingBalance = calcOutstandingBalance(
+          propertyData.propertyValue -
+            propertyData.downPayment -
+            totalInvestmentDischarges -
+            propertyData.subsidy,
+          propertyData.interestRate,
+          propertyData.financingYears,
+          month
+        );
+      } else if (propertyData.amortizationType === "SAC") {
+        const interest =
+          outstandingBalance * (propertyData.interestRate / 100 / 12);
+        installmentValue = amortizationFixed + interest;
+        outstandingBalance -= amortizationFixed;
+      }
+    }
 
     const rentalAmount = (rentIsActive ? rentValue : 0) - installmentValue;
 
@@ -236,21 +264,6 @@ export function calcDetailedTable(propertyData: PropertyData) {
       propertyData.propertyAppreciationRate,
       Math.floor(month / 12)
     );
-
-    if (outstandingBalance > 0) {
-      if (installmentIsActive)
-        outstandingBalance = calcOutstandingBalance(
-          propertyData.propertyValue -
-            propertyData.downPayment -
-            totalInvestmentDischarges -
-            propertyData.subsidy,
-          propertyData.interestRate,
-          propertyData.financingYears,
-          month
-        );
-    } else {
-      outstandingBalance = 0;
-    }
 
     const interestPaid =
       outstandingBalance > 0
@@ -281,10 +294,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
       initialCapital: initialCapital,
       initialCapitalYield: capitalYield,
       propertyValue: propertyValue,
+      installmentValue: installmentValue,
       rentValue: rentIsActive ? rentValue : 0,
       rentalShortfall: totalRentalShortfall,
       rentalAmount: rentalAmount,
-      outstandingBalance: outstandingBalance,
+      outstandingBalance: Math.max(outstandingBalance, 0),
       interestPaid: interestPaid,
       finalValue: finalValue,
       monthlyProfit: monthlyProfit,

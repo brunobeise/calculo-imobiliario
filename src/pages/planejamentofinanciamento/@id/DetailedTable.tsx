@@ -26,6 +26,14 @@ export default function DetailedTable(props: TabelaRendimentoProps) {
     },
     { title: "Capital", dataIndex: "initialCapital" },
     { title: "Valor do Aluguel", dataIndex: "rentValue" },
+    ...(propertyData.amortizationType === "SAC"
+      ? [
+          {
+            title: "Parcela",
+            dataIndex: "installmentValue",
+          },
+        ]
+      : []), // Adiciona a coluna somente se for SAC
     { title: "Aluguel - Parcela", dataIndex: "rentalAmount" },
     { title: "Valor do Imóvel", dataIndex: "propertyValue" },
     { title: "Rendimento do Capital", dataIndex: "initialCapitalYield" },

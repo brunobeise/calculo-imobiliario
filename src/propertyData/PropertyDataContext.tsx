@@ -34,6 +34,7 @@ export type PropertyData = {
   discharges: Discharge[];
   initialDate: string;
   cdi?: number;
+  amortizationType: "SAC" | "PRICE"
 };
 
 export type PropertyDataContextType = {

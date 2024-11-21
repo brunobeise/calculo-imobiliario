@@ -9,6 +9,7 @@ export interface FinancingPlanningDetailedTable {
   totalCapital: number;
   initialCapital: number;
   initialCapitalYield: number;
+  installmentValue: number;
   rentValue: number;
   rentalAmount: number;
   outstandingBalance: number;

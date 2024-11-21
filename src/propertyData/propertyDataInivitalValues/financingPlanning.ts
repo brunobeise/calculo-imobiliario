@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { PropertyData } from "../PropertyDataContext";
 
 const data = {
   propertyValue: 500000,
@@ -26,6 +27,7 @@ const data = {
   discharges: [],
   initialDate: dayjs().format("MM/YYYY"),
   cdi: undefined,
-};
+  amortizationType: "PRICE",
+} as PropertyData;
 
 export default data;
