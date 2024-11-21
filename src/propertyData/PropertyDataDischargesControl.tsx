@@ -122,24 +122,19 @@ export default function PropertyDataDischargesControl({
 
     const newDischarges: Discharge[] = [];
 
-    const finalMonth = propertyData.finalYear * 12;
+    console.log(propertyData.finalYear);
 
-   const startMonth =
-     dayjs(data.month, "MM/YYYY").diff(
-       dayjs(propertyData.initialDate, "MM/YYYY"),
-       "month"
-     );
+    const startMonth = dayjs(data.month, "MM/YYYY").diff(
+      dayjs(propertyData.initialDate, "MM/YYYY"),
+      "month"
+    );
 
     const maxInstallments = data.installments || Infinity;
     let installmentCount = 0;
 
     if (data.dischargeType && data.dischargeType !== "personalized") {
       const step = increment(data.dischargeType);
-      for (
-        let i = startMonth;
-        i <= finalMonth && installmentCount < maxInstallments;
-        i += step
-      ) {
+      for (let i = startMonth; installmentCount < maxInstallments; i += step) {
         const effectiveIndexValue = data.indexValue ? data.indexValue / 100 : 0;
 
         const valueWithInterest = data.indexValue
@@ -466,56 +461,50 @@ export default function PropertyDataDischargesControl({
                 />
               </FormControl>
 
-             
-                <div className="grid grid-cols-2 gap-4">
-                  <FormControl error={!!errors.indexType}>
-                    <FormLabel>Tipo do Índice</FormLabel>
-                    <Controller
-                      name="indexType"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          onChange={(_e, v) => field.onChange(v)}
-                          value={field.value}
-                        >
-                          <Option value={"INCC - M"}>INCC - M</Option>
-                          <Option value={"IGP - M"}>IGP - M</Option>
-                          <Option value={"IPCA"}>IPCA</Option>
-                          <Option value={"TR"}>TR</Option>
-                          <Option value={"CDI"}>CDI</Option>
-                        </Select>
-                      )}
-                    />
-                    {errors.indexType && (
-                      <FormHelperText>
-                        {errors.indexType.message}
-                      </FormHelperText>
+              <div className="grid grid-cols-2 gap-4">
+                <FormControl error={!!errors.indexType}>
+                  <FormLabel>Tipo do Índice</FormLabel>
+                  <Controller
+                    name="indexType"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        onChange={(_e, v) => field.onChange(v)}
+                        value={field.value}
+                      >
+                        <Option value={"INCC - M"}>INCC - M</Option>
+                        <Option value={"IGP - M"}>IGP - M</Option>
+                        <Option value={"IPCA"}>IPCA</Option>
+                        <Option value={"TR"}>TR</Option>
+                        <Option value={"CDI"}>CDI</Option>
+                      </Select>
                     )}
-                  </FormControl>
-                  <FormControl error={!!errors.indexValue}>
-                    <Controller
-                      name="indexValue"
-                      control={control}
-                      render={({ field }) => (
-                        <PercentageInput
-                          required={false}
-                          noHeight
-                          min={0}
-                          value={field.value ?? 0}
-                          onChange={(e) => field.onChange(e || 0)}
-                          label="Taxa (mensal)"
-                        />
-                      )}
-                    />
-                    {errors.indexValue && (
-                      <FormHelperText>
-                        {errors.indexValue.message}
-                      </FormHelperText>
+                  />
+                  {errors.indexType && (
+                    <FormHelperText>{errors.indexType.message}</FormHelperText>
+                  )}
+                </FormControl>
+                <FormControl error={!!errors.indexValue}>
+                  <Controller
+                    name="indexValue"
+                    control={control}
+                    render={({ field }) => (
+                      <PercentageInput
+                        required={false}
+                        noHeight
+                        min={0}
+                        value={field.value ?? 0}
+                        onChange={(e) => field.onChange(e || 0)}
+                        label="Taxa (mensal)"
+                      />
                     )}
-                  </FormControl>
-                </div>
-            
+                  />
+                  {errors.indexValue && (
+                    <FormHelperText>{errors.indexValue.message}</FormHelperText>
+                  )}
+                </FormControl>
+              </div>
             </DialogContent>
             <DialogActions>
               <Button type="submit" variant="solid" color="primary">
@@ -554,7 +543,7 @@ export default function PropertyDataDischargesControl({
                   <th className="w-[90px]">Mês</th>
                   <th>Índice</th>
                   <th>Valor</th>
-                  <th>Valor Presente</th>
+                  {propertyData.PVDiscountRate && <th>Valor Presente</th>}
                   <th className="w-[30px]"></th>
                 </tr>
               </thead>
@@ -581,7 +570,9 @@ export default function PropertyDataDischargesControl({
                             ` ${item.indexValue ? item.indexValue + "%" : ""}`}
                         </td>
                         <td>{toBRL(item.value)}</td>
-                        <td>{toBRL(presentValue)}</td>
+                        {propertyData.PVDiscountRate && (
+                          <td>{toBRL(presentValue)}</td>
+                        )}
                         <td className="flex justify-end items-center">
                           <FaTrash
                             onClick={() => handleRemoveDischarge(index)}

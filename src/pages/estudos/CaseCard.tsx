@@ -257,7 +257,7 @@ const CaseCard = ({
         caseAdded={(c) => setCaseStudy({ ...casestudy, ...c })}
         open={editOrNewCaseModal}
         onClose={() => setEditOrNewCaseModal(false)}
-        caseType="financingPlanning"
+        caseType={casestudy.type}
         propertyData={casestudy.propertyData}
       />
       <ConfirmationModal

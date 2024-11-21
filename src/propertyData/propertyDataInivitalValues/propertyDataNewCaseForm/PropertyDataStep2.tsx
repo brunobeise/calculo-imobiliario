@@ -19,10 +19,16 @@ export default function PropertyDataStep2({
     <div className="p-5 !text-blackish">
       <h4 className="font-bold text-center">Informações do Imóvel</h4>
 
-      <p className="my-4 text-sm">
-        Preencha os detalhes do imóvel, como o valor total, valor da entrada e o
-        subsídio, se aplicável.
-      </p>
+      {simplificated ? (
+        <p className="my-4 text-sm">
+          Informe o valor do imóvel e a data de início do estudo para começar.
+        </p>
+      ) : (
+        <p className="my-4 text-sm">
+          Preencha os detalhes do imóvel, como o valor total, valor da entrada e
+          o subsídio, se aplicável.
+        </p>
+      )}
 
       <div className="flex flex-col gap-5">
         {/* Campo: Valor do imóvel */}

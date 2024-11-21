@@ -41,10 +41,10 @@ export default function PropertyDataCard({
     setPropertyData(id, Number(value));
   };
 
-  const totalDischargesDownPayment = useMemo(() => {
+  const totalDischarges = useMemo(() => {
     if (!propertyData) return 0;
     return propertyData?.discharges.reduce((acc, val) => {
-      return val.isDownPayment ? acc + val.originalValue : acc;
+      return acc + val.originalValue;
     }, 0);
   }, [propertyData]);
 
@@ -217,7 +217,7 @@ export default function PropertyDataCard({
                   disabled
                   label="Total do recurso próprio:"
                   id="ownResource"
-                  value={totalDischargesDownPayment + propertyData.downPayment}
+                  value={totalDischarges + propertyData.downPayment}
                   onChange={() => {}}
                 />
               )}
@@ -295,7 +295,7 @@ export default function PropertyDataCard({
                   infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
                   value={
                     propertyData.propertyValue -
-                    totalDischargesDownPayment -
+                    totalDischarges -
                     propertyData.downPayment -
                     propertyData.subsidy
                   }

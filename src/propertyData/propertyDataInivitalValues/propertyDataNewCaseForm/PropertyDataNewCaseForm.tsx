@@ -26,6 +26,7 @@ export default function PropertyDataNewCaseForm({
     initialDate: dayjs().format("MM/YYYY"),
     initialFinancingMonth: dayjs().add(1, "month").format("MM/YYYY"),
     initialRentMonth: dayjs().add(1, "month").format("MM/YYYY"),
+    downPayment: 0,
   } as unknown as PropertyData);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -84,7 +85,6 @@ export default function PropertyDataNewCaseForm({
     else
       return (
         (activeStep === 0 && !form.propertyValue) ||
-        (activeStep === 1 && !form.downPayment) ||
         (activeStep === 2 && !form.installmentValue) ||
         (activeStep === 2 && !form.financingFees)
       );

@@ -14,13 +14,13 @@ export default function SubTypeOptions({ onSelect }: SubTypeOptionsProps) {
         onClick={() => onSelect("Simplificado")}
         title="Simplificado"
         icon={<LuBox />}
-        desc="Elabora uma proposta simles com descrição do imóvel e condições de pagemento."
+        desc="Elabore uma proposta simples com descrição do imóvel e condições de pagamento."
       />
       <ContextSelectorButton
         icon={<FaCalculator />}
         onClick={() => onSelect("Avançado")}
         title="Avançado"
-        desc="Elabora uma proposta detalhada, abrangendo a análise de viabilidade financeira, projeção de lucros e estimativa de valorização futura."
+        desc="Elabore uma proposta detalhada, abrangendo a análise de viabilidade financeira, projeção de lucros e estimativa de valorização futura."
       />
     </Card>
   );

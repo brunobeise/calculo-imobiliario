@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 const data = {
   propertyValue: 500000,
   downPayment: 125000,
-  subsidy: 500,
+  subsidy: 0,
   installmentValue: 3373.77,
   initialRentValue: 2200,
   initialRentMonth: dayjs().add(1, "month").format("MM/YYYY"),

@@ -20,9 +20,7 @@ export default function PropertyDataStep4({
       <h4 className="font-bold text-center">Detalhes do Financiamento</h4>
 
       {simplificated ? (
-        <p className="my-4 text-sm">
-          Preencha os detalhes do financiamento.
-        </p>
+        <p className="my-4 text-sm">Preencha os detalhes do financiamento.</p>
       ) : (
         <p className="my-4 text-sm">
           Preencha os detalhes do financiamento, como os juros aplicados, o
@@ -90,6 +88,20 @@ export default function PropertyDataStep4({
           value={form.financingFees}
           onChange={(v) => setForm("financingFees", Number(v.target.value))}
           infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
+        />
+
+        <CurrencyInput
+          label={`Total Financiado:`}
+          disabled
+          id="totalFinanced"
+          infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
+          value={
+            form.propertyValue -
+            form.discharges.reduce((acc, val) => acc + val.originalValue, 0) -
+            form.downPayment -
+            (form.subsidy || 0)
+          }
+          onChange={() => {}}
         />
       </div>
     </div>
