@@ -141,35 +141,50 @@ export default function ProjectionReturn({
               <strong className="text-red">{toBRL(downPayment)} - </strong>
               <p className="font-medium">Entrada </p>
             </div>
-            <div className="flex gap-1 text-nowrap">
-              <strong className="text-red">
-                {toBRL(
-                  propertyData.discharges.reduce(
-                    (acc, val) => (val.isDownPayment ? acc + val.value : acc),
-                    0
-                  )
-                )}{" "}
-                -{" "}
-              </strong>
-              <p className="font-medium text-nowrap">Parcelamento da entrada</p>
-            </div>
+            {propertyData.discharges.reduce(
+              (acc, val) => (val.isDownPayment ? acc + val.value : acc),
+              0
+            ) > 0 && (
+              <div className="flex gap-1 text-nowrap">
+                <strong className="text-red">
+                  {toBRL(
+                    propertyData.discharges.reduce(
+                      (acc, val) => (val.isDownPayment ? acc + val.value : acc),
+                      0
+                    )
+                  )}{" "}
+                  -{" "}
+                </strong>
+                <p className="font-medium text-nowrap">
+                  Parcelamento da entrada
+                </p>
+              </div>
+            )}
+
             <div className="flex gap-1">
               <strong className="text-red">{toBRL(financingFees)} - </strong>
               <p className="font-medium">Documentação </p>
             </div>
-            <div className="flex gap-1">
-              <strong className="text-red">
-                {" "}
-                {toBRL(
-                  propertyData.discharges.reduce(
-                    (acc, val) => (!val.isDownPayment ? acc + val.value : acc),
-                    0
-                  )
-                )}{" "}
-                -{" "}
-              </strong>
-              <p className="font-medium">Reforços </p>
-            </div>
+            {propertyData.discharges.reduce(
+              (acc, val) => (!val.isDownPayment ? acc + val.value : acc),
+              0
+            ) > 0 && (
+              <div className="flex gap-1">
+                <strong className="text-red">
+                  {" "}
+                  {toBRL(
+                    propertyData.discharges.reduce(
+                      (acc, val) =>
+                        !val.isDownPayment ? acc + val.value : acc,
+                      0
+                    )
+                  )}{" "}
+                  -{" "}
+                </strong>
+                <p className="font-medium">Reforços </p>
+              </div>
+            )}
+
             <div className="flex gap-1">
               <strong className="text-red">
                 {toBRL(
