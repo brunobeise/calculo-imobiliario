@@ -113,7 +113,7 @@ const FinancingPlanningReportPreview = forwardRef<
           backgroundColor: custom.backgroundColor,
         }}
       >
-        <div className="flex flex-col items-center w-full !m-0">
+        <div className="flex flex-col items-center w-full !m-0 overflow-x-hidden">
           {isPageViewActive(0) && (
             <div ref={page1Ref} className="w-full">
               <UserSignature

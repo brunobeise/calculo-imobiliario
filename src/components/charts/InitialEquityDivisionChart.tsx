@@ -122,15 +122,15 @@ export default function InitialEquityDivisionChart({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center w-full">
       {filteredData.filteredValues.length > 0 ? (
-        <>
+        <div className="w-full flex flex-col items-center">
           <Pie className="w-full h-full" data={data} options={options} />
-          <div className="flex justify-around mt-4 ">
+          <div className="flex justify-around mt-4 me-4">
             {filteredData.filteredLabels.map((label, index) => (
               <div key={index} className="flex flex-col items-center">
                 <div
-                  className="w-12 h-4 mx-10"
+                  className="w-12 h-4 mx-6"
                   style={{
                     backgroundColor: data.datasets[0].backgroundColor[index],
                   }}
@@ -139,7 +139,7 @@ export default function InitialEquityDivisionChart({
               </div>
             ))}
           </div>
-        </>
+        </div>
       ) : (
         <span>Nenhum dado disponível</span>
       )}

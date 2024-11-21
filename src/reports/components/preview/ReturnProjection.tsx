@@ -22,13 +22,15 @@ export default function ProjectionReturn({
   const { downPayment, financingFees } = propertyData;
 
   return (
-    <div className="p-4 mx-auto">
-      <SectionTitle
-        color={color}
-        title={`Projeção de Retorno em ${propertyData.finalYear} anos`}
-        secondary={secondary}
-        icon={<FaMoneyBillTrendUp />}
-      />
+    <div className="p-4 px-4 lg:px-12 mx-auto">
+      <div className="px-4 lg:px-0">
+        <SectionTitle
+          color={color}
+          title={`Projeção de Retorno em ${propertyData.finalYear} anos`}
+          secondary={secondary}
+          icon={<FaMoneyBillTrendUp />}
+        />
+      </div>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div
