@@ -214,7 +214,11 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </svg>
             </SvgIcon>
           </div>
-          <span style={{ color: secondary }}>parcelas de</span>
+          {propertyData.amortizationType === "SAC" ? (
+            <span style={{ color: secondary }}>parcela inicial</span>
+          ) : (
+            <span style={{ color: secondary }}>parcelas de</span>
+          )}
           <span style={{ color }} className="text-xl font-bold mt-[-5px]">
             {toBRL(propertyData.installmentValue)}
           </span>
@@ -247,17 +251,31 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
           </span>
         </div>
 
-        <p
-          style={{ color: secondary }}
-          className=" col-span-3 px-4 mt-6 text-md ms-[-15px]"
-        >
-          O valor da parcela é estipulado pela <strong>tabela PRICE</strong>.
-          Como as primeiras parcelas da tabela SAC são mais altas, optar pela
-          tabela PRICE acaba sendo mais vantajoso, pois a diferença entre os
-          valores pode ser usada para quitar o saldo devedor ou ser investida no
-          mercado financeiro. Esse método permite que o cliente liquide a dívida
-          antes do prazo previsto.
-        </p>
+        {propertyData.amortizationType === "SAC" ? (
+          <p
+            style={{ color: secondary }}
+            className=" col-span-3 px-4 mt-6 text-md ms-[-15px]"
+          >
+            O valor da parcela é estipulado pela <strong>tabela SAC.</strong>{" "}
+            Como as parcelas da tabela SAC diminuem com o tempo, optar por esse
+            modelo traz a vantagem de reduzir o saldo devedor mais rapidamente.
+            Isso resulta em um pagamento total de juros menor ao longo do
+            financiamento, tornando essa opção interessante para quem busca
+            economizar no custo total da dívida.
+          </p>
+        ) : (
+          <p
+            style={{ color: secondary }}
+            className=" col-span-3 px-4 mt-6 text-md ms-[-15px]"
+          >
+            O valor da parcela é estipulado pela <strong>tabela PRICE</strong>.
+            Como as primeiras parcelas da tabela SAC são mais altas, optar pela
+            tabela PRICE acaba sendo mais vantajoso, pois a diferença entre os
+            valores pode ser usada para quitar o saldo devedor ou ser investida
+            no mercado financeiro. Esse método permite que o cliente liquide a
+            dívida antes do prazo previsto.
+          </p>
+        )}
       </div>
       <Xwrapper>
         <Xarrow

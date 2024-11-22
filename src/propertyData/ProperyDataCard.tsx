@@ -51,12 +51,13 @@ export default function PropertyDataCard({
   useEffect(() => {
     if (!propertyData) return;
 
-    const installmentValue = calcInstallmentValue(
-      propertyData.propertyValue - propertyData.downPayment,
-      propertyData.interestRate,
-      propertyData.financingYears,
-      propertyData.amortizationType
-    );
+    const installmentValue =
+      calcInstallmentValue(
+        propertyData.propertyValue - propertyData.downPayment,
+        propertyData.interestRate,
+        propertyData.financingYears,
+        propertyData.amortizationType
+      ) + 150;
 
     const totalInvestmentDischarges = propertyData.discharges.reduce(
       (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
@@ -69,7 +70,8 @@ export default function PropertyDataCard({
         totalInvestmentDischarges,
       propertyData.interestRate,
       propertyData.financingYears,
-      12 * propertyData.finalYear
+      12 * propertyData.finalYear,
+      propertyData.amortizationType
     );
 
     if (installmentValueCalculatorLock)
@@ -88,6 +90,20 @@ export default function PropertyDataCard({
     propertyData?.amortizationType,
     installmentValueCalculatorLock,
   ]);
+
+  const taxValue = useMemo(() => {
+    if (!propertyData) return 0;
+    const result =
+      propertyData.installmentValue -
+      calcInstallmentValue(
+        propertyData.propertyValue - propertyData.downPayment,
+        propertyData.interestRate,
+        propertyData.financingYears,
+        propertyData.amortizationType
+      );
+
+    return Math.abs(result) < 0.01 ? 0 : result;
+  }, [propertyData?.installmentValue]);
 
   if (!propertyData) return null;
 
@@ -278,11 +294,7 @@ export default function PropertyDataCard({
             <div className="grid grid-cols-2 gap-5">
               {!isFieldHidden("installmentValue") && (
                 <CurrencyInput
-                  lock={
-                    propertyData.amortizationType === "PRICE"
-                      ? installmentValueCalculatorLock
-                      : undefined
-                  }
+                  lock={installmentValueCalculatorLock}
                   setLock={(value) => setInstallmentValueCalculatorLock(value)}
                   label="Valor da Parcela:"
                   id="installmentValue"
@@ -290,18 +302,18 @@ export default function PropertyDataCard({
                   onChange={(v) =>
                     handleChangeNumber("installmentValue", v.target.value)
                   }
-                  infoTooltip="R$ 150,00 em taxas de administração e seguro foram adicionados automaticamente. Você pode ajustar esse valor manualmente ao realizar uma simulação."
+                  infoTooltip="Valor total que será pago mensalmente. O saldo devedor será reduzido com base no valor da parcela calculada pelo sistema, e qualquer valor excedente será automaticamente destinado ao pagamento de taxas."
                 />
               )}
 
-              {!isFieldHidden("initialFinancingMonth") && (
-                <DatePicker
-                  defaultValue={dayjs(
-                    propertyData.initialFinancingMonth,
-                    "MM/YYYY"
-                  ).format("MM/YYYY")}
-                  label="Data de ínicio das parcelas"
-                  onChange={(v) => setPropertyData("initialFinancingMonth", v)}
+              {!isFieldHidden("installmentValueTax") && (
+                <CurrencyInput
+                  disabled
+                  label="Taxa da parcela"
+                  id="installmentValueTax"
+                  value={taxValue || 0}
+                  onChange={() => {}}
+                  infoTooltip="Essa é a parte do valor total da parcela que será usada para cobrir taxas. Valores adicionais ao mínimo necessário para o financiamento serão automaticamente direcionados para este campo."
                 />
               )}
             </div>
@@ -332,7 +344,9 @@ export default function PropertyDataCard({
 
               {!isFieldHidden("outstandingBalance") && (
                 <CurrencyInput
-                  label={`Saldo devedor em ${propertyData.finalYear} anos:`}
+                  label={`Saldo devedor em ${propertyData.finalYear} anos. (${
+                    propertyData.finalYear * 12
+                  }) meses`}
                   disabled
                   id="outstandingBalance"
                   infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
@@ -388,30 +402,43 @@ export default function PropertyDataCard({
               </div>
             )}
 
-            {!isFieldHidden("financingYears") && (
-              <div>
-                <FormLabel className="h-[40px]" htmlFor="financingYears">
-                  Tempo do financiamento:
-                </FormLabel>
-                <Input
-                  id="financingYears"
-                  value={propertyData.financingYears}
-                  onChange={(v) => {
-                    const value = Number(v.target.value);
-                    if (value > 0) setPropertyData("financingYears", value);
-                  }}
-                  type="number"
-                  endDecorator="Anos"
-                  slotProps={{
-                    input: {
-                      min: 1,
-                      max: 35,
-                      step: 1,
-                    },
-                  }}
+            <div className="grid grid-cols-2 gap-5">
+              {!isFieldHidden("financingYears") && (
+                <div>
+                  <FormLabel className="h-[40px]" htmlFor="financingYears">
+                    Tempo do financiamento:
+                  </FormLabel>
+                  <Input
+                    id="financingYears"
+                    value={propertyData.financingYears}
+                    onChange={(v) => {
+                      const value = Number(v.target.value);
+                      if (value > 0) setPropertyData("financingYears", value);
+                    }}
+                    type="number"
+                    endDecorator="Anos"
+                    slotProps={{
+                      input: {
+                        min: 1,
+                        max: 35,
+                        step: 1,
+                      },
+                    }}
+                  />
+                </div>
+              )}
+
+              {!isFieldHidden("initialFinancingMonth") && (
+                <DatePicker
+                  defaultValue={dayjs(
+                    propertyData.initialFinancingMonth,
+                    "MM/YYYY"
+                  ).format("MM/YYYY")}
+                  label="Data de ínicio das parcelas"
+                  onChange={(v) => setPropertyData("initialFinancingMonth", v)}
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </Sheet>
       )}

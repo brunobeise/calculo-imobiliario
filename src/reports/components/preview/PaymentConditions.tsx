@@ -3,6 +3,7 @@ import { LuCircleDollarSign } from "react-icons/lu";
 import dayjs from "dayjs";
 import { toBRL } from "@/lib/formatter";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
+import SectionTitle from "./SectionTitle";
 
 interface PaymentConditionsProps {
   color: string;
@@ -15,7 +16,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   color,
   secondary,
   propertyData,
-  isAdvancedMode
+  isAdvancedMode,
 }) => {
   const { discharges, initialDate, downPayment, financingFees } = propertyData;
 
@@ -124,14 +125,12 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
   return (
     <div style={{ color }} className="p-3 px-8">
-      <div className="flex items-center mb-6 text-lg font-semibold text-primary">
-        <span role="img" aria-label="payment" className="mr-2">
-          <LuCircleDollarSign className="text-grayText text-2xl me-2" />
-        </span>
-        <p style={{ color }} className="text-2xl font-bold">
-          Condição de Pagamento
-        </p>
-      </div>
+      <SectionTitle
+        color={color}
+        secondary={secondary}
+        icon={<LuCircleDollarSign />}
+        title="Condição de Pagamento"
+      />
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 palce-items-center">
         <div className="gap-3 flex flex-col">
@@ -201,6 +200,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                     Parcelas mensais:{" "}
                   </span>
                   <strong>{toBRL(propertyData.installmentValue)}</strong>
+                  {propertyData.amortizationType === "SAC"
+                    ? "(decrescente)"
+                    : ""}
                 </li>
               </ul>
             </div>
@@ -249,7 +251,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         )}
 
         <div
-          className={`rounded-3xl p-4 border h-min  ${totalReinforcementParts > 0 ? 'hidden lg:block' : ''}`}
+          className={`rounded-3xl p-4 border h-min  ${
+            totalReinforcementParts > 0 ? "hidden lg:block" : ""
+          }`}
         >
           <h3 style={{ color }} className="text-xl mb-2">
             Financiamento
@@ -271,9 +275,10 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
             </li>
             <li>
               <span style={{ color: secondary }} className="text-sm">
-                Parcelas mensais:{" "}
+                Parcelas mensais:{"  "}
               </span>
-              <strong>{toBRL(propertyData.installmentValue)}</strong>
+              <strong>{toBRL(propertyData.installmentValue)}</strong>{" "}
+              {propertyData.amortizationType === "SAC" ? "(decrescente)" : ""}
             </li>
           </ul>
         </div>

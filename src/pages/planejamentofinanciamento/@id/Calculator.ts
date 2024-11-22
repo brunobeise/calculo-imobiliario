@@ -239,6 +239,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
       }
     }
 
+    const installmentTax =
+      propertyData.installmentValue > installmentValue
+        ? propertyData.installmentValue - installmentValue
+        : 0;
+
     const rentalAmount = (rentIsActive ? rentValue : 0) - installmentValue;
 
     let investmentExcess = 0;
@@ -253,6 +258,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
       totalRentalShortfall += dischargesByMonth[month];
       initialInvestment += dischargesByMonth[month];
     }
+
+    if(propertyData.amortizationType === "SAC") investmentExcess += installmentTax;
 
     const capitalYield =
       initialCapital >= 0
