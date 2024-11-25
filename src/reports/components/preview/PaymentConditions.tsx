@@ -51,16 +51,18 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
       financingFees +
       downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0);
 
-    const totalFinancing =
+    const totalFinancing = Math.round(
       propertyData.propertyValue -
-      downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
-      propertyData.downPayment -
-      propertyData.subsidy;
+        downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
+        reinforcementDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
+        propertyData.downPayment -
+        propertyData.subsidy
+    );
 
-    const totalReinforcement = reinforcementDischarges.reduce(
+    const totalReinforcement = Math.round( reinforcementDischarges.reduce(
       (sum, d) => sum + d.originalValue,
       0
-    );
+    ))
 
     const totalParts = downPaymentDischarges.length + 1;
 

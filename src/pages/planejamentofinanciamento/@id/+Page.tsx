@@ -165,6 +165,7 @@ export default function FinancingPlanning(): JSX.Element {
           "subsidy",
           "initialDate",
           "outstandingBalance",
+          "installmentValueTax",
         ];
 
   const hideSheets = subType === "Avançado" ? [] : ["appreciation"];

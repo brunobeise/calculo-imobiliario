@@ -25,7 +25,7 @@ export default function PropertyDataCard({
   const { propertyData, setPropertyData } = useContext(propertyDataContext);
 
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
-    useState(true);
+    useState(false);
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -291,10 +291,21 @@ export default function PropertyDataCard({
               </div>
             )}
 
-            <div className="grid grid-cols-2 gap-5">
+            <div
+              className={`grid  gap-5 ${
+                !isFieldHidden("installmentValue") &&
+                !isFieldHidden("installmentValueTax")
+                  ? " grid-cols-2"
+                  : ""
+              }`}
+            >
               {!isFieldHidden("installmentValue") && (
                 <CurrencyInput
-                  lock={installmentValueCalculatorLock}
+                  lock={
+                    !isFieldHidden("installmentValueTax")
+                      ? installmentValueCalculatorLock
+                      : undefined
+                  }
                   setLock={(value) => setInstallmentValueCalculatorLock(value)}
                   label="Valor da Parcela:"
                   id="installmentValue"
@@ -332,12 +343,12 @@ export default function PropertyDataCard({
                   disabled
                   id="totalFinanced"
                   infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
-                  value={
+                  value={Math.round(
                     propertyData.propertyValue -
-                    totalDischarges -
-                    propertyData.downPayment -
-                    propertyData.subsidy
-                  }
+                      totalDischarges -
+                      propertyData.downPayment -
+                      propertyData.subsidy
+                  )}
                   onChange={() => {}}
                 />
               )}
