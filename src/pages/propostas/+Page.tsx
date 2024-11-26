@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
-import { FaBook, FaCaretDown, FaCaretUp } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaBook, FaCaretDown, FaCaretUp, FaFileAlt } from "react-icons/fa";
 import { FormLabel, Option, Select, Table } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
@@ -137,48 +137,71 @@ export default function MyCases() {
     setCurrentPage(1);
   }, [casesContext]);
 
-  const CasesContextSelect = () => (
-    <div className="bg-white absolute top-14 shadow-lg w-max z-[2]">
-      <ContextSelectorButton
-        onClick={() => {
-          setCasesContext("myCases");
+  const CasesContextSelect = () => {
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node)
+        ) {
           setCasesContextDropdown(false);
-        }}
-        title={
-          <div className="flex items-center text-primary gap-2">
-            <FaBook className="text-sm" />
-            <h3 className="font-bold !text-sm">Minhas Propostas</h3>
-          </div>
         }
-      />
-      <ContextSelectorButton
-        onClick={() => {
-          setCasesContext("realEstateCases");
-          setCasesContextDropdown(false);
-        }}
-        title={
-          <div className="flex items-center text-primary gap-2">
-            <FaShareAltSquare className="text-sm" />
-            <h3 className="font-bold !text-sm">Propostas compartilhadas</h3>
-          </div>
-        }
-      />
-      {user.admin && (
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [setCasesContextDropdown]);
+
+    return (
+      <div
+        ref={dropdownRef}
+        className="bg-white absolute top-14 shadow-lg w-max z-[2]"
+      >
         <ContextSelectorButton
           onClick={() => {
-            setCasesContext("adminCases");
+            setCasesContext("myCases");
             setCasesContextDropdown(false);
           }}
           title={
             <div className="flex items-center text-primary gap-2">
-              <RiAdminFill className="text-sm" />
-              <h3 className="font-bold !text-sm">Todas Propostas</h3>
+              <FaBook className="text-sm" />
+              <h3 className="font-bold !text-sm">Minhas Propostas</h3>
             </div>
           }
         />
-      )}
-    </div>
-  );
+        <ContextSelectorButton
+          onClick={() => {
+            setCasesContext("realEstateCases");
+            setCasesContextDropdown(false);
+          }}
+          title={
+            <div className="flex items-center text-primary gap-2">
+              <FaShareAltSquare className="text-sm" />
+              <h3 className="font-bold !text-sm">Compartilhadas</h3>
+            </div>
+          }
+        />
+        {user.admin && (
+          <ContextSelectorButton
+            onClick={() => {
+              setCasesContext("adminCases");
+              setCasesContextDropdown(false);
+            }}
+            title={
+              <div className="flex items-center text-primary gap-2">
+                <RiAdminFill className="text-sm" />
+                <h3 className="font-bold !text-sm">Admin</h3>
+              </div>
+            }
+          />
+        )}
+      </div>
+    );
+  };
 
   const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated) {
@@ -188,16 +211,16 @@ export default function MyCases() {
 
   const header = (
     <div className="flex justify-between">
-      <div className="flex ms-4 items-center text-primary gap-2  text-2xl mt-5 relative">
-        {casesContext === "myCases" && <FaBook className="text-xl" />}
+      <div className="flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative">
+        {casesContext === "myCases" && <FaFileAlt className="text-xl" />}
         {casesContext === "realEstateCases" && (
           <FaShareAltSquare className="text-md" />
         )}
         {casesContext === "adminCases" && <RiAdminFill className="text-md" />}
         <h2 className="font-bold">
           {casesContext === "myCases" && "Minhas Propostas"}{" "}
-          {casesContext === "realEstateCases" && "Propostas Compartilhadas"}
-          {casesContext === "adminCases" && "Todos propostas"}
+          {casesContext === "realEstateCases" && "Compartilhadas"}
+          {casesContext === "adminCases" && "Admin"}
         </h2>
         {!casesContextDropdown ? (
           <FaCaretDown

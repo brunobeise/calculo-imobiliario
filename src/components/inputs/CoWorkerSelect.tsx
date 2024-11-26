@@ -17,7 +17,7 @@ export default function CoWorkerSelect(props: CoWorkerSelectProps) {
     (state: RootState) => state.realEstate
   );
   useEffect(() => {
-    if (!realEstateUsers) {
+    if (!realEstateUsers || realEstateUsers.length === 0) {
       dispatch(fetchRealEstateUsers());
     }
   }, [dispatch, realEstateUsers]);

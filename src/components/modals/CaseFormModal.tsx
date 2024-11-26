@@ -19,7 +19,7 @@ import PropertyDataDisplay from "../shared/PropertyDataDisplay";
 import { navigate } from "vike/client/router";
 import { Proposal } from "@/types/proposalTypes";
 import BooleanInput from "../inputs/BooleanInput";
-import { CaseStudyTypeLinkMap } from "@/lib/maps";
+import { CaseStudyTypeLinkMap, getCaseLink } from "@/lib/maps";
 
 interface CaseFormModalProps {
   open: boolean;
@@ -30,6 +30,7 @@ interface CaseFormModalProps {
   editChoose: boolean;
   actualCase?: Proposal;
   caseAdded?: (newCase: Proposal) => void;
+  duplicate?: boolean;
 }
 
 interface CaseFormData {
@@ -47,6 +48,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
   editChoose,
   actualCase,
   subType,
+  duplicate,
 }) => {
   const {
     register,
@@ -118,6 +120,25 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
     }
   };
 
+  const handleDuplicate: SubmitHandler<CaseFormData> = async (data) => {
+    setLoading(true);
+    try {
+      const result = await caseService.duplicateCase({
+        id: actualCase!.id,
+        propertyName: data?.propertyName,
+        name: data!.name,
+      });
+      const url = getCaseLink(actualCase?.type) + "/" + result.id;
+      window.location.href = url;
+      navigate(url);
+    } catch (error) {
+      console.error("Erro ao duplicar case:", error);
+    } finally {
+      onClose();
+      setLoading(false);
+    }
+  };
+
   return (
     <Modal open={open} onClose={onClose}>
       <ModalDialog
@@ -133,7 +154,11 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
         <DialogContent className="!p-2 !overflow-x-hidden">
           <form
             onSubmit={
-              editChoose ? handleSubmit(handleEdit) : handleSubmit(handleCreate)
+              duplicate
+                ? handleSubmit(handleDuplicate)
+                : editChoose
+                ? handleSubmit(handleEdit)
+                : handleSubmit(handleCreate)
             }
             id="create-case-form"
             className="flex flex-col gap-5 w-full"

@@ -32,6 +32,8 @@ import { FaMagnifyingGlass } from "react-icons/fa6";
 import placehodler from "./placeholder.jpg";
 import { IoShareSocialSharp } from "react-icons/io5";
 import StatusTag from "@/components/shared/CaseStatusTag";
+import { IoDuplicate } from "react-icons/io5";
+import DuplicateCaseModal from "./DuplicateCaseModal";
 
 const CaseCard = ({
   caseStudy,
@@ -50,6 +52,9 @@ const CaseCard = ({
   const [sessionsModal, setSessionsModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [duplicateCase, setDuplicateCase] = useState<Proposal | undefined>(
+    undefined
+  );
 
   const handleDelete = async () => {
     setDeleteLoading(true);
@@ -67,7 +72,8 @@ const CaseCard = ({
     }
   };
 
-  const isAnyModalOpen = editOrNewCaseModal || sessionsModal || deleteModal;
+  const isAnyModalOpen =
+    editOrNewCaseModal || sessionsModal || deleteModal || !!duplicateCase;
 
   return (
     <div
@@ -167,6 +173,15 @@ const CaseCard = ({
             <FaLink className="mr-2" /> Copiar Link
           </MenuItem>
 
+          <MenuItem
+            onClick={(e) => {
+              e.stopPropagation();
+              setDuplicateCase(casestudy);
+            }}
+          >
+            <IoDuplicate className="mr-2" /> Duplicar
+          </MenuItem>
+
           {!realEstateCase && (
             <>
               <MenuItem
@@ -213,43 +228,46 @@ const CaseCard = ({
           ))}
       </div>
       <div className="absolute bottom-4 left-4">
-        {realEstateCase ||
-          (adminCase ? (
-            <div className="flex items-center text-sm">
-              <div className="rounded-full overflow-hidden flex justify-center items-center w-[20px] h-[20px]">
-                <img
-                  src={
-                    caseStudy.user?.photo ||
-                    "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
-                  }
-                />
-              </div>
-              <div className="ms-2 flex flex-col">
-                <span className="!text-md text-blackish">
-                  {caseStudy.user?.fullName &&
-                    `${
-                      caseStudy.user.fullName.split(" ")[0]
-                    } ${caseStudy.user.fullName
-                      .split(" ")
-                      [caseStudy.user.fullName.split(" ").length - 1].charAt(
-                        0
-                      )}.`}
-                </span>
-              </div>
+        {realEstateCase || adminCase ? (
+          <div className="flex items-center text-sm">
+            <div className="rounded-full overflow-hidden flex justify-center items-center w-[20px] h-[20px]">
+              <img
+                src={
+                  caseStudy.user?.photo ||
+                  "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png"
+                }
+              />
             </div>
-          ) : (
-            <StatusTag
-              status={casestudy.status}
-              id={casestudy.id}
-              onChange={(s) => setCaseStudy({ ...casestudy, status: s })}
-              enableEdit
-            />
-          ))}
+            <div className="ms-2 flex flex-col">
+              <span className="!text-md text-blackish">
+                {caseStudy.user?.fullName &&
+                  `${
+                    caseStudy.user.fullName.split(" ")[0]
+                  } ${caseStudy.user.fullName
+                    .split(" ")
+                    [caseStudy.user.fullName.split(" ").length - 1].charAt(
+                      0
+                    )}.`}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <StatusTag
+            status={casestudy.status}
+            id={casestudy.id}
+            onChange={(s) => setCaseStudy({ ...casestudy, status: s })}
+            enableEdit
+          />
+        )}
       </div>
       <div className="absolute bottom-4 right-4 text-gray text-sm">
         {dayjs(casestudy.createdAt).format("DD/MM/YYYY")}
       </div>
-
+      <DuplicateCaseModal
+        data={duplicateCase}
+        onClose={() => setDuplicateCase(undefined)}
+      />
+      ;
       <CaseFormModal
         subType={casestudy.subType}
         actualCase={casestudy}

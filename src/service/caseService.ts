@@ -10,10 +10,24 @@ export const caseService = {
   async createCase(data: Partial<Proposal>) {
     try {
       const response = await api.post("/cases", data);
-      notify("success", "Estudo criado com sucesso!");
+      notify("success", "Proposta criado com sucesso!");
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Erro ao criar case.");
+      handleApiError(error, "Erro ao criar proposta.");
+    }
+  },
+
+  async duplicateCase(params: {
+    id: string;
+    propertyName: string;
+    name: string;
+  }) {
+    try {
+      const response = await api.post("/cases-duplicate", params);
+      notify("success", "Proposta criado com sucesso!");
+      return response.data;
+    } catch (error: any) {
+      handleApiError(error, "Erro ao criar proposta.");
     }
   },
 
@@ -24,7 +38,7 @@ export const caseService = {
       );
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar os cases.");
+      handleApiError(error, "Não foi possível buscar as propostas");
     }
   },
 
@@ -33,7 +47,7 @@ export const caseService = {
       const response = await api.get<Session[]>("/cases-sessions/" + caseId);
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar os cases.");
+      handleApiError(error, "Não foi possível buscar as propostas.");
     }
   },
 
@@ -42,7 +56,7 @@ export const caseService = {
       const response = await api.get<string[]>("/proposals");
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar os cases.");
+      handleApiError(error, "Não foi possível buscar as propostas.");
     }
   },
 
@@ -53,7 +67,7 @@ export const caseService = {
       );
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar os cases.");
+      handleApiError(error, "Não foi possível buscar as propostas.");
     }
   },
 
@@ -62,7 +76,7 @@ export const caseService = {
       const response = await api.get<Proposal>("/cases/" + caseId);
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar o case.");
+      handleApiError(error, "Não foi possível buscar a proposta.");
     }
   },
 
@@ -71,26 +85,26 @@ export const caseService = {
       const response = await api.get<Proposal>("/proposal-case/" + caseId);
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar o case.");
+      handleApiError(error, "Não foi possível buscar a proposta.");
     }
   },
 
   async updateCase(caseId: string, data: Partial<Proposal>) {
     try {
       const response = await api.put("/cases/" + caseId, data);
-      notify("success", "Estudo atualizado com sucesso!");
+      notify("success", "Proposta atualizada com sucesso!");
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Erro ao atualizar o case.");
+      handleApiError(error, "Erro ao atualizar a proposta.");
     }
   },
 
   async deleteCase(caseId: string) {
     try {
       await api.delete("/cases/" + caseId);
-      notify("success", "Estudo deletado com sucesso!");
+      notify("success", "Proposta deletada com sucesso!");
     } catch (error: any) {
-      handleApiError(error, "Erro ao deletar o case.");
+      handleApiError(error, "Erro ao deletar a proposta.");
     }
   },
 
@@ -101,7 +115,7 @@ export const caseService = {
       );
       return response.data;
     } catch (error: any) {
-      handleApiError(error, "Não foi possível buscar os cases.");
+      handleApiError(error, "Não foi possível buscar as propostas.");
     }
   },
 };

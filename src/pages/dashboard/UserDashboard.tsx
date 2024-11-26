@@ -11,7 +11,7 @@ import {
   fetchUserDashboardData,
 } from "@/store/dashboard/userDashboardReducer";
 import { Table } from "@mui/joy";
-import { SessionRow } from "../estudos/CaseSessionsModal";
+import { SessionRow } from "../propostas/CaseSessionsModal";
 
 interface UserDashboardProps {
   userId?: string;

@@ -77,7 +77,7 @@ function Layout({ children }: { children: ReactNode }) {
                   <div
                     className={`flex flex-col w-full ${
                       !isCaseMenuRoute &&
-                      !pageContext.urlPathname.includes("/proposta")
+                      !pageContext.urlPathname.includes("/proposta/")
                         ? "ms-64"
                         : ""
                     }`}

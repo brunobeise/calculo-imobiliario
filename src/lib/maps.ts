@@ -25,3 +25,10 @@ export function getCaseTitle(Key: string) {
     "planejamentofinanciamento"
   );
 }
+
+export function getCaseLink(Key?: string) {
+  return (
+    CaseStudyTypeLinkMap[Key as keyof typeof CaseStudyTypeLinkMap] ||
+    "financingPlanning"
+  );
+}

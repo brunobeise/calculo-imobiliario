@@ -26,7 +26,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
   const [casesOpen, setCasesOpen] = useState(false);
 
-  if (!isAuthenticated || pageContext.urlPathname.includes("proposta"))
+  if (!isAuthenticated || pageContext.urlPathname.includes("/proposta/"))
     return null;
 
   return (
@@ -138,10 +138,10 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           </a>
           <ListDivider />
 
-          <a href={"/estudos"} onClick={() => toggleBackdrop(false)}>
+          <a href={"/propostas"} onClick={() => toggleBackdrop(false)}>
             <ListItem
               className={`!ms-5 ${
-                pageContext.urlPathname === "/estudos" ? "!text-primary" : ""
+                pageContext.urlPathname === "/propostas" ? "!text-primary" : ""
               }`}
             >
               <ListItemDecorator>
@@ -149,7 +149,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/estudos" ? "!text-primary" : ""
+                  pageContext.urlPathname === "/propostas" ? "!text-primary" : ""
                 }`}
               >
                 Propostas
