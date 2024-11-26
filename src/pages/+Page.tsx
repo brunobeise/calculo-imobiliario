@@ -23,7 +23,7 @@ export default function App() {
 
   function Welcome() {
     return (
-      <div className="w-full h-full">
+      <div className="w-full h-screen items-center flex flex-col justify-center border">
         <div className="flex items-center mb-10 flex-col">
           <img className="w-[120px]" src={logo} />
           <span className="text-primary">

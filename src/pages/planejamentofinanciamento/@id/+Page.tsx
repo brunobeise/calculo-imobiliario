@@ -9,7 +9,14 @@ import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
-import { FaBook, FaCalculator, FaEdit, FaFile, FaSave } from "react-icons/fa";
+import {
+  FaBook,
+  FaCalculator,
+  FaEdit,
+  FaExternalLinkAlt,
+  FaFile,
+  FaSave,
+} from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
@@ -41,6 +48,7 @@ import { navigate } from "vike/client/router";
 import StatusTag from "@/components/shared/CaseStatusTag";
 import { LuBox } from "react-icons/lu";
 import { getCaseTitle } from "@/lib/maps";
+import { uploadImage } from "@/lib/imgur";
 
 export default function FinancingPlanning(): JSX.Element {
   const pageContext = usePageContext();
@@ -107,13 +115,34 @@ export default function FinancingPlanning(): JSX.Element {
   }, [propertyData]);
 
   const handleSave = async () => {
+    if (!actualCase?.id) return;
     setSaveLoading(true);
 
-    if (!actualCase?.id) return;
+    let uploadMainPhoto = actualCase.mainPhoto;
+
+    if (
+      actualCase.mainPhoto &&
+      !actualCase.mainPhoto.includes("res.cloudinary.com")
+    ) {
+      uploadMainPhoto = await uploadImage(actualCase.mainPhoto);
+    }
+
+    const uploadAdditionalPhotos = await Promise.all(
+      actualCase.additionalPhotos.map(async (photo) => {
+        if (photo && !photo.includes("res.cloudinary.com")) {
+          const uploadedPhoto = await uploadImage(photo);
+          return uploadedPhoto;
+        }
+        return photo;
+      })
+    );
     try {
       await caseService.updateCase(actualCase.id, {
+        ...actualCase,
         propertyData: propertyData,
         subType: actualCase.subType,
+        mainPhoto: uploadMainPhoto,
+        additionalPhotos: uploadAdditionalPhotos,
       });
     } finally {
       setSaveLoading(false);
@@ -138,10 +167,20 @@ export default function FinancingPlanning(): JSX.Element {
       icon: id ? <FaEdit /> : <FaSave />,
       tooltip: id ? "Editar Case" : "Salvar Case",
     },
+
     ...(actualCase
       ? [
           {
-            onClick: handleSave,
+            icon: <FaExternalLinkAlt className="!text-[1.1rem]" />,
+            tooltip: "Acessar link compartilhado",
+            href: "/proposta/" + actualCase?.id,
+          },
+        ]
+      : []),
+    ...(actualCase
+      ? [
+          {
+            onClick: () => handleSave(),
             icon: <FaSave />,
             tooltip: "Salvar Case",
             loading: saveLoading,
@@ -191,6 +230,7 @@ export default function FinancingPlanning(): JSX.Element {
 
       {report && actualCase ? (
         <FinancingPlanningReport
+          onChange={(data) => setActualCase({ ...actualCase, ...data })}
           onClose={() => setReport(false)}
           propertyData={propertyData}
           caseData={caseData}
@@ -303,11 +343,9 @@ export default function FinancingPlanning(): JSX.Element {
               )}
             </div>
           )}
-
-          <FloatingButtonList buttons={buttons} />
         </div>
       )}
-
+      <FloatingButtonList buttons={buttons} />
       <CaseFormModal
         subType={subType}
         actualCase={actualCase}
@@ -389,8 +427,8 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
   actualCase,
   setActualCase,
 }) => (
-  <>
-    <div className={actualCase ? "h-[85px]" : "h-[50px]"}>
+  <div className="bg-whitefull">
+    <div className={actualCase ? "h-[85px] " : "h-[50px]"}>
       <div className="flex justify-center items-center h-full">
         <div className="flex flex-col items-center gap-2">
           {actualCase ? (
@@ -418,7 +456,7 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({
       </div>
     </div>
     <Divider className="!mt-3" />
-  </>
+  </div>
 );
 
 interface RestartButtonProps {
