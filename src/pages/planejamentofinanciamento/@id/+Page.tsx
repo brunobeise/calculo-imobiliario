@@ -165,14 +165,14 @@ export default function FinancingPlanning(): JSX.Element {
         }
       },
       icon: id ? <FaEdit /> : <FaSave />,
-      tooltip: id ? "Editar Case" : "Salvar Case",
+      tooltip: id ? "Editar" : "Salvar",
     },
 
     ...(actualCase
       ? [
           {
             icon: <FaExternalLinkAlt className="!text-[1.1rem]" />,
-            tooltip: "Acessar link compartilhado",
+            tooltip: "Ver online",
             href: "/proposta/" + actualCase?.id,
           },
         ]
@@ -182,7 +182,7 @@ export default function FinancingPlanning(): JSX.Element {
           {
             onClick: () => handleSave(),
             icon: <FaSave />,
-            tooltip: "Salvar Case",
+            tooltip: "Salvar",
             loading: saveLoading,
           },
         ]
@@ -193,7 +193,13 @@ export default function FinancingPlanning(): JSX.Element {
 
   const hideFields =
     subType === "Avançado"
-      ? ["inCashFees", "personalBalance", "rentMonthlyYieldRate"]
+      ? [
+          "inCashFees",
+          "personalBalance",
+          "rentMonthlyYieldRate",
+          "initialFinancingMonth2",
+          "initialDate2",
+        ]
       : [
           "initialRentMonth",
           "initialRentValue",
@@ -205,6 +211,7 @@ export default function FinancingPlanning(): JSX.Element {
           "initialDate",
           "outstandingBalance",
           "installmentValueTax",
+          "initialFinancingMonth",
         ];
 
   const hideSheets = subType === "Avançado" ? [] : ["appreciation"];
@@ -294,7 +301,11 @@ export default function FinancingPlanning(): JSX.Element {
               </List>
             </RadioGroup>
           </div>
-          <PropertyDataCard hideSheets={hideSheets} hideFields={hideFields} />
+          <PropertyDataCard
+            titles={actualCase?.subType === "Simplificado" ? ["Fluxo de pagamento"] : []}
+            hideSheets={hideSheets}
+            hideFields={hideFields}
+          />
           {subType === "Avançado" && (
             <div className="w-full text-center ">
               {errors.length === 0 ? (

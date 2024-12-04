@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Input, FormLabel } from "@mui/joy";
 import MaskInputBRL from "@/components/inputs/masks/MaskInputBRL";
 import InfoTooltip from "../ui/InfoTooltip";
@@ -17,6 +17,7 @@ interface CurrencyInputProps {
   lock?: boolean;
   setLock?: (value: boolean) => void;
   noHeight?: boolean;
+  extraButton?: ReactNode;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -31,6 +32,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   lock,
   setLock,
   noHeight,
+  extraButton,
 }) => {
   return (
     <div className={wrapperClassName}>
@@ -64,6 +66,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
         }}
         required={required}
         readOnly={disabled}
+        endDecorator={extraButton}
       />
     </div>
   );

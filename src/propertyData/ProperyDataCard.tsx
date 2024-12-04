@@ -2,7 +2,15 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { PropertyData, propertyDataContext } from "./PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
-import { FormLabel, Input, Radio, RadioGroup, Sheet, Slider } from "@mui/joy";
+import {
+  FormLabel,
+  Input,
+  Radio,
+  RadioGroup,
+  Sheet,
+  Slider,
+  Tooltip,
+} from "@mui/joy";
 import React from "react";
 import PercentageInput from "@/components/inputs/PercentageInput";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
@@ -12,20 +20,25 @@ import InfoTooltip from "@/components/ui/InfoTooltip";
 import PropertyDataDischargesControl from "./PropertyDataDischargesControl";
 import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
+import { FaCalculator } from "react-icons/fa";
+import InstallmentSimulationModal from "@/components/modals/InstallmentSimulationModal";
 
 interface PropertyDataCardProps {
   hideFields?: string[];
   hideSheets?: string[];
+  titles?: string[];
 }
 
 export default function PropertyDataCard({
   hideFields = [],
   hideSheets = [],
+  titles = [],
 }: PropertyDataCardProps) {
   const { propertyData, setPropertyData } = useContext(propertyDataContext);
 
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
     useState(false);
+  const [installmentSimulator, setInstallmentSimulator] = useState(false);
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -48,26 +61,28 @@ export default function PropertyDataCard({
     }, 0);
   }, [propertyData]);
 
+  const totalDownDischarges = (propertyData?.discharges || []).reduce(
+    (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
+    0
+  );
+
   useEffect(() => {
     if (!propertyData) return;
 
     const installmentValue =
       calcInstallmentValue(
-        propertyData.propertyValue - propertyData.downPayment,
+        propertyData.propertyValue -
+          propertyData.downPayment -
+          totalDownDischarges,
         propertyData.interestRate,
         propertyData.financingYears,
         propertyData.amortizationType
       ) + 150;
 
-    const totalInvestmentDischarges = propertyData.discharges.reduce(
-      (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
-      0
-    );
-
     const outstandingBalance = calcOutstandingBalance(
       propertyData.propertyValue -
         propertyData.downPayment -
-        totalInvestmentDischarges,
+        totalDownDischarges,
       propertyData.interestRate,
       propertyData.financingYears,
       12 * propertyData.finalYear,
@@ -105,6 +120,12 @@ export default function PropertyDataCard({
     return Math.abs(result) < 0.01 ? 0 : result;
   }, [propertyData?.installmentValue]);
 
+  const totalFinanced =
+    (propertyData?.propertyValue || 0) -
+    (propertyData?.downPayment || 0) -
+    (totalDownDischarges || 0) -
+    (propertyData?.subsidy || 0);
+
   if (!propertyData) return null;
 
   const isFieldHidden = (fieldName: string) => {
@@ -126,10 +147,10 @@ export default function PropertyDataCard({
       {!isSheetHidden("propertyData") && (
         <Sheet variant="outlined" color="neutral" className="p-5 w-full">
           <h2 className="text-xl text-center mb-3 font-bold ">
-            Dados do Imóvel e Financiamento
+            {titles[0] || "Dados do Imóvel e Financiamento"}
           </h2>
 
-          <div className="grid grid-cols-1 gap-5 h-[90%]  gap-5">
+          <div className="grid grid-cols-1 gap-5 h-[90%]   gap-5">
             {!isFieldHidden("propertyValue") && (
               <CurrencyInput
                 label="Valor do imóvel:"
@@ -141,31 +162,34 @@ export default function PropertyDataCard({
               />
             )}
 
-            <div className="grid grid-cols-2 gap-5">
-              {!isFieldHidden("initialRentValue") && (
-                <CurrencyInput
-                  label="Valor Inicial do aluguel:"
-                  id="initialRentValue"
-                  value={propertyData.initialRentValue}
-                  onChange={(v) =>
-                    handleChangeNumber("initialRentValue", v.target.value)
-                  }
-                  disabled={propertyData.isHousing}
-                />
-              )}
-              {!isFieldHidden("initialRentMonth") && (
-                <DatePicker
-                  defaultValue={dayjs(
-                    propertyData.initialRentMonth,
-                    "MM/YYYY"
-                  ).format("MM/YYYY")}
-                  label="Início do aluguel"
-                  onChange={(v) => setPropertyData("initialRentMonth", v)}
-                />
-              )}
-            </div>
+            {(!isFieldHidden("initialRentValue") ||
+              !isFieldHidden("initialRentMonth")) && (
+              <div className="grid grid-cols-2 gap-5">
+                {!isFieldHidden("initialRentValue") && (
+                  <CurrencyInput
+                    label="Valor Inicial do aluguel:"
+                    id="initialRentValue"
+                    value={propertyData.initialRentValue}
+                    onChange={(v) =>
+                      handleChangeNumber("initialRentValue", v.target.value)
+                    }
+                    disabled={propertyData.isHousing}
+                  />
+                )}
+                {!isFieldHidden("initialRentMonth") && (
+                  <DatePicker
+                    defaultValue={dayjs(
+                      propertyData.initialRentMonth,
+                      "MM/YYYY"
+                    ).format("MM/YYYY")}
+                    label="Início do aluguel"
+                    onChange={(v) => setPropertyData("initialRentMonth", v)}
+                  />
+                )}
+              </div>
+            )}
 
-            <div className="mb-[-20px]">
+            <div>
               <div className="relative">
                 {!isFieldHidden("downPayment") && (
                   <CurrencyInput
@@ -217,29 +241,31 @@ export default function PropertyDataCard({
               )}
             </div>
 
-            <div className={"grid grid-cols-2 gap-5"}>
-              {!isFieldHidden("subsidy") && (
-                <CurrencyInput
-                  label="Valor do subsídio:"
-                  id="subsidy"
-                  value={propertyData.subsidy}
-                  onChange={(v) =>
-                    handleChangeNumber("subsidy", v.target.value)
-                  }
-                  disabled={propertyData.isHousing}
-                />
-              )}
+            {(!isFieldHidden("subsidy") || !isFieldHidden("ownResource")) && (
+              <div className={"grid grid-cols-2 gap-5"}>
+                {!isFieldHidden("subsidy") && (
+                  <CurrencyInput
+                    label="Valor do subsídio:"
+                    id="subsidy"
+                    value={propertyData.subsidy}
+                    onChange={(v) =>
+                      handleChangeNumber("subsidy", v.target.value)
+                    }
+                    disabled={propertyData.isHousing}
+                  />
+                )}
 
-              {!isFieldHidden("ownResource") && (
-                <CurrencyInput
-                  disabled
-                  label="Total do recurso próprio:"
-                  id="ownResource"
-                  value={totalDischarges + propertyData.downPayment}
-                  onChange={() => {}}
-                />
-              )}
-            </div>
+                {!isFieldHidden("ownResource") && (
+                  <CurrencyInput
+                    disabled
+                    label="Total do recurso próprio:"
+                    id="ownResource"
+                    value={totalDischarges + propertyData.downPayment}
+                    onChange={() => {}}
+                  />
+                )}
+              </div>
+            )}
 
             {!isFieldHidden("dischargesControl") && (
               <PropertyDataDischargesControl
@@ -254,10 +280,10 @@ export default function PropertyDataCard({
       {!isSheetHidden("financingDetails") && (
         <Sheet variant="outlined" color="neutral" className="p-5 w-full">
           <h2 className="text-xl text-center mb-3 font-bold ">
-            Detalhes do Financiamento
+            {titles[1] || "  Detalhes do Financiamento"}
           </h2>
 
-          <div className="grid grid-cols-1 gap-5 h-[90%]  gap-5">
+          <div className="grid grid-cols-1 gap-5 h-[90%]   gap-5">
             {!isFieldHidden("interestRate") && (
               <PercentageInput
                 label="Juros nominal do financiamento:"
@@ -291,14 +317,7 @@ export default function PropertyDataCard({
               </div>
             )}
 
-            <div
-              className={`grid  gap-5 ${
-                !isFieldHidden("installmentValue") &&
-                !isFieldHidden("installmentValueTax")
-                  ? " grid-cols-2"
-                  : ""
-              }`}
-            >
+            <div className={`grid grid-cols-2 gap-5 `}>
               {!isFieldHidden("installmentValue") && (
                 <CurrencyInput
                   lock={
@@ -314,6 +333,35 @@ export default function PropertyDataCard({
                     handleChangeNumber("installmentValue", v.target.value)
                   }
                   infoTooltip="Valor total que será pago mensalmente. O saldo devedor será reduzido com base no valor da parcela calculada pelo sistema, e qualquer valor excedente será automaticamente destinado ao pagamento de taxas."
+                  extraButton={
+                    !isFieldHidden("installmentSimulator") && (
+                      <Tooltip
+                        sx={{ maxWidth: "280px" }}
+                        size="md"
+                        arrow
+                        direction="rtl"
+                        title="Simular valor da parcela"
+                      >
+                        <div>
+                          <FaCalculator
+                            onClick={() => setInstallmentSimulator(true)}
+                            className="cursor-pointer text-grayText"
+                          />
+                        </div>
+                      </Tooltip>
+                    )
+                  }
+                />
+              )}
+
+              {!isFieldHidden("initialFinancingMonth2") && (
+                <DatePicker
+                  defaultValue={dayjs(
+                    propertyData.initialFinancingMonth,
+                    "MM/YYYY"
+                  ).format("MM/YYYY")}
+                  label="Data de inicio das parcelas"
+                  onChange={(v) => setPropertyData("initialFinancingMonth", v)}
                 />
               )}
 
@@ -343,12 +391,7 @@ export default function PropertyDataCard({
                   disabled
                   id="totalFinanced"
                   infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
-                  value={Math.round(
-                    propertyData.propertyValue -
-                      totalDischarges -
-                      propertyData.downPayment -
-                      propertyData.subsidy
-                  )}
+                  value={totalFinanced}
                   onChange={() => {}}
                 />
               )}
@@ -369,16 +412,10 @@ export default function PropertyDataCard({
               )}
             </div>
 
-            <div
-              className={`${
-                !isFieldHidden("inCashFees")
-                  ? "grid grid-cols-2 items-end gap-5"
-                  : ""
-              }`}
-            >
+            <div className={`${"grid grid-cols-2  gap-5"}`}>
               {!isFieldHidden("financingFees") && (
                 <CurrencyInput
-                  label="Taxas do financiamento:"
+                  label="Documentação total:"
                   id="financingFees"
                   value={propertyData.financingFees}
                   onChange={(v) =>
@@ -398,20 +435,20 @@ export default function PropertyDataCard({
                   }
                 />
               )}
-            </div>
 
-            {isFieldHidden("initialDate") && !isFieldHidden("initialDate2") && (
-              <div>
-                <DatePicker
-                  defaultValue={dayjs(
-                    propertyData.initialDate,
-                    "MM/YYYY"
-                  ).format("MM/YYYY")}
-                  label="Data de ínicio do estudo"
-                  onChange={(v) => setPropertyData("initialDate", v)}
-                />
-              </div>
-            )}
+              {!isFieldHidden("financingFeesDate") && (
+                <div>
+                  <DatePicker
+                    defaultValue={dayjs(
+                      propertyData.financingFeesDate,
+                      "MM/YYYY"
+                    ).format("MM/YYYY")}
+                    label="Data do pagamento da documentação"
+                    onChange={(v) => setPropertyData("financingFeesDate", v)}
+                  />
+                </div>
+              )}
+            </div>
 
             <div className="grid grid-cols-2 gap-5">
               {!isFieldHidden("financingYears") && (
@@ -445,7 +482,7 @@ export default function PropertyDataCard({
                     propertyData.initialFinancingMonth,
                     "MM/YYYY"
                   ).format("MM/YYYY")}
-                  label="Data de ínicio das parcelas"
+                  label="Data de início das parcelas"
                   onChange={(v) => setPropertyData("initialFinancingMonth", v)}
                 />
               )}
@@ -460,7 +497,7 @@ export default function PropertyDataCard({
             Valorização e Rentabilidade
           </h2>
 
-          <div className="grid grid-cols-2 gap-5 h-[90%]  gap-5 justify-between pt-8">
+          <div className="grid grid-cols-2 gap-5 h-[90%]  gap-5  pt-8">
             {!isFieldHidden("isHousing") && (
               <BooleanInput
                 id="isHousing"
@@ -618,6 +655,14 @@ export default function PropertyDataCard({
             )}
           </div>
         </Sheet>
+      )}
+
+      {!isFieldHidden("installmentSimulator") && (
+        <InstallmentSimulationModal
+          onClose={() => setInstallmentSimulator(false)}
+          open={installmentSimulator}
+          onSimulate={(v) => setPropertyData("installmentValue", v)}
+        />
       )}
     </form>
   );

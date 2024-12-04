@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import dayjs from "dayjs";
-import { AiOutlineCalendar } from "react-icons/ai";
 import { FormLabel, Input } from "@mui/joy";
+import { FaCalendarAlt } from "react-icons/fa";
 
 interface DatePickerProps {
   onChange: (date: string) => void;
@@ -101,13 +101,17 @@ const DatePicker: React.FC<DatePickerProps> = ({
         <FormLabel htmlFor={id}>{label}</FormLabel>
       </div>
       <div className="flex items-center space-x-2">
-        <Input className="w-full" type="text" value={inputValue} readOnly />
-        <div
-          onClick={toggleModal}
-          className="cursor-pointer hover:text-blackish"
-        >
-          <AiOutlineCalendar size={24} />
-        </div>
+        <Input
+          className="w-full"
+          type="text"
+          value={inputValue}
+          readOnly
+          endDecorator={
+            <div onClick={toggleModal} className="cursor-pointer text-grayText">
+              <FaCalendarAlt />
+            </div>
+          }
+        />
       </div>
 
       {showModal && (

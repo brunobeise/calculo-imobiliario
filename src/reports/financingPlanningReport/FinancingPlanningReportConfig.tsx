@@ -158,7 +158,7 @@ export default function FinancingPlanningReportConfig(
         </div>
         <TextInput
           value={props.data.suites}
-          label="Número de Suítes"
+          label="Número de Quartos"
           onChange={(v) => props.setData({ ...props.data, suites: v })}
         />
         <TextInput

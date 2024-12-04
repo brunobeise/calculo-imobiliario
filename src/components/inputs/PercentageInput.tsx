@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input, FormLabel } from "@mui/joy";
 import InfoTooltip from "../ui/InfoTooltip";
 
 interface PercentageInputProps {
   label: string;
   id?: string;
-  value?: number | string;
+  value?: number;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   min?: number;
   step?: number;
@@ -29,17 +29,26 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   noHeight,
   placeholder,
 }) => {
-  const [inputValue, setInputValue] = useState<string>("");
-  useEffect(() => {
-    setInputValue(
-      value !== undefined ? value.toString().replace(".", ",") : ""
-    );
-  }, [value]);
+  const [inputValue, setInputValue] = useState<string>(
+    value !== undefined ? value.toString() : ""
+  );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value.replace(",", ".");
-    setInputValue(event.target.value);
-    onChange({ ...event, target: { ...event.target, value: newValue } });
+    const newValue = event.target.value;
+
+    // Permite que o usuário apague ou insira valores parcialmente
+    setInputValue(newValue);
+
+    // Apenas dispara onChange se o valor for um número válido
+    const parsedValue = parseFloat(newValue);
+    if (!isNaN(parsedValue)) {
+      onChange({
+        ...event,
+        target: { ...event.target, value: parsedValue.toString() },
+      });
+    } else if (newValue === "") {
+      onChange({ ...event, target: { ...event.target, value: "" } });
+    }
   };
 
   return (
@@ -54,7 +63,7 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
         id={id}
         value={inputValue}
         onChange={handleInputChange}
-        type="text"
+        type="number"
         endDecorator="%"
         slotProps={{
           input: {

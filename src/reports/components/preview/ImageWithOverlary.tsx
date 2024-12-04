@@ -18,7 +18,7 @@ const ImageWithOverlay: React.FC<ImageWithOverlayProps> = ({
       className={`h-[460px] overflow-hidden flex justify-center items-center relative w-full ${className}`}
     >
       <img
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover object-center"
         src={mainPhoto}
         alt="Main Photo"
       />

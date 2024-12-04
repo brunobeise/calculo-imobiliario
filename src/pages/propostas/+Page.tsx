@@ -366,7 +366,7 @@ export default function MyCases() {
       )}
       {!loading && data.length === 0 && (
         <div className="w-full text-center">
-          <span className=" text-gray">nenhum proposta encontrado</span>
+          <span className=" text-gray mt-4">nenhuma proposta encontrada</span>
         </div>
       )}
     </>

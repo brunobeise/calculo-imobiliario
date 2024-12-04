@@ -11,6 +11,8 @@ import {
   Modal,
   ModalDialog,
   Option,
+  Radio,
+  RadioGroup,
   Select,
   Sheet,
   Table,
@@ -22,7 +24,7 @@ import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { useForm, Controller } from "react-hook-form";
 import { toBRL } from "@/lib/formatter";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-import BooleanInput from "@/components/inputs/BooleanInput";
+
 import PercentageInput from "@/components/inputs/PercentageInput";
 import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
@@ -121,8 +123,6 @@ export default function PropertyDataDischargesControl({
     };
 
     const newDischarges: Discharge[] = [];
-
-    console.log(propertyData.finalYear);
 
     const startMonth = dayjs(data.month, "MM/YYYY").diff(
       dayjs(propertyData.initialDate, "MM/YYYY"),
@@ -452,11 +452,23 @@ export default function PropertyDataDischargesControl({
                   name="isDownPayment"
                   control={control}
                   render={({ field }) => (
-                    <BooleanInput
-                      label="Contar como parte da entrada"
-                      checked={field.value}
-                      onChange={field.onChange}
-                    />
+                    <div className="relative">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Modelo de amortização:
+                      </label>
+                      <RadioGroup
+                        name="isDownPayment"
+                        value={field.value}
+                        onChange={(event) =>
+                          field.onChange(event.target.value === "true")
+                        }
+                      >
+                        <div className="flex gap-10">
+                          <Radio value="true" label="Entrada" />
+                          <Radio value="false" label="Reforços" />
+                        </div>
+                      </RadioGroup>
+                    </div>
                   )}
                 />
               </FormControl>

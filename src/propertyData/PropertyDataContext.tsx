@@ -18,6 +18,7 @@ export type PropertyData = {
   initialFinancingMonth: string;
   inCashFees: number;
   financingFees: number;
+  financingFeesDate: string;
   monthlyYieldRate: number;
   rentMonthlyYieldRate: number;
   personalBalance: number;
@@ -34,7 +35,7 @@ export type PropertyData = {
   discharges: Discharge[];
   initialDate: string;
   cdi?: number;
-  amortizationType: "SAC" | "PRICE"
+  amortizationType: "SAC" | "PRICE";
 };
 
 export type PropertyDataContextType = {

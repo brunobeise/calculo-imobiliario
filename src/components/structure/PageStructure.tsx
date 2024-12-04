@@ -22,10 +22,14 @@ export default function PageStructure(props: PageStructureProps) {
         {props.contentHeader}
         {props.contentHeader && <Divider className="!my-5" />}
 
-        <div className="h-fit overflow-y-auto relative">
+        <div
+          className={`h-fit relative min-h-[80%] ${
+            props.loading ? "overflow-y-visible" : "overflow-y-auto"
+          }`}
+        >
           {props.content}
           {props.loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
+            <div className="absolute top-0 left-0 flex items-center justify-center bg-white/80 z-10 w-full h-full">
               <PageLoading />
             </div>
           )}
@@ -40,4 +44,3 @@ export default function PageStructure(props: PageStructureProps) {
     </div>
   );
 }
-
