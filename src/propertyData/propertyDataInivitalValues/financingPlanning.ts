@@ -29,6 +29,7 @@ const data = {
   initialDate: dayjs().format("MM/YYYY"),
   cdi: undefined,
   amortizationType: "PRICE",
+  considerCapitalGainsTax: true,
 } as PropertyData;
 
 export default data;

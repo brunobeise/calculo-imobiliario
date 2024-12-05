@@ -144,6 +144,8 @@ export function calcCapitalGainsTax(
   totalInterestPaid: number,
   propertyData: PropertyData
 ) {
+  if (!propertyData.considerCapitalGainsTax) return 0;
+
   const appreciatedPropertyValue = calcPropertyValuation(
     propertyData.propertyValue,
     propertyData.interestRate,
@@ -286,7 +288,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
     if (!isFinancingFeesInitial && month === financingFeesMonthDiff + 1) {
       investmentExcess += propertyData.financingFees;
       totalRentalShortfall += propertyData.financingFees;
-      initialInvestment += propertyData.financingFees
+      initialInvestment += propertyData.financingFees;
     }
 
     const capitalYield =

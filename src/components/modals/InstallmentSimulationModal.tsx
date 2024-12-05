@@ -22,8 +22,7 @@ import { calcInstallmentValue } from "@/lib/calcs";
 import PercentageInput from "../inputs/PercentageInput";
 
 interface SimulationFormData {
-  propertyValue: number;
-  downPayment: number;
+  totalFinanced: number;
   interestRate: number;
   financingYears: number;
   amortizationType: "PRICE" | "SAC";
@@ -55,25 +54,16 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
     0
   );
 
-  const propertyValue = watch("propertyValue");
-  const downPayment = watch("downPayment");
-  console.log(downPayment);
-
   const interestRate = watch("interestRate");
   const financingYears = watch("financingYears");
   const amortizationType = watch("amortizationType");
+  const totalFinanced = watch("totalFinanced");
 
   useEffect(() => {
-    if (
-      propertyValue &&
-      downPayment !== undefined &&
-      interestRate !== undefined &&
-      financingYears &&
-      amortizationType
-    ) {
+    if (interestRate !== undefined && financingYears && amortizationType) {
       const simulatedValue =
         calcInstallmentValue(
-          propertyValue - downPayment,
+          totalFinanced,
           interestRate,
           financingYears,
           amortizationType
@@ -81,21 +71,22 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
       setInstallmentValue(simulatedValue);
     }
   }, [
-    propertyValue,
-    downPayment,
     interestRate,
     financingYears,
     amortizationType,
     totalDownDischarges,
+    totalFinanced,
   ]);
 
   useEffect(() => {
     if (!propertyData) return;
-    setValue("propertyValue", propertyData.propertyValue || 0);
     setValue(
-      "downPayment",
-      propertyData.downPayment + totalDownDischarges || 0
+      "totalFinanced",
+      propertyData.propertyValue -
+        propertyData.downPayment -
+        totalDownDischarges || 0
     );
+
     setValue("interestRate", propertyData.interestRate || 0);
     setValue("financingYears", propertyData.financingYears || 0);
     setValue("amortizationType", propertyData.amortizationType || "PRICE");
@@ -125,37 +116,22 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
             id="simulate-installment-form"
             className="flex flex-col gap-5 w-full"
           >
-            <FormControl error={!!errors.propertyValue}>
+            <FormControl error={!!errors.totalFinanced}>
               <CurrencyInput
                 noHeight
-                label="Valor do Imóvel"
-                value={propertyValue}
-                id="propertyValue"
+                label="Valor Financiado"
+                id="totalFinanced"
+                value={totalFinanced}
                 onChange={(e) =>
-                  setValue("propertyValue", Number(e.target.value))
+                  setValue("totalFinanced", Number(e.target.value))
                 }
               />
-              {errors.propertyValue && (
-                <FormHelperText>{errors.propertyValue.message}</FormHelperText>
+              {errors.totalFinanced && (
+                <FormHelperText>{errors.totalFinanced.message}</FormHelperText>
               )}
             </FormControl>
 
-            <FormControl error={!!errors.downPayment}>
-              <CurrencyInput
-                noHeight
-                label="Valor da Entrada"
-                id="downPayment"
-                value={downPayment}
-                onChange={(e) =>
-                  setValue("downPayment", Number(e.target.value))
-                }
-              />
-              {errors.downPayment && (
-                <FormHelperText>{errors.downPayment.message}</FormHelperText>
-              )}
-            </FormControl>
-
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-3">
               <FormControl error={!!errors.interestRate}>
                 <PercentageInput
                   noHeight
@@ -203,14 +179,7 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
             </div>
 
             <div className="relative">
-              <Typography
-                component="label"
-                htmlFor="amortizationType"
-                mb={1}
-                className="block text-sm font-medium text-gray-700"
-              >
-                Modelo de amortização:
-              </Typography>
+              <FormLabel className="!mb-2">Modelo de amortização:</FormLabel>
               <RadioGroup
                 name="amortizationType"
                 value={amortizationType}

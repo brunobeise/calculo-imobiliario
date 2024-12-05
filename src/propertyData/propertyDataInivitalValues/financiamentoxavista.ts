@@ -27,6 +27,7 @@ const data = {
   discharges: [],
   initialDate: dayjs().format("MM/YYYY"),
   cdi: undefined,
+  considerCapitalGainsTax: true,
 };
 
 export default data;

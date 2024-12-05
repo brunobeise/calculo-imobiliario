@@ -122,12 +122,14 @@ export default function ProjectionReturn({
                 {toBRL(caseData.finalRow.outstandingBalance)}
               </strong>
             </div>
-            <div className="flex gap-1">
-              <p className="font-medium">Impostos - </p>
-              <strong className="text-red">
-                {toBRL(caseData.capitalGainsTax)}
-              </strong>
-            </div>
+            {propertyData.considerCapitalGainsTax && (
+              <div className="flex gap-1">
+                <p className="font-medium">Impostos - </p>
+                <strong className="text-red">
+                  {toBRL(caseData.capitalGainsTax)}
+                </strong>
+              </div>
+            )}
             <div className="flex gap-1">
               <p className="font-medium">Corretagem - </p>
               <strong className="text-red">

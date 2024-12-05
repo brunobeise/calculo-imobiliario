@@ -517,6 +517,18 @@ export default function PropertyDataCard({
               />
             )}
 
+            {!isFieldHidden("considerCapitalGainsTax") && (
+              <div className="col-span-2">
+                <BooleanInput
+                  id="considerCapitalGainsTax"
+                  checked={propertyData.considerCapitalGainsTax}
+                  onChange={handleChangeBoolean}
+                  label="Calcular imposto de ganho de capital"
+                  infoTooltip="Selecione esta opção para calcular e incluir o imposto sobre o ganho de capital no valor total."
+                />
+              </div>
+            )}
+
             {!isFieldHidden("personalBalance") && (
               <CurrencyInput
                 label="Saldo Disponível:"
