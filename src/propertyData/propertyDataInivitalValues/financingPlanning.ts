@@ -12,7 +12,7 @@ const data = {
   financingYears: 35,
   inCashFees: 0,
   financingFees: 14000,
-  financingFeesDate: dayjs().add(1, "month").format("MM/YYYY"),
+  financingFeesDate: dayjs().format("MM/YYYY"),
   monthlyYieldRate: 0.9,
   rentMonthlyYieldRate: 0.8,
   personalBalance: 0,

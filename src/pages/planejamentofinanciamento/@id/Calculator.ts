@@ -10,9 +10,13 @@ import dayjs from "dayjs";
 
 export function calcCaseData(propertyData: PropertyData) {
   const detailedTable = calcDetailedTable(propertyData);
+
+  const isFinancingFeesInitial =
+    propertyData.financingFeesDate === propertyData.initialDate;
+
   const totalInvestment =
     propertyData.downPayment +
-    propertyData.financingFees +
+    (isFinancingFeesInitial ? propertyData.financingFees : 0) +
     detailedTable.reduce(
       (acc, val) => acc + val.investmentExcessPresentValue,
       0
@@ -33,7 +37,7 @@ export function calcCaseData(propertyData: PropertyData) {
   return {
     totalInvestment:
       propertyData.downPayment +
-      propertyData.financingFees +
+      (isFinancingFeesInitial ? propertyData.financingFees : 0) +
       detailedTable[detailedTable.length - 1].rentalShortfall -
       propertyData.subsidy,
     investedEquity: 0,
@@ -85,6 +89,11 @@ export function calcInvestedEquityPresentValue(
   propertyData: PropertyData,
   detailedTable: FinancingPlanningDetailedTable[]
 ) {
+  const isFinancingFeesInitial = dayjs(
+    propertyData.financingFeesDate,
+    "MM/YYYY"
+  ).isSame(dayjs(propertyData.initialDate, "MM/YYYY"));
+
   const investmentExcessVpSum = detailedTable.reduce(
     (acc, val) => acc + val.investmentExcessPresentValue,
     0
@@ -92,7 +101,7 @@ export function calcInvestedEquityPresentValue(
 
   return (
     propertyData.downPayment +
-    propertyData.financingFees +
+    (isFinancingFeesInitial ? propertyData.financingFees : 0) +
     investmentExcessVpSum
   );
 }
@@ -152,10 +161,17 @@ export function calcDetailedTable(propertyData: PropertyData) {
   const rows: FinancingPlanningDetailedTable[] = [];
 
   let initialCapital = 0;
-  let initialInvestment =
-    propertyData.downPayment +
-    propertyData.financingFees -
-    propertyData.subsidy;
+  let initialInvestment = propertyData.downPayment - propertyData.subsidy; // Inicialmente sem financingFees
+
+  const isFinancingFeesInitial = dayjs(
+    propertyData.financingFeesDate,
+    "MM/YYYY"
+  ).isSame(dayjs(propertyData.initialDate, "MM/YYYY"));
+
+  if (isFinancingFeesInitial) {
+    initialInvestment += propertyData.financingFees; // Adiciona ao investimento inicial, se necessário
+  }
+
   let rentValue = propertyData.initialRentValue;
   let totalRentalShortfall = 0;
 
@@ -192,6 +208,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
     propertyData.financingYears,
     0
   );
+
+  const financingFeesMonthDiff = dayjs(
+    propertyData.financingFeesDate,
+    "MM/YYYY"
+  ).diff(dayjs(propertyData.initialDate, "MM/YYYY"), "month");
 
   for (let month = 1; month <= propertyData.finalYear * 12; month++) {
     const yearIndex = Math.floor(month / 12);
@@ -259,7 +280,14 @@ export function calcDetailedTable(propertyData: PropertyData) {
       initialInvestment += dischargesByMonth[month];
     }
 
-    if(propertyData.amortizationType === "SAC") investmentExcess += installmentTax;
+    if (propertyData.amortizationType === "SAC")
+      investmentExcess += installmentTax;
+
+    if (!isFinancingFeesInitial && month === financingFeesMonthDiff + 1) {
+      investmentExcess += propertyData.financingFees;
+      totalRentalShortfall += propertyData.financingFees;
+      initialInvestment += propertyData.financingFees
+    }
 
     const capitalYield =
       initialCapital >= 0

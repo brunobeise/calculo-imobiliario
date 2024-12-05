@@ -41,6 +41,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     };
 
     const entryDetails = downPaymentDischarges.map((discharge, index) => ({
+      originalDate: dayjs(initialDate, "MM/YYYY").add(discharge.month, "month"),
       date: computeDischargeDate(initialDate, discharge.month),
       partLabel: `${index + 2}ª Parte:`,
       amount: toBRL(discharge.originalValue),
@@ -59,10 +60,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         propertyData.subsidy
     );
 
-    const totalReinforcement = Math.round( reinforcementDischarges.reduce(
-      (sum, d) => sum + d.originalValue,
-      0
-    ))
+    const totalReinforcement = Math.round(
+      reinforcementDischarges.reduce((sum, d) => sum + d.originalValue, 0)
+    );
 
     const totalParts = downPaymentDischarges.length + 1;
 
@@ -117,12 +117,12 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     };
   }, [
     discharges,
-    downPayment,
-    financingFees,
     propertyData.propertyValue,
     propertyData.downPayment,
     propertyData.subsidy,
     initialDate,
+    downPayment,
+    financingFees,
   ]);
 
   return (
@@ -134,7 +134,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         title="Condição de Pagamento"
       />
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 palce-items-center">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         <div className="gap-3 flex flex-col">
           <div className="rounded-3xl p-4 border h-min">
             <h3 style={{ color }} className="text-xl mb-2">
@@ -156,22 +156,33 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                     • 1ª Parte:{" "}
                     <strong style={{ color }}>{toBRL(downPayment)}</strong>
                   </li>
-                  <li className="mt-1">
-                    • Documentação:{" "}
-                    <strong style={{ color }}>{toBRL(financingFees)}</strong>
-                  </li>
+                  {propertyData.financingFeesDate ===
+                    propertyData.initialDate && (
+                    <li className="mt-1">
+                      • Documentação:{" "}
+                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
+                    </li>
+                  )}
                 </ul>
               </li>
               {entryDetails.map((detail, i) => (
                 <li key={i} className="text-sm">
-                  <span>
-                    {i + 2}) {detail.date}
-                  </span>
+                  <span>{`${i + 2}) ${detail.date}`}</span>
                   <ul>
                     <li style={{ color: secondary }}>
                       • {detail.partLabel}{" "}
                       <strong style={{ color }}>{detail.amount}</strong>
                     </li>
+
+                    {propertyData.financingFeesDate ===
+                      dayjs(detail.originalDate).format("MM/YYYY") && (
+                      <li style={{ color: secondary }}>
+                        • Documentação:{" "}
+                        <strong style={{ color }}>
+                          {toBRL(financingFees)}
+                        </strong>
+                      </li>
+                    )}
                   </ul>
                 </li>
               ))}
