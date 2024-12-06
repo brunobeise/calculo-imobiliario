@@ -26,6 +26,7 @@ import CoWorkerSelect from "@/components/inputs/CoWorkerSelect";
 import { useAuth } from "@/auth";
 import { navigate } from "vike/client/router";
 import { RiAdminFill } from "react-icons/ri";
+import StatusFilter from "@/components/shared/StatusFilter";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
@@ -289,6 +290,13 @@ export default function MyCases() {
             />
           </div>
         )}
+      </div>
+
+      <div>
+        <StatusFilter
+          statuses={["Rascunho", "Em Análise", "Enviada", "Aceita", "Recusada"]}
+          onChange={() => console.log()}
+        />
       </div>
 
       <div className="flex items-center text-gray text-md gap-3">
