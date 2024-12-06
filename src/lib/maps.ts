@@ -9,7 +9,7 @@ export const CaseStudyTypeMap = {
 
 export const badgeStatusMap = {
   Rascunho: "default",
-  "Em análise": "warning",
+  "Em Análise": "warning",
   Enviada: "info",
   Aceita: "success",
   Recusada: "danger",

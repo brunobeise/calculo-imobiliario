@@ -72,7 +72,7 @@ const StatusTag = ({
                 <MenuItem onClick={() => handleStatusChange("Rascunho")}>
                   Rascunho
                 </MenuItem>
-                <MenuItem onClick={() => handleStatusChange("Em análise")}>
+                <MenuItem onClick={() => handleStatusChange("Em Análise")}>
                   Em Análise
                 </MenuItem>
                 <MenuItem
