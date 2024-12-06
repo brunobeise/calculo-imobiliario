@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Badge from "./Badge";
 
 type StatusFilterProps = {
-  statuses: string[];
   onChange: (activeStatuses: string[]) => void;
+  value: string[];
 };
 
 const statusToBadgeType: Record<
@@ -17,8 +17,9 @@ const statusToBadgeType: Record<
   Recusada: "danger",
 };
 
-const StatusFilter = ({ statuses, onChange }: StatusFilterProps) => {
-  const [activeStatuses, setActiveStatuses] = useState<string[]>(statuses);
+const StatusFilter = ({ value, onChange }: StatusFilterProps) => {
+  const statuses = ["Rascunho", "Em Análise", "Enviada", "Aceita", "Recusada"];
+  const [activeStatuses, setActiveStatuses] = useState<string[]>(value);
 
   const toggleStatus = (status: string) => {
     const updatedStatuses = activeStatuses.includes(status)

@@ -63,6 +63,11 @@ export default function MyCases() {
     return localStorage.getItem("minDate") || dayjs().format("MM/YYYY");
   });
   const [maxDate, setMaxDate] = useState(dayjs().format("MM/YYYY"));
+  const [statuses, setStatuses] = useState<string[]>(() => {
+    const storedStatuses = localStorage.getItem("statuses");
+    return storedStatuses ? (JSON.parse(storedStatuses) as string[]) : [];
+  });
+
   const [search, setSearch] = useState("");
   const [type, setType] = useState(() => {
     return localStorage.getItem("type") || "financingPlanning";
@@ -95,6 +100,7 @@ export default function MyCases() {
       limit,
       type,
       userId: filterByUser,
+      statuses,
     };
     if (casesContext === "myCases") dispatch(fetchCases(queryParams));
     if (casesContext === "adminCases") dispatch(fetchAdminCases(queryParams));
@@ -112,6 +118,7 @@ export default function MyCases() {
     type,
     casesContext,
     filterByUser,
+    statuses,
   ]);
 
   useEffect(() => {
@@ -123,6 +130,7 @@ export default function MyCases() {
     localStorage.setItem("orderBy", orderBy);
     localStorage.setItem("limit", limit.toString());
     localStorage.setItem("showMode", showMode);
+    localStorage.setItem("statuses", JSON.stringify(statuses));
   }, [
     minDate,
     search,
@@ -132,6 +140,7 @@ export default function MyCases() {
     orderBy,
     limit,
     showMode,
+    statuses,
   ]);
 
   useEffect(() => {
@@ -155,7 +164,7 @@ export default function MyCases() {
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
-    }, [setCasesContextDropdown]);
+    }, []);
 
     return (
       <div
@@ -293,10 +302,7 @@ export default function MyCases() {
       </div>
 
       <div>
-        <StatusFilter
-          statuses={["Rascunho", "Em Análise", "Enviada", "Aceita", "Recusada"]}
-          onChange={() => console.log()}
-        />
+        <StatusFilter value={statuses} onChange={(v) => setStatuses(v)} />
       </div>
 
       <div className="flex items-center text-gray text-md gap-3">
