@@ -4,7 +4,10 @@ import CurrencyInput from "@/components/inputs/CurrencyInput";
 import PercentageInput from "@/components/inputs/PercentageInput";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import dayjs from "dayjs";
-import { FormLabel, Input } from "@mui/joy";
+import { FormLabel, Input, Tooltip } from "@mui/joy";
+import InstallmentSimulationModal from "@/components/modals/InstallmentSimulationModal";
+import { useState } from "react";
+import { FaCalculator } from "react-icons/fa6";
 
 export default function PropertyDataStep4({
   form,
@@ -15,6 +18,8 @@ export default function PropertyDataStep4({
   setForm: (key: string, value: any) => void;
   simplificated?: boolean;
 }) {
+  const [installmentSimulator, setInstallmentSimulator] = useState(false);
+
   return (
     <div className="p-5 !text-blackish">
       <h4 className="font-bold text-center">Detalhes do Financiamento</h4>
@@ -71,6 +76,22 @@ export default function PropertyDataStep4({
             onChange={(v) =>
               setForm("installmentValue", Number(v.target.value))
             }
+            extraButton={
+              <Tooltip
+                sx={{ maxWidth: "280px" }}
+                size="md"
+                arrow
+                direction="rtl"
+                title="Simular valor da parcela"
+              >
+                <div>
+                  <FaCalculator
+                    onClick={() => setInstallmentSimulator(true)}
+                    className="cursor-pointer text-grayText"
+                  />
+                </div>
+              </Tooltip>
+            }
           />
 
           {!simplificated && (
@@ -104,6 +125,11 @@ export default function PropertyDataStep4({
           onChange={() => {}}
         />
       </div>
+      <InstallmentSimulationModal
+        onClose={() => setInstallmentSimulator(false)}
+        open={installmentSimulator}
+        onSimulate={(v) => setForm("installmentValue", v)}
+      />
     </div>
   );
 }

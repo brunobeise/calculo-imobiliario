@@ -144,7 +144,14 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         icon={<LuCircleDollarSign />}
         title="Condição de Pagamento"
       />
-
+      <div className="text-xl mb-6">
+        <span>
+          Valor do imóvel:{" "}
+          <b style={{ color: color }} className="font-bold">
+            {toBRL(propertyData.propertyValue)}
+          </b>
+        </span>
+      </div>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         <div className="gap-3 flex flex-col">
           <div className="rounded-3xl p-4 border h-min">
@@ -155,59 +162,65 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               {toBRL(totalDownPayment)}
             </p>
             <ul className="list-none space-y-3">
-              <li className="text-sm">
-                <span style={{ color: color }}>
-                  1){" "}
-                  {dayjs(initialDate, "MM/YYYY")
-                    .format("MMMM [de] YYYY")
-                    .replace(/^./, (match) => match.toUpperCase())}
-                </span>
-                <ul style={{ color: secondary }} className="ml-1 my-1">
-                  <li>
-                    • 1ª Parte:{" "}
-                    <strong style={{ color }}>{toBRL(downPayment)}</strong>
+              {entryDetails.map((detail, i) => (
+                <li key={i} className="text-sm">
+                  <span>{`${i + 2}) ${detail.date}`}</span>
+                  <ul>
+                    <li style={{ color: secondary }}>
+                      • {detail.partLabel}{" "}
+                      <strong style={{ color }}>{detail.amount}</strong>
+                    </li>
+                    {propertyData.financingFeesDate ===
+                      dayjs(detail.originalDate).format("MM/YYYY") && (
+                      <li style={{ color: secondary }}>
+                        • Documentação:{" "}
+                        <strong style={{ color }}>
+                          {toBRL(financingFees)}
+                        </strong>
+                      </li>
+                    )}
+                  </ul>
+                </li>
+              ))}
+
+              {entryDetails.length === 0 &&
+                propertyData.financingFeesDate === initialDate && (
+                  <li className="text-sm">
+                    <span>
+                      {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                        .format("MMMM [de] YYYY")
+                        .replace(/^./, (match) => match.toUpperCase())}
+                    </span>
+                    <ul>
+                      <li style={{ color: secondary }}>
+                        • Documentação:{" "}
+                        <strong style={{ color }}>
+                          {toBRL(financingFees)}
+                        </strong>
+                      </li>
+                    </ul>
                   </li>
-                  {propertyData.financingFeesDate ===
-                    propertyData.initialDate && (
-                    <li className="mt-1">
+                )}
+
+              {entryDetails.every(
+                (detail) =>
+                  dayjs(detail.originalDate).format("MM/YYYY") !==
+                  propertyData.financingFeesDate
+              ) && (
+                <li className="text-sm">
+                  <span>
+                    {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                      .format("MMMM [de] YYYY")
+                      .replace(/^./, (match) => match.toUpperCase())}
+                  </span>
+                  <ul>
+                    <li style={{ color: secondary }}>
                       • Documentação:{" "}
                       <strong style={{ color }}>{toBRL(financingFees)}</strong>
                     </li>
-                  )}
-                  {entryDetails
-                    .filter((d) => d.description)
-                    .map((detail) => (
-                      <li style={{ color: secondary }}>
-                        • {detail.description}{" "}
-                        <strong style={{ color }}>{detail.amount}</strong>
-                      </li>
-                    ))}
-                </ul>
-              </li>
-              {entryDetails
-                .filter((d) => !d.description)
-                .map((detail, i) => (
-                  <li key={i} className="text-sm">
-                    <span>{`${i + 2}) ${detail.date}`}</span>
-
-                    <ul>
-                      <li style={{ color: secondary }}>
-                        • {detail.partLabel}{" "}
-                        <strong style={{ color }}>{detail.amount}</strong>
-                      </li>
-
-                      {propertyData.financingFeesDate ===
-                        dayjs(detail.originalDate).format("MM/YYYY") && (
-                        <li style={{ color: secondary }}>
-                          • Documentação:{" "}
-                          <strong style={{ color }}>
-                            {toBRL(financingFees)}
-                          </strong>
-                        </li>
-                      )}
-                    </ul>
-                  </li>
-                ))}
+                  </ul>
+                </li>
+              )}
             </ul>
           </div>
           {totalReinforcementParts > 0 && (
