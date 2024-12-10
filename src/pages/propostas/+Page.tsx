@@ -60,33 +60,45 @@ export default function MyCases() {
   const data = useSelector((state: RootState) => state.cases[casesContext]);
 
   const [minDate, setMinDate] = useState(() => {
-    return localStorage.getItem("minDate") || dayjs().format("MM/YYYY");
+    const storedMinDate = localStorage.getItem("minDate");
+    return storedMinDate || dayjs().subtract(1, "year").format("MM/YYYY");
   });
+
   const [maxDate, setMaxDate] = useState(dayjs().format("MM/YYYY"));
+
   const [statuses, setStatuses] = useState<string[]>(() => {
     const storedStatuses = localStorage.getItem("statuses");
-    return storedStatuses ? (JSON.parse(storedStatuses) as string[]) : [];
+    return storedStatuses
+      ? (JSON.parse(storedStatuses) as string[])
+      : ["Enviada", "Aceita", "Rascunho", "Recusada", "Em Análise"];
   });
 
   const [search, setSearch] = useState("");
+
   const [type, setType] = useState(() => {
     return localStorage.getItem("type") || "financingPlanning";
   });
-  const [sortDirection, setSortDirection] = useState(() => {
+
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">(() => {
     return (localStorage.getItem("sortDirection") as "asc" | "desc") || "asc";
   });
+
   const [currentPage, setCurrentPage] = useState(() => {
     return Number(localStorage.getItem("currentPage")) || 1;
   });
+
   const [orderBy, setOrderBy] = useState(() => {
     return localStorage.getItem("orderBy") || "name";
   });
+
   const [limit, setLimit] = useState(() => {
     return Number(localStorage.getItem("limit")) || 10;
   });
+
   const [showMode, setShowMode] = useState<"table" | "cards">(() => {
     return (localStorage.getItem("showMode") as "table" | "cards") || "cards";
   });
+
   const [filterByUser, setFilterByUser] = useState("");
 
   useEffect(() => {
