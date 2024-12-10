@@ -41,29 +41,6 @@ interface FinancingPlanningReportPreviewProps {
   page8Ref?: React.RefObject<HTMLDivElement>;
 }
 
-const sections = [
-  {
-    title: "Pagamento e Retorno Esperado",
-    description:
-      "Detalha as opções de pagamento e apresenta uma estimativa de retorno financeiro.",
-  },
-  {
-    title: "Cálculo do Investimento",
-    description:
-      "Explica o cálculo envolvido na compra e uma venda possível do imóvel.",
-  },
-  {
-    title: "Análise Detalhada",
-    description:
-      "Avaliação detalhada das condições financeiras e viabilidade do investimento.",
-  },
-  {
-    title: "Descrição do Imóvel",
-    description:
-      "Fotos e informações sobre o imóvel, incluindo localização, características e diferenciais.",
-  },
-];
-
 const FinancingPlanningReportPreview = forwardRef<
   HTMLDivElement,
   FinancingPlanningReportPreviewProps
@@ -99,6 +76,33 @@ const FinancingPlanningReportPreview = forwardRef<
     };
 
     const isAdvancedMode = configData.subType === "Avançado";
+
+    const sections = [
+      {
+        title: "Pagamento e Retorno Esperado",
+        description:
+          "Detalha as opções de pagamento e apresenta uma estimativa de retorno financeiro.",
+        active: isPageViewActive(1),
+      },
+      {
+        title: "Cálculo do Investimento",
+        description:
+          "Explica o cálculo envolvido na compra e uma venda possível do imóvel.",
+        active: isPageViewActive(2),
+      },
+      {
+        title: "Análise Detalhada",
+        description:
+          "Avaliação detalhada das condições financeiras e viabilidade do investimento.",
+        active: isPageViewActive(3),
+      },
+      {
+        title: "Descrição do Imóvel",
+        description:
+          "Fotos e informações sobre o imóvel, incluindo localização, características e diferenciais.",
+        active: isPageViewActive(7),
+      },
+    ];
 
     return (
       <div

@@ -3,6 +3,7 @@ import { FiFileText } from "react-icons/fi";
 interface SummaryItem {
   title: string;
   description: string;
+  active: boolean;
 }
 
 interface SummaryProps {
@@ -24,16 +25,18 @@ export default function Summary({ items, color, secondary }: SummaryProps) {
         </p>
       </div>
       <div className="flex flex-col gap-4 px-6">
-        {items.map((item, index) => (
-          <a key={index} href={`#section${index + 2}`}>
-            <button className="w-full border rounded-xl p-2 text-left hover:bg-gray-100 transition-all ps-4">
-              <h3 className="text-xl font-semibold">{item.title}</h3>
-              <p className="mt-1" style={{ color: secondary }}>
-                {item.description}
-              </p>
-            </button>
-          </a>
-        ))}
+        {items
+          .filter((i) => i.active)
+          .map((item, index) => (
+            <a key={index} href={`#section${index + 2}`}>
+              <button className="w-full border rounded-xl p-2 text-left hover:bg-gray-100 transition-all ps-4">
+                <h3 className="text-xl font-semibold">{item.title}</h3>
+                <p className="mt-1" style={{ color: secondary }}>
+                  {item.description}
+                </p>
+              </button>
+            </a>
+          ))}
       </div>
     </div>
   );
