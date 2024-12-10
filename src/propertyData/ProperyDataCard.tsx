@@ -61,28 +61,25 @@ export default function PropertyDataCard({
     }, 0);
   }, [propertyData]);
 
-  const totalDownDischarges = (propertyData?.discharges || []).reduce(
-    (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
-    0
-  );
+  const totalFinanced =
+    (propertyData?.propertyValue || 0) -
+    (propertyData?.downPayment || 0) -
+    (totalDischarges || 0) -
+    (propertyData?.subsidy || 0);
 
   useEffect(() => {
     if (!propertyData) return;
 
     const installmentValue =
       calcInstallmentValue(
-        propertyData.propertyValue -
-          propertyData.downPayment -
-          totalDownDischarges,
+        totalFinanced,
         propertyData.interestRate,
         propertyData.financingYears,
         propertyData.amortizationType
       ) + 150;
 
     const outstandingBalance = calcOutstandingBalance(
-      propertyData.propertyValue -
-        propertyData.downPayment -
-        totalDownDischarges,
+      totalFinanced,
       propertyData.interestRate,
       propertyData.financingYears,
       12 * propertyData.finalYear,
@@ -111,7 +108,7 @@ export default function PropertyDataCard({
     const result =
       propertyData.installmentValue -
       calcInstallmentValue(
-        propertyData.propertyValue - propertyData.downPayment,
+        totalFinanced,
         propertyData.interestRate,
         propertyData.financingYears,
         propertyData.amortizationType
@@ -119,12 +116,6 @@ export default function PropertyDataCard({
 
     return Math.abs(result) < 0.01 ? 0 : result;
   }, [propertyData?.installmentValue]);
-
-  const totalFinanced =
-    (propertyData?.propertyValue || 0) -
-    (propertyData?.downPayment || 0) -
-    (totalDownDischarges || 0) -
-    (propertyData?.subsidy || 0);
 
   if (!propertyData) return null;
 

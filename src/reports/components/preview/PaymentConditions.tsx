@@ -40,7 +40,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         .replace(/^./, (match) => match.toUpperCase());
     };
 
-    const entryDetails = downPaymentDischarges
+    let entryDetails = downPaymentDischarges
       .map((discharge, index) => ({
         originalDate: dayjs(initialDate, "MM/YYYY").add(
           discharge.month,
@@ -52,11 +52,31 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         description: discharge.description,
       }))
       .sort((a, b) => {
-        const dateA = dayjs(a.date, "YYYY-MM-DD");
-        const dateB = dayjs(b.date, "YYYY-MM-DD");
-
-        return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
+        return a.originalDate.isBefore(b.originalDate) ? -1 : 1;
       });
+
+    if (
+      propertyData.financingFeesDate !== propertyData.initialDate &&
+      !entryDetails.some(
+        (detail) =>
+          dayjs(detail.originalDate).format("MM/YYYY") ===
+          propertyData.financingFeesDate
+      )
+    ) {
+      entryDetails.push({
+        originalDate: dayjs(propertyData.financingFeesDate, "MM/YYYY"),
+        date: dayjs(propertyData.financingFeesDate, "MM/YYYY")
+          .format("MMMM [de] YYYY")
+          .replace(/^./, (match) => match.toUpperCase()),
+        partLabel: "Documentação:",
+        amount: toBRL(financingFees),
+        description: "",
+      });
+    }
+
+    entryDetails = entryDetails.sort((a, b) =>
+      a.originalDate.isBefore(b.originalDate) ? -1 : 1
+    );
 
     const totalDownPayment =
       downPayment +
@@ -128,12 +148,14 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     };
   }, [
     discharges,
+    propertyData.financingFeesDate,
+    propertyData.initialDate,
     propertyData.propertyValue,
     propertyData.downPayment,
     propertyData.subsidy,
-    initialDate,
     downPayment,
     financingFees,
+    initialDate,
   ]);
 
   return (
@@ -162,29 +184,75 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               {toBRL(totalDownPayment)}
             </p>
             <ul className="list-none space-y-3">
-              {entryDetails.map((detail, i) => (
-                <li key={i} className="text-sm">
-                  <span>{`${i + 2}) ${detail.date}`}</span>
-                  <ul>
+              <li className="text-sm">
+                <span style={{ color: color }}>
+                  1){" "}
+                  {dayjs(initialDate, "MM/YYYY")
+                    .format("MMMM [de] YYYY")
+                    .replace(/^./, (match) => match.toUpperCase())}
+                </span>
+                <ul style={{ color: secondary }} className="ml-1 my-1">
+                  <li>
+                    • 1ª Parte:{" "}
+                    <strong style={{ color }}>{toBRL(downPayment)}</strong>
+                  </li>
+                  {propertyData.financingFeesDate ===
+                    propertyData.initialDate && (
                     <li style={{ color: secondary }}>
-                      • {detail.partLabel}{" "}
-                      <strong style={{ color }}>{detail.amount}</strong>
+                      • Documentação:{" "}
+                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
                     </li>
-                    {propertyData.financingFeesDate ===
-                      dayjs(detail.originalDate).format("MM/YYYY") && (
-                      <li style={{ color: secondary }}>
-                        • Documentação:{" "}
-                        <strong style={{ color }}>
-                          {toBRL(financingFees)}
-                        </strong>
+                  )}
+                  {entryDetails
+                    .filter((d) => d.description)
+                    .map((detail, i) => (
+                      <li key={i} style={{ color: secondary }}>
+                        • {detail.description}{" "}
+                        <strong style={{ color }}>{detail.amount}</strong>
                       </li>
-                    )}
-                  </ul>
-                </li>
-              ))}
+                    ))}
+                </ul>
+              </li>
 
-              {entryDetails.length === 0 &&
-                propertyData.financingFeesDate === initialDate && (
+              {entryDetails.map((detail, i) => {
+                const isDocumentationDate =
+                  dayjs(detail.originalDate).format("MM/YYYY") ===
+                  propertyData.financingFeesDate;
+
+                const hasDocumentation = entryDetails.some(
+                  (d) => d.partLabel === "Documentação:" && isDocumentationDate
+                );
+
+                if (detail.description) return null;
+
+                return (
+                  <li key={i} className="text-sm">
+                    <span>{`${i + 2}) ${detail.date}`}</span>
+                    <ul>
+                      <li style={{ color: secondary }}>
+                        • {detail.partLabel}{" "}
+                        <strong style={{ color }}>{detail.amount}</strong>
+                      </li>
+
+                      {isDocumentationDate && !hasDocumentation && (
+                        <li style={{ color: secondary }}>
+                          • Documentação:{" "}
+                          <strong style={{ color }}>
+                            {toBRL(financingFees)}
+                          </strong>
+                        </li>
+                      )}
+                    </ul>
+                  </li>
+                );
+              })}
+
+              {propertyData.financingFeesDate !== propertyData.initialDate &&
+                !entryDetails.some(
+                  (detail) =>
+                    dayjs(detail.originalDate).format("MM/YYYY") ===
+                    propertyData.financingFeesDate
+                ) && (
                   <li className="text-sm">
                     <span>
                       {dayjs(propertyData.financingFeesDate, "MM/YYYY")
@@ -201,26 +269,6 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                     </ul>
                   </li>
                 )}
-
-              {entryDetails.every(
-                (detail) =>
-                  dayjs(detail.originalDate).format("MM/YYYY") !==
-                  propertyData.financingFeesDate
-              ) && (
-                <li className="text-sm">
-                  <span>
-                    {dayjs(propertyData.financingFeesDate, "MM/YYYY")
-                      .format("MMMM [de] YYYY")
-                      .replace(/^./, (match) => match.toUpperCase())}
-                  </span>
-                  <ul>
-                    <li style={{ color: secondary }}>
-                      • Documentação:{" "}
-                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
-                    </li>
-                  </ul>
-                </li>
-              )}
             </ul>
           </div>
           {totalReinforcementParts > 0 && (
@@ -341,9 +389,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                 discharge
               ) => {
                 if (
-                  discharge.indexType && // Só considera se houver indexType
-                  discharge.indexValue && // Só considera se houver indexValue
-                  discharge.type.toLowerCase() !== "aporte único" // Ignora "aporte único"
+                  discharge.indexType &&
+                  discharge.indexValue &&
+                  discharge.type.toLowerCase() !== "aporte único"
                 ) {
                   const key = `${discharge.indexType} - ${discharge.indexValue}`;
                   if (!acc[key])
