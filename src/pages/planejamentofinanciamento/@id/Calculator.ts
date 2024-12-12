@@ -163,7 +163,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
   const rows: FinancingPlanningDetailedTable[] = [];
 
   let initialCapital = 0;
-  let initialInvestment = propertyData.downPayment - propertyData.subsidy; // Inicialmente sem financingFees
+  let initialInvestment = propertyData.downPayment - propertyData.subsidy;
 
   const isFinancingFeesInitial = dayjs(
     propertyData.financingFeesDate,
@@ -171,7 +171,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
   ).isSame(dayjs(propertyData.initialDate, "MM/YYYY"));
 
   if (isFinancingFeesInitial) {
-    initialInvestment += propertyData.financingFees; // Adiciona ao investimento inicial, se necessário
+    initialInvestment += propertyData.financingFees;
   }
 
   let rentValue = propertyData.initialRentValue;
@@ -187,7 +187,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
   });
 
   const totalInvestmentDischarges = propertyData.discharges.reduce(
-    (acc, val) => (val.isDownPayment ? val.originalValue + acc : acc),
+    (acc, val) => val.originalValue + acc,
     0
   );
 
