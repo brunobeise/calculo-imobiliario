@@ -69,7 +69,7 @@ export default function ProjectionReturn({
             Lucro Anual
           </p>
           <p style={{ color }} className="text-xl font-bold text-blue-600">
-            {(totalProfitPercent / 7 || 0).toFixed(1)}%
+            {(totalProfitPercent / propertyData.finalYear || 0).toFixed(1)}%
           </p>
         </div>
       </div>
