@@ -115,9 +115,10 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
           <span style={{ color }} className="text-xl font-bold">
             {toBRL(
               propertyData.propertyValue -
-                propertyData?.discharges.reduce((acc, val) => {
-                  return val.isDownPayment ? acc + val.originalValue : acc;
-                }, 0) -
+                propertyData?.discharges.reduce(
+                  (acc, val) => acc + val.originalValue,
+                  0
+                ) -
                 propertyData.downPayment -
                 propertyData.subsidy
             )}
