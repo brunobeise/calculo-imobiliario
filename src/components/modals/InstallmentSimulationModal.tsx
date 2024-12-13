@@ -158,14 +158,14 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
                   {...register("financingMonths", {
                     required: "O prazo é obrigatório",
                     min: { value: 1, message: "Deve ser ao menos 1 ano" },
-                    max: { value: 35, message: "Máximo de 35 anos" },
+                    max: { value: 420, message: "Máximo de 35 anos" },
                   })}
                   type="number"
-                  endDecorator="Anos"
+                  endDecorator="Meses"
                   slotProps={{
                     input: {
                       min: 1,
-                      max: 35,
+                      max: 420,
                       step: 1,
                     },
                   }}
