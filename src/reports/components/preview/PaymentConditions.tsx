@@ -174,7 +174,14 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </b>
         </span>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+      <div
+        style={
+          {
+            "--scroll-thumb-color": color,
+          } as React.CSSProperties
+        }
+        className="grid grid-cols-2 lg:grid-cols-3 gap-3"
+      >
         <div className="gap-3 flex flex-col">
           <div className="rounded-3xl p-4 border h-min">
             <h3 style={{ color }} className="text-xl mb-2">
@@ -183,96 +190,101 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
             <p style={{ color }} className="text-2xl font-bold mb-4">
               {toBRL(totalDownPayment)}
             </p>
-            <ul className="list-none space-y-3">
-              <li className="text-sm">
-                <span style={{ color: color }}>
-                  1){" "}
-                  {dayjs(initialDate, "MM/YYYY")
-                    .format("MMMM [de] YYYY")
-                    .replace(/^./, (match) => match.toUpperCase())}
-                </span>
-                <ul style={{ color: secondary }} className="ml-1 my-1">
-                  <li>
-                    • 1ª Parte:{" "}
-                    <strong style={{ color }}>{toBRL(downPayment)}</strong>
-                  </li>
-                  {propertyData.financingFeesDate ===
-                    propertyData.initialDate && (
-                    <li style={{ color: secondary }}>
-                      • Documentação:{" "}
-                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
+            <div className="max-h-[400px] overflow-y-auto scrollbar ">
+              <ul className="list-none space-y-3 ">
+                <li className="text-sm">
+                  <span style={{ color: color }}>
+                    1){" "}
+                    {dayjs(initialDate, "MM/YYYY")
+                      .format("MMMM [de] YYYY")
+                      .replace(/^./, (match) => match.toUpperCase())}
+                  </span>
+                  <ul style={{ color: secondary }} className="ml-1 my-1">
+                    <li>
+                      • 1ª Parte:{" "}
+                      <strong style={{ color }}>{toBRL(downPayment)}</strong>
                     </li>
-                  )}
-                  {entryDetails
-                    .filter((d) => d.description)
-                    .map((detail, i) => (
-                      <li key={i} style={{ color: secondary }}>
-                        • {detail.description}{" "}
-                        <strong style={{ color }}>{detail.amount}</strong>
-                      </li>
-                    ))}
-                </ul>
-              </li>
-
-              {entryDetails.map((detail, i) => {
-                const isDocumentationDate =
-                  dayjs(detail.originalDate).format("MM/YYYY") ===
-                  propertyData.financingFeesDate;
-
-                const hasDocumentation = entryDetails.some(
-                  (d) => d.partLabel === "Documentação:" && isDocumentationDate
-                );
-
-                if (detail.description) return null;
-
-                return (
-                  <li key={i} className="text-sm">
-                    <span>{`${i + 2}) ${detail.date}`}</span>
-                    <ul>
-                      <li style={{ color: secondary }}>
-                        • {detail.partLabel}{" "}
-                        <strong style={{ color }}>{detail.amount}</strong>
-                      </li>
-
-                      {isDocumentationDate && !hasDocumentation && (
-                        <li style={{ color: secondary }}>
-                          • Documentação:{" "}
-                          <strong style={{ color }}>
-                            {toBRL(financingFees)}
-                          </strong>
-                        </li>
-                      )}
-                    </ul>
-                  </li>
-                );
-              })}
-
-              {propertyData.financingFeesDate !== propertyData.initialDate &&
-                !entryDetails.some(
-                  (detail) =>
-                    dayjs(detail.originalDate).format("MM/YYYY") ===
-                    propertyData.financingFeesDate
-                ) && (
-                  <li className="text-sm">
-                    <span>
-                      {dayjs(propertyData.financingFeesDate, "MM/YYYY")
-                        .format("MMMM [de] YYYY")
-                        .replace(/^./, (match) => match.toUpperCase())}
-                    </span>
-                    <ul>
+                    {propertyData.financingFeesDate ===
+                      propertyData.initialDate && (
                       <li style={{ color: secondary }}>
                         • Documentação:{" "}
                         <strong style={{ color }}>
                           {toBRL(financingFees)}
                         </strong>
                       </li>
-                    </ul>
-                  </li>
-                )}
-            </ul>
+                    )}
+                    {entryDetails
+                      .filter((d) => d.description)
+                      .map((detail, i) => (
+                        <li key={i} style={{ color: secondary }}>
+                          • {detail.description}{" "}
+                          <strong style={{ color }}>{detail.amount}</strong>
+                        </li>
+                      ))}
+                  </ul>
+                </li>
+
+                {entryDetails.map((detail, i) => {
+                  const isDocumentationDate =
+                    dayjs(detail.originalDate).format("MM/YYYY") ===
+                    propertyData.financingFeesDate;
+
+                  const hasDocumentation = entryDetails.some(
+                    (d) =>
+                      d.partLabel === "Documentação:" && isDocumentationDate
+                  );
+
+                  if (detail.description) return null;
+
+                  return (
+                    <li key={i} className="text-sm">
+                      <span>{`${i + 2}) ${detail.date}`}</span>
+                      <ul>
+                        <li style={{ color: secondary }}>
+                          • {detail.partLabel}{" "}
+                          <strong style={{ color }}>{detail.amount}</strong>
+                        </li>
+
+                        {isDocumentationDate && !hasDocumentation && (
+                          <li style={{ color: secondary }}>
+                            • Documentação:{" "}
+                            <strong style={{ color }}>
+                              {toBRL(financingFees)}
+                            </strong>
+                          </li>
+                        )}
+                      </ul>
+                    </li>
+                  );
+                })}
+
+                {propertyData.financingFeesDate !== propertyData.initialDate &&
+                  !entryDetails.some(
+                    (detail) =>
+                      dayjs(detail.originalDate).format("MM/YYYY") ===
+                      propertyData.financingFeesDate
+                  ) && (
+                    <li className="text-sm">
+                      <span>
+                        {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                          .format("MMMM [de] YYYY")
+                          .replace(/^./, (match) => match.toUpperCase())}
+                      </span>
+                      <ul>
+                        <li style={{ color: secondary }}>
+                          • Documentação:{" "}
+                          <strong style={{ color }}>
+                            {toBRL(financingFees)}
+                          </strong>
+                        </li>
+                      </ul>
+                    </li>
+                  )}
+              </ul>
+            </div>
           </div>
           {totalReinforcementParts > 0 && (
-            <div className="rounded-3xl p-4 border h-min lg:invisible">
+            <div className="rounded-3xl p-4 border h-min lg:hidden">
               <h3 style={{ color }} className="text-xl mb-2">
                 Financiamento
               </h3>

@@ -9,7 +9,7 @@ const data = {
   initialRentValue: 2200,
   initialRentMonth: dayjs().add(1, "month").format("MM/YYYY"),
   initialFinancingMonth: dayjs().add(1, "month").format("MM/YYYY"),
-  financingYears: 35,
+  financingMonths: 420,
   inCashFees: 0,
   financingFees: 14000,
   financingFeesDate: dayjs().format("MM/YYYY"),

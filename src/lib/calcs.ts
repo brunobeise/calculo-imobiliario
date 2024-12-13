@@ -19,21 +19,20 @@ export function calcPropertyValuation(
 export function calcInstallmentValue(
   financedAmount: number,
   annualInterestRate: number,
-  financingYears: number,
+  financingMonths: number,
   amortizationType: string = "PRICE"
 ) {
   const monthlyRate = annualInterestRate / 100 / 12;
-  const totalMonths = financingYears * 12;
 
   if (amortizationType === "SAC") {
-    const fixedAmortization = financedAmount / totalMonths;
+    const fixedAmortization = financedAmount / financingMonths;
     const firstInstallment = fixedAmortization + financedAmount * monthlyRate;
     return firstInstallment;
   } else {
     return (
       (financedAmount *
-        (monthlyRate * Math.pow(1 + monthlyRate, totalMonths))) /
-        (Math.pow(1 + monthlyRate, totalMonths) - 1)
+        (monthlyRate * Math.pow(1 + monthlyRate, financingMonths))) /
+      (Math.pow(1 + monthlyRate, financingMonths) - 1)
     );
   }
 }
@@ -41,23 +40,22 @@ export function calcInstallmentValue(
 export function calcOutstandingBalance(
   financedAmount: number,
   annualInterestRate: number,
-  totalFinancingYears: number,
+  totalFinancingMonths: number,
   paymentsMade: number,
   amortizationType: string = "PRICE"
 ): number {
   const monthlyRate = annualInterestRate / 100 / 12;
-  const totalInstallments = totalFinancingYears * 12;
 
   if (amortizationType === "SAC") {
-    const fixedAmortization = financedAmount / totalInstallments;
+    const fixedAmortization = financedAmount / totalFinancingMonths;
     const remainingBalance = financedAmount - fixedAmortization * paymentsMade;
     return remainingBalance > 0 ? remainingBalance : 0;
   } else {
     let outstandingBalance =
       financedAmount *
-      ((Math.pow(1 + monthlyRate, totalInstallments) -
+      ((Math.pow(1 + monthlyRate, totalFinancingMonths) -
         Math.pow(1 + monthlyRate, paymentsMade)) /
-        (Math.pow(1 + monthlyRate, totalInstallments) - 1));
+        (Math.pow(1 + monthlyRate, totalFinancingMonths) - 1));
 
     if (outstandingBalance < 0) {
       outstandingBalance = 0;
@@ -70,24 +68,24 @@ export function calcOutstandingBalance(
 export function calcTotalInterestPaid(
   loanAmount: number,
   interestRate: number,
-  totalYearsOfLoan: number,
+  financingMonths: number,
   installmentValue: number,
   paymentsMade: number
 ) {
   const monthlyInterestRate = interestRate / 100 / 12;
-  const totalPayments = totalYearsOfLoan * 12;
+
 
   const balanceBeforePayment =
     loanAmount *
-    ((Math.pow(1 + monthlyInterestRate, totalPayments) -
+    ((Math.pow(1 + monthlyInterestRate, financingMonths) -
       Math.pow(1 + monthlyInterestRate, paymentsMade - 1)) /
-      (Math.pow(1 + monthlyInterestRate, totalPayments) - 1));
+      (Math.pow(1 + monthlyInterestRate, financingMonths) - 1));
 
   const balanceAfterPayment =
     loanAmount *
-    ((Math.pow(1 + monthlyInterestRate, totalPayments) -
+    ((Math.pow(1 + monthlyInterestRate, financingMonths) -
       Math.pow(1 + monthlyInterestRate, paymentsMade)) /
-      (Math.pow(1 + monthlyInterestRate, totalPayments) - 1));
+      (Math.pow(1 + monthlyInterestRate, financingMonths) - 1));
 
   const principalPaid =
     installmentValue - (balanceBeforePayment - balanceAfterPayment);

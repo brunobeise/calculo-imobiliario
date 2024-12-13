@@ -48,7 +48,7 @@ export default function ConsideredData(props: ConsideredDataProps) {
           <p>Valor da entrada: {toBRL(propertyData.downPayment)}</p>
           <p>Taxas do financiamento: {toBRL(propertyData.financingFees)}</p>
           <p>Juros do financiamento: {propertyData.interestRate.toFixed(2)}%</p>
-          <p>Tempo do financiamento: {propertyData.financingYears} anos</p>
+          <p>Tempo do financiamento: {propertyData.financingMonths} meses</p>
           <p>Valor da Parcela: {toBRL(propertyData.installmentValue)}</p>
           <p>
             Saldo devedor em {propertyData.finalYear} anos:{" "}

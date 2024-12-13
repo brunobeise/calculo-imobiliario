@@ -24,7 +24,7 @@ import PercentageInput from "../inputs/PercentageInput";
 interface SimulationFormData {
   totalFinanced: number;
   interestRate: number;
-  financingYears: number;
+  financingMonths: number;
   amortizationType: "PRICE" | "SAC";
 }
 
@@ -55,24 +55,24 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
   );
 
   const interestRate = watch("interestRate");
-  const financingYears = watch("financingYears");
+  const financingMonths = watch("financingMonths");
   const amortizationType = watch("amortizationType");
   const totalFinanced = watch("totalFinanced");
 
   useEffect(() => {
-    if (interestRate !== undefined && financingYears && amortizationType) {
+    if (interestRate !== undefined && financingMonths && amortizationType) {
       const simulatedValue =
         calcInstallmentValue(
           totalFinanced,
           interestRate,
-          financingYears,
+          financingMonths,
           amortizationType
         ) + 150;
       setInstallmentValue(simulatedValue);
     }
   }, [
     interestRate,
-    financingYears,
+    financingMonths,
     amortizationType,
     totalDownDischarges,
     totalFinanced,
@@ -88,7 +88,7 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
     );
 
     setValue("interestRate", propertyData.interestRate || 0);
-    setValue("financingYears", propertyData.financingYears || 0);
+    setValue("financingMonths", propertyData.financingMonths || 0);
     setValue("amortizationType", propertyData.amortizationType || "PRICE");
   }, [propertyData, setValue, totalDownDischarges]);
 
@@ -148,14 +148,14 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
                 )}
               </FormControl>
 
-              <FormControl error={!!errors.financingYears}>
-                <FormLabel htmlFor="financingYears">
+              <FormControl error={!!errors.financingMonths}>
+                <FormLabel htmlFor="financingMonths">
                   Tempo do financiamento:
                 </FormLabel>
                 <Input
-                  id="financingYears"
-                  value={financingYears}
-                  {...register("financingYears", {
+                  id="financingMonths"
+                  value={financingMonths}
+                  {...register("financingMonths", {
                     required: "O prazo é obrigatório",
                     min: { value: 1, message: "Deve ser ao menos 1 ano" },
                     max: { value: 35, message: "Máximo de 35 anos" },
@@ -170,9 +170,9 @@ const InstallmentSimulationModal: React.FC<InstallmentSimulationModalProps> = ({
                     },
                   }}
                 />
-                {errors.financingYears && (
+                {errors.financingMonths && (
                   <FormHelperText>
-                    {errors.financingYears.message}
+                    {errors.financingMonths.message}
                   </FormHelperText>
                 )}
               </FormControl>

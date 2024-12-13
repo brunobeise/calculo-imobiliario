@@ -159,7 +159,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
             </SvgIcon>
           </div>
           <span style={{ color }} className="text-xl font-bold">
-            {propertyData.financingYears} anos
+            {propertyData.financingMonths} meses
           </span>
           <span style={{ color: secondary }} className="mt-[-5px]">
             financiamento

@@ -44,22 +44,22 @@ export default function PropertyDataStep4({
               onChange={(v) => setForm("interestRate", Number(v.target.value))}
             />
             <div>
-              <FormLabel className="h-[40px]" htmlFor="financingYears">
+              <FormLabel className="h-[40px]" htmlFor="financingMonths">
                 Tempo do financiamento:
               </FormLabel>
               <Input
-                id="financingYears"
-                value={form.financingYears !== 0 ? form.financingYears : ""}
+                id="financingMonths"
+                value={form.financingMonths !== 0 ? form.financingMonths : ""}
                 onChange={(v) => {
                   const value = Number(v.target.value);
-                  setForm("financingYears", value);
+                  setForm("financingMonths", value);
                 }}
                 type="number"
-                endDecorator="Anos"
+                endDecorator="Meses"
                 slotProps={{
                   input: {
                     min: 1,
-                    max: 35,
+                    max: 420,
                     step: 1,
                   },
                 }}

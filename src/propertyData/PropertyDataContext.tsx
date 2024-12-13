@@ -23,7 +23,7 @@ export type PropertyData = {
   rentMonthlyYieldRate: number;
   personalBalance: number;
   finalYear: number;
-  financingYears: number;
+  financingMonths: number;
   propertyAppreciationRate: number;
   rentAppreciationRate: number;
   outstandingBalance: number;

@@ -4,7 +4,7 @@ import {
   PropertyData,
   propertyDataContext,
 } from "@/propertyData/PropertyDataContext";
-import ErrorAlert, { propertyDataError } from "@/components/errorAlert";
+
 import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
@@ -56,7 +56,6 @@ export default function FinancingPlanning(): JSX.Element {
 
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
-  const [errors, setErrors] = useState<propertyDataError[]>([]);
   const [report, setReport] = useState<boolean>(false);
   const { caseData, setCaseData } = useContext(caseDataContext);
   const [newCase, setNewCase] = useState<boolean>(!id);
@@ -97,21 +96,7 @@ export default function FinancingPlanning(): JSX.Element {
 
   useEffect(() => {
     if (!propertyData) return;
-
-    const newErrors: propertyDataError[] = [];
-
-    if (propertyData.finalYear > 35 || propertyData.financingYears > 35) {
-      newErrors.push({
-        title: "Ano final ou tempo de financiamento inválido.",
-        message: "Prazo do financiamento é de no máximo 35 anos",
-      });
-    }
-
     setCaseData(calcCaseData(propertyData));
-
-    if (JSON.stringify(errors) !== JSON.stringify(newErrors)) {
-      setErrors(newErrors);
-    }
   }, [propertyData]);
 
   const handleSave = async () => {
@@ -165,7 +150,7 @@ export default function FinancingPlanning(): JSX.Element {
         }
       },
       icon: id ? <FaEdit /> : <FaSave />,
-      tooltip: id ? "Editar" : "Salvar",
+      tooltip: id ? "Editar" : "Salvar", 
     },
 
     ...(actualCase
@@ -205,7 +190,7 @@ export default function FinancingPlanning(): JSX.Element {
           "initialRentValue",
           "interestRate",
           "inCashFees",
-          "financingYears",
+          "financingMonths",
           "ownResource",
           "subsidy",
           "initialDate",
@@ -302,56 +287,41 @@ export default function FinancingPlanning(): JSX.Element {
             </RadioGroup>
           </div>
           <PropertyDataCard
-            titles={actualCase?.subType === "Simplificado" ? ["Fluxo de pagamento"] : []}
+            titles={
+              actualCase?.subType === "Simplificado"
+                ? ["Fluxo de pagamento"]
+                : []
+            }
             hideSheets={hideSheets}
             hideFields={hideFields}
           />
           {subType === "Avançado" && (
             <div className="w-full text-center ">
-              {errors.length === 0 ? (
-                <div className="grid grid-cols-12 gap-3 justify-center mt-5 mb-5 px-5">
-                  <Conclusion caseData={caseData} />
+              <div className="grid grid-cols-12 gap-3 justify-center mt-5 mb-5 px-5">
+                <Conclusion caseData={caseData} />
 
-                  <TableRentAppreciation
-                    data={caseData.detailedTable.map((i) => i.rentValue)}
-                    maxHeight={300}
-                    border
-                    text="left"
-                    annualCollection={true}
-                    title={true}
-                    colspan={12}
-                  />
-                  <TablePropertyAppreciation
-                    data={caseData.detailedTable.map((i) => i.propertyValue)}
-                    propertyValue={propertyData.propertyValue}
-                    totalValorization
-                    maxHeight={300}
-                    border
-                    text="left"
-                    annualCollection={true}
-                    title={true}
-                    colspan={12}
-                  />
-                  <DetailedTable detailedTable={caseData.detailedTable} />
-                </div>
-              ) : (
-                <div
-                  className={
-                    "grid place-items-center gap-2 mt-5 lg:px-32" +
-                    (errors.length % 2 === 0
-                      ? " md:grid-cols-2"
-                      : " grid-cols-1")
-                  }
-                >
-                  {errors.map((e, index) => (
-                    <ErrorAlert
-                      key={index}
-                      message={e.message}
-                      title={e.title}
-                    />
-                  ))}
-                </div>
-              )}
+                <TableRentAppreciation
+                  data={caseData.detailedTable.map((i) => i.rentValue)}
+                  maxHeight={300}
+                  border
+                  text="left"
+                  annualCollection={true}
+                  title={true}
+                  colspan={12}
+                />
+                <TablePropertyAppreciation
+                  data={caseData.detailedTable.map((i) => i.propertyValue)}
+                  propertyValue={propertyData.propertyValue}
+                  totalValorization
+                  maxHeight={300}
+                  border
+                  text="left"
+                  annualCollection={true}
+                  title={true}
+                  colspan={12}
+                />
+                <DetailedTable detailedTable={caseData.detailedTable} />
+              </div>
             </div>
           )}
         </div>

@@ -191,7 +191,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
     0
   );
 
-  const totalMonths = propertyData.financingYears * 12;
+  const totalMonths = propertyData.financingMonths
   const amortizationFixed =
     propertyData.amortizationType === "SAC"
       ? (propertyData.propertyValue -
@@ -207,7 +207,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
       totalInvestmentDischarges -
       propertyData.subsidy,
     propertyData.interestRate,
-    propertyData.financingYears,
+    propertyData.financingMonths,
     0
   );
 
@@ -251,7 +251,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
             totalInvestmentDischarges -
             propertyData.subsidy,
           propertyData.interestRate,
-          propertyData.financingYears,
+          propertyData.financingMonths,
           month
         );
       } else if (propertyData.amortizationType === "SAC") {
@@ -307,7 +307,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
         ? calcTotalInterestPaid(
             propertyData.propertyValue - propertyData.downPayment,
             propertyData.interestRate,
-            propertyData.financingYears,
+            propertyData.financingMonths,
             propertyData.installmentValue,
             month
           )

@@ -74,14 +74,14 @@ export default function PropertyDataCard({
       calcInstallmentValue(
         totalFinanced,
         propertyData.interestRate,
-        propertyData.financingYears,
+        propertyData.financingMonths,
         propertyData.amortizationType
       ) + 150;
 
     const outstandingBalance = calcOutstandingBalance(
       totalFinanced,
       propertyData.interestRate,
-      propertyData.financingYears,
+      propertyData.financingMonths,
       12 * propertyData.finalYear,
       propertyData.amortizationType
     );
@@ -97,7 +97,7 @@ export default function PropertyDataCard({
     propertyData?.downPayment,
     propertyData?.interestRate,
     propertyData?.propertyAppreciationRate,
-    propertyData?.financingYears,
+    propertyData?.financingMonths,
     propertyData?.discharges,
     propertyData?.amortizationType,
     installmentValueCalculatorLock,
@@ -110,7 +110,7 @@ export default function PropertyDataCard({
       calcInstallmentValue(
         totalFinanced,
         propertyData.interestRate,
-        propertyData.financingYears,
+        propertyData.financingMonths,
         propertyData.amortizationType
       );
 
@@ -442,24 +442,24 @@ export default function PropertyDataCard({
             </div>
 
             <div className="grid grid-cols-2 gap-5">
-              {!isFieldHidden("financingYears") && (
+              {!isFieldHidden("financingMonths") && (
                 <div>
-                  <FormLabel className="h-[40px]" htmlFor="financingYears">
+                  <FormLabel className="h-[40px]" htmlFor="financingMonths">
                     Tempo do financiamento:
                   </FormLabel>
                   <Input
-                    id="financingYears"
-                    value={propertyData.financingYears}
+                    id="financingMonths"
+                    value={propertyData.financingMonths}
                     onChange={(v) => {
                       const value = Number(v.target.value);
-                      if (value > 0) setPropertyData("financingYears", value);
+                      if (value > 0) setPropertyData("financingMonths", value);
                     }}
                     type="number"
-                    endDecorator="Anos"
+                    endDecorator="Meses"
                     slotProps={{
                       input: {
                         min: 1,
-                        max: 35,
+                        max: 420,
                         step: 1,
                       },
                     }}

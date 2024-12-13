@@ -75,7 +75,7 @@ export default function PropertyDataNewCaseForm({
         (activeStep === 3 && !form.interestRate) ||
         (activeStep === 3 && !form.installmentValue) ||
         (activeStep === 3 && !form.financingFees) ||
-        (activeStep === 3 && !form.financingYears) ||
+        (activeStep === 3 && !form.financingMonths) ||
         (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
         (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
         (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
