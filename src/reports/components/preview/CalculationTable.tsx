@@ -1,12 +1,10 @@
 import { toBRL } from "@/lib/formatter";
 import SectionTitle from "./SectionTitle";
 import { GrLineChart } from "react-icons/gr";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 interface CalculationTableProps {
-  propertyData: {
-    propertyAppreciationRate: number;
-    rentMonthlyYieldRate: number;
-  };
+  propertyData: PropertyData;
   caseData: {
     detailedTable: {
       propertyValue: number;
@@ -38,8 +36,14 @@ const CalculationTable = ({
       >
         <thead>
           <tr>
-            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left"></th>
-            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left">
+            <th
+              style={{ borderColor: secondary }}
+              className="px-4 py-3 border-r border-b text-left"
+            ></th>
+            <th
+              style={{ borderColor: secondary }}
+              className="px-4 py-3 border-r border-b text-left"
+            >
               <div className="flex flex-col">
                 <strong>Valorização Imóvel</strong>
                 <span className="text-sm font-normal">
@@ -47,15 +51,21 @@ const CalculationTable = ({
                 </span>
               </div>
             </th>
-            <th style={{borderColor: secondary}} className="px-4 py-3 border-r border-b text-left">
+            <th
+              style={{ borderColor: secondary }}
+              className="px-4 py-3 border-r border-b text-left"
+            >
               <div className="flex flex-col">
                 <strong>Projeção Aluguel</strong>
                 <span className="text-sm font-normal">
-                  {propertyData.rentMonthlyYieldRate * 10}%
+                  {propertyData.rentAppreciationRate * 10}%
                 </span>
               </div>
             </th>
-            <th style={{borderColor: secondary}} className="px-4 py-3 border-b text-left">
+            <th
+              style={{ borderColor: secondary }}
+              className="px-4 py-3 border-b text-left"
+            >
               <div className="flex flex-col">
                 <strong>Diferença</strong>
                 <span className="text-sm font-normal">aluguel - parcela</span>
@@ -74,16 +84,25 @@ const CalculationTable = ({
                   >
                     Ano {(i - 1) / 12 + 1}
                   </td>
-                  <td   style={{ color, borderColor: secondary }}  className="px-4 py-3 border-r border-t">
+                  <td
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-3 border-r border-t"
+                  >
                     {toBRL(
                       item.propertyValue *
                         (1 + propertyData.propertyAppreciationRate / 100)
                     )}
                   </td>
-                  <td   style={{ color, borderColor: secondary }} className="px-4 py-3 border-r border-t">
+                  <td
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-3 border-r border-t"
+                  >
                     {toBRL(item.rentValue)}
                   </td>
-                  <td   style={{ color, borderColor: secondary }} className="px-4 py-3 border-t">
+                  <td
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-3 border-t"
+                  >
                     {toBRL(item.rentalAmount)}
                   </td>
                 </tr>
