@@ -376,7 +376,7 @@ export default function PropertyDataDischargesControl({
                 />
                 {errors.dischargeType && (
                   <FormHelperText>
-                    {errors.dischargeType.message}
+                    {errors.dischargeType.message.toString()}
                   </FormHelperText>
                 )}
               </FormControl>
@@ -553,7 +553,7 @@ export default function PropertyDataDischargesControl({
                     />
                     {errors.indexType && (
                       <FormHelperText>
-                        {errors.indexType.message}
+                        {errors.indexType.message.toString()}
                       </FormHelperText>
                     )}
                   </FormControl>

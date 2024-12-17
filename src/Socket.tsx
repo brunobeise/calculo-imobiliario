@@ -3,7 +3,6 @@ import { io, Socket } from "socket.io-client";
 import { useAuth } from "./auth";
 import { toast } from "react-toastify";
 
-// Tipo para o contexto WebSocket
 interface WebSocketContextType {
   socket: Socket | null;
 }
@@ -12,7 +11,6 @@ const WebSocketContext = createContext<WebSocketContextType | undefined>(
   undefined
 );
 
-// Provedor do WebSocket
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -20,14 +18,12 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const auth = useAuth();
 
   useEffect(() => {
-    // Verifica se o usuário está autenticado antes de conectar
     if (!auth.isAuthenticated) {
-      console.warn("User ID not available, skipping WebSocket connection.");
       return;
     }
-    // Inicializa a conexão WebSocket
+
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
-      query: { userId: auth.user.id }, // Passa o ID do usuário
+      query: { userId: auth.user.id },
       transports: ["websocket"],
     });
 
@@ -43,9 +39,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     });
 
     setSocket(newSocket);
-
-    // Limpeza ao desmontar
-  }, [auth.isAuthenticated, auth.user.id]); // Atualiza somente se o ID do usuário mudar
+  }, [auth.isAuthenticated, auth.user.id]);
 
   return (
     <WebSocketContext.Provider value={{ socket }}>

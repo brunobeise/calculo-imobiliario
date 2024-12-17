@@ -39,7 +39,7 @@ const CaseTableRow = ({ caseStudy }: { caseStudy: Proposal }) => {
       await caseService.updateCase(casestudy.id, {
         isArchived: true,
       });
-      dispatch(fetchCases());
+      dispatch(fetchCases(undefined));
     } catch (error) {
       console.error("Erro ao editar case:", error);
     } finally {

@@ -46,8 +46,9 @@ export default function NewCase(props: NewCaseProps) {
     }));
 
   useEffect(() => {
-    if (context === "myCases") dispatch(fetchCases());
-    if (context === "realEstateCases") dispatch(fetchRealEstateCases());
+    if (context === "myCases") dispatch(fetchCases(undefined));
+    if (context === "realEstateCases")
+      dispatch(fetchRealEstateCases(undefined));
   }, [context, dispatch]);
 
   const hasLastCase = () => {
