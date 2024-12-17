@@ -7,6 +7,7 @@ import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { nanoid } from "nanoid";
+import { io, Socket } from "socket.io-client";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -47,16 +48,16 @@ function useVisibility(ref: React.RefObject<HTMLElement>) {
 }
 
 export default function FinancingPlanningReportSharedPage() {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [sessionTime, setSessionTime] = useState(0);
+  const sessionTimeRef = useRef(sessionTime);
   const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const caseData = calcCaseData(proposalData.propertyData);
   const auth = useAuth();
+
   const [sessionId] = useState(nanoid(7));
-
-  const [sessionTime, setSessionTime] = useState(0);
-  const sessionTimeRef = useRef(sessionTime);
-
   const page1Ref = useRef(null);
   const page2Ref = useRef(null);
   const page3Ref = useRef(null);
@@ -75,12 +76,23 @@ export default function FinancingPlanningReportSharedPage() {
   const page7TimeVisible = useVisibility(page7Ref);
   const page8TimeVisible = useVisibility(page8Ref);
 
+  // Configura conexão com o WebSocket
   useEffect(() => {
-    sessionTimeRef.current = sessionTime;
-    if (sessionTime % 3 === 0) {
-      saveSessionData();
-    }
-  }, [sessionTime]);
+    const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
+      transports: ["websocket"],
+    });
+
+    newSocket.on("connect", () => {
+      console.log("Conectado ao servidor WebSocket com ID:", newSocket.id);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+      console.log("Conexão com WebSocket encerrada.");
+    };
+  }, []);
 
   useEffect(() => {
     const sessionTimer = setInterval(() => {
@@ -90,8 +102,17 @@ export default function FinancingPlanningReportSharedPage() {
     return () => clearInterval(sessionTimer);
   }, []);
 
+  useEffect(() => {
+    sessionTimeRef.current = sessionTime;
+
+    if (sessionTime % 3 === 0) {
+      saveSessionData();
+    }
+  }, [sessionTime]);
+
   const saveSessionData = () => {
     const currentSessionTime = sessionTimeRef.current;
+
     const dataToSend = {
       sessionTime: currentSessionTime,
       caseId: proposalData.id,
@@ -106,11 +127,12 @@ export default function FinancingPlanningReportSharedPage() {
       page8TimeVisible,
     };
 
-    if (!auth.isAuthenticated)
-      navigator.sendBeacon(
-        import.meta.env.PUBLIC_ENV__API_URL + "/proposal-session",
-        JSON.stringify(dataToSend)
-      );
+    if (socket?.connected && !auth.isAuthenticated) {
+      socket.emit("track_session_data", dataToSend);
+      console.log("Dados enviados via WebSocket:", dataToSend);
+    } else {
+      console.warn("Socket não conectado. Dados não enviados.");
+    }
   };
 
   useEffect(() => {
@@ -129,30 +151,6 @@ export default function FinancingPlanningReportSharedPage() {
 
     return () => resizeObserver.disconnect();
   }, []);
-
-  useEffect(() => {
-    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      saveSessionData();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [
-    page1TimeVisible,
-    page2TimeVisible,
-    page3TimeVisible,
-    page4TimeVisible,
-    page5TimeVisible,
-    page6TimeVisible,
-    page7TimeVisible,
-    page8TimeVisible,
-
-    saveSessionData,
-  ]);
 
   return (
     <>

@@ -43,7 +43,7 @@ export default function ProjectionReturn({
           <p style={{ color }} className="text-xl font-bold text-blue-600">
             {toBRL(
               caseData.finalRow.propertyValue -
-                caseData.finalRow.outstandingBalance -
+                (caseData.finalRow.outstandingBalance || 0) -
                 caseData.brokerageFee -
                 caseData.capitalGainsTax +
                 caseData.finalRow.totalCapital
@@ -119,7 +119,7 @@ export default function ProjectionReturn({
             <div className="flex gap-1">
               <p className="font-medium">Dívida Quitada - </p>
               <strong className="text-red">
-                {toBRL(caseData.finalRow.outstandingBalance)}
+                {toBRL(caseData.finalRow.outstandingBalance || 0) }
               </strong>
             </div>
             {propertyData.considerCapitalGainsTax && (

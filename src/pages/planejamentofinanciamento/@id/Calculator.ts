@@ -113,6 +113,7 @@ export function calcInvestedEquityFinal(
 ) {
   if (month > 0 && month <= detailedTable.length) {
     const rowForMonth = detailedTable[month - 1];
+
     return (
       rowForMonth.finalValue -
       rowForMonth.propertyValue +
@@ -191,7 +192,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
     0
   );
 
-  const totalMonths = propertyData.financingMonths
+  const totalMonths = propertyData.financingMonths;
   const amortizationFixed =
     propertyData.amortizationType === "SAC"
       ? (propertyData.propertyValue -

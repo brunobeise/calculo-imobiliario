@@ -43,6 +43,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { MenuProvider } from "@/components/menu/MenuContext";
 import DrawerMenu from "@/components/menu/DrawerMenu";
 import { usePageContext } from "vike-react/usePageContext";
+import { WebSocketProvider } from "@/Socket";
 
 export { Layout };
 
@@ -54,40 +55,42 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <CssVarsProvider theme={theme}>
+      <ToastContainer
+        position="top-center"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        transition={Bounce}
+      />
       <Provider store={store}>
         <AuthProvider>
-          <PropertyDataProvider>
-            <FinancingPlanningCaseDataProvider>
-              <ToastContainer
-                position="top-center"
-                autoClose={2500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                transition={Bounce}
-              />
-              <MenuProvider>
-                <div className="flex">
-                  {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
-                  <div
-                    className={`flex flex-col w-full ${
-                      !isCaseMenuRoute &&
-                      !pageContext.urlPathname.includes("/proposta/")
-                        ? "ms-64"
-                        : ""
-                    }`}
-                  >
-                    {children}
+          <WebSocketProvider>
+            <PropertyDataProvider>
+              <FinancingPlanningCaseDataProvider>
+                <MenuProvider>
+                  <div className="flex">
+                    {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
+                    <div
+                      className={`flex flex-col w-full ${
+                        !isCaseMenuRoute &&
+                        !pageContext.urlPathname.includes("/proposta/")
+                          ? "ms-64"
+                          : ""
+                      }`}
+                    >
+                      {children}
+                    </div>
                   </div>
-                </div>
-              </MenuProvider>
-            </FinancingPlanningCaseDataProvider>
-          </PropertyDataProvider>
+                </MenuProvider>
+              </FinancingPlanningCaseDataProvider>
+            </PropertyDataProvider>
+          </WebSocketProvider>
         </AuthProvider>
       </Provider>
     </CssVarsProvider>

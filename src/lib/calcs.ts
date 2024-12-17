@@ -74,7 +74,6 @@ export function calcTotalInterestPaid(
 ) {
   const monthlyInterestRate = interestRate / 100 / 12;
 
-
   const balanceBeforePayment =
     loanAmount *
     ((Math.pow(1 + monthlyInterestRate, financingMonths) -
