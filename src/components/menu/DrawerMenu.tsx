@@ -6,9 +6,9 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
-import { FaBars, FaUser, FaCalculator, FaFileAlt } from "react-icons/fa";
+import { FaBars, FaUser, FaFileAlt } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
-import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
+import { FaAngleRight, FaAngleDown, FaFileCirclePlus } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 import Cookies from "js-cookie";
@@ -175,9 +175,9 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             className="!ms-5 cursor-pointer"
           >
             <ListItemDecorator>
-              <FaCalculator />
+              <FaFileCirclePlus />
             </ListItemDecorator>
-            <Typography className="font-bold !ms-[-10px]">Cenários</Typography>
+            <Typography className="font-bold !ms-[-10px]">Nova Proposta</Typography>
           </ListItem>
           {casesOpen && (
             <List>

@@ -23,6 +23,8 @@ export default function UserSignature2(props: UserSignatureProps) {
     realEstate: realEstateReducer,
   };
 
+  console.log(data);
+
   return (
     <div
       style={{
@@ -38,10 +40,7 @@ export default function UserSignature2(props: UserSignatureProps) {
               backgroundColor: props.primaryColor,
             }}
             className="w-full h-full rounded-full overflow-hidden flex items-center justify-center translate-x-[15px]"
-            src={
-              data.realEstate?.logo2 ||
-              "https://res.cloudinary.com/dpegpgjpr/image/upload/v1722019585/s71bo47g6jxzo88gh5x1.png"
-            }
+            src={data.realEstate?.logo2}
             alt=""
           />
         </div>
@@ -53,10 +52,7 @@ export default function UserSignature2(props: UserSignatureProps) {
         >
           <img
             className="w-full h-full object-cover object-center"
-            src={
-              data.photo ||
-              "https://res.cloudinary.com/dr9bi47aq/image/upload/v1726154180/r20tb0lgt0duwjn51khq.webp"
-            }
+            src={data.photo}
             alt=""
           />
         </div>
