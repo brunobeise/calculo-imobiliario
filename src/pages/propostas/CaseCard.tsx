@@ -267,7 +267,7 @@ const CaseCard = ({
         data={duplicateCase}
         onClose={() => setDuplicateCase(undefined)}
       />
-      ;
+
       <CaseFormModal
         subType={casestudy.subType}
         actualCase={casestudy}

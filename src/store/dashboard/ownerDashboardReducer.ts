@@ -18,9 +18,9 @@ interface OwnerDashboardState {
 }
 
 const initialState: OwnerDashboardState = {
-  totalProposals: 0,
-  activeUsers: 0,
-  acceptedProposals: 0,
+  totalProposals: undefined,
+  activeUsers: undefined,
+  acceptedProposals: undefined,
   proposalsChart: { values: [], labels: [] },
   featuredUsers: [],
   featuredUsersLoading: false,

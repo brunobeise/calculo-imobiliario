@@ -32,19 +32,19 @@ export default function AdminDashboard() {
     <div className="overflow-x-hidden">
       <div className="grid grid-cols-3 gap-10 ">
         <DashboardPaper
-          loading={data.loading}
+          loading={!data.activeUsers}
           value={data.activeUsers}
           title="Usuários ativos"
           icon={<FaUsers />}
         />
         <DashboardPaper
-          loading={data.loading}
+          loading={!data.realEstateCount}
           value={data.realEstateCount}
           title="Imobiliárias"
           icon={<MdOutlineRealEstateAgent />}
         />
         <DashboardPaper
-          loading={data.loading}
+          loading={!data.realEstateCount}
           value={data.totalProposals}
           title="Propostas Geradas"
           icon={<FaFileAlt />}

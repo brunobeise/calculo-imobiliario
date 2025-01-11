@@ -24,16 +24,16 @@ export default function PageStructure(props: PageStructureProps) {
 
         <div
           className={`h-fit relative min-h-[80%] ${
-            props.loading ? "overflow-y-hidden min-h-[80%]" : "overflow-y-auto"
+            props.loading ? "overflow-y-hidden min-h-[100%]" : "overflow-y-auto"
           }`}
         >
+          {props.content}
+
           {props.loading && (
             <div className="absolute top-0 left-0 flex items-center justify-center bg-white/80 z-10 w-full h-full">
               <PageLoading />
             </div>
           )}
-
-          {props.content}
         </div>
 
         {props.footer && (

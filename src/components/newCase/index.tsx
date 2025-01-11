@@ -39,10 +39,12 @@ export default function NewCase(props: NewCaseProps) {
 
   const { myCases, realEstateCases, loading, realEstateCasesLastPage } =
     useSelector((state: RootState) => ({
-      myCases: state.cases.myCases,
-      realEstateCases: state.cases.realEstateCases,
-      loading: state.cases.myCasesLoading || state.cases.realEstateCasesLoading,
-      realEstateCasesLastPage: state.cases.realEstateCasesLastPage,
+      myCases: state.proposals.myCases,
+      realEstateCases: state.proposals.realEstateCases,
+      loading:
+        state.proposals.myCasesLoading ||
+        state.proposals.realEstateCasesLoading,
+      realEstateCasesLastPage: state.proposals.realEstateCasesLastPage,
     }));
 
   useEffect(() => {

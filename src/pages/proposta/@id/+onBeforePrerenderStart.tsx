@@ -1,8 +1,8 @@
 import { caseService } from "@/service/caseService";
 
 export async function onBeforePrerenderStart() {
-  const cases = await caseService.getAllProposals();
-  return cases?.map((caseItem) => ({
+  const proposals = await caseService.getAllProposals();
+  return proposals?.map((caseItem) => ({
     url: `/proposta/${caseItem}`,
   }));
 }

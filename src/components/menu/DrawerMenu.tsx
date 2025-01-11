@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/joy";
 import { useState } from "react";
-import { FaBars, FaHome, FaUser, FaCalculator, FaFileAlt } from "react-icons/fa";
+import { FaBars, FaUser, FaCalculator, FaFileAlt } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaAngleRight, FaAngleDown } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
@@ -64,32 +64,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             Imob<span className="font-bold">Deal</span>
           </span>
         </div>
-        <List size="lg" >
-          <a
-            href={"/"}
-            onClick={() => {
-              toggleBackdrop(false);
-              toggleMenu(false);
-            }}
-          >
-            <ListItem
-              className={`!ms-5  ${
-                pageContext.urlPathname === "/" ? "!text-primary" : ""
-              }`}
-            >
-              <ListItemDecorator>
-                <FaHome />
-              </ListItemDecorator>
-              <Typography
-                className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/" ? "!text-primary" : ""
-                }`}
-              >
-                Home
-              </Typography>
-            </ListItem>
-          </a>
-          <ListDivider />
+        <List size="lg">
           <a
             href={"/dashboard"}
             onClick={() => {
@@ -149,7 +124,9 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </ListItemDecorator>
               <Typography
                 className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/propostas" ? "!text-primary" : ""
+                  pageContext.urlPathname === "/propostas"
+                    ? "!text-primary"
+                    : ""
                 }`}
               >
                 Propostas

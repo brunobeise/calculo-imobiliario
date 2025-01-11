@@ -136,9 +136,11 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
   const sessions =
     useSelector(
       (state: RootState) =>
-        state.cases.myCases.find((c) => c.id === props.caseId)?.sessions
+        state.proposals.myCases.find((c) => c.id === props.caseId)?.sessions
     ) || [];
-  const loading = useSelector((state: RootState) => state.cases.sessionLoading);
+  const loading = useSelector(
+    (state: RootState) => state.proposals.sessionLoading
+  );
 
   useEffect(() => {
     if (props.open) {

@@ -41,16 +41,19 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
     <div className="overflow-x-hidden">
       <div className="grid grid-cols-3 gap-10 ">
         <DashboardPaper
+          loading={data.activeUsers === undefined}
           value={data.activeUsers}
           title="Corretores"
           icon={<FaUsers />}
         />
         <DashboardPaper
+          loading={data.totalProposals === undefined}
           value={data.totalProposals}
           title="Propostas Geradas"
           icon={<FaFileAlt />}
         />
         <DashboardPaper
+          loading={data.acceptedProposals === undefined}
           value={data.acceptedProposals}
           title="Propostas Aceitas"
           icon={<FaFileCircleCheck />}

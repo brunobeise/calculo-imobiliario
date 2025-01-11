@@ -12,7 +12,7 @@ export const store = configureStore({
     userDashboard: userDashboardReducer,
     ownerDashboard: ownerDashboardReducer,
     adminDashboard: adminDashboardReducer,
-    cases: casesReducer,
+    proposals: casesReducer,
     user: userReducer,
     realEstate: realEstateReducer,
   },

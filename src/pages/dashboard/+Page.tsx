@@ -38,9 +38,12 @@ export default function Dashbaord() {
     else if (!realEstate && !userSelected) {
       if (user.admin) setDashboardLevel("admin");
       else if (user.owner) setDashboardLevel("owner");
-      else setDashboardLevel("user");
+      else {
+        setDashboardLevel("user");
+        setUserSelected(user.id);
+      }
     }
-  }, [dispatch, realEstate, userSelected]);
+  }, [dispatch, realEstate, user.admin, user.id, user.owner, userSelected]);
 
   useEffect(() => {
     if (user.owner) {
@@ -50,8 +53,9 @@ export default function Dashbaord() {
   }, [dispatch, realEstate, user.owner]);
 
   useEffect(() => {
-    if (!realEstate && !user.admin && user.owner) setRealEstate(realEstateData?.id || "");
-  }, [realEstate, realEstateData]);
+    if (!realEstate && !user.admin && user.owner)
+      setRealEstate(realEstateData?.id || "");
+  }, [realEstate, realEstateData, user.admin, user.owner]);
 
   if (!isAuthenticated) {
     navigate("/");

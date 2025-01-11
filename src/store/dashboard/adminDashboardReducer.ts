@@ -18,9 +18,9 @@ interface AdminDashboardState {
 }
 
 const initialState: AdminDashboardState = {
-  activeUsers: 0,
-  realEstateCount: 0,
-  totalProposals: 0,
+  activeUsers: undefined,
+  realEstateCount: undefined,
+  totalProposals: undefined,
   proposalsChart: { values: [], labels: [] },
   featuredRealEstates: [],
   featuredRealEstatesLoading: false,

@@ -38,7 +38,7 @@ export default function MyCases() {
 
   const lastPage = useSelector(
     (state: RootState) =>
-      state.cases[
+      state.proposals[
         casesContext === "myCases"
           ? "myCasesLastPage"
           : casesContext === "adminCases"
@@ -49,7 +49,7 @@ export default function MyCases() {
 
   const loading = useSelector(
     (state: RootState) =>
-      state.cases[
+      state.proposals[
         casesContext === "myCases"
           ? "myCasesLoading"
           : casesContext === "adminCases"
@@ -57,7 +57,7 @@ export default function MyCases() {
           : "realEstateCasesLoading"
       ]
   );
-  const data = useSelector((state: RootState) => state.cases[casesContext]);
+  const data = useSelector((state: RootState) => state.proposals[casesContext]);
 
   const [minDate, setMinDate] = useState(() => {
     const storedMinDate = localStorage.getItem("minDate");
@@ -390,7 +390,7 @@ export default function MyCases() {
           </Table>
         </div>
       )}
-      {!loading && data.length === 0 && (
+      {loading && data.length === 0 && (
         <div className="w-full text-center">
           <span className=" text-gray mt-4">nenhuma proposta encontrada</span>
         </div>

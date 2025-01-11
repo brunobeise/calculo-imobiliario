@@ -14,9 +14,9 @@ interface UserDashboardState {
 }
 
 const initialState: UserDashboardState = {
-  inProgressProposals: 0,
-  totalProposals: 0,
-  acceptedProposals: 0,
+  inProgressProposals: undefined,
+  totalProposals: undefined,
+  acceptedProposals: undefined,
   lastSessions: [],
   lastSessionsLoading: false,
   loading: false,
