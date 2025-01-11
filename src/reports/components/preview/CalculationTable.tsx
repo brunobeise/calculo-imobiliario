@@ -58,7 +58,7 @@ const CalculationTable = ({
               <div className="flex flex-col">
                 <strong>Projeção Aluguel</strong>
                 <span className="text-sm font-normal">
-                  {propertyData.rentAppreciationRate * 10}%
+                  {propertyData.rentAppreciationRate}%
                 </span>
               </div>
             </th>
