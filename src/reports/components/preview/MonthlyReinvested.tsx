@@ -6,9 +6,10 @@ import InfoItem from "./InfoItem";
 import { InvestmentAccumulationChart } from "@/components/charts/InvestmentAccumulationChart";
 import SectionTitle from "./SectionTitle";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
 
 interface MonthlyReinvestedProps {
-  caseData: FinancingPlanningData;
+  caseData: FinancingPlanningData | DirectFinancingData;
   propertyData: PropertyData;
   color: string;
   secondary: string;
@@ -26,7 +27,7 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
         icon={<FaMoneyBillTransfer />}
       />
       <div className="col-span-2 mb-10">
-        <p style={{color: secondary}}>
+        <p style={{ color: secondary }}>
           No cálculo mensal do investimento imobiliário, é comum que a diferença
           entre o valor do aluguel recebido e a parcela do financiamento resulte
           em um valor positivo. Essa diferença representa o lucro mensal gerado
@@ -38,17 +39,26 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
         </p>
       </div>
 
-      <div style={{borderColor: secondary}} className="rounded-2xl border">
+      <div style={{ borderColor: secondary }} className="rounded-2xl border">
         <table className="min-w-full ">
           <thead>
             <tr>
-              <th   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b text-left"></th>
-              <th   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b text-left">
+              <th
+                style={{ color, borderColor: secondary }}
+                className="px-4 py-2 border-r border-b text-left"
+              ></th>
+              <th
+                style={{ color, borderColor: secondary }}
+                className="px-4 py-2 border-r border-b text-left"
+              >
                 <div className="flex flex-col">
                   <strong>Valor do reinvestimento</strong>
                 </div>
               </th>
-              <th   style={{ color, borderColor: secondary }} className="px-4 py-2 border-b text-left">
+              <th
+                style={{ color, borderColor: secondary }}
+                className="px-4 py-2 border-b text-left"
+              >
                 <div className="flex flex-col">
                   <strong>Total aplicado até o momento</strong>
                 </div>
@@ -71,18 +81,27 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
                   return (
                     <>
                       <tr>
-                        <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t w-[100px]">
+                        <td
+                          style={{ color, borderColor: secondary }}
+                          className="px-4 py-2 border-r border-t w-[100px]"
+                        >
                           {dayjs(propertyData.initialDate, "MM/YYYY")
                             .add(firstPositiveRentalIndex + 1, "month")
                             .format("MM/YYYY")}
                         </td>
-                        <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t">
+                        <td
+                          style={{ color, borderColor: secondary }}
+                          className="px-4 py-2 border-r border-t"
+                        >
                           {toBRL(
                             caseData.detailedTable[firstPositiveRentalIndex]
                               ?.rentalAmount
                           )}
                         </td>
-                        <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-t">
+                        <td
+                          style={{ color, borderColor: secondary }}
+                          className="px-4 py-2 border-t"
+                        >
                           {toBRL(
                             caseData.detailedTable[firstPositiveRentalIndex]
                               ?.totalCapital
@@ -93,18 +112,27 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
                       {caseData.detailedTable[twelveMonthsLaterIndex]
                         ?.rentalAmount && (
                         <tr>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t w-[100px]">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-r border-t w-[100px]"
+                          >
                             {dayjs(propertyData.initialDate, "MM/YYYY")
                               .add(twelveMonthsLaterIndex + 1, "month")
                               .format("MM/YYYY")}
                           </td>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-r border-t"
+                          >
                             {toBRL(
                               caseData.detailedTable[twelveMonthsLaterIndex]
                                 ?.rentalAmount
                             )}
                           </td>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-t">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-t"
+                          >
                             {toBRL(
                               caseData.detailedTable[twelveMonthsLaterIndex]
                                 ?.totalCapital
@@ -116,18 +144,27 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
                       {caseData.detailedTable[twentyFourMonthsLaterIndex]
                         ?.rentalAmount && (
                         <tr>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t w-[100px]">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-r border-t w-[100px]"
+                          >
                             {dayjs(propertyData.initialDate, "MM/YYYY")
                               .add(twentyFourMonthsLaterIndex + 1, "month")
                               .format("MM/YYYY")}
                           </td>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-r border-t"
+                          >
                             {toBRL(
                               caseData.detailedTable[twentyFourMonthsLaterIndex]
                                 ?.rentalAmount
                             )}
                           </td>
-                          <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-t">
+                          <td
+                            style={{ color, borderColor: secondary }}
+                            className="px-4 py-2 border-r border-t"
+                          >
                             {toBRL(
                               caseData.detailedTable[twentyFourMonthsLaterIndex]
                                 ?.totalCapital
@@ -150,7 +187,7 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
           secondary={secondary}
           type="reais"
           text="Valor Total Aplicado:"
-          value={caseData.detailedTable.reduce(
+          value={(caseData as FinancingPlanningData).detailedTable.reduce(
             (acc, val) => (val.rentalAmount > 0 ? acc + val.rentalAmount : acc),
             0
           )}
@@ -169,7 +206,7 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
           text="Total de Ganho em Juros:"
           value={
             caseData.finalRow.totalCapital -
-            caseData.detailedTable.reduce(
+            (caseData as FinancingPlanningData).detailedTable.reduce(
               (acc, val) =>
                 val.rentalAmount > 0 ? acc + val.rentalAmount : acc,
               0

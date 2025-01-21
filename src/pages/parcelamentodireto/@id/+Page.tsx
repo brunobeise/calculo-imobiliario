@@ -19,18 +19,17 @@ import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { Proposal } from "@/types/proposalTypes";
-import FinancingPlanningReport from "@/reports/financingPlanningReport/FinancingPlanningReport";
 import CaseFormModal from "@/components/modals/CaseFormModal";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
 import { uploadImage } from "@/lib/imgur";
 import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
+import DirectFinancingReport from "@/reports/directFinancingReport/DirectFinancingReport";
 
-export default function FinancingPlanning(): JSX.Element {
+export default function DirectFinancing(): JSX.Element {
   const pageContext = usePageContext();
   const { id } = pageContext.routeParams;
-
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
   const [report, setReport] = useState<boolean>(false);
@@ -47,7 +46,7 @@ export default function FinancingPlanning(): JSX.Element {
   useEffect(() => {
     if (pageContext.urlParsed.search.newCase === "false") {
       setNewCase(false);
-      const storedData = localStorage.getItem("financingPlanningPropertyData");
+      const storedData = localStorage.getItem("DirectFinancingPropertyData");
       if (storedData) {
         setMultiplePropertyData(JSON.parse(storedData) as PropertyData);
       }
@@ -63,7 +62,7 @@ export default function FinancingPlanning(): JSX.Element {
           setMultiplePropertyData(response.propertyData);
           setActualCase(response);
           localStorage.setItem(
-            "financingPlanningPropertyData",
+            "DirectFinancingPropertyData",
             JSON.stringify(response.propertyData)
           );
         }
@@ -114,7 +113,7 @@ export default function FinancingPlanning(): JSX.Element {
   const handleRestart = () => {
     setNewCase(true);
     setActualCase(undefined);
-    navigate("/planejamentofinanciamento");
+    navigate("/parcelamentodireto");
   };
 
   const buttons = [
@@ -161,7 +160,15 @@ export default function FinancingPlanning(): JSX.Element {
           "rentMonthlyYieldRate",
           "initialFinancingMonth2",
           "initialDate2",
-          "dischargesControl2",
+          "installmentValue",
+          "installmentValueTax",
+          "interestRate",
+          "amortizationType",
+          "initialFinancingMonth",
+          "totalFinanced",
+          "outstandingBalance",
+          "financingMonths",
+          "dischargesControl",
           "financingFees2",
           "financingFeesDate2",
           "subsidy2",
@@ -174,13 +181,24 @@ export default function FinancingPlanning(): JSX.Element {
           "financingMonths",
           "ownResource",
           "subsidy",
+          "subsidy2",
+          "initialFinancingMonth2",
           "initialDate",
+          "installmentValue",
+          "installmentValueTax",
           "outstandingBalance",
           "installmentValueTax",
           "initialFinancingMonth",
-          "dischargesControl2",
-          "financingFees2",
-          "financingFeesDate2",
+          "installmentValueTax",
+          "interestRate",
+          "amortizationType",
+          "initialFinancingMonth",
+          "totalFinanced",
+          "outstandingBalance",
+          "financingMonths",
+          "dischargesControl",
+          "financingFees",
+          "financingFeesDate",
         ];
 
   const hideSheets = subType === "Avançado" ? [] : ["appreciation"];
@@ -208,7 +226,7 @@ export default function FinancingPlanning(): JSX.Element {
       />
 
       {report && actualCase ? (
-        <FinancingPlanningReport
+        <DirectFinancingReport
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
           onClose={() => setReport(false)}
           propertyData={propertyData}
@@ -230,8 +248,8 @@ export default function FinancingPlanning(): JSX.Element {
           <PropertyDataCard
             titles={
               actualCase?.subType === "Simplificado"
-                ? ["Fluxo de pagamento"]
-                : []
+                ? ["Custos e Valores do Imóvel", "Fluxo de Pagamento"]
+                : ["Dados do imóvel e Financiamento", "Fluxo de Pagamento"]
             }
             hideSheets={hideSheets}
             hideFields={hideFields}
@@ -274,7 +292,7 @@ export default function FinancingPlanning(): JSX.Element {
         editChoose={editChoose}
         open={caseFormModal}
         onClose={() => setCaseFormModal(false)}
-        caseType="financingPlanning"
+        caseType="directFinancing"
         propertyData={propertyData}
       />
 

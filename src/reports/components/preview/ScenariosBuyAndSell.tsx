@@ -2,11 +2,12 @@ import { toBRL } from "@/lib/formatter";
 import ScenarioCard from "./ScenarioCard";
 import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
+import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
 
 interface ScenariosBuyAndSellProps {
   color: string;
   secondary: string;
-  caseData: FinancingPlanningData;
+  caseData: FinancingPlanningData | DirectFinancingData;
   propertyData: PropertyData;
 }
 

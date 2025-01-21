@@ -69,7 +69,7 @@ export const fetchProposalsChart = createAsyncThunk<
   { rejectValue: string }
 >("adminDashboard/fetchProposalsData", async (filter, { rejectWithValue }) => {
   try {
-    const response = await dashboardService.getProposalsChart(filter);
+    const response = await dashboardService.getAdminProposalsChart(filter);
     return response;
   } catch (error: any) {
     return rejectWithValue(error.response?.data ?? error.message);

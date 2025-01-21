@@ -1,22 +1,12 @@
 import "react-toastify/dist/ReactToastify.css";
 import logo from "@/assets/imobDeal.png";
-import rural from "@/assets/rurallfinancing.png";
-import invest from "@/assets/financingOrInvest.png";
-import obra from "@/assets/jurosdeobra.png";
-import avista from "@/assets/financiamentoxavista.png";
-export interface Route {
-  title: string;
-  href: string;
-  description: string;
-  element: JSX.Element;
-}
-
-import { financingRoutes } from "@/routes/financing";
 import CaseTypeCard from "@/components/shared/CaseTypeCard";
+import FinancingPlanningImage from "@/assets/financingPlanning.png";
+import DirectFinancingImage from "@/assets/financiamentodireto.png";
 
 export default function Cenarios() {
   return (
-    <div className="w-full h-screen items-center flex flex-col justify-center border">
+    <div className="w-full h-screen items-center flex flex-col justify-center">
       <div className="flex items-center mb-10 flex-col">
         <img className="w-[120px]" src={logo} />
         <span className="text-primary">
@@ -25,28 +15,25 @@ export default function Cenarios() {
       </div>
 
       <div className="w-full flex justify-center">
-        <div className="gap-5 uw:gap-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 justify-items-center">
-          {financingRoutes
-            .filter((r) => !r.href.includes("/:id"))
-            .map((i) => (
-              <CaseTypeCard
-                key={i.title}
-                link={i.href}
-                desc={i.description}
-                image={i.image}
-                title={i.title}
-              />
-            ))}
+        <div className="gap-12 uw:gap-12 flex justify-items-center">
           <CaseTypeCard
-            comingSoon
-            link={""}
+            title="Financiamento Bancário"
+            link={"/planejamentofinanciamento"}
             desc={
-              "Compara as duas hipóteses quando o cliente tem o saldo para comprar a vista."
+              "Faz um plano de aquisição com a estratégia de financiamento imobiliário."
             }
-            image={avista}
-            title={"Financiamento vs. Compra à Vista"}
+            image={FinancingPlanningImage}
           />
+
           <CaseTypeCard
+            title="Parcelamento Direto"
+            link={"/parcelamentodireto"}
+            desc={
+              "Elabora um plano de aquisição para financiamento direto com a construtora, alinhado às necessidades do cliente."
+            }
+            image={DirectFinancingImage}
+          />
+          {/* <CaseTypeCard
             comingSoon
             link={""}
             desc={"Faz um plano de aquisição de financimento para imóvel rural"}
@@ -70,7 +57,7 @@ export default function Cenarios() {
             }
             image={obra}
             title={"Financiamento de imóvel na planta"}
-          />
+          /> */}
         </div>
       </div>
     </div>

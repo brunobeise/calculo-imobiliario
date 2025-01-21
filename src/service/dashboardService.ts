@@ -19,7 +19,14 @@ export const dashboardService = {
     return response.data;
   },
 
-  async getProposalsChart(filter: string, realEstateId?: string) {
+  async getAdminProposalsChart(filter: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/admin/proposals-chart/" + filter
+    );
+    return response.data;
+  },
+
+  async getOwnerProposalsChart(filter: string, realEstateId?: string) {
     const response = await api.get<{ values: number[]; labels: [] }>(
       "/dashboard/proposals-chart/" +
         filter +

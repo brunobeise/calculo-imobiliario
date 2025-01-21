@@ -45,12 +45,16 @@ export interface Discharge {
 export default function PropertyDataDischargesControl({
   propertyData,
   setPropertyData,
+  height = "200px",
+  title,
 }: {
   propertyData: PropertyData;
   setPropertyData: (
     field: keyof PropertyData,
     value: PropertyData[keyof PropertyData]
   ) => void;
+  height?: string;
+  title?: string
 }) {
   const [addDischargeModal, setAddDischargeModal] = useState(false);
   const [dischargesDetailModal, setDischargesDetailModal] = useState(false);
@@ -250,12 +254,13 @@ export default function PropertyDataDischargesControl({
     <Sheet
       variant="outlined"
       color="neutral"
-      className={"p-3 rounded border-card"}
+      style={{ height }}
+      className="p-3 rounded border-card flex flex-col"
     >
-      <DialogTitle className="flex i items-center justify-between pb-3">
+      <DialogTitle className="flex items-center justify-between pb-3">
         <span className="text-sm">
           <p className="text-lg flex items-center gap-2">
-            Aportes Adicionais{" "}
+            {title || "Aportes Adicionais"}
             {propertyData.discharges.length > 0 && (
               <FaMagnifyingGlass
                 onClick={() => setDischargesDetailModal(true)}
@@ -284,7 +289,7 @@ export default function PropertyDataDischargesControl({
       </DialogTitle>
       <Divider />
       {propertyData.discharges.length > 0 && (
-        <div className="overflow-y-auto max-h-[180px]">
+        <div className={`overflow-y-auto max-h-[100%]`}>
           <Table stickyHeader>
             <thead>
               <tr>
@@ -610,7 +615,7 @@ export default function PropertyDataDischargesControl({
           aria-labelledby="create-discharge-title"
           sx={{ width: { xs: "90%", sm: 600 } }}
         >
-          <DialogTitle>Aportes adicionais</DialogTitle>
+          <DialogTitle> {title || "Aportes Adicionais"}</DialogTitle>
           <DialogContent className="overflow-y-auto">
             <Table>
               <thead>

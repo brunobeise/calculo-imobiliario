@@ -10,6 +10,7 @@ interface PaymentConditionsProps {
   secondary: string;
   propertyData: PropertyData;
   isAdvancedMode?: boolean;
+  hasBankFinancing?: boolean;
 }
 
 const PaymentConditions: React.FC<PaymentConditionsProps> = ({
@@ -17,6 +18,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   secondary,
   propertyData,
   isAdvancedMode,
+  hasBankFinancing = true,
 }) => {
   const { discharges, initialDate, downPayment, financingFees } = propertyData;
 
@@ -283,7 +285,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               </ul>
             </div>
           </div>
-          {totalReinforcementParts > 0 && (
+          {totalReinforcementParts > 0 && hasBankFinancing && (
             <div className="rounded-3xl p-4 border h-min lg:hidden">
               <h3 style={{ color }} className="text-xl mb-2">
                 Financiamento
@@ -357,39 +359,40 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
             </div>
           </>
         )}
-
-        <div
-          className={`rounded-3xl p-4 border h-min  ${
-            totalReinforcementParts > 0 ? "hidden lg:block" : ""
-          }`}
-        >
-          <h3 style={{ color }} className="text-xl mb-2">
-            Financiamento
-          </h3>
-          <p style={{ color }} className="text-2xl font-bold mb-4">
-            {toBRL(totalFinancing)}
-          </p>
-          <ul className="list-none space-y-2 text-sm">
-            <li>
-              <span style={{ color: secondary }} className="text-sm">
-                {" "}
-                Início:{" "}
-              </span>
-              <strong style={{ color }}>
-                {dayjs(propertyData.initialFinancingMonth, "MM/YYYY")
-                  .format("MMMM [de] YYYY")
-                  .replace(/^./, (match) => match.toUpperCase())}
-              </strong>
-            </li>
-            <li>
-              <span style={{ color: secondary }} className="text-sm">
-                Parcelas mensais:{"  "}
-              </span>
-              <strong>{toBRL(propertyData.installmentValue)}</strong>{" "}
-              {propertyData.amortizationType === "SAC" ? "(decrescente)" : ""}
-            </li>
-          </ul>
-        </div>
+        {hasBankFinancing && (
+          <div
+            className={`rounded-3xl p-4 border h-min  ${
+              totalReinforcementParts > 0 ? "hidden lg:block" : ""
+            }`}
+          >
+            <h3 style={{ color }} className="text-xl mb-2">
+              Financiamento
+            </h3>
+            <p style={{ color }} className="text-2xl font-bold mb-4">
+              {toBRL(totalFinancing)}
+            </p>
+            <ul className="list-none space-y-2 text-sm">
+              <li>
+                <span style={{ color: secondary }} className="text-sm">
+                  {" "}
+                  Início:{" "}
+                </span>
+                <strong style={{ color }}>
+                  {dayjs(propertyData.initialFinancingMonth, "MM/YYYY")
+                    .format("MMMM [de] YYYY")
+                    .replace(/^./, (match) => match.toUpperCase())}
+                </strong>
+              </li>
+              <li>
+                <span style={{ color: secondary }} className="text-sm">
+                  Parcelas mensais:{"  "}
+                </span>
+                <strong>{toBRL(propertyData.installmentValue)}</strong>{" "}
+                {propertyData.amortizationType === "SAC" ? "(decrescente)" : ""}
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
 
       {isAdvancedMode && (

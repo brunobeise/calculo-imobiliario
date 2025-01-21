@@ -6,15 +6,22 @@ import { toBRL } from "@/lib/formatter";
 import InfoItem from "./InfoItem";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
 import dayjs from "dayjs";
+import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
 
 interface PresentValueProps {
   color: string;
   secondary: string;
-  caseData: FinancingPlanningData;
+  caseData: FinancingPlanningData | DirectFinancingData;
   propertyData: PropertyData;
 }
 
 export default function PresentValue(props: PresentValueProps) {
+  const isFinancingPlanningData = (
+    data: FinancingPlanningData | DirectFinancingData
+  ): data is FinancingPlanningData => {
+    return Array.isArray(data.detailedTable) && "breakEven" in data;
+  };
+
   const { caseData, color, secondary, propertyData } = props;
   return (
     <>
@@ -40,17 +47,29 @@ export default function PresentValue(props: PresentValueProps) {
         </div>
 
         <div className="flex flex-col gap-5">
-          <div style={{ color, borderColor: secondary }} className="min-h-[170px] rounded-2xl border ">
+          <div
+            style={{ color, borderColor: secondary }}
+            className="min-h-[170px] rounded-2xl border "
+          >
             <table className="min-w-full ">
               <thead className="">
                 <tr>
-                  <th   style={{ color, borderColor: secondary }} className="px-4 py-2  border-r border-b  text-left"></th>
-                  <th   style={{ color, borderColor: secondary }} className="px-4 py-2  border-r border-b  text-left">
+                  <th
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-2  border-r border-b  text-left"
+                  ></th>
+                  <th
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-2  border-r border-b  text-left"
+                  >
                     <div className="flex flex-col">
                       <strong>Investimento excedente em valor real</strong>
                     </div>
                   </th>
-                  <th   style={{ color, borderColor: secondary }} className="px-4 py-2  border-b text-left">
+                  <th
+                    style={{ color, borderColor: secondary }}
+                    className="px-4 py-2  border-b text-left"
+                  >
                     <div className="flex flex-col">
                       <strong>
                         Investimento excedente convertido em valor presente
@@ -66,7 +85,10 @@ export default function PresentValue(props: PresentValueProps) {
                     -1 >
                     0 && (
                     <tr className="">
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b w-[100px]">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2 border-r border-b w-[100px]"
+                      >
                         <strong>
                           {" "}
                           {dayjs(propertyData.initialDate, "MM/YYYY")
@@ -74,10 +96,16 @@ export default function PresentValue(props: PresentValueProps) {
                             .format("MM/YYYY")}
                         </strong>
                       </td>
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2 border-r border-b"
+                      >
                         {toBRL(caseData.detailedTable[0].investmentExcess)}
                       </td>
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-b">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2 border-b"
+                      >
                         {toBRL(
                           caseData.detailedTable[0].investmentExcessPresentValue
                         )}
@@ -93,7 +121,10 @@ export default function PresentValue(props: PresentValueProps) {
                     -1 >
                     0 && (
                     <tr className="">
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b w-[100px]">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2 border-r border-b w-[100px]"
+                      >
                         <strong>
                           {dayjs(propertyData.initialDate, "MM/YYYY")
                             .add(
@@ -103,14 +134,20 @@ export default function PresentValue(props: PresentValueProps) {
                             .format("MM/YYYY")}
                         </strong>
                       </td>
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r border-b ">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2 border-r border-b "
+                      >
                         {toBRL(
                           caseData.detailedTable[
                             Math.floor(caseData.detailedTable.length / 2)
                           ].investmentExcess
                         )}
                       </td>
-                      <td   style={{ color, borderColor: secondary }} className="px-4 py-2  border-b ">
+                      <td
+                        style={{ color, borderColor: secondary }}
+                        className="px-4 py-2  border-b "
+                      >
                         {toBRL(
                           caseData.detailedTable[
                             Math.floor(caseData.detailedTable.length / 2)
@@ -128,7 +165,10 @@ export default function PresentValue(props: PresentValueProps) {
                       item.investmentExcessPresentValue !== 0
                   ) && (
                   <tr className="">
-                    <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r w-[100px]">
+                    <td
+                      style={{ color, borderColor: secondary }}
+                      className="px-4 py-2 border-r w-[100px]"
+                    >
                       <strong>
                         {dayjs(propertyData.initialDate, "MM/YYYY")
                           .add(
@@ -140,7 +180,10 @@ export default function PresentValue(props: PresentValueProps) {
                           .format("MM/YYYY")}
                       </strong>
                     </td>
-                    <td   style={{ color, borderColor: secondary }} className="px-4 py-2 border-r ">
+                    <td
+                      style={{ color, borderColor: secondary }}
+                      className="px-4 py-2 border-r "
+                    >
                       {toBRL(
                         caseData.detailedTable
                           .slice()
@@ -150,7 +193,10 @@ export default function PresentValue(props: PresentValueProps) {
                           )?.investmentExcess
                       )}
                     </td>
-                    <td   style={{ color, borderColor: secondary }} className="px-4 py-2">
+                    <td
+                      style={{ color, borderColor: secondary }}
+                      className="px-4 py-2"
+                    >
                       {toBRL(
                         caseData.detailedTable
                           .slice()
@@ -178,12 +224,20 @@ export default function PresentValue(props: PresentValueProps) {
               color={color}
               secondary={secondary}
               text="Total Investido em VP:"
-              value={caseData.detailedTable.reduce(
-                (acc, val) => acc + val.investmentExcessPresentValue,
-                0
-              )}
+              value={
+                isFinancingPlanningData(caseData)
+                  ? caseData.detailedTable.reduce(
+                      (acc, val) => acc + val.investmentExcessPresentValue,
+                      0
+                    )
+                  : caseData.detailedTable.reduce(
+                      (acc, val) => acc + val.investmentExcessPresentValue,
+                      0
+                    )
+              }
               type="reais"
             />
+
             <InfoItem
               color={color}
               secondary={secondary}

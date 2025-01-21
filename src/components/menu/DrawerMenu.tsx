@@ -5,10 +5,10 @@ import {
   ListItemDecorator,
   Typography,
 } from "@mui/joy";
-import { useState } from "react";
+
 import { FaBars, FaUser, FaFileAlt } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
-import { FaAngleRight, FaAngleDown, FaFileCirclePlus } from "react-icons/fa6";
+import { FaFileCirclePlus } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { MdOutlineRealEstateAgent } from "react-icons/md";
 import Cookies from "js-cookie";
@@ -16,7 +16,7 @@ import logo from "@/assets/imobDeal.png";
 import { useAuth } from "@/auth";
 import { usePageContext } from "vike-react/usePageContext";
 import ListDivider from "@mui/joy/ListDivider";
-import { financingRoutes } from "@/routes/financing";
+
 import { useMenu } from "./MenuContext";
 
 export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
@@ -24,7 +24,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const pageContext = usePageContext();
 
   const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
-  const [casesOpen, setCasesOpen] = useState(false);
 
   if (!isAuthenticated || pageContext.urlPathname.includes("/proposta/"))
     return null;
@@ -33,7 +32,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
     <>
       {isCaseMenu && (
         <Button
-          className="!absolute translate-x-[10px] translate-y-[10px] !bg-[#f0f0f0] !text-primary h-min"
+          className="!absolute translate-x-[10px] translate-y-[10px] !bg-[#f0f0f0] !text-primary h-min z-[2]"
           onClick={() => {
             toggleMenu(true);
             toggleBackdrop(true);
@@ -162,53 +161,22 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </>
           )}
           <ListDivider />
-
-          <ListItem
-            endAction={
-              casesOpen ? (
-                <FaAngleDown className="me-5" />
-              ) : (
-                <FaAngleRight className="me-5" />
-              )
-            }
-            onClick={() => setCasesOpen(!casesOpen)}
-            className="!ms-5 cursor-pointer"
+          <a
+            onClick={() => {
+              toggleMenu(false);
+              toggleBackdrop(false);
+            }}
+            href="/cenarios"
           >
-            <ListItemDecorator>
-              <FaFileCirclePlus />
-            </ListItemDecorator>
-            <Typography className="font-bold !ms-[-10px]">Nova Proposta</Typography>
-          </ListItem>
-          {casesOpen && (
-            <List>
-              {financingRoutes
-                .filter((r) => !r.href.includes("/:id"))
-                .map((i) => (
-                  <a
-                    onClick={() => {
-                      toggleMenu(false);
-                      toggleBackdrop(false);
-                    }}
-                    href={i.href}
-                    key={i.href}
-                  >
-                    <ListItem
-                      className={`cursor-pointer !px-6 ${
-                        pageContext.urlPathname === i.href
-                          ? "!text-primary"
-                          : ""
-                      }`}
-                      nested
-                      sx={{ my: 1 }}
-                    >
-                      <Typography className="font-bold !ms-[10px]">
-                        {i.title}
-                      </Typography>
-                    </ListItem>
-                  </a>
-                ))}
-            </List>
-          )}
+            <ListItem className="!ms-5 cursor-pointer">
+              <ListItemDecorator>
+                <FaFileCirclePlus />
+              </ListItemDecorator>
+              <Typography className="font-bold !ms-[-10px]">
+                Nova Proposta
+              </Typography>
+            </ListItem>
+          </a>
         </List>
         <List size="lg" className="!absolute bottom-0">
           <ListItem

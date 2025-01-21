@@ -137,7 +137,7 @@ export default function PropertyDataCard({
     >
       {!isSheetHidden("propertyData") && (
         <Sheet variant="outlined" color="neutral" className="p-5 w-full">
-          <h2 className="text-xl text-center mb-3 font-bold ">
+          <h2 className="text-xl text-center my-3 font-bold ">
             {titles[0] || "Dados do Imóvel e Financiamento"}
           </h2>
 
@@ -180,7 +180,7 @@ export default function PropertyDataCard({
               </div>
             )}
 
-            <div>
+            <div className="mb-[-25px]">
               <div className="relative">
                 {!isFieldHidden("downPayment") && (
                   <CurrencyInput
@@ -264,32 +264,68 @@ export default function PropertyDataCard({
                 setPropertyData={setPropertyData}
               />
             )}
+
+            {!isFieldHidden("financingFees2") && (
+              <CurrencyInput
+                label="Documentação total:"
+                id="financingFees"
+                value={propertyData.financingFees}
+                onChange={(v) =>
+                  handleChangeNumber("financingFees", v.target.value)
+                }
+                infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
+              />
+            )}
+            {!isFieldHidden("financingFeesDate2") && (
+              <div>
+                <DatePicker
+                  defaultValue={dayjs(
+                    propertyData.financingFeesDate,
+                    "MM/YYYY"
+                  ).format("MM/YYYY")}
+                  label="Data do pagamento da documentação"
+                  onChange={(v) => setPropertyData("financingFeesDate", v)}
+                />
+              </div>
+            )}
           </div>
         </Sheet>
       )}
 
       {!isSheetHidden("financingDetails") && (
         <Sheet variant="outlined" color="neutral" className="p-5 w-full">
-          <h2 className="text-xl text-center mb-3 font-bold ">
+          <h2 className="text-xl text-center my-3 font-bold ">
             {titles[1] || "  Detalhes do Financiamento"}
           </h2>
 
-          <div className="grid grid-cols-1 gap-5 h-[90%]   gap-5">
+          <div className="grid grid-cols-2 gap-5 h-[90%]   gap-5">
+            {!isFieldHidden("dischargesControl2") && (
+              <div className="py-1 col-span-2">
+                <PropertyDataDischargesControl
+                  propertyData={propertyData}
+                  setPropertyData={setPropertyData}
+                  height="400px"
+                  title="Configurar Fluxo"
+                />
+              </div>
+            )}
             {!isFieldHidden("interestRate") && (
-              <PercentageInput
-                label="Juros nominal do financiamento:"
-                id="interestRate"
-                value={propertyData.interestRate}
-                onChange={(v) =>
-                  handleChangeNumber("interestRate", v.target.value)
-                }
-                wrapperClassName="relative"
-                infoTooltip="Percentual nominal dos juros aplicados ao financiamento, que representa a taxa base acordada com a instituição financeira, sem considerar a inflação ou outros ajustes."
-              />
+              <div className="col-span-2">
+                <PercentageInput
+                  label="Juros nominal do financiamento:"
+                  id="interestRate"
+                  value={propertyData.interestRate}
+                  onChange={(v) =>
+                    handleChangeNumber("interestRate", v.target.value)
+                  }
+                  wrapperClassName="relative"
+                  infoTooltip="Percentual nominal dos juros aplicados ao financiamento, que representa a taxa base acordada com a instituição financeira, sem considerar a inflação ou outros ajustes."
+                />
+              </div>
             )}
 
             {!isFieldHidden("amortizationType") && (
-              <div className="relative">
+              <div className="relative col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Modelo de amortização:
                 </label>
@@ -308,183 +344,178 @@ export default function PropertyDataCard({
               </div>
             )}
 
-            <div className={`grid grid-cols-2 gap-5 `}>
-              {!isFieldHidden("installmentValue") && (
-                <CurrencyInput
-                  lock={
-                    !isFieldHidden("installmentValueTax")
-                      ? installmentValueCalculatorLock
-                      : undefined
-                  }
-                  setLock={(value) => setInstallmentValueCalculatorLock(value)}
-                  label="Valor da Parcela:"
-                  id="installmentValue"
-                  value={propertyData.installmentValue}
-                  onChange={(v) =>
-                    handleChangeNumber("installmentValue", v.target.value)
-                  }
-                  infoTooltip="Valor total que será pago mensalmente. O saldo devedor será reduzido com base no valor da parcela calculada pelo sistema, e qualquer valor excedente será automaticamente destinado ao pagamento de taxas."
-                  extraButton={
-                    !isFieldHidden("installmentSimulator") && (
-                      <Tooltip
-                        sx={{ maxWidth: "280px" }}
-                        size="md"
-                        arrow
-                        direction="rtl"
-                        title="Simular valor da parcela"
-                      >
-                        <div>
-                          <FaCalculator
-                            onClick={() => setInstallmentSimulator(true)}
-                            className="cursor-pointer text-grayText"
-                          />
-                        </div>
-                      </Tooltip>
-                    )
-                  }
-                />
-              )}
+            {!isFieldHidden("installmentValue") && (
+              <CurrencyInput
+                lock={
+                  !isFieldHidden("installmentValueTax")
+                    ? installmentValueCalculatorLock
+                    : undefined
+                }
+                setLock={(value) => setInstallmentValueCalculatorLock(value)}
+                label="Valor da Parcela:"
+                id="installmentValue"
+                value={propertyData.installmentValue}
+                onChange={(v) =>
+                  handleChangeNumber("installmentValue", v.target.value)
+                }
+                infoTooltip="Valor total que será pago mensalmente. O saldo devedor será reduzido com base no valor da parcela calculada pelo sistema, e qualquer valor excedente será automaticamente destinado ao pagamento de taxas."
+                extraButton={
+                  !isFieldHidden("installmentSimulator") && (
+                    <Tooltip
+                      sx={{ maxWidth: "280px" }}
+                      size="md"
+                      arrow
+                      direction="rtl"
+                      title="Simular valor da parcela"
+                    >
+                      <div>
+                        <FaCalculator
+                          onClick={() => setInstallmentSimulator(true)}
+                          className="cursor-pointer text-grayText"
+                        />
+                      </div>
+                    </Tooltip>
+                  )
+                }
+              />
+            )}
 
-              {!isFieldHidden("initialFinancingMonth2") && (
+            {!isFieldHidden("initialFinancingMonth2") && (
+              <DatePicker
+                defaultValue={dayjs(
+                  propertyData.initialFinancingMonth,
+                  "MM/YYYY"
+                ).format("MM/YYYY")}
+                label="Data de inicio das parcelas"
+                onChange={(v) => setPropertyData("initialFinancingMonth", v)}
+              />
+            )}
+
+            {!isFieldHidden("installmentValueTax") && (
+              <CurrencyInput
+                disabled
+                label="Taxa da parcela"
+                id="installmentValueTax"
+                value={taxValue || 0}
+                onChange={() => {}}
+                infoTooltip="Essa é a parte do valor total da parcela que será usada para cobrir taxas. Valores adicionais ao mínimo necessário para o financiamento serão automaticamente direcionados para este campo."
+              />
+            )}
+
+            {!isFieldHidden("totalFinanced") && (
+              <CurrencyInput
+                label={`Total Financiado:`}
+                disabled
+                id="totalFinanced"
+                infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
+                value={totalFinanced}
+                onChange={() => {}}
+              />
+            )}
+
+            {!isFieldHidden("subsidy2") && (
+              <CurrencyInput
+                label="Valor do subsídio:"
+                id="subsidy"
+                value={propertyData.subsidy}
+                onChange={(v) => handleChangeNumber("subsidy", v.target.value)}
+                disabled={propertyData.isHousing}
+              />
+            )}
+
+            {!isFieldHidden("outstandingBalance") && (
+              <CurrencyInput
+                label={`Saldo devedor em ${propertyData.finalYear} anos. (${
+                  propertyData.finalYear * 12
+                }) meses`}
+                disabled
+                id="outstandingBalance"
+                infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
+                value={propertyData.outstandingBalance}
+                onChange={(v) =>
+                  handleChangeNumber("outstandingBalance", v.target.value)
+                }
+              />
+            )}
+
+            {!isFieldHidden("financingFees") && (
+              <CurrencyInput
+                label="Documentação total:"
+                id="financingFees"
+                value={propertyData.financingFees}
+                onChange={(v) =>
+                  handleChangeNumber("financingFees", v.target.value)
+                }
+                infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
+              />
+            )}
+
+            {!isFieldHidden("inCashFees") && (
+              <CurrencyInput
+                label="Taxas à vista:"
+                id="inCashFees"
+                value={propertyData.inCashFees}
+                onChange={(v) =>
+                  handleChangeNumber("inCashFees", v.target.value)
+                }
+              />
+            )}
+
+            {!isFieldHidden("financingFeesDate") && (
+              <div>
                 <DatePicker
                   defaultValue={dayjs(
-                    propertyData.initialFinancingMonth,
+                    propertyData.financingFeesDate,
                     "MM/YYYY"
                   ).format("MM/YYYY")}
-                  label="Data de inicio das parcelas"
-                  onChange={(v) => setPropertyData("initialFinancingMonth", v)}
+                  label="Data do pagamento da documentação"
+                  onChange={(v) => setPropertyData("financingFeesDate", v)}
                 />
-              )}
+              </div>
+            )}
 
-              {!isFieldHidden("installmentValueTax") && (
-                <CurrencyInput
-                  disabled
-                  label="Taxa da parcela"
-                  id="installmentValueTax"
-                  value={taxValue || 0}
-                  onChange={() => {}}
-                  infoTooltip="Essa é a parte do valor total da parcela que será usada para cobrir taxas. Valores adicionais ao mínimo necessário para o financiamento serão automaticamente direcionados para este campo."
+            {!isFieldHidden("financingMonths") && (
+              <div>
+                <FormLabel className="h-[40px]" htmlFor="financingMonths">
+                  Tempo do financiamento:
+                </FormLabel>
+                <Input
+                  id="financingMonths"
+                  value={propertyData.financingMonths}
+                  onChange={(v) => {
+                    const value = Number(v.target.value);
+                    if (value > 0) setPropertyData("financingMonths", value);
+                  }}
+                  type="number"
+                  endDecorator="Meses"
+                  slotProps={{
+                    input: {
+                      min: 1,
+                      max: 420,
+                      step: 1,
+                    },
+                  }}
                 />
-              )}
-            </div>
+              </div>
+            )}
 
-            <div
-              className={`${
-                !isFieldHidden("totalFinanced") &&
-                !isFieldHidden("outstandingBalance")
-                  ? "grid grid-cols-2 gap-5"
-                  : ""
-              }`}
-            >
-              {!isFieldHidden("totalFinanced") && (
-                <CurrencyInput
-                  label={`Total Financiado:`}
-                  disabled
-                  id="totalFinanced"
-                  infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
-                  value={totalFinanced}
-                  onChange={() => {}}
-                />
-              )}
-
-              {!isFieldHidden("outstandingBalance") && (
-                <CurrencyInput
-                  label={`Saldo devedor em ${propertyData.finalYear} anos. (${
-                    propertyData.finalYear * 12
-                  }) meses`}
-                  disabled
-                  id="outstandingBalance"
-                  infoTooltip="Valor restante do financiamento que ainda precisa ser pago após 7 anos, considerando os pagamentos já realizados e os juros acumulados."
-                  value={propertyData.outstandingBalance}
-                  onChange={(v) =>
-                    handleChangeNumber("outstandingBalance", v.target.value)
-                  }
-                />
-              )}
-            </div>
-
-            <div className={`${"grid grid-cols-2  gap-5"}`}>
-              {!isFieldHidden("financingFees") && (
-                <CurrencyInput
-                  label="Documentação total:"
-                  id="financingFees"
-                  value={propertyData.financingFees}
-                  onChange={(v) =>
-                    handleChangeNumber("financingFees", v.target.value)
-                  }
-                  infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
-                />
-              )}
-
-              {!isFieldHidden("inCashFees") && (
-                <CurrencyInput
-                  label="Taxas à vista:"
-                  id="inCashFees"
-                  value={propertyData.inCashFees}
-                  onChange={(v) =>
-                    handleChangeNumber("inCashFees", v.target.value)
-                  }
-                />
-              )}
-
-              {!isFieldHidden("financingFeesDate") && (
-                <div>
-                  <DatePicker
-                    defaultValue={dayjs(
-                      propertyData.financingFeesDate,
-                      "MM/YYYY"
-                    ).format("MM/YYYY")}
-                    label="Data do pagamento da documentação"
-                    onChange={(v) => setPropertyData("financingFeesDate", v)}
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-5">
-              {!isFieldHidden("financingMonths") && (
-                <div>
-                  <FormLabel className="h-[40px]" htmlFor="financingMonths">
-                    Tempo do financiamento:
-                  </FormLabel>
-                  <Input
-                    id="financingMonths"
-                    value={propertyData.financingMonths}
-                    onChange={(v) => {
-                      const value = Number(v.target.value);
-                      if (value > 0) setPropertyData("financingMonths", value);
-                    }}
-                    type="number"
-                    endDecorator="Meses"
-                    slotProps={{
-                      input: {
-                        min: 1,
-                        max: 420,
-                        step: 1,
-                      },
-                    }}
-                  />
-                </div>
-              )}
-
-              {!isFieldHidden("initialFinancingMonth") && (
-                <DatePicker
-                  defaultValue={dayjs(
-                    propertyData.initialFinancingMonth,
-                    "MM/YYYY"
-                  ).format("MM/YYYY")}
-                  label="Data de início das parcelas"
-                  onChange={(v) => setPropertyData("initialFinancingMonth", v)}
-                />
-              )}
-            </div>
+            {!isFieldHidden("initialFinancingMonth") && (
+              <DatePicker
+                defaultValue={dayjs(
+                  propertyData.initialFinancingMonth,
+                  "MM/YYYY"
+                ).format("MM/YYYY")}
+                label="Data de início das parcelas"
+                onChange={(v) => setPropertyData("initialFinancingMonth", v)}
+              />
+            )}
           </div>
         </Sheet>
       )}
 
       {!isSheetHidden("appreciation") && (
-        <Sheet variant="outlined" color="neutral" className="p-5 w-full">
-          <h2 className="text-xl text-center mb-3 font-bold ">
+        <Sheet variant="outlined" color="neutral" className="p-6 w-full">
+          <h2 className="text-xl text-center my-3 font-bold ">
             Valorização e Rentabilidade
           </h2>
 

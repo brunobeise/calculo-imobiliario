@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { Proposal } from "@/types/proposalTypes";
 import { notify } from "@/notify";
-import { CaseStudyTypeLinkMap } from "@/lib/maps";
+import { CaseStudyTypeLinkMap, getCaseLink } from "@/lib/maps";
 import { caseService } from "@/service/caseService";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
@@ -138,15 +138,10 @@ const CaseCard = ({
               <MenuItem
                 onClick={(e) => {
                   e.stopPropagation();
-                  const url =
-                    CaseStudyTypeLinkMap[
-                      casestudy.type as keyof typeof CaseStudyTypeLinkMap
-                    ] +
-                    "/" +
-                    casestudy.id;
+                  
                   toggleMenu(false);
                   toggleBackdrop(false);
-                  window.open(url, "_blank");
+                  window.open(getCaseLink(caseStudy.type), "_blank");
                 }}
               >
                 <MdFileOpen className="mr-2" /> Abrir Estudo

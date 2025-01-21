@@ -8,6 +8,7 @@ import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { nanoid } from "nanoid";
 import { io, Socket } from "socket.io-client";
+import DirectFinancingReportPreview from "@/reports/directFinancingReport/DirectFinancingReportPreview";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -75,8 +76,6 @@ export default function FinancingPlanningReportSharedPage() {
   const page6TimeVisible = useVisibility(page6Ref);
   const page7TimeVisible = useVisibility(page7Ref);
   const page8TimeVisible = useVisibility(page8Ref);
-
-  // Configura conexão com o WebSocket
   useEffect(() => {
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
       transports: ["websocket"],
@@ -162,46 +161,93 @@ export default function FinancingPlanningReportSharedPage() {
         className="relative w-full lg:bg-[#525659]"
         style={{ height: `${dimensions.height}px` }}
       >
-        <FinancingPlanningReportPreview
-          custom={{
-            backgroundColor:
-              proposalData.user.realEstate?.backgroundColor || "",
-            primaryColor: proposalData.user.realEstate?.primaryColor || "",
-            secondaryColor: proposalData.user.realEstate?.secondaryColor || "",
-            headerType: proposalData.user.realEstate?.headerType || 1,
-          }}
-          propertyData={proposalData?.propertyData}
-          user={proposalData.user}
-          caseData={caseData}
-          configData={{
-            propertyName: proposalData.propertyName || "",
-            mainPhoto: proposalData.mainPhoto || "",
-            description: proposalData.description || "",
-            additionalPhotos: proposalData.additionalPhotos,
-            features: proposalData.features,
-            pageViewMap:
-              proposalData.pageViewMap.length === 0
-                ? [true, true, true, true, true, true, true, true]
-                : proposalData.pageViewMap,
-            address: proposalData.address,
-            bathrooms: proposalData.bathrooms,
-            builtArea: proposalData.builtArea,
-            cod: proposalData.cod,
-            landArea: proposalData.landArea,
-            parkingSpaces: proposalData.parkingSpaces,
-            suites: proposalData.suites,
-            subType: proposalData.subType,
-          }}
-          ref={componentRef}
-          page1Ref={page1Ref}
-          page2Ref={page2Ref}
-          page3Ref={page3Ref}
-          page4Ref={page4Ref}
-          page5Ref={page5Ref}
-          page6Ref={page6Ref}
-          page7Ref={page7Ref}
-          page8Ref={page8Ref}
-        />
+        {proposalData.type === "financingPlanning" && (
+          <FinancingPlanningReportPreview
+            custom={{
+              backgroundColor:
+                proposalData.user.realEstate?.backgroundColor || "",
+              primaryColor: proposalData.user.realEstate?.primaryColor || "",
+              secondaryColor:
+                proposalData.user.realEstate?.secondaryColor || "",
+              headerType: proposalData.user.realEstate?.headerType || 1,
+            }}
+            propertyData={proposalData?.propertyData}
+            user={proposalData.user}
+            caseData={caseData}
+            configData={{
+              propertyName: proposalData.propertyName || "",
+              mainPhoto: proposalData.mainPhoto || "",
+              description: proposalData.description || "",
+              additionalPhotos: proposalData.additionalPhotos,
+              features: proposalData.features,
+              pageViewMap:
+                proposalData.pageViewMap.length === 0
+                  ? [true, true, true, true, true, true, true, true]
+                  : proposalData.pageViewMap,
+              address: proposalData.address,
+              bathrooms: proposalData.bathrooms,
+              builtArea: proposalData.builtArea,
+              cod: proposalData.cod,
+              landArea: proposalData.landArea,
+              parkingSpaces: proposalData.parkingSpaces,
+              suites: proposalData.suites,
+              subType: proposalData.subType,
+            }}
+            ref={componentRef}
+            page1Ref={page1Ref}
+            page2Ref={page2Ref}
+            page3Ref={page3Ref}
+            page4Ref={page4Ref}
+            page5Ref={page5Ref}
+            page6Ref={page6Ref}
+            page7Ref={page7Ref}
+            page8Ref={page8Ref}
+          />
+        )}
+
+        {proposalData.type === "directFinancing" && (
+          <DirectFinancingReportPreview
+            custom={{
+              backgroundColor:
+                proposalData.user.realEstate?.backgroundColor || "",
+              primaryColor: proposalData.user.realEstate?.primaryColor || "",
+              secondaryColor:
+                proposalData.user.realEstate?.secondaryColor || "",
+              headerType: proposalData.user.realEstate?.headerType || 1,
+            }}
+            propertyData={proposalData?.propertyData}
+            user={proposalData.user}
+            caseData={caseData}
+            configData={{
+              propertyName: proposalData.propertyName || "",
+              mainPhoto: proposalData.mainPhoto || "",
+              description: proposalData.description || "",
+              additionalPhotos: proposalData.additionalPhotos,
+              features: proposalData.features,
+              pageViewMap:
+                proposalData.pageViewMap.length === 0
+                  ? [true, true, true, true, true, true, true, true]
+                  : proposalData.pageViewMap,
+              address: proposalData.address,
+              bathrooms: proposalData.bathrooms,
+              builtArea: proposalData.builtArea,
+              cod: proposalData.cod,
+              landArea: proposalData.landArea,
+              parkingSpaces: proposalData.parkingSpaces,
+              suites: proposalData.suites,
+              subType: proposalData.subType,
+            }}
+            ref={componentRef}
+            page1Ref={page1Ref}
+            page2Ref={page2Ref}
+            page3Ref={page3Ref}
+            page4Ref={page4Ref}
+            page5Ref={page5Ref}
+            page6Ref={page6Ref}
+            page7Ref={page7Ref}
+            page8Ref={page8Ref}
+          />
+        )}
       </div>
     </>
   );

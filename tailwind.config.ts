@@ -54,6 +54,7 @@ const config: Config = {
       whitefull: "#ffff",
       green: "#239e15",
       red: "#a82222",
+      redDark: "#751717",
       blackish: "#1c1d21;",
       black: "#000000",
     },

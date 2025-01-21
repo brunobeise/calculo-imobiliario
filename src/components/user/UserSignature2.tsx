@@ -23,8 +23,6 @@ export default function UserSignature2(props: UserSignatureProps) {
     realEstate: realEstateReducer,
   };
 
-  console.log(data);
-
   return (
     <div
       style={{

@@ -12,6 +12,8 @@ import PropertyDataStep5 from "./PropertyDataStep5";
 import PropertyDataStep4 from "./PropertyDataStep4";
 import PropertyDataStep6 from "./PropertyDataStep6";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import { usePageContext } from "vike-react/usePageContext";
+import { getCaseTypeByLink } from "@/lib/maps";
 
 export default function PropertyDataNewCaseForm({
   finish,
@@ -28,6 +30,8 @@ export default function PropertyDataNewCaseForm({
     initialRentMonth: dayjs().add(1, "month").format("MM/YYYY"),
     downPayment: 0,
   } as unknown as PropertyData);
+
+  const type = getCaseTypeByLink(usePageContext().urlPathname);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const setForm = (key: string, value: any) => {
@@ -58,12 +62,12 @@ export default function PropertyDataNewCaseForm({
     ? [
         { label: "Início do Estudo" },
         { label: "Informações do Imóvel" },
-        { label: "Entrada" },
+        { label: "Pagamento" },
         { label: "Detalhes do Financiamento" },
         { label: "Aluguel" },
         { label: "Valorização e Rentabilidade" },
       ]
-    : [{ label: "Início" }, { label: "Entrada" }, { label: "Financiamento" }];
+    : [{ label: "Início" }, { label: "Pagamento" }, { label: "Financiamento" }];
 
   const disableNextButton = () => {
     if (isAdvancedMode)
@@ -72,10 +76,10 @@ export default function PropertyDataNewCaseForm({
         (activeStep === 1 && !form.propertyValue) ||
         (activeStep === 1 && !form.propertyAppreciationRate) ||
         (activeStep === 2 && !form.downPayment) ||
-        (activeStep === 3 && !form.interestRate) ||
-        (activeStep === 3 && !form.installmentValue) ||
-        (activeStep === 3 && !form.financingFees) ||
-        (activeStep === 3 && !form.financingMonths) ||
+        (type === 'financingPlanning' && activeStep === 3 && !form.interestRate) ||
+        (type === 'financingPlanning' && activeStep === 3 && !form.installmentValue) ||
+        (type === 'financingPlanning' && activeStep === 3 && !form.financingFees) ||
+        (type === 'financingPlanning' && activeStep === 3 && !form.financingMonths) ||
         (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
         (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
         (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
@@ -85,8 +89,8 @@ export default function PropertyDataNewCaseForm({
     else
       return (
         (activeStep === 0 && !form.propertyValue) ||
-        (activeStep === 2 && !form.installmentValue) ||
-        (activeStep === 2 && !form.financingFees)
+        (type === 'financingPlanning' && activeStep === 2 && !form.installmentValue) ||
+        (activeStep === 2 &&  !form.financingFees)
       );
   };
 
@@ -147,7 +151,7 @@ export default function PropertyDataNewCaseForm({
                 <PropertyDataStep3 form={form} setForm={setForm} />
               )}
               {activeStep === 3 && (
-                <PropertyDataStep4 form={form} setForm={setForm} />
+                <PropertyDataStep4 type={type} form={form} setForm={setForm} />
               )}
               {activeStep === 4 && (
                 <PropertyDataStep5 form={form} setForm={setForm} />
@@ -170,13 +174,14 @@ export default function PropertyDataNewCaseForm({
               )}
               {activeStep === 2 && (
                 <PropertyDataStep4
+                  type={type}
                   simplificated
                   form={form}
                   setForm={setForm}
                 />
               )}
               {activeStep === 3 && (
-                <PropertyDataStep4 form={form} setForm={setForm} />
+                <PropertyDataStep4 type={type} form={form} setForm={setForm} />
               )}
               {activeStep === 4 && (
                 <PropertyDataStep5 form={form} setForm={setForm} />

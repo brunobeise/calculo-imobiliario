@@ -1,15 +1,18 @@
 import { toBRL } from "@/lib/formatter";
+import { getCaseTitle } from "@/lib/maps";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import React from "react";
 
 interface PropertyDataDisplayProps {
   propertyData: PropertyData;
   subType?: string;
+  scenario?: string;
 }
 
 const PropertyDataDisplay: React.FC<PropertyDataDisplayProps> = ({
   propertyData,
   subType,
+  scenario,
 }) => {
   return (
     <div className=" max-w-full overflow-auto text-sm">
@@ -18,9 +21,12 @@ const PropertyDataDisplay: React.FC<PropertyDataDisplayProps> = ({
           <strong>Tipo: </strong> {"Simplificado"}
         </p>
       )}
-      <p>
-        <strong>Cenário: </strong> {"Planejamento de Financiamento"}
-      </p>
+
+      {scenario && (
+        <p>
+          <strong>Cenário: </strong> {getCaseTitle(scenario)}
+        </p>
+      )}
 
       {subType === "Simplificado" ? (
         <div className="grid grid-cols-2 gap-1 text-sm mt-4">

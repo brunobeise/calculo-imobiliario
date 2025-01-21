@@ -13,6 +13,8 @@ import MyCases from "./MyCases";
 import { FaArrowLeft } from "react-icons/fa";
 import SubTypeOptions from "./SubTypeOptions";
 import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
+import { usePageContext } from "vike-react/usePageContext";
+import { getCaseTypeByLink } from "@/lib/maps";
 
 interface NewCaseProps {
   setNewCase: (v: boolean) => void;
@@ -36,6 +38,9 @@ export default function NewCase(props: NewCaseProps) {
   const [context, setContext] = useState<NewCaseContext>();
 
   const { setMultiplePropertyData } = useContext(propertyDataContext);
+  const url = usePageContext().urlPathname;
+
+  const [search, setSearch] = useState("");
 
   const { myCases, realEstateCases, loading, realEstateCasesLastPage } =
     useSelector((state: RootState) => ({
@@ -48,10 +53,11 @@ export default function NewCase(props: NewCaseProps) {
     }));
 
   useEffect(() => {
-    if (context === "myCases") dispatch(fetchCases(undefined));
+    if (context === "myCases")
+      dispatch(fetchCases({ type: getCaseTypeByLink(url), search: search }));
     if (context === "realEstateCases")
       dispatch(fetchRealEstateCases(undefined));
-  }, [context, dispatch]);
+  }, [context, dispatch, search, url]);
 
   const hasLastCase = () => {
     const storedData = localStorage.getItem("financingPlanningPropertyData");
@@ -78,9 +84,10 @@ export default function NewCase(props: NewCaseProps) {
         {!context && " Iniciar estudo"}
         {context === "new" && "Como deseja começar o estudo?"}
         {context === "exists" && "Continuar estudo"}
-        {context === "myCases" && "Meus estudos"}{" "}
-        {context === "template" && "Qual tipo do estudo?"}{" "}
-        {context === "manual" && "Qual tipo do estudo?"}{" "}
+        {context === "realEstateCases" && "Estudos Compartilhados"}
+        {context === "myCases" && "Meus estudos"}
+        {context === "template" && "Qual tipo do estudo?"}
+        {context === "manual" && "Qual tipo do estudo?"}
       </h2>
 
       {!context && <NewCaseOptions setContext={setContext} />}
@@ -128,7 +135,13 @@ export default function NewCase(props: NewCaseProps) {
         />
       )}
 
-      {context === "myCases" && <MyCases myCases={myCases} loading={loading} />}
+      {context === "myCases" && (
+        <MyCases
+          onSearch={(v) => setSearch(v)}
+          myCases={myCases}
+          loading={loading}
+        />
+      )}
 
       {(context === "template" || context === "manual") && (
         <SubTypeOptions

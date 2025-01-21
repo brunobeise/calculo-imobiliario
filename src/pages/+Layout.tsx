@@ -44,6 +44,9 @@ import { MenuProvider } from "@/components/menu/MenuContext";
 import DrawerMenu from "@/components/menu/DrawerMenu";
 import { usePageContext } from "vike-react/usePageContext";
 import { WebSocketProvider } from "@/Socket";
+import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseData";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 export { Layout };
 
@@ -51,6 +54,8 @@ function Layout({ children }: { children: ReactNode }) {
   const pageContext = usePageContext();
   const isCaseMenuRoute =
     pageContext.urlPathname.includes("planejamentofinanciamento") ||
+    pageContext.urlPathname.includes("parcelamentodireto") ||
+    pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname === "/";
 
   return (
@@ -73,21 +78,25 @@ function Layout({ children }: { children: ReactNode }) {
           <WebSocketProvider>
             <PropertyDataProvider>
               <FinancingPlanningCaseDataProvider>
-                <MenuProvider>
-                  <div className="flex">
-                    {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
-                    <div
-                      className={`flex flex-col w-full ${
-                        !isCaseMenuRoute &&
-                        !pageContext.urlPathname.includes("/proposta/")
-                          ? "ms-64"
-                          : ""
-                      }`}
-                    >
-                      {children}
-                    </div>
-                  </div>
-                </MenuProvider>
+                <DirectFinancingCaseDataProvider>
+                  <DndProvider backend={HTML5Backend}>
+                    <MenuProvider>
+                      <div className="flex">
+                        {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
+                        <div
+                          className={`flex flex-col w-full ${
+                            !isCaseMenuRoute &&
+                            !pageContext.urlPathname.includes("/proposta/")
+                              ? "ms-64"
+                              : ""
+                          }`}
+                        >
+                          {children}
+                        </div>
+                      </div>
+                    </MenuProvider>
+                  </DndProvider>
+                </DirectFinancingCaseDataProvider>
               </FinancingPlanningCaseDataProvider>
             </PropertyDataProvider>
           </WebSocketProvider>

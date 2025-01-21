@@ -2,11 +2,12 @@ import CompleteAnalysisChart from "@/components/charts/CompleteAnalysisChart";
 import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { FaChartLine } from "react-icons/fa";
 import SectionTitle from "./SectionTitle";
+import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
 
 interface DetailChartAnalysisProps {
   color: string;
   secondary: string;
-  caseData: FinancingPlanningData;
+  caseData: FinancingPlanningData | DirectFinancingData;
 }
 
 export default function DetailChartAnalysis(props: DetailChartAnalysisProps) {

@@ -76,7 +76,7 @@ export default function MyCases() {
   const [search, setSearch] = useState("");
 
   const [type, setType] = useState(() => {
-    return localStorage.getItem("type") || "financingPlanning";
+    return localStorage.getItem("type") || "";
   });
 
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(() => {
@@ -262,17 +262,16 @@ export default function MyCases() {
         <div className="flex flex-col gap-2 me-4">
           <FormLabel htmlFor="case-type-select">Tipo de proposta:</FormLabel>
           <Select
-            onChange={(_, v) => setType(v || "financingPlanning")}
+            onChange={(_, v) => setType(v || "")}
             id="case-type-select"
             className="w-[300px]"
             defaultValue={type}
           >
+            <Option value={""}>Todos</Option>
             <Option value={"financingPlanning"}>
               Planejamento de Financiamento
             </Option>
-            <Option value={"financingOrCash"}>
-              Financiamento vs. Compra à Vista
-            </Option>
+            <Option value={"directFinancing"}>Parcelamento Direto</Option>
           </Select>
         </div>
         {casesContext !== "realEstateCases" && (
@@ -358,7 +357,7 @@ export default function MyCases() {
   const content = (
     <>
       {showMode === "cards" ? (
-        <div className="grid grid-cols-2 lg:grid-cols-4 uw:grid-cols-8 gap-6 p-2 pe-4">
+        <div className="grid grid-cols-2 lg:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
           {data.map((caseStudy) => (
             <CaseCard
               adminCase={casesContext === "adminCases"}

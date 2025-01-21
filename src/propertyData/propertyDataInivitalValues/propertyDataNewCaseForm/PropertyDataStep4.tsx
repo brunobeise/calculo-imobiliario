@@ -13,10 +13,12 @@ export default function PropertyDataStep4({
   form,
   setForm,
   simplificated,
+  type,
 }: {
   form: PropertyData;
   setForm: (key: string, value: any) => void;
   simplificated?: boolean;
+  type: string;
 }) {
   const [installmentSimulator, setInstallmentSimulator] = useState(false);
 
@@ -34,7 +36,7 @@ export default function PropertyDataStep4({
       )}
 
       <div className="flex flex-col gap-5">
-        {!simplificated && (
+        {!simplificated && type === 'financingPlanning' && (
           <div className="grid grid-cols-2 gap-5">
             <PercentageInput
               infoTooltip="Percentual nominal dos juros aplicados ao financiamento."
@@ -68,62 +70,72 @@ export default function PropertyDataStep4({
           </div>
         )}
 
-        <div className={`grid grid-cols-${simplificated ? "1" : "2"} gap-5`}>
-          <CurrencyInput
-            label="Valor da parcela:"
-            id="installmentValue"
-            value={form.installmentValue}
-            onChange={(v) =>
-              setForm("installmentValue", Number(v.target.value))
-            }
-            extraButton={
-              <Tooltip
-                sx={{ maxWidth: "280px" }}
-                size="md"
-                arrow
-                direction="rtl"
-                title="Simular valor da parcela"
-              >
-                <div>
-                  <FaCalculator
-                    onClick={() => setInstallmentSimulator(true)}
-                    className="cursor-pointer text-grayText"
-                  />
-                </div>
-              </Tooltip>
-            }
-          />
-
-          {!simplificated && (
-            <DatePicker
-              defaultValue={dayjs().add(1, "month").format("MM/YYYY")}
-              label="Início das parcelas:"
-              onChange={(v) => setForm("initialFinancingMonth", v)}
+        {type == "fiancingPlanning" && (
+          <div className={`grid grid-cols-${simplificated ? "1" : "2"} gap-5`}>
+            <CurrencyInput
+              label="Valor da parcela:"
+              id="installmentValue"
+              value={form.installmentValue}
+              onChange={(v) =>
+                setForm("installmentValue", Number(v.target.value))
+              }
+              extraButton={
+                <Tooltip
+                  sx={{ maxWidth: "280px" }}
+                  size="md"
+                  arrow
+                  direction="rtl"
+                  title="Simular valor da parcela"
+                >
+                  <div>
+                    <FaCalculator
+                      onClick={() => setInstallmentSimulator(true)}
+                      className="cursor-pointer text-grayText"
+                    />
+                  </div>
+                </Tooltip>
+              }
             />
-          )}
-        </div>
+
+            {!simplificated && (
+              <DatePicker
+                defaultValue={dayjs().add(1, "month").format("MM/YYYY")}
+                label="Início das parcelas:"
+                onChange={(v) => setForm("initialFinancingMonth", v)}
+              />
+            )}
+          </div>
+        )}
 
         <CurrencyInput
-          label="Taxas do financiamento:"
+          label="Valor da documentação:"
           id="financingFees"
           value={form.financingFees}
           onChange={(v) => setForm("financingFees", Number(v.target.value))}
           infoTooltip="Valor total das taxas que devem ser pagas no momento da contratação do financiamento, como taxas de administração, seguro e avaliação do imóvel."
         />
 
-        <CurrencyInput
-          label={`Total Financiado:`}
-          disabled
-          id="totalFinanced"
-          infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
-          value={
-            form.propertyValue -
-            form.discharges.reduce((acc, val) => acc + val.originalValue, 0) -
-            form.downPayment -
-            (form.subsidy || 0)
-          }
-          onChange={() => {}}
+        <DatePicker
+          defaultValue={dayjs().format("MM/YYYY")}
+          label="Data do pagamento da documentação"
+          onChange={(v) => setForm("financingFeesDate", v)}
         />
+
+        {type === "financingPlanning" && (
+          <CurrencyInput
+            label={`Total Financiado:`}
+            disabled
+            id="totalFinanced"
+            infoTooltip="Valor corresponde ao saldo que será financiado. (Valor do imóvel - Valor do recurso próprio)"
+            value={
+              form.propertyValue -
+              form.discharges.reduce((acc, val) => acc + val.originalValue, 0) -
+              form.downPayment -
+              (form.subsidy || 0)
+            }
+            onChange={() => {}}
+          />
+        )}
       </div>
       <InstallmentSimulationModal
         onClose={() => setInstallmentSimulator(false)}

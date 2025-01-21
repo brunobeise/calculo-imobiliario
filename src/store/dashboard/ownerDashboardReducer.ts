@@ -74,7 +74,7 @@ export const fetchOwnerProposalsChart = createAsyncThunk<
   { rejectValue: string }
 >("ownerDashboard/fetchProposalsChart", async (props, { rejectWithValue }) => {
   try {
-    const response = await dashboardService.getProposalsChart(
+    const response = await dashboardService.getOwnerProposalsChart(
       props.filter,
       props.realEstate
     );

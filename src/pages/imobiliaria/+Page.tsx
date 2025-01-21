@@ -267,13 +267,12 @@ export default function RealEstateConfig() {
               </div>
             </div>
 
-            <div className="col-span-12 grid grid-cols-2 gap-4">
+            <div className="col-span-12 flex">
               <Controller
                 name="logo"
                 control={control}
                 render={({ field }) => (
                   <PictureInput
-                    bordered
                     label="Logo Principal:"
                     value={field.value ? [field.value] : []}
                     onChange={(v) => field.onChange(v)}
@@ -285,7 +284,6 @@ export default function RealEstateConfig() {
                 control={control}
                 render={({ field }) => (
                   <PictureInput
-                    bordered
                     label="Logo Secundário:"
                     value={field.value ? [field.value] : []}
                     onChange={(v) => field.onChange(v)}

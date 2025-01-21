@@ -3,10 +3,11 @@ import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { toBRL } from "@/lib/formatter";
 import SectionTitle from "./SectionTitle";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
 
 interface ProjectionReturnProps {
   propertyData: PropertyData;
-  caseData: FinancingPlanningData;
+  caseData: FinancingPlanningData | DirectFinancingData;
   color: string;
   secondary: string;
 }
@@ -18,6 +19,12 @@ export default function ProjectionReturn({
   secondary,
 }: ProjectionReturnProps) {
   const { totalProfit, totalProfitPercent } = caseData;
+
+  const isFinancingPlanningData = (
+    data: FinancingPlanningData | DirectFinancingData
+  ): data is FinancingPlanningData => {
+    return Array.isArray(data.detailedTable) && "breakEven" in data;
+  };
 
   const { downPayment, financingFees } = propertyData;
 
@@ -119,7 +126,7 @@ export default function ProjectionReturn({
             <div className="flex gap-1">
               <p className="font-medium">Dívida Quitada - </p>
               <strong className="text-red">
-                {toBRL(caseData.finalRow.outstandingBalance || 0) }
+                {toBRL(caseData.finalRow.outstandingBalance || 0)}
               </strong>
             </div>
             {propertyData.considerCapitalGainsTax && (
@@ -190,12 +197,20 @@ export default function ProjectionReturn({
             <div className="flex gap-1">
               <strong className="text-red">
                 {toBRL(
-                  caseData.detailedTable.reduce(
-                    (acc, val) =>
-                      val.rentalAmount < 0 ? acc + val.rentalAmount * -1 : acc,
-                    0
-                  )
-                )}{" "}
+                  isFinancingPlanningData(caseData)
+                    ? caseData.detailedTable.reduce((acc, val) => {
+                        return val.rentalAmount < 0
+                          ? acc + val.rentalAmount * -1
+                          : acc;
+                      }, 0)
+                    : Array.isArray(caseData.detailedTable)
+                    ? caseData.detailedTable.reduce((acc, val) => {
+                        return val.rentalAmount < 0
+                          ? acc + val.rentalAmount * -1
+                          : acc;
+                      }, 0)
+                    : 0
+                )}
                 -{" "}
               </strong>
               <p className="font-medium">Aluguel - Parcela </p>

@@ -1,10 +1,18 @@
 export const CaseStudyTypeLinkMap = {
   financingPlanning: "/planejamentofinanciamento",
+  directFinancing: "/parcelamentodireto",
+};
+
+export const CaseStudyLinkTypeMap = {
+  "/planejamentofinanciamento": "financingPlanning",
+  "/parcelamentodireto": "directFinancing",
 };
 
 export const CaseStudyTypeMap = {
   financingPlanning: "Planejamento de Financiamento",
   planejamentofinanciamento: "Planejamento de Financiamento",
+  directFinancing: "Parcelamento Direto",
+  parcelamentodireto: "Parcelamento Direto",
 };
 
 export const badgeStatusMap = {
@@ -29,6 +37,13 @@ export function getCaseTitle(Key: string) {
 export function getCaseLink(Key?: string) {
   return (
     CaseStudyTypeLinkMap[Key as keyof typeof CaseStudyTypeLinkMap] ||
+    "financingPlanning"
+  );
+}
+
+export function getCaseTypeByLink(Key?: string) {
+  return (
+    CaseStudyLinkTypeMap[Key as keyof typeof CaseStudyLinkTypeMap] ||
     "financingPlanning"
   );
 }

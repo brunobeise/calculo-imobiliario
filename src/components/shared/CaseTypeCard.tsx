@@ -15,19 +15,21 @@ export default function CaseTypeCard({
 }: CaseCardProps) {
   const cardContent = (
     <div
-      className={`relative overflow-hidden min-w-[260px] max-w-[260px] text-center h-[420px] bg-white rounded-[10px] duration-300 pt-5 ${
+      className={`relative overflow-hidden min-w-[260px] max-w-[260px]  h-[420px] bg-white rounded-[10px] duration-300 pt-5 ${
         comingSoon
           ? "border-[#bebebe] border-2"
           : " hover:scale-[102%] cursor-pointer shadow-[inset_0_-3em_3em_rgba(0,0,0,0.05),0_0_0_2px_rgb(190,190,190),0.3em_0.3em_1em_rgba(0,0,0,0.3)] transition-duration-300 hover:shadow-[inset_0_-3em_3em_rgba(0,0,0,0.12),0_0_0_2px_rgb(190,190,190),0.3em_0.3em_1em_rgba(0,0,0,0.3)]"
       }`}
     >
-      <span
-        className={`text-2xl text-primary font-bold ${
-          comingSoon ? "opacity-70" : ""
-        }`}
-      >
-        {title}
-      </span>
+      <div className="px-4 text-center ">
+        <span
+          className={`text-[1.6rem] text-primary  font-bold ${
+            comingSoon ? "opacity-70" : ""
+          }`}
+        >
+          {title}
+        </span>
+      </div>
       <p
         className={`px-4 mt-4 text-primary text-left ms-2 text-[0.9rem] ${
           comingSoon ? "opacity-70" : ""

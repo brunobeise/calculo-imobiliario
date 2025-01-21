@@ -1,110 +1,230 @@
 import React, { useEffect, useState } from "react";
-import { Button, FormLabel, SvgIcon } from "@mui/joy";
+import { FaRedo, FaTrash } from "react-icons/fa";
+import { useDrag, useDrop } from "react-dnd";
+import { IoIosAdd } from "react-icons/io";
 
-interface PictureReportInputProps {
+interface PictureInputProps {
   onChange: (src: string) => void;
   value?: string[];
   label: string;
   multiple?: boolean;
   bordered?: boolean;
+  maxSize?: number;
 }
 
-export default function PictureInput({
+interface DraggableImageProps {
+  src: string;
+  index: number;
+  moveImage: (from: number, to: number) => void;
+  handleDelete: (index: number) => void;
+  handleReplace: () => void;
+}
+
+const DraggableImage: React.FC<DraggableImageProps> = ({
+  src,
+  index,
+  moveImage,
+  handleDelete,
+  handleReplace,
+}) => {
+  const [, ref] = useDrag({
+    type: "image",
+    item: { index },
+  });
+
+  const [, drop] = useDrop({
+    accept: "image",
+    hover: (item: { index: number }) => {
+      if (item.index !== index) {
+        moveImage(item.index, index);
+        item.index = index;
+      }
+    },
+  });
+
+  return (
+    <div
+      ref={(node) => ref(drop(node))}
+      className="relative h-20 max-w-32  flex items-center justify-center border border-border rounded overflow-hidden"
+    >
+      <img src={src} alt="Preview" className="object-cover h-full w-full" />
+      <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
+        <button type="button" onClick={handleReplace} className="text-white">
+          <FaRedo />
+        </button>
+        <button
+          type="button"
+          onClick={() => handleDelete(index)}
+          className="text-red"
+        >
+          <FaTrash />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export const PictureInput: React.FC<PictureInputProps> = ({
   onChange,
   label,
-  value,
+  value = [],
   multiple = false,
   bordered = false,
-}: PictureReportInputProps) {
-  const [fileNames, setFileNames] = useState<string[]>(value || []);
-  const [fileSrcs, setFileSrcs] = useState<string[]>(value || []);
+  maxSize = 5120,
+}) => {
+  const [fileNames, setFileNames] = useState<string[]>(value);
+  const [fileSrcs, setFileSrcs] = useState<string[]>(value);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files) {
-      const srcs = Array.from(files).map((file) => URL.createObjectURL(file));
-      const names = Array.from(files).map((file) => file.name);
-      setFileNames(names);
-      setFileSrcs(srcs);
-      onChange(srcs.join(","));
+  const [error, setError] = useState<string | null>(null);
+
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFiles = (files: FileList) => {
+    const srcs = Array.from(files).map((file) => {
+      if (file.size / 1024 > maxSize) {
+        setError(`File size exceeds the limit of ${maxSize}KB`);
+        return "";
+      }
+      return URL.createObjectURL(file);
+    });
+
+    const names = Array.from(files).map((file) => file.name);
+    const newSrcs = multiple
+      ? [...fileSrcs.filter(Boolean), ...srcs.filter((src) => src !== "")]
+      : srcs.filter((src) => src !== "");
+    const newNames = multiple ? [...fileNames, ...names] : names;
+
+    setFileNames(newNames);
+    setFileSrcs(newSrcs);
+    onChange(newSrcs.join(","));
+    setError(null);
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) handleFiles(files);
+
+    // Limpa o valor do input para permitir novas seleções
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const moveImage = (from: number, to: number) => {
+    const updatedSrcs = [...fileSrcs];
+    const [movedSrc] = updatedSrcs.splice(from, 1);
+    updatedSrcs.splice(to, 0, movedSrc);
+    setFileSrcs(updatedSrcs);
+    onChange(updatedSrcs.join(","));
+  };
+
+  const handleDelete = (index: number) => {
+    if (multiple) {
+      const updatedSrcs = fileSrcs
+        .filter((_, i) => i !== index)
+        .filter(Boolean);
+      const updatedNames = fileNames.filter((_, i) => i !== index);
+      setFileSrcs(updatedSrcs);
+      setFileNames(updatedNames);
+      onChange(updatedSrcs.join(","));
+    } else {
+      setFileSrcs([]);
+      setFileNames([]);
+      onChange("");
     }
   };
 
+  const handleReplace = () => {
+    fileInputRef.current?.click();
+  };
+
   useEffect(() => {
-    if (value) setFileSrcs(value);
+    setFileSrcs(value);
   }, [value]);
 
   return (
     <div
-      className={`p-3 rounded overflow-hidden  ${
-        bordered ? " py-3 px-0 border border-[#e7e5e4]" : ""
+      className={`flex flex-col gap-2 p-4 ${
+        bordered ? "border border-gray-300 rounded" : ""
       }`}
     >
-      <div className={"ms-4 w-full !cursor-pointer"}>
-        <FormLabel htmlFor={label} className="mr-2">
-          {label}
-        </FormLabel>
-        <div className="flex items-center mt-2">
-          <Button
-            role={undefined}
-            tabIndex={-1}
-            variant="outlined"
-            color="neutral"
-            className="text-nowrap"
-            startDecorator={
-              <SvgIcon>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                  />
-                </svg>
-              </SvgIcon>
-            }
-          >
-            Escolher arquivo
-            <input
-              id={label}
-              type="file"
-              multiple={multiple}
-              onChange={handleFileChange}
-              className="absolute inset-0 w-full h-full opacity-0 !cursor-pointer"
-            />
-          </Button>
-          {fileSrcs.length === 1 && (
-            <div className="flex items-center ml-4">
-              {fileSrcs.map((src, index) => (
-                <div key={index} className="flex items-center mr-4">
-                  <img src={src} alt="Preview" className="h-10 mr-2" />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        {fileSrcs.length > 1 && (
-          <div className="flex items-center ml-4 mt-2 flex-wrap gap-5">
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+      {fileSrcs.filter(Boolean).length > 1 ? (
+        <div className="relative flex items-center  gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
+          <div className="flex flex-wrap gap-2">
             {fileSrcs.map((src, index) => (
-              <div key={index} className="flex items-center mr-4">
-                <img
+              <div className="cursor-pointer ">
+                <DraggableImage
+                  key={index}
                   src={src}
-                  alt="Preview"
-                  className="w-10 h-10 object-cover mr-2"
+                  index={index}
+                  moveImage={moveImage}
+                  handleDelete={handleDelete}
+                  handleReplace={handleReplace}
                 />
-                <span>
-                  {!fileNames[index].includes("cloudinary") && fileNames[index]}
-                </span>
               </div>
             ))}
+            <div
+              className="text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <IoIosAdd />
+            </div>
           </div>
-        )}
-      </div>
+        </div>
+      ) : fileSrcs.filter(Boolean).length === 1 ? (
+        <div className="flex items-center justify-between gap-2 p-4 border border-border rounded min-w-[300px] w-full h-24">
+          <div className="flex gap-2">
+            <img
+              src={fileSrcs[0]}
+              alt="Preview"
+              className="max-h-20 max-w-32 object-cover rounded"
+            />
+            {multiple && (
+              <div
+                className="text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <IoIosAdd />
+              </div>
+            )}
+          </div>
+          <div className="flex gap-5">
+            <button
+              type="button"
+              onClick={() => handleReplace()}
+              className="text-blue-500 hover:text-gray-600"
+            >
+              <FaRedo />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDelete(0)}
+              className="text-red hover:text-redDark"
+            >
+              <FaTrash />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="flex justify-center items-center border-dashed border-2 border-gray text-grayText rounded-md p-6 cursor-pointer hover:border-grayScale-400 min-h-24"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <span className="text-sm font-medium">
+            {multiple ? "Selecionar imagens" : "Selecionar imagem"}
+          </span>
+        </div>
+      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple={multiple}
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      {error && <span className="text-red-500 text-sm">{error}</span>}
     </div>
   );
-}
+};
+
+export default PictureInput;
