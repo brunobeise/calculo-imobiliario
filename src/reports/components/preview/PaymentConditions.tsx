@@ -202,10 +202,13 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                       .replace(/^./, (match) => match.toUpperCase())}
                   </span>
                   <ul style={{ color: secondary }} className="ml-1 my-1">
-                    <li>
-                      • 1ª Parte:{" "}
-                      <strong style={{ color }}>{toBRL(downPayment)}</strong>
-                    </li>
+                    {propertyData.downPayment > 0 && (
+                      <li>
+                        • 1ª Parte:{" "}
+                        <strong style={{ color }}>{toBRL(downPayment)}</strong>
+                      </li>
+                    )}
+
                     {propertyData.financingFeesDate ===
                       propertyData.initialDate && (
                       <li style={{ color: secondary }}>
@@ -372,6 +375,16 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               {toBRL(totalFinancing)}
             </p>
             <ul className="list-none space-y-2 text-sm">
+              {propertyData.subsidy > 0 && (
+                <li>
+                  <span style={{ color: secondary }} className="text-sm">
+                    • Subsídio:{" "}
+                  </span>
+                  <strong style={{ color }}>
+                    {toBRL(propertyData.subsidy)}
+                  </strong>
+                </li>
+              )}
               <li>
                 <span style={{ color: secondary }} className="text-sm">
                   {" "}
