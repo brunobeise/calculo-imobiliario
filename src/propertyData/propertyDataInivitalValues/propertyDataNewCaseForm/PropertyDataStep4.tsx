@@ -70,7 +70,7 @@ export default function PropertyDataStep4({
           </div>
         )}
 
-        {type == "fiancingPlanning" && (
+        {type == "financingPlanning" && (
           <div className={`grid grid-cols-${simplificated ? "1" : "2"} gap-5`}>
             <CurrencyInput
               label="Valor da parcela:"
