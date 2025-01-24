@@ -43,9 +43,6 @@ export default function UserConfig() {
     setForm((prevForm) => ({
       ...prevForm,
       [id]: value,
-      fullName: prevForm.fullName ?? "",
-      role: prevForm.role ?? "",
-      creci: prevForm.creci ?? "",
     }));
   };
 
