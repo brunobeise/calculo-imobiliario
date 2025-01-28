@@ -4,8 +4,9 @@ import casesReducer from "./caseReducer";
 import userReducer from "./userReducer";
 import realEstateReducer from "./realEstateReducer";
 import adminDashboardReducer from "./dashboard/adminDashboardReducer";
-import ownerDashboardReducer from './dashboard/ownerDashboardReducer'
+import ownerDashboardReducer from "./dashboard/ownerDashboardReducer";
 import userDashboardReducer from "./dashboard/userDashboardReducer";
+import buildingReducer from "./buildingReducer";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     proposals: casesReducer,
     user: userReducer,
     realEstate: realEstateReducer,
+    building: buildingReducer,
   },
 });
 

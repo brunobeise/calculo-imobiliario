@@ -16,8 +16,8 @@ import logo from "@/assets/imobDeal.png";
 import { useAuth } from "@/auth";
 import { usePageContext } from "vike-react/usePageContext";
 import ListDivider from "@mui/joy/ListDivider";
-
 import { useMenu } from "./MenuContext";
+import { FaBuilding } from "react-icons/fa";
 
 export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const { isAuthenticated, user } = useAuth();
@@ -68,7 +68,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             href={"/dashboard"}
             onClick={() => {
               toggleBackdrop(false);
-              toggleMenu(false);
             }}
           >
             <ListItem
@@ -161,6 +160,32 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </>
           )}
           <ListDivider />
+
+          <a
+            href={"/imoveis"}
+            onClick={() => {
+              toggleBackdrop(false);
+            }}
+          >
+            <ListItem
+              className={`!ms-5 ${
+                pageContext.urlPathname === "/imoveis" ? "!text-primary" : ""
+              }`}
+            >
+              <ListItemDecorator>
+                <FaBuilding />
+              </ListItemDecorator>
+              <Typography
+                className={`font-bold !ms-[-10px] ${
+                  pageContext.urlPathname === "/imoveis" ? "!text-primary" : ""
+                }`}
+              >
+                Imóveis
+              </Typography>
+            </ListItem>
+          </a>
+          <ListDivider />
+
           <a
             onClick={() => {
               toggleMenu(false);

@@ -1,10 +1,19 @@
-import { FormLabel, Textarea, Input } from "@mui/joy";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  FormLabel,
+  Textarea,
+  Input,
+  FormControl,
+  FormHelperText,
+} from "@mui/joy";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
 interface TextFieldInputProps {
   onChange: (value: string) => void;
   label: string;
   isTextarea?: boolean;
-  value?: string;
+  value?: string | number;
+  error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
 }
 
 export default function TextInput({
@@ -12,11 +21,13 @@ export default function TextInput({
   value,
   label,
   isTextarea = false,
+  error,
 }: TextFieldInputProps) {
   return (
-    <div className="p-3 rounded flex items-center">
-      <div className="ms-4 w-full">
-        <FormLabel htmlFor={label}>{label}</FormLabel>
+    <FormControl error={!!error} className="p-3 rounded flex items-center">
+      <div className="w-full">
+        <FormLabel>{label}</FormLabel>
+
         <div className="mt-2">
           {isTextarea ? (
             <Textarea
@@ -29,10 +40,16 @@ export default function TextInput({
               }}
             />
           ) : (
-            <Input value={value} onChange={(e) => onChange(e.target.value)} />
+            <Input
+            
+              error={!!error}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+            />
           )}
         </div>
+        {error && <FormHelperText>{error.toString()}</FormHelperText>}
       </div>
-    </div>
+    </FormControl>
   );
 }

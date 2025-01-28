@@ -272,7 +272,10 @@ export default function PropertyDataDischargesControl({
             Total:
             <span className="ms-1 ">
               {toBRL(
-                propertyData.discharges.reduce((acc, val) => acc + val.value, 0)
+                propertyData.discharges.reduce(
+                  (acc, val) => acc + val.originalValue,
+                  0
+                )
               )}
             </span>
           </p>
@@ -296,8 +299,8 @@ export default function PropertyDataDischargesControl({
                 <th>Tipo</th>
                 <th className="w-[80px]">Entrada</th>
                 <th>Mês</th>
-                <th>Parcelas</th>
-                <th>Valor</th>
+                <th>Parcelas</th>     <th>Valor</th>
+           
                 <th className="w-[40px]"></th>
               </tr>
             </thead>
@@ -319,7 +322,7 @@ export default function PropertyDataDischargesControl({
                         .format("MM/YYYY")}
                     </td>
                     <td>{item.count}x</td>
-                    <td>{toBRL(item.value)}</td>
+                    <td>{toBRL(item.originalValue)}</td>
                     <td className="flex justify-end items-center w-[40px]">
                       <FaTrash
                         onClick={() => handleRemoveDischargeGroup(item)}
@@ -622,7 +625,8 @@ export default function PropertyDataDischargesControl({
                 <tr>
                   <th className="w-[90px]">Mês</th>
                   <th>Índice</th>
-                  <th>Valor</th>
+                  <th>Valor Original</th>
+                  <th>Valor real</th>
                   {propertyData.PVDiscountRate && <th>Valor Presente</th>}
                   <th className="w-[30px]"></th>
                 </tr>
@@ -649,6 +653,7 @@ export default function PropertyDataDischargesControl({
                           {(item.indexType || "Nenhum") +
                             ` ${item.indexValue ? item.indexValue + "%" : ""}`}
                         </td>
+                        <td>{toBRL(item.originalValue)}</td>
                         <td>{toBRL(item.value)}</td>
                         {propertyData.PVDiscountRate && (
                           <td>{toBRL(presentValue)}</td>

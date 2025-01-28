@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
-import { FaBook, FaCaretDown, FaCaretUp, FaFileAlt } from "react-icons/fa";
-import { FormLabel, Option, Select, Table } from "@mui/joy";
+import {
+  FaBook,
+  FaCaretDown,
+  FaCaretUp,
+  FaFileAlt,
+  FaPlusCircle,
+} from "react-icons/fa";
+import { Button, FormLabel, Option, Select, Table } from "@mui/joy";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import {
@@ -27,15 +33,16 @@ import { useAuth } from "@/auth";
 import { navigate } from "vike/client/router";
 import { RiAdminFill } from "react-icons/ri";
 import StatusFilter from "@/components/shared/StatusFilter";
+import { useMenu } from "@/components/menu/MenuContext";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
+  const { toggleMenu, toggleBackdrop } = useMenu();
 
   const [casesContext, setCasesContext] = useState<
     "myCases" | "realEstateCases" | "adminCases"
   >("myCases");
   const [casesContextDropdown, setCasesContextDropdown] = useState(false);
-
   const lastPage = useSelector(
     (state: RootState) =>
       state.proposals[
@@ -288,6 +295,16 @@ export default function MyCases() {
             />
           </>
         )}
+        <Button
+          onClick={() => {
+            navigate("/cenarios");
+            toggleMenu(false);
+            toggleBackdrop(false);
+          }}
+          endDecorator={<FaPlusCircle />}
+        >
+          Nova Proposta
+        </Button>
       </div>
     </div>
   );

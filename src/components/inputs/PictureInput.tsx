@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { FaRedo, FaTrash } from "react-icons/fa";
 import { useDrag, useDrop } from "react-dnd";
 import { IoIosAdd } from "react-icons/io";
+import { FormControl, FormHelperText, FormLabel } from "@mui/joy";
+import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 
 interface PictureInputProps {
   onChange: (src: string) => void;
@@ -10,6 +13,7 @@ interface PictureInputProps {
   multiple?: boolean;
   bordered?: boolean;
   maxSize?: number;
+  error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
 }
 
 interface DraggableImageProps {
@@ -71,11 +75,12 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   multiple = false,
   bordered = false,
   maxSize = 5120,
+  error,
 }) => {
   const [fileNames, setFileNames] = useState<string[]>(value);
   const [fileSrcs, setFileSrcs] = useState<string[]>(value);
 
-  const [error, setError] = useState<string | null>(null);
+  const [Error, setError] = useState<string | null>(null);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -103,8 +108,6 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) handleFiles(files);
-
-    // Limpa o valor do input para permitir novas seleções
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -141,17 +144,20 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   }, [value]);
 
   return (
-    <div
+    <FormControl
+      error={!!error}
       className={`flex flex-col gap-2 p-4 ${
-        bordered ? "border border-gray-300 rounded" : ""
+        bordered ? "border border-border rounded" : ""
       }`}
     >
-      <label className="text-sm font-medium text-gray-700">{label}</label>
+      <FormLabel className="text-sm font-medium text-gray-700">
+        {label}
+      </FormLabel>
       {fileSrcs.filter(Boolean).length > 1 ? (
         <div className="relative flex items-center  gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
           <div className="flex flex-wrap gap-2">
             {fileSrcs.map((src, index) => (
-              <div className="cursor-pointer ">
+              <div key={src} className="cursor-pointer ">
                 <DraggableImage
                   key={index}
                   src={src}
@@ -163,7 +169,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
               </div>
             ))}
             <div
-              className="text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border"
+              className={`text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border `}
               onClick={() => fileInputRef.current?.click()}
             >
               <IoIosAdd />
@@ -206,12 +212,14 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         </div>
       ) : (
         <div
-          className="flex justify-center items-center border-dashed border-2 border-gray text-grayText rounded-md p-6 cursor-pointer hover:border-grayScale-400 min-h-24"
+          className={`flex justify-center items-center border-dashed border-2 border-gray text-grayText rounded-md p-6 cursor-pointer hover:border-grayScale-400 min-h-24${
+            error ? " border-error hover:border-red" : ""
+          }`}
           onClick={() => fileInputRef.current?.click()}
         >
-          <span className="text-sm font-medium">
+          <FormHelperText className="text-sm font-medium">
             {multiple ? "Selecionar imagens" : "Selecionar imagem"}
-          </span>
+          </FormHelperText>
         </div>
       )}
       <input
@@ -222,8 +230,10 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         className="hidden"
         onChange={handleFileChange}
       />
-      {error && <span className="text-red-500 text-sm">{error}</span>}
-    </div>
+      {(error || Error) && (
+        <FormHelperText>{error.toString() || Error}</FormHelperText>
+      )}
+    </FormControl>
   );
 };
 

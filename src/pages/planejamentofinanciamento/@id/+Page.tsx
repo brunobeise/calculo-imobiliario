@@ -16,6 +16,7 @@ import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import NewCase from "../../../components/newCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import { caseService } from "@/service/caseService";
+
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { Proposal } from "@/types/proposalTypes";

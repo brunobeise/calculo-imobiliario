@@ -55,6 +55,7 @@ const config: Config = {
       green: "#239e15",
       red: "#a82222",
       redDark: "#751717",
+      error: "#c71c1c",
       blackish: "#1c1d21;",
       black: "#000000",
     },
@@ -72,6 +73,7 @@ const config: Config = {
     require("tailwindcss-animate"),
     require("postcss-nesting"),
     require("tailwind-scrollbar"),
+    
   ],
 };
 

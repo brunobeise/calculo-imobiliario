@@ -24,9 +24,9 @@ export interface Proposal {
   address?: string;
   cod?: string;
   subType: string;
-
   user: User;
   isArchived: boolean;
   sessions?: Session[];
   pageViewMap: boolean[];
+  buildingId?: string;
 }

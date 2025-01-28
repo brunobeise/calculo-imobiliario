@@ -1,10 +1,10 @@
-import { FinancingPlanningReportData } from "@/reports/financingPlanningReport/FinancingPlanningReportConfig";
 import SectionTitle from "./SectionTitle";
 import { BsHouse } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { ReportData } from "../ReportConfig";
 
 interface PropertyDescriptionProps {
-  configData: FinancingPlanningReportData;
+  configData: ReportData & { pageViewMap?: boolean[] };
   color: string;
   secondary: string;
 }
@@ -82,6 +82,7 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
           <div className="columns-2 mt-5">
             {configData.additionalPhotos.map((p) => (
               <div
+                key={p}
                 style={{ borderColor: color }}
                 className="relative overflow-hidden rounded-lg border border-4 my-2"
               >

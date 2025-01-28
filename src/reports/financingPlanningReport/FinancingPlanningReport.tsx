@@ -1,7 +1,4 @@
 import { useRef } from "react";
-import FinancingPlanningReportConfig, {
-  FinancingPlanningReportData,
-} from "./FinancingPlanningReportConfig";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
@@ -9,13 +6,14 @@ import { Proposal } from "@/types/proposalTypes";
 import { Divider } from "@mui/joy";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import ReportConfig, { ReportData } from "../components/ReportConfig";
 
 interface FinancingPlanningReportProps {
   propertyData: PropertyData;
   actualCase: Proposal;
   caseData: FinancingPlanningData;
   onClose: () => void;
-  onChange: (configData: FinancingPlanningReportData) => void;
+  onChange: (configData: ReportData) => void;
 }
 
 export default function FinancingPlanningReport({
@@ -49,6 +47,7 @@ export default function FinancingPlanningReport({
     parkingSpaces: actualCase.parkingSpaces,
     suites: actualCase.suites,
     subType: actualCase.subType,
+    buildingId: actualCase.buildingId
   };
 
   return (
@@ -71,10 +70,7 @@ export default function FinancingPlanningReport({
         />
         <div>
           <div style={{ position: "sticky", top: "10px" }}>
-            <FinancingPlanningReportConfig
-              data={configData}
-              setData={(d) => onChange(d)}
-            />
+            <ReportConfig data={configData} setData={(d) => onChange(d)} />
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { DirectFinancingReportData } from "./DirectFinancingReportConfig";
 import CalculationTable from "../components/preview/CalculationTable";
 import { User } from "@/types/userTypes";
 import UserSignature from "@/components/user/UserSignature";
@@ -17,9 +16,10 @@ import PropertyDescription from "../components/preview/PropertyDescription";
 import ConsideredData from "../components/preview/ConsideredData";
 import DetailChartAnalysis from "../components/preview/DetailChartAnalysis";
 import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import { ReportData } from "../components/ReportConfig";
 
 interface DirectFinancingReportPreviewProps {
-  configData: DirectFinancingReportData;
+  configData: ReportData;
   propertyData?: PropertyData;
   caseData?: DirectFinancingData;
   user?: User;

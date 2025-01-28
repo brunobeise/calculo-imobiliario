@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinancingPlanningReportData } from "./FinancingPlanningReportConfig";
 import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import CalculationTable from "../components/preview/CalculationTable";
 import { User } from "@/types/userTypes";
@@ -18,9 +17,10 @@ import MonthlyReinvested from "../components/preview/MonthlyReinvested";
 import PropertyDescription from "../components/preview/PropertyDescription";
 import ConsideredData from "../components/preview/ConsideredData";
 import DetailChartAnalysis from "../components/preview/DetailChartAnalysis";
+import { ReportData } from "../components/ReportConfig";
 
 interface FinancingPlanningReportPreviewProps {
-  configData: FinancingPlanningReportData;
+  configData: ReportData;
   propertyData?: PropertyData;
   caseData?: FinancingPlanningData;
   user?: User;

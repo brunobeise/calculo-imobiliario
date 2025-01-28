@@ -1,7 +1,4 @@
 import { useRef } from "react";
-import DirectFinancingReportConfig, {
-  DirectFinancingReportData,
-} from "./DirectFinancingReportConfig";
 import DirectFinancingReportPreview from "./DirectFinancingReportPreview";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { Proposal } from "@/types/proposalTypes";
@@ -9,13 +6,14 @@ import { Divider } from "@mui/joy";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import ReportConfig, { ReportData } from "../components/ReportConfig";
 
 interface DirectFinancingReportProps {
   propertyData: PropertyData;
   actualCase: Proposal;
   caseData: DirectFinancingData;
   onClose: () => void;
-  onChange: (configData: DirectFinancingReportData) => void;
+  onChange: (configData: ReportData) => void;
 }
 
 export default function DirectFinancingReport({
@@ -49,6 +47,7 @@ export default function DirectFinancingReport({
     parkingSpaces: actualCase.parkingSpaces,
     suites: actualCase.suites,
     subType: actualCase.subType,
+    buildingId: actualCase.buildingId,
   };
 
   return (
@@ -71,10 +70,7 @@ export default function DirectFinancingReport({
         />
         <div>
           <div style={{ position: "sticky", top: "10px" }}>
-            <DirectFinancingReportConfig
-              data={configData}
-              setData={(d) => onChange(d)}
-            />
+            <ReportConfig data={configData} setData={(d) => onChange(d)} />
           </div>
         </div>
       </div>
