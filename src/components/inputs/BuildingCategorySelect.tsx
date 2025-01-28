@@ -43,7 +43,7 @@ export const BuildingCategorySelect = ({
             <Select
               {...field}
               placeholder="Selecione uma categoria"
-              onChange={(e, value) => {
+              onChange={(_e, value) => {
                 field.onChange(value);
                 onChange && onChange(value);
               }}
