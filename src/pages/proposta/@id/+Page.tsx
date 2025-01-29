@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
 import { Proposal } from "@/types/proposalTypes";
 import FinancingPlanningReportPreview from "@/reports/financingPlanningReport/FinancingPlanningReportPreview";
-import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
+import { calcCaseData as calcFinancingPlanningCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
+import { calcCaseData as calcDirectFinancingCaseData } from "@/pages/parcelamentodireto/@id/Calculator";
 import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { nanoid } from "nanoid";
 import { io, Socket } from "socket.io-client";
 import DirectFinancingReportPreview from "@/reports/directFinancingReport/DirectFinancingReportPreview";
+import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -55,7 +57,10 @@ export default function FinancingPlanningReportSharedPage() {
   const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const caseData = calcCaseData(proposalData.propertyData);
+  const caseData =
+    proposalData.type === "financingPlanning"
+      ? calcFinancingPlanningCaseData(proposalData.propertyData)
+      : calcDirectFinancingCaseData(proposalData.propertyData);
   const auth = useAuth();
 
   const [sessionId] = useState(nanoid(7));
@@ -173,7 +178,7 @@ export default function FinancingPlanningReportSharedPage() {
             }}
             propertyData={proposalData?.propertyData}
             user={proposalData.user}
-            caseData={caseData}
+            caseData={caseData as unknown as FinancingPlanningData}
             configData={{
               propertyName: proposalData.propertyName || "",
               mainPhoto: proposalData.mainPhoto || "",
