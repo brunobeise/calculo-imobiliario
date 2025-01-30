@@ -33,7 +33,8 @@ export default function Building() {
   const { user } = useAuth();
 
   const loading = useSelector(
-    (state: RootState) => state.building.createBuildingLoading
+    (state: RootState) =>
+      state.building.createBuildingLoading || state.building.loading
   );
   const building = useSelector((state: RootState) => state.building.building);
 
@@ -102,6 +103,7 @@ export default function Building() {
   );
 
   const content = (
+  building && (
     <div className="flex w-full">
       <div className="w-[80%]">
         <img className="rounded-lg w-full" src={building?.mainPhoto} alt="" />
@@ -189,6 +191,7 @@ export default function Building() {
         </div>
       </div>
     </div>
+    )
   );
 
   const newBuildingContent = (

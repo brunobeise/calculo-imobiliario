@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { Button, Input } from "@mui/joy";
 import axios from "axios";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
-import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
-import DialogActions from "@mui/joy/DialogActions";
-import Divider from "@mui/joy/Divider";
+import Dialog from "@/components/modals/Dialog";
+import { Spinner } from "@/components/Loading";
 import { Building } from "@/types/buildingTypes";
 
 interface ScrapModalProps {
@@ -14,6 +10,16 @@ interface ScrapModalProps {
   onClose: () => void;
   onScrap: (data: Partial<Building>) => void;
 }
+
+const statusMessages = [
+  "Capturando imagens do imóvel...",
+  "Defininindo a imagem principal...",
+  "Extraindo dados...",
+  "Refinando descrição...",
+  "Buscando as caracteristicas...",
+  "Escapando do anti-robô...",
+  "Organizando informações...",
+];
 
 export default function ScrapModal({
   open,
@@ -39,7 +45,24 @@ export default function ScrapModal({
       return;
     }
 
-    setStatus("Fazendo varredura no site... Isso pode levar alguns minutos...");
+    setStatus("Iniciando a varredura... Isso pode levar alguns minutos...");
+
+    const shuffledMessages = [...statusMessages].sort(
+      () => Math.random() - 0.5
+    );
+    let currentMessageIndex = 0;
+
+    const updateStatus = () => {
+      if (currentMessageIndex < shuffledMessages.length) {
+        setStatus(shuffledMessages[currentMessageIndex]);
+        currentMessageIndex++;
+
+        const randomDelay = Math.random() * (7000 - 2000) + 2000;
+        setTimeout(updateStatus, randomDelay);
+      }
+    };
+
+    updateStatus();
 
     try {
       const result = await axios.post(
@@ -47,9 +70,14 @@ export default function ScrapModal({
         { url: link }
       );
 
-      setStatus("");
-      onScrap(result.data);
-      onClose();
+      setStatus("Finalizando...");
+      setTimeout(() => {
+        onClose();
+      }, 2000);
+      setTimeout(() => {
+        setStatus("");
+        onScrap(result.data);
+      }, 3000);
     } catch {
       setError("Não foi possível completar a varredura.");
       setStatus("");
@@ -59,35 +87,37 @@ export default function ScrapModal({
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalDialog variant="outlined">
-        <DialogTitle>Cadastrar imóvel via link</DialogTitle>
-        <Divider />
-        <DialogContent className="w-[500px]">
-          <Input
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            placeholder="Coloque aqui o link do imóvel"
-            className="w-full"
-          />
-          <div className={`mt-4 py-4 text-center ${error && "text-red-500"}`}>
-            {error || status}
+    <Dialog open={open} onClose={onClose} title="Cadastrar imóvel via link">
+      <div className="h-[170px] w-[500px] flex flex-col justify-between py-2 relative">
+        <Input
+          disabled={loading}
+          value={link}
+          onChange={(e) => setLink(e.target.value)}
+          placeholder="Coloque aqui o link do imóvel"
+          className="w-full"
+        />
+
+        <div
+          className={`absolute left-[50%] translate-x-[-50%] top-[50%] translate-y-[-50%] text-center ${
+            error ? "text-red-500" : ""
+          }`}
+        >
+          {error || status}
+        </div>
+
+        {loading && (
+          <div className="flex justify-center">
+            <Spinner />
           </div>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            loading={loading}
-            variant="solid"
-            color="primary"
-            onClick={handleScrap}
-          >
-            Fazer Varredura
-          </Button>
-          <Button variant="plain" color="neutral" onClick={onClose}>
-            Cancelar
-          </Button>
-        </DialogActions>
-      </ModalDialog>
-    </Modal>
+        )}
+        {!loading && status !== "Finalizando..." && (
+          <div className="flex justify-center gap-2 mb-4">
+            <Button className="w-[300px]" onClick={handleScrap}>
+              Fazer Varredura
+            </Button>
+          </div>
+        )}
+      </div>
+    </Dialog>
   );
 }

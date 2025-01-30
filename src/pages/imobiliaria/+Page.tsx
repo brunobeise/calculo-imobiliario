@@ -318,7 +318,7 @@ export default function RealEstateConfig() {
       <UserFormModal
         open={userFormModal}
         onClose={() => setUserFormModal(false)}
-        // userAdded={(user) => dispatch(addUser(user))}
+        userAdded={() => dispatch(fetchRealEstateUsers())}
       />
       <FloatingButtonList
         buttons={[
