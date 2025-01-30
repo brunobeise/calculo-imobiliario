@@ -58,6 +58,10 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname === "/";
 
+  if (typeof global === "undefined") {
+    window.global = window;
+  }
+
   return (
     <CssVarsProvider theme={theme}>
       <ToastContainer

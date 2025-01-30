@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from "react";
 import {
-  Divider,
   Input,
   FormHelperText,
   FormControl,
@@ -13,17 +13,20 @@ import { uploadImage } from "@/lib/imgur";
 import { userService } from "@/service/userService";
 import { User } from "@/types/userTypes";
 import Dialog from "./Dialog";
+import MaskInputPhone from "../inputs/masks/MaskInputPhone";
 
 interface UserFormModalProps {
   open: boolean;
   onClose: () => void;
-  userAdded?: (user: User) => void;
+  userAdded?: () => void;
+  editUser?: User;
 }
 
 const UserFormModal: React.FC<UserFormModalProps> = ({
   open,
   onClose,
   userAdded,
+  editUser,
 }) => {
   const {
     register,
@@ -31,6 +34,8 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
     control,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm<User>();
 
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -48,18 +53,25 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         ...data,
         photo: uploadedPhoto,
       };
-
-      const newUser = await userService.createUser(updatedData);
+      if (editUser) {
+        const { realEstate, realEstateId, _count, casesCount, ...data } =
+          updatedData;
+        await userService.editUser(editUser.id, data);
+      } else await userService.createUser(updatedData);
 
       reset();
       onClose();
-      userAdded && userAdded(newUser);
+      userAdded && userAdded();
     } catch (error) {
       console.error("Erro ao fazer upload da imagem:", error);
     } finally {
       setUploadLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (editUser) reset(editUser);
+  }, [editUser, reset]);
 
   return (
     <Dialog
@@ -72,7 +84,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
             variant="solid"
             color="primary"
           >
-            Criar
+            {editUser ? "Salvar" : "Criar"}
           </Button>
           <Button
             disabled={uploadLoading}
@@ -93,6 +105,19 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         id="create-user-form"
         className="flex flex-col gap-5 w-full px-2"
       >
+        <FormControl>
+          <Controller
+            control={control}
+            name="photo"
+            render={({ field }) => (
+              <PictureInput
+                value={[field.value]}
+                label="Foto"
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </FormControl>
         <FormControl error={!!errors.fullName}>
           <Typography component="label" htmlFor="fullName" mb={1}>
             Nome Completo *
@@ -169,24 +194,28 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           />
         </FormControl>
 
-        <FormControl>
-          <Controller
-            control={control}
-            name="photo"
-            render={({ field }) => (
-              <PictureInput bordered label="Foto" onChange={field.onChange} />
-            )}
-          />
-        </FormControl>
-
         <FormControl error={!!errors.phone}>
           <Typography component="label" htmlFor="phone" mb={1}>
             Telefone *
           </Typography>
           <Input
             id="phone"
+            slotProps={{
+              input: {
+                component: MaskInputPhone,
+                onChange: (event) => setValue("phone", event.target.value), // Garante que o React Hook Form receba o valor limpo
+                value: watch("phone") || "", // Mantém a sincronia do campo
+              },
+            }}
             placeholder="Digite o telefone"
-            {...register("phone", { required: "Telefone é obrigatório" })}
+            {...register("phone", {
+              required: "Telefone é obrigatório",
+              pattern: {
+                value: /^\d{11}$/, // Regex para garantir que tenha exatamente 11 números
+                message:
+                  "Número inválido. O formato correto é DDD + número (11 dígitos).",
+              },
+            })}
             error={!!errors.phone}
           />
           {errors.phone && (
@@ -240,8 +269,6 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           </FormControl>
         </div>
       </form>
-
-      <Divider />
     </Dialog>
   );
 };

@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, ReactNode } from "react";
 import {
   DialogPanel,
   Dialog as Modal,
@@ -10,7 +10,7 @@ import { DialogTitle, ModalClose } from "@mui/joy";
 interface SharedModalProps {
   open: boolean;
   onClose: () => void;
-  title?: string;
+  title?: ReactNode;
   children: React.ReactNode;
   actions?: React.ReactNode;
   width?: number;
@@ -39,7 +39,7 @@ export default function Dialog({
         </TransitionChild>
 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-200"
             enterFrom="scale-95 opacity-0"
@@ -63,12 +63,12 @@ export default function Dialog({
               <div className="px-4 py-2">{children}</div>
 
               {actions && (
-                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6 justify-between">
                   {actions}
                 </div>
               )}
             </DialogPanel>
-          </Transition.Child>
+          </TransitionChild>
         </div>
       </Modal>
     </Transition>

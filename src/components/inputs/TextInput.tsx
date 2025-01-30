@@ -41,7 +41,6 @@ export default function TextInput({
             />
           ) : (
             <Input
-            
               error={!!error}
               value={value}
               onChange={(e) => onChange(e.target.value)}

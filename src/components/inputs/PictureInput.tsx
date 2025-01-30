@@ -14,6 +14,7 @@ interface PictureInputProps {
   bordered?: boolean;
   maxSize?: number;
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
+  onDrop?: (image: string, source: string) => void;
 }
 
 interface DraggableImageProps {
@@ -22,6 +23,7 @@ interface DraggableImageProps {
   moveImage: (from: number, to: number) => void;
   handleDelete: (index: number) => void;
   handleReplace: () => void;
+  source: string;
 }
 
 const DraggableImage: React.FC<DraggableImageProps> = ({
@@ -29,17 +31,17 @@ const DraggableImage: React.FC<DraggableImageProps> = ({
   index,
   moveImage,
   handleDelete,
-  handleReplace,
+  source,
 }) => {
   const [, ref] = useDrag({
     type: "image",
-    item: { index },
+    item: { index, src, source },
   });
 
   const [, drop] = useDrop({
     accept: "image",
-    hover: (item: { index: number }) => {
-      if (item.index !== index) {
+    hover: (item: { index: number; source: string }) => {
+      if (item.source === source && item.index !== index) {
         moveImage(item.index, index);
         item.index = index;
       }
@@ -49,17 +51,14 @@ const DraggableImage: React.FC<DraggableImageProps> = ({
   return (
     <div
       ref={(node) => ref(drop(node))}
-      className="relative h-20 max-w-32  flex items-center justify-center border border-border rounded overflow-hidden"
+      className="relative h-20 max-w-32 flex items-center justify-center border border-border rounded "
     >
       <img src={src} alt="Preview" className="object-cover h-full w-full" />
       <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
-        <button type="button" onClick={handleReplace} className="text-white">
-          <FaRedo />
-        </button>
         <button
           type="button"
           onClick={() => handleDelete(index)}
-          className="text-red"
+          className="absolute top-[-5px] right-[-5px] shadow-lg z-[10] border p-1 bg-white rounded-full text-red"
         >
           <FaTrash />
         </button>
@@ -76,6 +75,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   bordered = false,
   maxSize = 5120,
   error,
+  onDrop,
 }) => {
   const [fileNames, setFileNames] = useState<string[]>(value);
   const [fileSrcs, setFileSrcs] = useState<string[]>(value);
@@ -83,6 +83,24 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   const [Error, setError] = useState<string | null>(null);
 
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [, drop] = useDrop({
+    accept: "image",
+    hover: (item: { index: number; src: string; source: string }) => {
+      const dragIndex = item.index;
+      const hoverIndex = value.findIndex((img) => img === item.src);
+
+      if (item.source === label && dragIndex !== hoverIndex) {
+        moveImage(dragIndex, hoverIndex);
+        item.index = hoverIndex;
+      }
+    },
+    drop: (item: { src: string; source: string }) => {
+      if (item.source !== label && onDrop) {
+        onDrop(item.src, item.source);
+      }
+    },
+  });
 
   const handleFiles = (files: FileList) => {
     const srcs = Array.from(files).map((file) => {
@@ -145,8 +163,9 @@ export const PictureInput: React.FC<PictureInputProps> = ({
 
   return (
     <FormControl
+      ref={drop}
       error={!!error}
-      className={`flex flex-col gap-2 p-4 ${
+      className={`flex flex-col gap-2  ${
         bordered ? "border border-border rounded" : ""
       }`}
     >
@@ -154,10 +173,10 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         {label}
       </FormLabel>
       {fileSrcs.filter(Boolean).length > 1 ? (
-        <div className="relative flex items-center  gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
+        <div className="relative flex items-center gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
           <div className="flex flex-wrap gap-2">
             {fileSrcs.map((src, index) => (
-              <div key={src} className="cursor-pointer ">
+              <div key={src} className="cursor-grab">
                 <DraggableImage
                   key={index}
                   src={src}
@@ -165,11 +184,12 @@ export const PictureInput: React.FC<PictureInputProps> = ({
                   moveImage={moveImage}
                   handleDelete={handleDelete}
                   handleReplace={handleReplace}
+                  source={label}
                 />
               </div>
             ))}
             <div
-              className={`text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border `}
+              className={`text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border`}
               onClick={() => fileInputRef.current?.click()}
             >
               <IoIosAdd />

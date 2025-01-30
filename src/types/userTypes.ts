@@ -1,4 +1,3 @@
-
 import { Proposal } from "./proposalTypes";
 import { RealEstate } from "./realEstateTypes";
 
@@ -17,10 +16,12 @@ export interface User {
   email: string;
   password?: string;
   owner: boolean;
+  isArchived?: boolean;
   realEstateId: string;
   realEstate?: RealEstate;
   createdAt: Date;
   updatedAt: Date;
+  _count?: unknown;
   cases?: Proposal[];
   casesCount?: number;
 }

@@ -1,11 +1,7 @@
 import Button from "@mui/joy/Button";
-import Divider from "@mui/joy/Divider";
-import DialogTitle from "@mui/joy/DialogTitle";
-import DialogContent from "@mui/joy/DialogContent";
 import DialogActions from "@mui/joy/DialogActions";
-import Modal from "@mui/joy/Modal";
-import ModalDialog from "@mui/joy/ModalDialog";
 import { IoWarning } from "react-icons/io5";
+import Dialog from "./Dialog";
 
 interface ConfirmationModalProps {
   content: string;
@@ -29,15 +25,9 @@ export default function ConfirmationModal({
   noText,
 }: ConfirmationModalProps) {
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalDialog variant="outlined" role="alertdialog">
-        <DialogTitle className="flex items-center">
-          <IoWarning />
-          {title ?? "Confirmação"}
-        </DialogTitle>
-        <Divider />
-        <DialogContent>{content}</DialogContent>
-        <DialogActions>
+    <Dialog
+      actions={
+        <>
           <Button
             loading={okLoading}
             variant="solid"
@@ -49,8 +39,20 @@ export default function ConfirmationModal({
           <Button variant="plain" color="neutral" onClick={onClose}>
             {noText || "Não"}
           </Button>
-        </DialogActions>
-      </ModalDialog>
-    </Modal>
+        </>
+      }
+      title={
+        <div className="items-center flex gap-2">
+          {" "}
+          <IoWarning />
+          {title ?? "Confirmação"}
+        </div>
+      }
+      open={open}
+      onClose={onClose}
+    >
+      <div className="w-[420px] flex justify-center">{content} </div>
+      <DialogActions></DialogActions>
+    </Dialog>
   );
 }

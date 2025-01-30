@@ -18,18 +18,18 @@ export function calcCaseData(propertyData: PropertyData) {
     ) -
     propertyData.subsidy;
 
- const capitalGainsTax = calcCapitalGainsTax(
-   detailedTable.reduce(
-     (acc, val) => acc + val.investmentExcess,
-     0
-   ) - propertyData.subsidy,
-   propertyData
- );
+  const capitalGainsTax = calcCapitalGainsTax(
+    detailedTable.reduce((acc, val) => acc + val.investmentExcess, 0) -
+      propertyData.subsidy,
+    propertyData
+  );
   const totalProfit = calcTotalProfit(
     detailedTable,
     totalInvestment,
     capitalGainsTax
   );
+
+  console.log(detailedTable[detailedTable.length - 1]);
 
   return {
     totalInvestment:
@@ -280,8 +280,8 @@ export function calcDetailedTable(propertyData: PropertyData) {
       propertyValue: propertyValue,
       rentValue: rentIsActive ? rentValue : 0,
       rentalShortfall: totalRentalShortfall,
-      rentalAmount: rentalAmount, // Balanço do mês (aluguel - gasto)
-      outstandingBalance: Math.max(outstandingBalance, 0), // Saldo devedor atualizado
+      rentalAmount: rentalAmount,
+      outstandingBalance: Math.max(outstandingBalance, 0),
       finalValue: initialCapital + propertyValue,
       monthlyProfit: monthlyProfit,
       investmentExcess: investmentExcess,
@@ -296,4 +296,3 @@ export function calcDetailedTable(propertyData: PropertyData) {
 
   return rows;
 }
-

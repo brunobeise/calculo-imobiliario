@@ -145,27 +145,22 @@ export default function ReportConfig(props: ReportConfigProps) {
           }}
         />
 
-        {!props.data.buildingId && (
-          <>
-            {" "}
-            <PictureInput
-              label="Foto Principal do imóvel"
-              value={[props.data.mainPhoto]}
-              onChange={(v) => props.setData({ ...props.data, mainPhoto: v })}
-            />
-            <PictureInput
-              label="Fotos Adicionais do imóvel"
-              multiple
-              value={props.data.additionalPhotos}
-              onChange={(v) =>
-                props.setData({
-                  ...props.data,
-                  additionalPhotos: v.split(","),
-                })
-              }
-            />
-          </>
-        )}
+        <PictureInput
+          label="Foto Principal do imóvel"
+          value={[props.data.mainPhoto]}
+          onChange={(v) => props.setData({ ...props.data, mainPhoto: v })}
+        />
+        <PictureInput
+          label="Fotos Adicionais do imóvel"
+          multiple
+          value={props.data.additionalPhotos}
+          onChange={(v) =>
+            props.setData({
+              ...props.data,
+              additionalPhotos: v.split(","),
+            })
+          }
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-y-5 px-5">

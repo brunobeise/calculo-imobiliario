@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import {
   FaArrowLeft,
   FaBuilding,
+  FaCheckCircle,
   FaEye,
   FaMapMarkerAlt,
   FaPen,
@@ -102,9 +103,8 @@ export default function Building() {
     </div>
   );
 
-  const content = (
-  building && (
-    <div className="flex w-full">
+  const content = building && (
+    <div className="flex w-full  text-primary">
       <div className="w-[80%]">
         <img className="rounded-lg w-full" src={building?.mainPhoto} alt="" />
         {building?.additionalPhotos.length > 0 && (
@@ -162,13 +162,20 @@ export default function Building() {
 
         {building?.features.length > 0 && (
           <div className="text-lg">
-            <strong>Características</strong>
-            <p>{building?.features?.join(" · ")}</p>
+            <strong className="block mb-3">Características</strong>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 text-sm">
+              {building.features.map((feature, index) => (
+                <div key={index} className="flex items-center">
+                  <FaCheckCircle className="flex-shrink-0 w-4 h-4" />
+                  <span className="ml-2">{feature}</span>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {building?.createdAt && (
-          <p>
+          <p className="mt-5">
             <strong>Criado em:</strong>{" "}
             {dayjs(building?.createdAt).format("YYYY-MM-DD")}
           </p>
@@ -191,7 +198,6 @@ export default function Building() {
         </div>
       </div>
     </div>
-    )
   );
 
   const newBuildingContent = (

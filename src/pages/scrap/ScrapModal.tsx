@@ -73,10 +73,10 @@ export default function ScrapModal({
       setStatus("Finalizando...");
       setTimeout(() => {
         onClose();
+        onScrap(result.data);
       }, 2000);
       setTimeout(() => {
         setStatus("");
-        onScrap(result.data);
       }, 3000);
     } catch {
       setError("Não foi possível completar a varredura.");

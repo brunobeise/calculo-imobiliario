@@ -25,6 +25,8 @@ import { IoAddCircleSharp, IoCloseOutline } from "react-icons/io5";
 import SelectHeaderTypeModal from "./SelectHeaderTypeModal";
 import UserSignature from "@/components/user/UserSignature";
 import SelectColorsModal from "./SelectColorsModal";
+import { FaPen, FaTrash } from "react-icons/fa6";
+import { User } from "@/types/userTypes";
 
 export default function RealEstateConfig() {
   const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +47,9 @@ export default function RealEstateConfig() {
   const [userFormModal, setUserFormModal] = useState(false);
   const [selectHeaderTypeModal, setSelectHeaderTypeModal] = useState(false);
   const [selectColorsModal, setSelectColorsModal] = useState(false);
+  const [editUser, setEditUser] = useState<User>();
+  const [deleteUserLoading, setDeleteUserLoading] = useState(false);
+  const [deleteUser, setDeleteUser] = useState<User>();
 
   const onSubmit = async (data: RealEstateFormData) => {
     let uploadLogo = data.logo;
@@ -86,13 +91,21 @@ export default function RealEstateConfig() {
     await userService.editUser(changeAdminUser.userId, {
       owner: !changeAdminUser.owner,
     });
-    // dispatch(updateUserAdmin(changeAdminUser.userId));
+    dispatch(fetchRealEstateUsers());
     setChangeAdminUser({
       text: "",
       userId: "",
       owner: false,
       loading: false,
     });
+  };
+
+  const handleDeleteUser = async () => {
+    setDeleteUserLoading(true);
+    await userService.editUser(deleteUser.id, { isArchived: true });
+    setDeleteUserLoading(false);
+    setDeleteUser(undefined);
+    dispatch(fetchRealEstateUsers());
   };
 
   const handleColorChange = (colors: {
@@ -139,10 +152,11 @@ export default function RealEstateConfig() {
             <tr>
               <th className="w-[60px]"></th>
               <th>Nome</th>
-              <th className="w-[350px]">Email</th>
+              <th className="w-[220px]">Email</th>
               <th>Cargo</th>
               <th>Propostas</th>
               <th className="w-[80px]">Admin</th>
+              <th className="flex justify-end">Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -182,6 +196,21 @@ export default function RealEstateConfig() {
                 >
                   <div className="w-full flex justify-center">
                     {user.owner ? <FaCheckCircle /> : <IoCloseOutline />}
+                  </div>
+                </td>
+                <td>
+                  <div className="flex justify-end gap-5">
+                    <FaPen
+                      onClick={() => {
+                        setUserFormModal(true);
+                        setEditUser(user);
+                      }}
+                      className="cursor-pointer hover:opacity-90"
+                    />
+                    <FaTrash
+                      onClick={() => setDeleteUser(user)}
+                      className="text-red cursor-pointer hover:opacity-90"
+                    />
                   </div>
                 </td>
               </tr>
@@ -315,7 +344,16 @@ export default function RealEstateConfig() {
         title="Deseja alterar a permissão desse usuário?"
         onOk={handleAdmin}
       />
+      <ConfirmationModal
+        open={!!deleteUser}
+        onClose={() => setDeleteUser(undefined)}
+        okLoading={deleteUserLoading}
+        content={`Deseja realmente remover ${deleteUser?.fullName} da imobiliária permanentemente?`}
+        title="Excluir usuário"
+        onOk={handleDeleteUser}
+      />
       <UserFormModal
+        editUser={editUser}
         open={userFormModal}
         onClose={() => setUserFormModal(false)}
         userAdded={() => dispatch(fetchRealEstateUsers())}

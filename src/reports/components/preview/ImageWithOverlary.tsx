@@ -23,10 +23,12 @@ const ImageWithOverlay: React.FC<ImageWithOverlayProps> = ({
         alt="Main Photo"
       />
       <div
-        className="absolute bottom-0 w-full bg-gradient-to-t from-[#000000de] to-transparent flex items-center px-10 text-lg font-light"
+        className="absolute bottom-0 w-full bg-gradient-to-t from-[#000000f0] to-transparent flex items-end pb-5 px-10 text-lg font-light"
         style={{ height: `${overlayHeight}px` }}
       >
-        <p className="whitespace-pre text-white text-xl">{description}</p>
+        <p className="whitespace-pre-wrap break-words text-white text-xl !text-white">
+          {description}
+        </p>
       </div>
     </div>
   );

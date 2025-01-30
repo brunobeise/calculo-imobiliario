@@ -21,6 +21,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
     handleSubmit,
     setValue,
     formState: { errors },
+    watch,
   } = useForm<Partial<Building>>({
     defaultValues: initialData || {
       mainPhoto: "",
@@ -90,6 +91,25 @@ export default function BuildingForm({ initialData, onSubmit }) {
     });
   };
 
+  const mainPhoto = watch("mainPhoto");
+  const additionalPhotos = watch("additionalPhotos");
+
+  const handleDrop = (image: string, source: string) => {
+    if (source === "Foto Principal do Imóvel") {
+      setValue("additionalPhotos", [...additionalPhotos, mainPhoto]);
+      setValue("mainPhoto", "");
+    } else if (source === "Fotos Adicionais do Imóvel") {
+      const newAdditionalPhotos = additionalPhotos.filter(
+        (img) => img !== image
+      );
+      if (mainPhoto) {
+        newAdditionalPhotos.push(mainPhoto);
+      }
+      setValue("mainPhoto", image);
+      setValue("additionalPhotos", newAdditionalPhotos);
+    }
+  };
+
   const createLoading =
     useSelector((state: RootState) => state.building.createBuildingLoading) ||
     saveLoading;
@@ -118,6 +138,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
               value={[field.value]}
               onChange={(v) => setValue("mainPhoto", v)}
               error={errors.mainPhoto?.message}
+              onDrop={(image, source) => handleDrop(image, source)}
             />
           )}
         />
@@ -130,6 +151,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
               multiple
               value={field.value}
               onChange={(v) => setValue("additionalPhotos", v.split(","))}
+              onDrop={(image, source) => handleDrop(image, source)}
             />
           )}
         />

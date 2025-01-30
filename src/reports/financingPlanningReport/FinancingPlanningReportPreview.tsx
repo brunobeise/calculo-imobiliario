@@ -131,7 +131,7 @@ const FinancingPlanningReportPreview = forwardRef<
               <ImageWithOverlay
                 mainPhoto={configData.mainPhoto}
                 description={configData.description}
-                overlayHeight={150}
+                overlayHeight={200}
                 className="h-[460px]"
               />
               {isAdvancedMode ? (
