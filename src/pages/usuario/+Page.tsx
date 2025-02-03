@@ -16,7 +16,6 @@ import { editUserData, fetchUserData } from "@/store/userReducer";
 import { User } from "@/types/userTypes";
 import PageStructure from "@/components/structure/PageStructure";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import UserSignature2 from "@/components/user/UserSignature2";
 import { useAuth } from "@/auth";
 import { navigate } from "vike/client/router";
 
@@ -87,16 +86,17 @@ export default function UserConfig() {
   );
 
   const contentHeader = !loading && userData && (
-    <UserSignature2
-      title="Assinatura Exemplo"
-      desc="Nome do imóvel"
-      userData={form}
-    />
+    // <UserSignature2
+    //   title="Assinatura Exemplo"
+    //   desc="Nome do imóvel"
+    //   userData={form}
+    // />
+    <></>
   );
 
   const content = (
-    <div>
-      <div className="grid grid-cols-6 gap-x-5 gap-y-3">
+    <div className="overflow-y-auto">
+      <div className="grid grid-cols-6 gap-x-5 gap-y-3 ">
         <div className="col-span-6">
           <PictureInput
             bordered

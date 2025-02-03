@@ -286,17 +286,17 @@ export default function RealEstateConfig() {
                   render={({ field }) => <Input type="color" {...field} />}
                 />
               </div>
-              <div className="col-span-2">
+              {/* <div className="col-span-2">
                 <Button
                   onClick={() => setSelectColorsModal(true)}
                   variant="soft"
                 >
                   Visualizar proposta de exemplo
                 </Button>
-              </div>
+              </div> */}
             </div>
 
-            <div className="col-span-12 flex">
+            <div className="col-span-12 flex gap-5">
               <Controller
                 name="logo"
                 control={control}

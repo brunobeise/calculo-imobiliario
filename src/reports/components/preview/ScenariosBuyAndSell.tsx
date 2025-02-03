@@ -40,7 +40,7 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
     <div className="grid grid-cols-2 gap-6 gap-y-2 px-10">
       <ScenarioCard
         title="Cenário de Compra"
-        subtitle="Valor do imóvel R$ 300.000"
+        subtitle={`Valor do imóvel ${toBRL(propertyData.propertyValue)}`}
         lines={purchaseLines}
         color={color}
         secondary={secondary}
