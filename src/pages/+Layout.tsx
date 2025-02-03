@@ -47,6 +47,7 @@ import { WebSocketProvider } from "@/Socket";
 import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseData";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import Clarity from "@microsoft/clarity";
 
 export { Layout };
 
@@ -57,6 +58,8 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("parcelamentodireto") ||
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname === "/";
+
+  Clarity.init("q41oivjif8");
 
   if (typeof global === "undefined") {
     window.global = window;
