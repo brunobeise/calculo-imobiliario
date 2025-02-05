@@ -59,7 +59,7 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname === "/";
 
-  // Clarity.init("q41oivjif8");
+  Clarity.init("q41oivjif8");
 
   if (typeof global === "undefined") {
     window.global = window;
