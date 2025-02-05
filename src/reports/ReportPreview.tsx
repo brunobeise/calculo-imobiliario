@@ -26,7 +26,6 @@ import ItemListInput from "@/components/inputs/ItemListInput";
 import { ReportConfig } from "@/types/reportConfigTypes";
 import BooleanInput from "@/components/inputs/BooleanInput";
 import CaseSessionsDrawer from "@/components/shared/CaseSessionsDrawer";
-import "react-image-lightbox/style.css"; // This only needs to be imported once in your app
 
 interface ReportPreviewProps {
   propertyData: PropertyData;

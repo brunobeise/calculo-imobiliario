@@ -4,10 +4,17 @@ import { BsHouse } from "react-icons/bs";
 import { FaCheckCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { FaBath, FaBed, FaCar, FaHammer } from "react-icons/fa6";
 import { SlSizeFullscreen } from "react-icons/sl";
-import { Gallery } from "react-grid-gallery";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
 import { useEffect, useState } from "react";
+import Lightbox from "yet-another-react-lightbox";
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
+import Slideshow from "yet-another-react-lightbox/plugins/slideshow";
+import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
+import "yet-another-react-lightbox/styles.css";
+import { Gallery } from "react-grid-gallery";
 
 interface PropertyDescriptionProps {
   configData: ReportData;
@@ -15,13 +22,16 @@ interface PropertyDescriptionProps {
   secondary: string;
 }
 
-export default function PropertyDescription(props: PropertyDescriptionProps) {
-  const { color, configData, secondary } = props;
-
+export default function PropertyDescription({
+  color,
+  configData,
+  secondary,
+}: PropertyDescriptionProps) {
   const [imageData, setImageData] = useState<
     { src: string; original: string; width: number; height: number }[]
   >([]);
-  const [index, setIndex] = useState(-1);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const getImageSize = (
     src: string
@@ -37,12 +47,10 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
   useEffect(() => {
     const fetchImageSizes = async () => {
       const updatedImages = await Promise.all(
-        [...configData.additionalPhotos].map(
-          async (image) => {
-            const { width, height } = await getImageSize(image);
-            return { src: image, original: image, width, height };
-          }
-        )
+        [...configData.additionalPhotos].map(async (image) => {
+          const { width, height } = await getImageSize(image);
+          return { src: image, original: image, width, height };
+        })
       );
       setImageData(updatedImages);
     };
@@ -51,15 +59,6 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
       fetchImageSizes();
     }
   }, [configData.additionalPhotos]);
-
-  const handleClick = (clickedIndex: number) => {
-    setIndex(clickedIndex);
-  };
-
-  const handleClose = () => setIndex(-1);
-
-  const nextIndex = (index + 1) % imageData.length;
-  const prevIndex = (index - 1 + imageData.length) % imageData.length;
 
   return (
     <div>
@@ -107,7 +106,6 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
                 <strong style={{ color }}>{configData.builtArea}m² </strong>
               </p>
             )}
-
             {configData.landArea && (
               <p style={{ color: secondary }}>
                 <SlSizeFullscreen className="inline mb-2 me-2" />
@@ -116,7 +114,6 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
               </p>
             )}
           </div>
-
           {configData.address && (
             <div className="text-lg">
               <div
@@ -152,24 +149,33 @@ export default function PropertyDescription(props: PropertyDescriptionProps) {
           </div>
         )}
       </div>
+
       {imageData.length > 0 && (
         <div className="my-4">
           <Gallery
-           rowHeight={300}
             images={imageData}
-            onClick={handleClick}
             enableImageSelection={false}
+            rowHeight={300}
+            onClick={(clickedIndex: number) => {
+              setCurrentIndex(clickedIndex);
+              setLightboxOpen(true);
+            }}
           />
-          {index >= 0 && (
-            <Lightbox
-              mainSrc={imageData[index].original}
-              nextSrc={imageData[nextIndex].original}
-              prevSrc={imageData[prevIndex].original}
-              onCloseRequest={handleClose}
-              onMovePrevRequest={() => setIndex(prevIndex)}
-              onMoveNextRequest={() => setIndex(nextIndex)}
-            />
-          )}
+
+          <Lightbox
+            open={lightboxOpen}
+            close={() => setLightboxOpen(false)}
+            slides={imageData}
+            index={currentIndex}
+            on={{
+              view: ({ index: newIndex }) => setCurrentIndex(newIndex),
+            }}
+            styles={{
+              container: { backgroundColor: "rgba(0, 0, 0, 0.7)" },
+            }}
+            plugins={[Captions, Fullscreen, Slideshow, Thumbnails, Zoom]}
+            animation={{ navigation: 500 }}
+          />
         </div>
       )}
     </div>
