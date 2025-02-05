@@ -74,7 +74,7 @@ export default function UserConfig() {
       <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-4 shadow-lg rounded-lg h-64 relative">
         <h5 className="font-bold">Imobiliária</h5>
         <div className="absolute top-[50%] translate-x-[-50%] left-[50%] translate-y-[-50%]">
-          <img className="w-[32]" src={userData.realEstate.logo} alt="" />
+          <img className="max-w-32 max-h-32" src={userData.realEstate.logo} alt="" />
         </div>
       </div>
       <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-4 shadow-lg rounded-lg h-64 relative">
