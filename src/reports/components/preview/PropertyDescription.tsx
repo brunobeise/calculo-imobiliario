@@ -155,7 +155,7 @@ export default function PropertyDescription({
           <Gallery
             images={imageData}
             enableImageSelection={false}
-            rowHeight={300}
+            rowHeight={210}
             onClick={(clickedIndex: number) => {
               setCurrentIndex(clickedIndex);
               setLightboxOpen(true);

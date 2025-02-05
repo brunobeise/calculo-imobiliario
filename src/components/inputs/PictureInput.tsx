@@ -341,7 +341,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
             <Gallery
               images={imageData}
               enableImageSelection={false}
-              rowHeight={200}
+              rowHeight={150}
               thumbnailImageComponent={(props) => {
                 const index = props.index ?? 0;
                 return (
