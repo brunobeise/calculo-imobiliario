@@ -125,7 +125,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
           },
         ]}
       />
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col gap-5">
         <Controller
           name="mainPhoto"
           control={control}
@@ -309,17 +309,18 @@ export default function BuildingForm({ initialData, onSubmit }) {
             />
           )}
         />
-        {(user.owner || user.id === initialData?.creator?.id) && (
-          <div className="ps-5">
-            <Button
-              onClick={() => setDeleteModal(true)}
-              endDecorator={<FaTrash />}
-              color="danger"
-            >
-              Excluir
-            </Button>
-          </div>
-        )}
+        {(user.owner || user.id === initialData?.creator?.id) &&
+          initialData && (
+            <div className="ps-3">
+              <Button
+                onClick={() => setDeleteModal(true)}
+                endDecorator={<FaTrash />}
+                color="danger"
+              >
+                Excluir
+              </Button>
+            </div>
+          )}
       </div>
       <ConfirmationModal
         open={deleteModal}

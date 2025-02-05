@@ -9,8 +9,6 @@ import {
 } from "@/types/paramsTypes";
 import { PaginatedResult } from "./store";
 import { Session } from "@/types/sessionTypes";
-
-// Define o estado inicial
 interface CasesState {
   myCases: Proposal[];
   myCasesLastPage: number | undefined;

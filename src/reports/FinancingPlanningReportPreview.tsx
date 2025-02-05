@@ -1,28 +1,27 @@
 import { forwardRef } from "react";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
-import CalculationTable from "../components/preview/CalculationTable";
+import CalculationTable from "./components/preview/CalculationTable";
 import { User } from "@/types/userTypes";
 import UserSignature from "@/components/user/UserSignature";
-import ImageWithOverlay from "../components/preview/ImageWithOverlary";
-import Summary from "../components/preview/Summary";
-import ReportDivider from "../components/preview/ReportDivider";
-import PaymentConditions from "../components/preview/PaymentConditions";
-import ProjectionReturn from "../components/preview/ReturnProjection";
-import ScenariosBuyAndSell from "../components/preview/ScenariosBuyAndSell";
-import UnderstandFinancing from "../components/preview/UnderstandFinancing";
-import InitialDivisionCharts from "../components/preview/InitialDivisionCharts";
-import PresentValue from "../components/preview/PresentValue";
-import MonthlyReinvested from "../components/preview/MonthlyReinvested";
-import PropertyDescription from "../components/preview/PropertyDescription";
-import ConsideredData from "../components/preview/ConsideredData";
-import DetailChartAnalysis from "../components/preview/DetailChartAnalysis";
-import { ReportData } from "../components/ReportConfig";
+import ImageWithOverlay from "./components/preview/ImageWithOverlary";
+import Summary from "./components/preview/Summary";
+import ReportDivider from "./components/preview/ReportDivider";
+import PaymentConditions from "./components/preview/PaymentConditions";
+import ProjectionReturn from "./components/preview/ReturnProjection";
+import ScenariosBuyAndSell from "./components/preview/ScenariosBuyAndSell";
+import UnderstandFinancing from "./components/preview/UnderstandFinancing";
+import InitialDivisionCharts from "./components/preview/InitialDivisionCharts";
+import PresentValue from "./components/preview/PresentValue";
+import MonthlyReinvested from "./components/preview/MonthlyReinvested";
+import PropertyDescription from "./components/preview/PropertyDescription";
+import ConsideredData from "./components/preview/ConsideredData";
+import DetailChartAnalysis from "./components/preview/DetailChartAnalysis";
+import { ReportData } from "./ReportPreview";
+import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 
 interface FinancingPlanningReportPreviewProps {
   configData: ReportData;
   propertyData?: PropertyData;
-  caseData?: FinancingPlanningData;
   user?: User;
   preview?: boolean;
   custom: {
@@ -49,7 +48,6 @@ const FinancingPlanningReportPreview = forwardRef<
     {
       configData,
       propertyData,
-      caseData,
       user,
       preview,
       page1Ref,
@@ -65,13 +63,18 @@ const FinancingPlanningReportPreview = forwardRef<
     ref
   ) => {
     if (!propertyData) return null;
-    if (!caseData) return null;
+    console.log(configData.reportConfig[0]);
+    
+    if (!configData.reportConfig.pageViewMap) return null;
+    const caseData = calcCaseData(propertyData);
 
     const isPageViewActive = (index: number) => {
       if (configData.subType === "Simplificado") return true;
+      console.log(configData.reportConfig);
+
       return (
-        index >= configData.pageViewMap.length ||
-        configData.pageViewMap[index] === true
+        index >= configData.reportConfig.pageViewMap?.length ||
+        configData.reportConfig.pageViewMap[index] === true
       );
     };
 

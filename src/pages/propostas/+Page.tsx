@@ -239,14 +239,14 @@ export default function MyCases() {
   }
 
   const header = (
-    <div className="flex justify-between">
+    <div className="flex justify-between ">
       <div className="flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative">
         {casesContext === "myCases" && <FaFileAlt className="text-xl" />}
         {casesContext === "realEstateCases" && (
           <FaShareAltSquare className="text-md" />
         )}
         {casesContext === "adminCases" && <RiAdminFill className="text-md" />}
-        <h2 className="font-bold">
+        <h2 className="font-bold text-nowrap">
           {casesContext === "myCases" && "Minhas Propostas"}{" "}
           {casesContext === "realEstateCases" && "Compartilhadas"}
           {casesContext === "adminCases" && "Admin"}
@@ -266,7 +266,7 @@ export default function MyCases() {
         {casesContextDropdown && <CasesContextSelect />}
       </div>
       <div className="flex gap-5 items-end">
-        <div className="flex flex-col gap-2 me-4">
+        <div className="flex flex-col gap-2">
           <FormLabel htmlFor="case-type-select">Tipo de proposta:</FormLabel>
           <Select
             onChange={(_, v) => setType(v || "")}
@@ -284,11 +284,13 @@ export default function MyCases() {
         {casesContext !== "realEstateCases" && (
           <>
             <DatePicker
+              width="180px"
               label="De:"
               onChange={(v) => setMinDate(v)}
               defaultValue={minDate}
             />
             <DatePicker
+              width="180px"
               label="Até:"
               onChange={(v) => setMaxDate(v)}
               defaultValue={maxDate}
@@ -374,7 +376,7 @@ export default function MyCases() {
   const content = (
     <>
       {showMode === "cards" ? (
-        <div className="grid grid-cols-2 lg:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
           {data.map((caseStudy) => (
             <CaseCard
               adminCase={casesContext === "adminCases"}

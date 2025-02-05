@@ -107,7 +107,7 @@ export default function LinkBuildingButton({
   );
 
   const content = (
-    <div className="grid grid-cols-4 gap-6 p-2 pe-4 relative h-[400px]">
+    <div className="grid grid-cols-5 gap-6 p-2 pe-4 relative h-[400px]">
       {buildings.map((building) => (
         <BuildingCard
           onLink={(data) => {
@@ -152,7 +152,7 @@ export default function LinkBuildingButton({
     <>
       <div
         onClick={() => !buildingId && setOpen(true)}
-        className={`relative flex items-center border-solid border border-border text-grayText rounded-lg relative h-32 overflow-hidden  mx-4 mb-2 ${
+        className={`relative flex items-center border-solid border border-border text-grayText rounded-lg relative h-32 overflow-hidden mb-2 ${
           buildingId
             ? "flex-row"
             : "justify-center cursor-pointer hover:border-grayScale-300"
@@ -207,7 +207,7 @@ export default function LinkBuildingButton({
 
           <Divider />
 
-          <DialogContent className="w-[1200px]">{content}</DialogContent>
+          <DialogContent className="w-[1400px]">{content}</DialogContent>
           {footer}
         </ModalDialog>
       </Modal>

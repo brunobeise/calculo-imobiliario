@@ -20,13 +20,13 @@ import { caseService } from "@/service/caseService";
 import GlobalLoading from "@/components/Loading";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { Proposal } from "@/types/proposalTypes";
-import FinancingPlanningReport from "@/reports/financingPlanningReport/FinancingPlanningReport";
 import CaseFormModal from "@/components/modals/CaseFormModal";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
 import { uploadImage } from "@/lib/imgur";
 import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
+import ReportPreview from "@/reports/ReportPreview";
 
 export default function FinancingPlanning(): JSX.Element {
   const pageContext = usePageContext();
@@ -194,9 +194,9 @@ export default function FinancingPlanning(): JSX.Element {
       />
     );
 
-  if (getCaseLoading) return <GlobalLoading text="Carregando estudo..." />;
-
-  if (!propertyData) return <></>;
+  if (getCaseLoading || !propertyData)
+    return <GlobalLoading />;
+  
 
   return (
     <div className="bg-background min-h-screen">
@@ -209,12 +209,12 @@ export default function FinancingPlanning(): JSX.Element {
       />
 
       {report && actualCase ? (
-        <FinancingPlanningReport
+        <ReportPreview
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
           onClose={() => setReport(false)}
           propertyData={propertyData}
-          caseData={caseData}
-          actualCase={actualCase}
+          context="financingPlanning"
+          proposal={actualCase}
         />
       ) : (
         <div className={`${actualCase ? "relative" : "relative mt-5"}`}>

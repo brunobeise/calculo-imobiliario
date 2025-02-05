@@ -1,5 +1,3 @@
-import { getInitialValues } from "@/propertyData/propertyDataInivitalValues";
-import FinancingPlanningReportPreview from "@/reports/financingPlanningReport/FinancingPlanningReportPreview";
 import {
   Button,
   DialogContent,
@@ -11,7 +9,6 @@ import {
   Input,
 } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { calcCaseData } from "../planejamentofinanciamento/@id/Calculator";
 
 interface SelectHeaderTypeModalProps {
   open: boolean;
@@ -96,7 +93,7 @@ export default function SelectColorsModal(props: SelectHeaderTypeModalProps) {
             </div>
             <div className="overflow-y-auto min-h-[400px] col-span-2">
               <div className="scale-[0.5] ">
-                <FinancingPlanningReportPreview
+                {/* <FinancingPlanningReportPreview
                   custom={{
                     headerType: 1,
                     primaryColor,
@@ -114,19 +111,10 @@ export default function SelectColorsModal(props: SelectHeaderTypeModalProps) {
                     description: "",
                     features: [],
                     propertyName: "Exemplo de Proposta",
-                    pageViewMap: [
-                      true,
-                      true,
-                      false,
-                      false,
-                      false,
-                      false,
-                      false,
-                      false,
-                    ],
+                  
                     subType: "Simplificado",
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>

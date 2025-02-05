@@ -1,14 +1,6 @@
 import { Spinner } from "@/components/Loading";
 import { Session } from "@/types/sessionTypes";
-import {
-  Modal,
-  ModalDialog,
-  Typography,
-  Table,
-  IconButton,
-  Sheet,
-  Chip,
-} from "@mui/joy";
+import { Table, IconButton, Sheet, Chip } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { useEffect, useState } from "react";
@@ -19,6 +11,7 @@ import { fetchCaseSessions } from "@/store/caseReducer";
 import { formatTime } from "@/lib/formatter";
 import { navigate } from "vike/client/router";
 import { CaseStudyTypeLinkMap } from "@/lib/maps";
+import Dialog from "@/components/modals/Dialog";
 
 interface CaseSessionsModal {
   open: boolean;
@@ -149,51 +142,40 @@ export default function CaseSessionsModal(props: CaseSessionsModal) {
   }, [dispatch, props.caseId, props.open]);
 
   return (
-    <Modal onClose={props.onClose} open={props.open}>
-      <ModalDialog
-        variant="outlined"
-        role="dialog"
-        aria-labelledby="sessions-case-modal"
-        className="h-[500px] overflow-y-auto"
-        sx={{ width: { xs: "90%", sm: 500 } }}
-      >
-        <>
-          <Typography className="text-center" level="h4">
-            Visualizações
-          </Typography>
-          {sessions.length > 0 ? (
-            <Table aria-label="session table">
-              <thead>
-                <tr>
-                  <th style={{ width: 40 }} aria-label="empty" />
+    <Dialog title="Visualizações" onClose={props.onClose} open={props.open}>
+      <div className="w-[500px] p-5">
+        {sessions.length > 0 ? (
+          <Table aria-label="session table">
+            <thead>
+              <tr>
+                <th style={{ width: 40 }} aria-label="empty" />
 
-                  <th>Tempo de sessão</th>
-                  <th>Data</th>
-                  <th className="w-[80px]"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {sessions.map((session) => (
-                  <SessionRow
-                    key={session.id}
-                    session={session}
-                    openSessionId={openSessionId}
-                    setOpenSessionId={setOpenSessionId}
-                  />
-                ))}
-              </tbody>
-            </Table>
-          ) : loading ? (
-            <>
-              <Spinner />
-            </>
-          ) : (
-            <span className="text-center mt-10">
-              Nenhuma visualização até o momento
-            </span>
-          )}
-        </>
-      </ModalDialog>
-    </Modal>
+                <th>Tempo de sessão</th>
+                <th>Data</th>
+                <th className="w-[80px]"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {sessions.map((session) => (
+                <SessionRow
+                  key={session.id}
+                  session={session}
+                  openSessionId={openSessionId}
+                  setOpenSessionId={setOpenSessionId}
+                />
+              ))}
+            </tbody>
+          </Table>
+        ) : loading ? (
+          <>
+            <Spinner />
+          </>
+        ) : (
+          <span className="text-center mt-10">
+            Nenhuma visualização até o momento
+          </span>
+        )}
+      </div>
+    </Dialog>
   );
 }

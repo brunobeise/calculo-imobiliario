@@ -117,8 +117,6 @@ export default function PropertyDataCard({
     return Math.abs(result) < 0.01 ? 0 : result;
   }, [propertyData?.installmentValue]);
 
-  if (!propertyData) return null;
-
   const isFieldHidden = (fieldName: string) => {
     return hideFields.includes(fieldName);
   };

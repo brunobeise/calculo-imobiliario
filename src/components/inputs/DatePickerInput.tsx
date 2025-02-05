@@ -9,6 +9,7 @@ interface DatePickerProps {
   label?: string;
   defaultValue?: string;
   noHeight?: boolean;
+  width?: string;
 }
 
 const months = [
@@ -32,6 +33,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   label,
   defaultValue,
   noHeight,
+  width = "100%",
 }) => {
   const initialMonth = defaultValue
     ? dayjs(defaultValue, "MM/YYYY").month()
@@ -102,7 +104,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </div>
       <div className="flex items-center space-x-2">
         <Input
-          className="w-full"
+          style={{ width: width }}
           type="text"
           value={inputValue}
           readOnly

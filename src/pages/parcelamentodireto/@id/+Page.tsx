@@ -25,7 +25,7 @@ import { navigate } from "vike/client/router";
 import { uploadImage } from "@/lib/imgur";
 import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
-import DirectFinancingReport from "@/reports/directFinancingReport/DirectFinancingReport";
+import ReportPreview from "@/reports/ReportPreview";
 
 export default function DirectFinancing(): JSX.Element {
   const pageContext = usePageContext();
@@ -226,12 +226,12 @@ export default function DirectFinancing(): JSX.Element {
       />
 
       {report && actualCase ? (
-        <DirectFinancingReport
+        <ReportPreview
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
           onClose={() => setReport(false)}
           propertyData={propertyData}
-          caseData={caseData}
-          actualCase={actualCase}
+          context="directFinancing"
+          proposal={actualCase}
         />
       ) : (
         <div className={`${actualCase ? "relative" : "relative mt-5"}`}>

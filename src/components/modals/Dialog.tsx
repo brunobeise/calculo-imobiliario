@@ -35,7 +35,10 @@ export default function Dialog({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50"
+            onClick={onClose}
+          />
         </TransitionChild>
 
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -50,6 +53,7 @@ export default function Dialog({
           >
             <DialogPanel
               className={`transform rounded-lg bg-whitefull shadow-xl transition-all max-h-[90vh] overflow-y-auto`}
+              onClick={(e) => e.stopPropagation()}
             >
               <ModalClose onClick={onClose} />
               {title && (

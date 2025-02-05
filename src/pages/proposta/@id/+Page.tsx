@@ -2,15 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
 import { Proposal } from "@/types/proposalTypes";
-import FinancingPlanningReportPreview from "@/reports/financingPlanningReport/FinancingPlanningReportPreview";
-import { calcCaseData as calcFinancingPlanningCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
-import { calcCaseData as calcDirectFinancingCaseData } from "@/pages/parcelamentodireto/@id/Calculator";
+import FinancingPlanningReportPreview from "@/reports/FinancingPlanningReportPreview";
+
 import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { nanoid } from "nanoid";
 import { io, Socket } from "socket.io-client";
-import DirectFinancingReportPreview from "@/reports/directFinancingReport/DirectFinancingReportPreview";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
+import DirectFinancingReportPreview from "@/reports/DirectFinancingReportPreview";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -57,10 +55,7 @@ export default function FinancingPlanningReportSharedPage() {
   const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const caseData =
-    proposalData.type === "financingPlanning"
-      ? calcFinancingPlanningCaseData(proposalData.propertyData)
-      : calcDirectFinancingCaseData(proposalData.propertyData);
+
   const auth = useAuth();
 
   const [sessionId] = useState(nanoid(7));
@@ -178,17 +173,12 @@ export default function FinancingPlanningReportSharedPage() {
             }}
             propertyData={proposalData?.propertyData}
             user={proposalData.user}
-            caseData={caseData as unknown as FinancingPlanningData}
             configData={{
               propertyName: proposalData.propertyName || "",
               mainPhoto: proposalData.mainPhoto || "",
               description: proposalData.description || "",
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
-              pageViewMap:
-                proposalData.pageViewMap.length === 0
-                  ? [true, true, true, true, true, true, true, true]
-                  : proposalData.pageViewMap,
               address: proposalData.address,
               bathrooms: proposalData.bathrooms,
               builtArea: proposalData.builtArea,
@@ -197,6 +187,7 @@ export default function FinancingPlanningReportSharedPage() {
               parkingSpaces: proposalData.parkingSpaces,
               suites: proposalData.suites,
               subType: proposalData.subType,
+              reportConfig: proposalData.reportConfig,
             }}
             ref={componentRef}
             page1Ref={page1Ref}
@@ -222,17 +213,13 @@ export default function FinancingPlanningReportSharedPage() {
             }}
             propertyData={proposalData?.propertyData}
             user={proposalData.user}
-            caseData={caseData}
             configData={{
               propertyName: proposalData.propertyName || "",
               mainPhoto: proposalData.mainPhoto || "",
               description: proposalData.description || "",
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
-              pageViewMap:
-                proposalData.pageViewMap.length === 0
-                  ? [true, true, true, true, true, true, true, true]
-                  : proposalData.pageViewMap,
+              reportConfig: proposalData.reportConfig,
               address: proposalData.address,
               bathrooms: proposalData.bathrooms,
               builtArea: proposalData.builtArea,

@@ -1,6 +1,7 @@
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { User } from "./userTypes";
 import { Session } from "./sessionTypes";
+import { ReportConfig } from "./reportConfigTypes";
 
 export interface Proposal {
   id: string;
@@ -18,6 +19,7 @@ export interface Proposal {
   features: string[];
   suites?: string;
   bathrooms?: string;
+  bedrooms: string;
   parkingSpaces?: string;
   builtArea?: string;
   landArea?: string;
@@ -27,6 +29,6 @@ export interface Proposal {
   user: User;
   isArchived: boolean;
   sessions?: Session[];
-  pageViewMap: boolean[];
   buildingId?: string;
+  reportConfig?: ReportConfig;
 }
