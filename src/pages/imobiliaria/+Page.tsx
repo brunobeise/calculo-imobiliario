@@ -152,8 +152,8 @@ export default function RealEstateConfig() {
             <tr>
               <th className="w-[60px]"></th>
               <th>Nome</th>
-              <th className="w-[220px]">Email</th>
-              <th>Cargo</th>
+              <th className="w-[320px]">Email</th>
+              <th className="w-[320px]">Cargo</th>
               <th>Propostas</th>
               <th className="w-[80px]">Admin</th>
               <th className="flex justify-end">Ações</th>
