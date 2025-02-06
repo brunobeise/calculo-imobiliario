@@ -18,6 +18,8 @@ import { usePageContext } from "vike-react/usePageContext";
 import ListDivider from "@mui/joy/ListDivider";
 import { useMenu } from "./MenuContext";
 import { FaBuilding } from "react-icons/fa";
+import { navigate } from "vike/client/router";
+import { PiHandshakeBold } from "react-icons/pi";
 
 export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const { isAuthenticated, user } = useAuth();
@@ -64,9 +66,10 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           </span>
         </div>
         <List size="lg">
-          <a
-            href={"/dashboard"}
+          <div
+            className="cursor-pointer hover:opacity-90"
             onClick={() => {
+              navigate("/dashboard");
               toggleBackdrop(false);
             }}
           >
@@ -88,10 +91,16 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 Dashboard
               </Typography>
             </ListItem>
-          </a>
+          </div>
           <ListDivider />
 
-          <a href={"/usuario"} onClick={() => toggleBackdrop(false)}>
+          <div
+            className="cursor-pointer hover:opacity-90"
+            onClick={() => {
+              navigate("/usuario");
+              toggleBackdrop(false);
+            }}
+          >
             <ListItem
               className={`!ms-5 ${
                 pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
@@ -108,10 +117,16 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 Meus dados
               </Typography>
             </ListItem>
-          </a>
+          </div>
           <ListDivider />
 
-          <a href={"/propostas"} onClick={() => toggleBackdrop(false)}>
+          <div
+            className="cursor-pointer hover:opacity-90"
+            onClick={() => {
+              navigate("/propostas");
+              toggleBackdrop(false);
+            }}
+          >
             <ListItem
               className={`!ms-5 ${
                 pageContext.urlPathname === "/propostas" ? "!text-primary" : ""
@@ -130,12 +145,18 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 Propostas
               </Typography>
             </ListItem>
-          </a>
+          </div>
 
           {user?.owner && (
             <>
               <ListDivider />
-              <a href={"/imobiliaria"} onClick={() => toggleBackdrop(false)}>
+              <div
+                className="cursor-pointer hover:opacity-90"
+                onClick={() => {
+                  navigate("/imobiliaria");
+                  toggleBackdrop(false);
+                }}
+              >
                 <ListItem
                   className={`!ms-5 ${
                     pageContext.urlPathname === "/imobiliaria"
@@ -156,14 +177,15 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                     Imobiliária
                   </Typography>
                 </ListItem>
-              </a>
+              </div>
             </>
           )}
           <ListDivider />
 
-          <a
-            href={"/imoveis"}
+          <div
+            className="cursor-pointer hover:opacity-90"
             onClick={() => {
+              navigate("/imoveis");
               toggleBackdrop(false);
             }}
           >
@@ -183,15 +205,50 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 Imóveis
               </Typography>
             </ListItem>
-          </a>
+          </div>
           <ListDivider />
+          {user.admin && (
+            <>
+              {" "}
+              <div
+                className="cursor-pointer hover:opacity-90"
+                onClick={() => {
+                  navigate("/onboarding");
+                  toggleBackdrop(false);
+                }}
+              >
+                <ListItem
+                  className={`!ms-5 ${
+                    pageContext.urlPathname === "/onboarding"
+                      ? "!text-primary"
+                      : ""
+                  }`}
+                >
+                  <ListItemDecorator>
+                    <PiHandshakeBold />
+                  </ListItemDecorator>
+                  <Typography
+                    className={`font-bold !ms-[-10px] ${
+                      pageContext.urlPathname === "/onboarding"
+                        ? "!text-primary"
+                        : ""
+                    }`}
+                  >
+                    Onboarding
+                  </Typography>
+                </ListItem>
+              </div>
+              <ListDivider />
+            </>
+          )}
 
-          <a
+          <div
+            className="cursor-pointer hover:opacity-90"
             onClick={() => {
               toggleMenu(false);
               toggleBackdrop(false);
+              navigate("/cenarios");
             }}
-            href="/cenarios"
           >
             <ListItem className="!ms-5 cursor-pointer">
               <ListItemDecorator>
@@ -201,7 +258,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 Nova Proposta
               </Typography>
             </ListItem>
-          </a>
+          </div>
         </List>
         <List size="lg" className="!absolute bottom-0">
           <ListItem

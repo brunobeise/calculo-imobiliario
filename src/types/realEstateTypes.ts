@@ -28,3 +28,14 @@ export interface RealEstateSelectOption {
   name: string;
   logo: string;
 }
+
+export type OnboardingDTO = {
+  name: string;
+  email: string;
+  phone: string;
+  realEstateName: string;
+  primaryColor: string;
+  secondaryColor: string;
+  logo?: string;
+  password?: string;
+};

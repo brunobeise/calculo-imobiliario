@@ -10,7 +10,7 @@ export const caseService = {
   async createCase(data: Partial<Proposal>) {
     try {
       const response = await api.post("/cases", data);
-      notify("success", "Proposta criado com sucesso!");
+      notify("success", "Proposta criada com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao criar proposta.");
@@ -24,7 +24,7 @@ export const caseService = {
   }) {
     try {
       const response = await api.post("/cases-duplicate", params);
-      notify("success", "Proposta criado com sucesso!");
+      notify("success", "Proposta criada com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao criar proposta.");
