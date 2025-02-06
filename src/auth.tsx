@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { fetchUserData } from "./store/userReducer";
 import { AppDispatch } from "./store/store";
 import { fetchRealEstateData } from "./store/realEstateReducer";
+import Clarity from "@microsoft/clarity";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -73,8 +74,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(permissions);
         Cookies.set("owner", permissions.owner.toString());
         Cookies.set("admin", permissions.admin.toString());
-        dispatch(fetchUserData());
-        dispatch(fetchRealEstateData());
+
+        dispatch(fetchRealEstateData()).unwrap();
       }
       return permissions;
     } catch (error) {
@@ -85,9 +86,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      getPermissions().then((permissions) => {
+      getPermissions().then(async (permissions) => {
         if (permissions) {
           setUser(permissions);
+          const userData = await dispatch(fetchUserData()).unwrap();
+          Clarity.init(import.meta.env.PUBLIC_ENV__CLARITY_TAG);
+          Clarity.setTag("userId", userData.fullName);
         }
       });
     }

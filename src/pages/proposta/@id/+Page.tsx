@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
 import { Proposal } from "@/types/proposalTypes";
 import FinancingPlanningReportPreview from "@/reports/FinancingPlanningReportPreview";
-
 import { Head } from "vike-react/Head";
 import { useAuth } from "@/auth";
 import { nanoid } from "nanoid";
 import { io, Socket } from "socket.io-client";
 import DirectFinancingReportPreview from "@/reports/DirectFinancingReportPreview";
+import Clarity from "@microsoft/clarity";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -86,6 +86,8 @@ export default function FinancingPlanningReportSharedPage() {
     });
 
     setSocket(newSocket);
+    if (!auth.isAuthenticated)
+      Clarity.init(import.meta.env.PUBLIC_ENV__CLARITY_TAG);
 
     return () => {
       newSocket.disconnect();
