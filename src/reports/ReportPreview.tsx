@@ -26,6 +26,7 @@ import ItemListInput from "@/components/inputs/ItemListInput";
 import { ReportConfig } from "@/types/reportConfigTypes";
 import BooleanInput from "@/components/inputs/BooleanInput";
 import CaseSessionsDrawer from "@/components/shared/CaseSessionsDrawer";
+import BooleanInputSwitch from "@/components/inputs/SwitchInput";
 
 interface ReportPreviewProps {
   propertyData: PropertyData;
@@ -434,7 +435,7 @@ export default function ReportPreview({
               <Divider />
             </div>
           )}
-          {/* <div className="grid grid-cols-1 gap-y-5">
+          <div className="grid grid-cols-1 gap-y-5">
             <BooleanInputSwitch
               label="Separar Documentação"
               checked={configData.reportConfig?.separateDocumentation}
@@ -487,7 +488,7 @@ export default function ReportPreview({
                 })
               }
             />
-            <BooleanInputSwitch
+            {/* <BooleanInputSwitch
               label="Solicitar Nome"
               checked={configData.reportConfig?.requestName}
               onChange={(v) =>
@@ -525,8 +526,8 @@ export default function ReportPreview({
                   },
                 })
               }
-            />
-          </div> */}
+            /> */}
+          </div>
         </div>
       );
 

@@ -3,10 +3,11 @@ import {
   List,
   ListItem,
   ListItemDecorator,
+  Skeleton,
   Typography,
 } from "@mui/joy";
 
-import { FaBars, FaUser, FaFileAlt } from "react-icons/fa";
+import { FaBars, FaFileAlt } from "react-icons/fa";
 import { BiSolidDashboard } from "react-icons/bi";
 import { FaFileCirclePlus } from "react-icons/fa6";
 import { RiLogoutBoxRLine } from "react-icons/ri";
@@ -20,9 +21,12 @@ import { useMenu } from "./MenuContext";
 import { FaBuilding } from "react-icons/fa";
 import { navigate } from "vike/client/router";
 import { PiHandshakeBold } from "react-icons/pi";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const { isAuthenticated, user } = useAuth();
+  const userData = useSelector((state: RootState) => state.user.userData);
   const pageContext = usePageContext();
 
   const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
@@ -59,13 +63,102 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           menuOpen || !isCaseMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center my-4 flex-col">
-          <img className="w-[100px]" src={logo} />
+        <div className="flex items-center my-6 mb-10 flex-col">
+          <img className="w-[80px]" src={logo} />
           <span className="text-primary">
             Imob<span className="font-bold">Deal</span>
           </span>
         </div>
+        <div
+          className="cursor-pointer hover:opacity-90"
+          onClick={() => {
+            navigate("/usuario");
+            toggleBackdrop(false);
+          }}
+        >
+          <ListItem
+            className={`!ms-5 !h-12 !px-2 !my-3 !mb-4 !flex items-center ${
+              pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
+            }`}
+          >
+            <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0">
+              {userData?.photo ? (
+                <img
+                  className="w-full h-full object-cover"
+                  src={userData.photo}
+                  alt="User"
+                />
+              ) : (
+                <Skeleton
+                  variant="circular"
+                  width={40}
+                  height={40}
+                  className="w-10 h-10"
+                />
+              )}
+            </div>
+
+            <Typography className="!ms-4 flex-1">
+              {userData?.fullName ? (
+                <p
+                  className={`font-bold ${
+                    pageContext.urlPathname === "/usuario"
+                      ? "!text-primary"
+                      : "!text-black"
+                  }`}
+                >
+                  {`${userData.fullName.split(" ")[0]} ${
+                    userData.fullName.split(" ").slice(-1)[0]
+                  }`}
+                </p>
+              ) : (
+                <Skeleton
+                  variant="text"
+                  width={100}
+                  className={`font-bold ${
+                    pageContext.urlPathname === "/usuario"
+                      ? "!text-primary"
+                      : "!text-black"
+                  }`}
+                />
+              )}
+              {userData?.role ? (
+                <p
+                  className={`text-sm ${
+                    pageContext.urlPathname === "/usuario"
+                      ? "!text-primary"
+                      : "!text-black"
+                  }`}
+                >
+                  {userData.role}
+                </p>
+              ) : (
+                <Skeleton variant="text" width={80} className="text-sm" />
+              )}
+            </Typography>
+          </ListItem>
+        </div>
+        <ListDivider />
+
         <List size="lg">
+          <div
+            className="cursor-pointer hover:opacity-90"
+            onClick={() => {
+              toggleMenu(false);
+              toggleBackdrop(false);
+              navigate("/cenarios");
+            }}
+          >
+            <ListItem className="!ms-5 cursor-pointer">
+              <ListItemDecorator>
+                <FaFileCirclePlus />
+              </ListItemDecorator>
+              <Typography className="font-bold !ms-[-10px]">
+                Nova Proposta
+              </Typography>
+            </ListItem>
+          </div>
+          <ListDivider />
           <div
             className="cursor-pointer hover:opacity-90"
             onClick={() => {
@@ -93,33 +186,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </ListItem>
           </div>
           <ListDivider />
-
-          <div
-            className="cursor-pointer hover:opacity-90"
-            onClick={() => {
-              navigate("/usuario");
-              toggleBackdrop(false);
-            }}
-          >
-            <ListItem
-              className={`!ms-5 ${
-                pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
-              }`}
-            >
-              <ListItemDecorator>
-                <FaUser />
-              </ListItemDecorator>
-              <Typography
-                className={`font-bold !ms-[-10px] ${
-                  pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
-                }`}
-              >
-                Meus dados
-              </Typography>
-            </ListItem>
-          </div>
-          <ListDivider />
-
           <div
             className="cursor-pointer hover:opacity-90"
             onClick={() => {
@@ -146,7 +212,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               </Typography>
             </ListItem>
           </div>
-
           {user?.owner && (
             <>
               <ListDivider />
@@ -181,7 +246,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </>
           )}
           <ListDivider />
-
           <div
             className="cursor-pointer hover:opacity-90"
             onClick={() => {
@@ -213,8 +277,9 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               <div
                 className="cursor-pointer hover:opacity-90"
                 onClick={() => {
-                  navigate("/onboarding");
+                  toggleMenu(false);
                   toggleBackdrop(false);
+                  navigate("/onboarding");
                 }}
               >
                 <ListItem
@@ -241,24 +306,6 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               <ListDivider />
             </>
           )}
-
-          <div
-            className="cursor-pointer hover:opacity-90"
-            onClick={() => {
-              toggleMenu(false);
-              toggleBackdrop(false);
-              navigate("/cenarios");
-            }}
-          >
-            <ListItem className="!ms-5 cursor-pointer">
-              <ListItemDecorator>
-                <FaFileCirclePlus />
-              </ListItemDecorator>
-              <Typography className="font-bold !ms-[-10px]">
-                Nova Proposta
-              </Typography>
-            </ListItem>
-          </div>
         </List>
         <List size="lg" className="!absolute bottom-0">
           <ListItem

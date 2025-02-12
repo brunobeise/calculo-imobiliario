@@ -140,6 +140,7 @@ const DirectFinancingReportPreview = forwardRef<
                 />
               ) : (
                 <PropertyDescription
+                  photoViewer={configData.reportConfig.photoViewer}
                   color={custom.primaryColor}
                   secondary={custom.secondaryColor}
                   configData={configData}
@@ -158,6 +159,12 @@ const DirectFinancingReportPreview = forwardRef<
                 />
               )}
               <PaymentConditions
+                groupMonthlyInstallments={
+                  configData.reportConfig.groupMonthlyInstallments
+                }
+                separateDocumentation={
+                  configData.reportConfig.separateDocumentation
+                }
                 isAdvancedMode={isAdvancedMode}
                 propertyData={propertyData}
                 color={custom.primaryColor}
@@ -260,6 +267,7 @@ const DirectFinancingReportPreview = forwardRef<
                 color={custom.primaryColor}
               />
               <PropertyDescription
+                photoViewer={configData.reportConfig.photoViewer}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
                 configData={configData}

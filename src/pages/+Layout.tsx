@@ -48,7 +48,6 @@ import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseDa
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-
 export { Layout };
 
 function Layout({ children }: { children: ReactNode }) {
@@ -59,12 +58,6 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname.includes("onboarding") ||
     pageContext.urlPathname === "/";
-
-
-
-  if (typeof global === "undefined") {
-    window.global = window;
-  }
 
   return (
     <CssVarsProvider theme={theme}>

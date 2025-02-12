@@ -4,7 +4,7 @@ import {
   Input,
   FormHelperText,
   FormControl,
-  Typography,
+  FormLabel,
   Button,
 } from "@mui/joy";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -12,7 +12,7 @@ import PictureInput from "../inputs/PictureInput";
 import { uploadImage } from "@/lib/imgur";
 import { userService } from "@/service/userService";
 import { User } from "@/types/userTypes";
-import Dialog from "./Dialog";
+import Dialog from "../modals/Dialog";
 import MaskInputPhone from "../inputs/masks/MaskInputPhone";
 
 interface UserFormModalProps {
@@ -119,9 +119,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           />
         </FormControl>
         <FormControl error={!!errors.fullName}>
-          <Typography component="label" htmlFor="fullName" mb={1}>
-            Nome Completo *
-          </Typography>
+          <FormLabel htmlFor="fullName">Nome Completo *</FormLabel>
           <Input
             id="fullName"
             placeholder="Digite o nome completo"
@@ -136,9 +134,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         </FormControl>
 
         <FormControl error={!!errors.email}>
-          <Typography component="label" htmlFor="email" mb={1}>
-            Email *
-          </Typography>
+          <FormLabel htmlFor="email">Email *</FormLabel>
           <Input
             id="email"
             type="email"
@@ -158,9 +154,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         </FormControl>
 
         <FormControl error={!!errors.role}>
-          <Typography component="label" htmlFor="role" mb={1}>
-            Função *
-          </Typography>
+          <FormLabel htmlFor="role">Função *</FormLabel>
           <Input
             id="role"
             placeholder="Digite a função"
@@ -173,9 +167,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         </FormControl>
 
         <FormControl>
-          <Typography component="label" htmlFor="creci" mb={1}>
-            CRECI
-          </Typography>
+          <FormLabel htmlFor="creci">CRECI</FormLabel>
           <Input
             id="creci"
             placeholder="Digite o CRECI"
@@ -184,9 +176,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         </FormControl>
 
         <FormControl>
-          <Typography component="label" htmlFor="address" mb={1}>
-            Endereço
-          </Typography>
+          <FormLabel htmlFor="address">Endereço</FormLabel>
           <Input
             id="address"
             placeholder="Digite o endereço"
@@ -195,9 +185,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
         </FormControl>
 
         <FormControl error={!!errors.phone}>
-          <Typography component="label" htmlFor="phone" mb={1}>
-            Telefone *
-          </Typography>
+          <FormLabel htmlFor="phone">Telefone *</FormLabel>
           <Input
             id="phone"
             slotProps={{
@@ -225,9 +213,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
 
         <div className="grid grid-cols-2 gap-x-5 gap-y-5">
           <FormControl>
-            <Typography component="label" htmlFor="whatsapp" mb={1}>
-              WhatsApp
-            </Typography>
+            <FormLabel htmlFor="whatsapp">WhatsApp</FormLabel>
             <Input
               id="whatsapp"
               placeholder="link do WhatsApp"
@@ -236,9 +222,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           </FormControl>
 
           <FormControl>
-            <Typography component="label" htmlFor="instagram" mb={1}>
-              Instagram
-            </Typography>
+            <FormLabel htmlFor="instagram">Instagram</FormLabel>
             <Input
               id="instagram"
               placeholder="link do Instagram"
@@ -247,9 +231,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           </FormControl>
 
           <FormControl>
-            <Typography component="label" htmlFor="facebook" mb={1}>
-              Facebook
-            </Typography>
+            <FormLabel htmlFor="facebook">Facebook</FormLabel>
             <Input
               id="facebook"
               placeholder="link do Facebook"
@@ -258,9 +240,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           </FormControl>
 
           <FormControl>
-            <Typography component="label" htmlFor="linkedin" mb={1}>
-              LinkedIn
-            </Typography>
+            <FormLabel htmlFor="linkedin">LinkedIn</FormLabel>
             <Input
               id="linkedin"
               placeholder="link do LinkedIn"

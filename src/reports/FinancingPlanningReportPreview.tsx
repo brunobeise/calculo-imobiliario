@@ -63,14 +63,12 @@ const FinancingPlanningReportPreview = forwardRef<
     ref
   ) => {
     if (!propertyData) return null;
-    console.log(configData.reportConfig[0]);
-    
+
     if (!configData.reportConfig.pageViewMap) return null;
     const caseData = calcCaseData(propertyData);
 
     const isPageViewActive = (index: number) => {
       if (configData.subType === "Simplificado") return true;
-      console.log(configData.reportConfig);
 
       return (
         index >= configData.reportConfig.pageViewMap?.length ||
@@ -145,6 +143,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 />
               ) : (
                 <PropertyDescription
+                  photoViewer={configData.reportConfig.photoViewer}
                   color={custom.primaryColor}
                   secondary={custom.secondaryColor}
                   configData={configData}
@@ -163,6 +162,12 @@ const FinancingPlanningReportPreview = forwardRef<
                 />
               )}
               <PaymentConditions
+                groupMonthlyInstallments={
+                  configData.reportConfig.groupMonthlyInstallments
+                }
+                separateDocumentation={
+                  configData.reportConfig.separateDocumentation
+                }
                 isAdvancedMode={isAdvancedMode}
                 propertyData={propertyData}
                 color={custom.primaryColor}
@@ -179,29 +184,37 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
 
-          {isPageViewActive(2) && isAdvancedMode && (
+          {isPageViewActive(2) && (
             <div id="section3" className="w-full" ref={page3Ref}>
-              <ReportDivider
-                bars={27}
-                title="Cálculo do investimento"
-                color={custom.primaryColor}
-              />
-              <div className="w-full px-12 my-10">
-                <CalculationTable
-                  color={custom.primaryColor}
-                  secondary={custom.secondaryColor}
-                  propertyData={propertyData}
-                  caseData={caseData}
-                />
-              </div>
+              {isAdvancedMode && (
+                <>
+                  <ReportDivider
+                    bars={27}
+                    title="Cálculo do investimento"
+                    color={custom.primaryColor}
+                  />
+                  <div className="w-full px-12 my-10">
+                    <CalculationTable
+                      color={custom.primaryColor}
+                      secondary={custom.secondaryColor}
+                      propertyData={propertyData}
+                      caseData={caseData}
+                    />
+                  </div>
 
-              <ScenariosBuyAndSell
-                propertyData={propertyData}
-                caseData={caseData}
-                color={custom.primaryColor}
-                secondary={custom.secondaryColor}
-              />
+                  <ScenariosBuyAndSell
+                    propertyData={propertyData}
+                    caseData={caseData}
+                    color={custom.primaryColor}
+                    secondary={custom.secondaryColor}
+                  />
+                </>
+              )}
+
               <UnderstandFinancing
+                displayFinancingTime={
+                  configData.reportConfig.displayFinancingTime
+                }
                 background={custom.backgroundColor}
                 propertyData={propertyData}
                 color={custom.primaryColor}
@@ -270,6 +283,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 color={custom.primaryColor}
               />
               <PropertyDescription
+                photoViewer={configData.reportConfig.photoViewer}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
                 configData={configData}

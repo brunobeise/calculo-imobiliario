@@ -13,6 +13,7 @@ import { realEstateService } from "@/service/realEstateService";
 import { useState } from "react";
 import { useAuth } from "@/auth";
 import { navigate } from "vike/client/router";
+import MaskInputPhone from "@/components/inputs/masks/MaskInputPhone";
 
 interface OnboardingFormData {
   name: string;
@@ -91,10 +92,23 @@ export default function OnboardingForm() {
         </FormControl>
 
         <FormControl error={!!errors.phone}>
-          <FormLabel htmlFor="phone">Telefone:</FormLabel>
+          <FormLabel htmlFor="phone">Telefone *</FormLabel>
           <Input
             id="phone"
-            {...register("phone", { required: "Telefone é obrigatório" })}
+            slotProps={{
+              input: {
+                component: MaskInputPhone,
+              },
+            }}
+            placeholder="Digite o telefone"
+            {...register("phone", {
+              required: "Telefone é obrigatório",
+              pattern: {
+                value: /^\d{11}$/, // Regex para garantir que tenha exatamente 11 números
+                message:
+                  "Número inválido. O formato correto é DDD + número (11 dígitos).",
+              },
+            })}
             error={!!errors.phone}
           />
           {errors.phone && (

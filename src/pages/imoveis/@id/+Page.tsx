@@ -33,10 +33,7 @@ export default function Building() {
 
   const { user } = useAuth();
 
-  const loading = useSelector(
-    (state: RootState) =>
-      state.building.createBuildingLoading || state.building.loading
-  );
+  const loading = useSelector((state: RootState) => state.building.loading);
   const building = useSelector((state: RootState) => state.building.building);
 
   const [scrapModal, setScrapModal] = useState(false);
@@ -63,6 +60,7 @@ export default function Building() {
       navigate("/imoveis/" + result.id);
     } else {
       await dispatch(updateBuilding({ buildingId: data.id, data }));
+      await dispatch(fetchBuildingById(id));
       if (data.isArchived) navigate("/imoveis");
     }
   };
@@ -160,7 +158,7 @@ export default function Building() {
           )}
         </div>
 
-        {building?.features.length > 0 && (
+        {building?.features?.length > 0 && (
           <div className="text-lg">
             <strong className="block mb-3">Características</strong>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-4 text-sm">

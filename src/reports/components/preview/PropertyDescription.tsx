@@ -14,18 +14,20 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import { Gallery } from "react-grid-gallery";
+import Gallery from "react-photo-gallery";
 
 interface PropertyDescriptionProps {
   configData: ReportData;
   color: string;
   secondary: string;
+  photoViewer: boolean;
 }
 
 export default function PropertyDescription({
   color,
   configData,
   secondary,
+  photoViewer = true,
 }: PropertyDescriptionProps) {
   const [imageData, setImageData] = useState<
     { src: string; original: string; width: number; height: number }[]
@@ -153,12 +155,14 @@ export default function PropertyDescription({
       {imageData.length > 0 && (
         <div className="my-4">
           <Gallery
-            images={imageData}
-            enableImageSelection={false}
-            rowHeight={210}
-            onClick={(clickedIndex: number) => {
-              setCurrentIndex(clickedIndex);
-              setLightboxOpen(true);
+            photos={imageData}
+            direction={"column"}
+            columns={2}
+            onClick={(_, click) => {
+              if (photoViewer) {
+                setCurrentIndex(click.index);
+                setLightboxOpen(true);
+              }
             }}
           />
 
@@ -167,6 +171,9 @@ export default function PropertyDescription({
             close={() => setLightboxOpen(false)}
             slides={imageData}
             index={currentIndex}
+            controller={{
+              closeOnBackdropClick: true,
+            }}
             on={{
               view: ({ index: newIndex }) => setCurrentIndex(newIndex),
             }}

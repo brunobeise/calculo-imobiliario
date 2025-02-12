@@ -11,6 +11,8 @@ interface PaymentConditionsProps {
   propertyData: PropertyData;
   isAdvancedMode?: boolean;
   hasBankFinancing?: boolean;
+  separateDocumentation: boolean;
+  groupMonthlyInstallments: boolean;
 }
 
 const PaymentConditions: React.FC<PaymentConditionsProps> = ({
@@ -19,6 +21,8 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   propertyData,
   isAdvancedMode,
   hasBankFinancing = true,
+  separateDocumentation,
+  groupMonthlyInstallments,
 }) => {
   const { discharges, initialDate, downPayment, financingFees } = propertyData;
 
@@ -34,7 +38,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     const downPaymentDischarges = discharges.filter((d) => d.isDownPayment);
     const reinforcementDischarges = discharges.filter((d) => !d.isDownPayment);
 
-    const computeDischargeDate = (initialDate: string, monthsToAdd: number) => {
+    const computeDischargeDate = (initialDate, monthsToAdd) => {
       const [month, year] = initialDate.split("/").map(Number);
       return dayjs(`${year}-${month}-01`)
         .add(monthsToAdd, "month")
@@ -53,9 +57,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         amount: toBRL(discharge.originalValue),
         description: discharge.description,
       }))
-      .sort((a, b) => {
-        return a.originalDate.isBefore(b.originalDate) ? -1 : 1;
-      });
+      .sort((a, b) => (a.originalDate.isBefore(b.originalDate) ? -1 : 1));
 
     if (
       propertyData.financingFeesDate !== propertyData.initialDate &&
@@ -101,18 +103,29 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
     let globalPartNumber = 1;
 
-    const reinforcementDetails = reinforcementDischarges
-      .sort((a, b) => a.month - b.month)
-      .reduce(
-        (
-          acc: {
-            date: string;
-            parts: { partNumber: number; amount: string }[];
-          }[],
-          discharge
-        ) => {
-          const date = computeDischargeDate(initialDate, discharge.month);
+    let reinforcementDetails;
 
+    if (groupMonthlyInstallments) {
+      reinforcementDetails = [];
+      if (reinforcementDischarges.length > 0) {
+        const firstDate = computeDischargeDate(
+          initialDate,
+          reinforcementDischarges[0].month
+        );
+        const amount = toBRL(reinforcementDischarges[0].originalValue);
+        const totalInstallments = reinforcementDischarges.length;
+
+        reinforcementDetails.push({
+          date: firstDate,
+          amount,
+          totalInstallments,
+        });
+      }
+    } else {
+      reinforcementDetails = reinforcementDischarges
+        .sort((a, b) => a.month - b.month)
+        .reduce((acc, discharge) => {
+          const date = computeDischargeDate(initialDate, discharge.month);
           const existingMonth = acc.find((item) => item.date === date);
 
           if (existingMonth) {
@@ -133,9 +146,8 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           }
 
           return acc;
-        },
-        []
-      );
+        }, []);
+    }
 
     const totalReinforcementParts = reinforcementDischarges.length;
 
@@ -157,6 +169,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     propertyData.subsidy,
     downPayment,
     financingFees,
+    groupMonthlyInstallments,
     initialDate,
   ]);
 
@@ -190,7 +203,11 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               Entrada ({totalParts}x)
             </h3>
             <p style={{ color }} className="text-2xl font-bold mb-4">
-              {toBRL(totalDownPayment)}
+              {toBRL(
+                separateDocumentation
+                  ? totalDownPayment - financingFees
+                  : totalDownPayment
+              )}
             </p>
             <div className="max-h-[400px] overflow-y-auto scrollbar ">
               <ul className="list-none space-y-3 ">
@@ -210,14 +227,15 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                     )}
 
                     {propertyData.financingFeesDate ===
-                      propertyData.initialDate && (
-                      <li style={{ color: secondary }}>
-                        • Documentação:{" "}
-                        <strong style={{ color }}>
-                          {toBRL(financingFees)}
-                        </strong>
-                      </li>
-                    )}
+                      propertyData.initialDate &&
+                      !separateDocumentation && (
+                        <li style={{ color: secondary }}>
+                          • Documentação:{" "}
+                          <strong style={{ color }}>
+                            {toBRL(financingFees)}
+                          </strong>
+                        </li>
+                      )}
                     {entryDetails
                       .filter((d) => d.description)
                       .map((detail, i) => (
@@ -240,6 +258,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                   );
 
                   if (detail.description) return null;
+                  if (hasDocumentation && separateDocumentation) return null;
 
                   return (
                     <li key={i} className="text-sm">
@@ -250,14 +269,16 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                           <strong style={{ color }}>{detail.amount}</strong>
                         </li>
 
-                        {isDocumentationDate && !hasDocumentation && (
-                          <li style={{ color: secondary }}>
-                            • Documentação:{" "}
-                            <strong style={{ color }}>
-                              {toBRL(financingFees)}
-                            </strong>
-                          </li>
-                        )}
+                        {isDocumentationDate &&
+                          !hasDocumentation &&
+                          !separateDocumentation && (
+                            <li style={{ color: secondary }}>
+                              • Documentação:{" "}
+                              <strong style={{ color }}>
+                                {toBRL(financingFees)}
+                              </strong>
+                            </li>
+                          )}
                       </ul>
                     </li>
                   );
@@ -288,6 +309,31 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               </ul>
             </div>
           </div>
+          {separateDocumentation && totalReinforcementParts > 0 && (
+            <div className="rounded-3xl p-4 border h-min">
+              <h3 style={{ color }} className="text-xl mb-2">
+                Documentação
+              </h3>
+              <p style={{ color }} className="text-2xl font-bold ">
+                {toBRL(financingFees)}
+              </p>
+              <div className="max-h-[400px] overflow-y-auto scrollbar ">
+                {propertyData.financingFeesDate !==
+                  propertyData.initialDate && (
+                  <ul className="list-none space-y-2 text-sm mt-4">
+                    <span style={{ color: secondary }}>Data do pagamento:</span>
+                    <li>
+                      <strong>
+                        {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                          .format("MMMM [de] YYYY")
+                          .replace(/^./, (match) => match.toUpperCase())}
+                      </strong>
+                    </li>
+                  </ul>
+                )}
+              </div>
+            </div>
+          )}
           {totalReinforcementParts > 0 && hasBankFinancing && (
             <div className="rounded-3xl p-4 border h-min lg:hidden">
               <h3 style={{ color }} className="text-xl mb-2">
@@ -343,17 +389,35 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                   <ul className="list-none space-y-3">
                     {reinforcementDetails.map((detail, i) => (
                       <li key={i} className="text-sm">
-                        <span style={{ color }}>
-                          {i + 1}) {detail.date}
-                        </span>
-                        <ul style={{ color: secondary }} className="ml-1">
-                          {detail.parts.map((part, j) => (
-                            <li key={j}>
-                              • {part.partNumber}ª Parte:{" "}
-                              <strong style={{ color }}>{part.amount}</strong>
-                            </li>
-                          ))}
-                        </ul>
+                        {groupMonthlyInstallments ? (
+                          <>
+                            <ul style={{ color: secondary }} className="ml-1">
+                              <li>
+                                • Parcelas mensais ({detail.totalInstallments}
+                                x):{" "}
+                                <strong style={{ color }}>
+                                  {detail.amount}
+                                </strong>
+                              </li>
+                            </ul>
+                          </>
+                        ) : (
+                          <>
+                            <span style={{ color }}>
+                              {i + 1}) {detail.date}
+                            </span>
+                            <ul style={{ color: secondary }} className="ml-1">
+                              {detail.parts?.map((part, j) => (
+                                <li key={j}>
+                                  • {part.partNumber}ª Parte:{" "}
+                                  <strong style={{ color }}>
+                                    {part.amount}
+                                  </strong>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -404,6 +468,31 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                 {propertyData.amortizationType === "SAC" ? "(decrescente)" : ""}
               </li>
             </ul>
+          </div>
+        )}
+
+        {separateDocumentation && totalReinforcementParts === 0 && (
+          <div className="rounded-3xl p-4 border h-min">
+            <h3 style={{ color }} className="text-xl mb-2">
+              Documentação
+            </h3>
+            <p style={{ color }} className="text-2xl font-bold ">
+              {toBRL(financingFees)}
+            </p>
+            <div className="max-h-[400px] overflow-y-auto scrollbar ">
+              {propertyData.financingFeesDate !== propertyData.initialDate && (
+                <ul className="list-none space-y-2 text-sm mt-4">
+                  <span style={{ color: secondary }}>Data do pagamento:</span>
+                  <li>
+                    <strong>
+                      {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                        .format("MMMM [de] YYYY")
+                        .replace(/^./, (match) => match.toUpperCase())}
+                    </strong>
+                  </li>
+                </ul>
+              )}
+            </div>
           </div>
         )}
       </div>

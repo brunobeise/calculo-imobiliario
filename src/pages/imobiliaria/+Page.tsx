@@ -3,7 +3,7 @@ import { Button, FormLabel, IconButton, Input, Table } from "@mui/joy";
 import PictureInput from "@/components/inputs/PictureInput";
 import { FaCheckCircle, FaEdit, FaSave } from "react-icons/fa";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-import UserFormModal from "@/components/modals/UserFormModal";
+import UserFormModal from "@/components/user/UserFormModal";
 import { useAuth } from "@/auth";
 import { navigate } from "vike/client/router";
 import { AppDispatch, RootState } from "@/store/store";

@@ -11,7 +11,7 @@ import { FaUser } from "react-icons/fa6";
 import { LuPhoneCall } from "react-icons/lu";
 import BooleanInputSwitch from "@/components/inputs/SwitchInput";
 import { Button } from "@mui/joy";
-import UserFormModal from "@/components/modals/UserFormModal";
+import UserFormModal from "@/components/user/UserFormModal";
 
 export default function UserConfig() {
   const { isAuthenticated } = useAuth();
