@@ -14,7 +14,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/plugins/captions.css";
 import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
-import Gallery from "react-photo-gallery";
+import { ColumnsPhotoAlbum } from "react-photo-album";
+import "react-photo-album/columns.css";
 
 interface PropertyDescriptionProps {
   configData: ReportData;
@@ -154,11 +155,11 @@ export default function PropertyDescription({
 
       {imageData.length > 0 && (
         <div className="my-4">
-          <Gallery
+          <ColumnsPhotoAlbum
             photos={imageData}
-            direction={"column"}
+            spacing={5}
             columns={2}
-            onClick={(_, click) => {
+            onClick={(click) => {
               if (photoViewer) {
                 setCurrentIndex(click.index);
                 setLightboxOpen(true);
