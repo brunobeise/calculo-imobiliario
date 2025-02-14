@@ -172,7 +172,6 @@ export default function FinancingPlanning(): JSX.Element {
           "initialRentValue",
           "interestRate",
           "inCashFees",
-          "financingMonths",
           "ownResource",
           "subsidy",
           "initialDate",
@@ -194,9 +193,7 @@ export default function FinancingPlanning(): JSX.Element {
       />
     );
 
-  if (getCaseLoading || !propertyData)
-    return <GlobalLoading />;
-  
+  if (getCaseLoading || !propertyData) return <GlobalLoading />;
 
   return (
     <div className="bg-background min-h-screen">
