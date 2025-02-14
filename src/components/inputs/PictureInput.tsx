@@ -6,7 +6,7 @@ import { IoIosAdd } from "react-icons/io";
 import { Button, FormControl, FormHelperText, FormLabel } from "@mui/joy";
 import { FieldError, FieldErrorsImpl, Merge } from "react-hook-form";
 import Dialog from "../modals/Dialog";
-import { Gallery, ThumbnailImageProps } from "react-grid-gallery";
+import { ColumnsPhotoAlbum, RenderImageProps } from "react-photo-album";
 
 interface PictureInputProps {
   onChange: (src: string) => void;
@@ -19,10 +19,15 @@ interface PictureInputProps {
   onDrop?: (image: string, source: string) => void;
 }
 
-interface DraggableGalleryImageProps extends ThumbnailImageProps {
-  image: { src: string; original: string; width: number; height: number };
+interface DraggableGalleryImageProps {
+  photo: {
+    src: string;
+    width: number;
+    height: number;
+  };
+  imageProps: React.ImgHTMLAttributes<HTMLImageElement>;
   index: number;
-  moveImage: (from: number, to: number) => void;
+  moveImage: (fromIndex: number, toIndex: number) => void;
 }
 
 interface DraggableImageProps {
@@ -51,7 +56,7 @@ const DraggableImage: React.FC<DraggableImageProps> = ({
   return (
     <div
       ref={(node) => ref(drop(node))}
-      className="relative h-20 max-w-32 flex items-center justify-center border border-border rounded "
+      className="relative h-20 max-w-32 flex items-center justify-center border border-border rounded cursor-grab"
     >
       <img src={src} alt="Preview" className="object-cover h-full w-full" />
       <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black bg-opacity-50 opacity-0 hover:opacity-100 transition-opacity">
@@ -67,7 +72,19 @@ const DraggableImage: React.FC<DraggableImageProps> = ({
   );
 };
 
+interface DraggableGalleryImageProps {
+  photo: {
+    src: string;
+    width: number;
+    height: number;
+  };
+  imageProps: React.ImgHTMLAttributes<HTMLImageElement>;
+  index: number;
+  moveImage: (fromIndex: number, toIndex: number) => void;
+}
+
 const DraggableGalleryImage: React.FC<DraggableGalleryImageProps> = ({
+  photo,
   imageProps,
   index,
   moveImage,
@@ -104,7 +121,8 @@ const DraggableGalleryImage: React.FC<DraggableGalleryImageProps> = ({
         isOver || hoverIndex === index ? "opacity-50" : ""
       }`}
     >
-      <img {...imageProps} />
+      <span className="text-white absolute ">{index}</span>
+      <img {...imageProps} src={photo.src} alt="Gallery Image" />
     </div>
   );
 };
@@ -162,13 +180,31 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   };
 
   const moveImage = (from: number, to: number) => {
-    const updatedImages = [...imageData];
-    const [movedImage] = updatedImages.splice(from, 1);
-    updatedImages.splice(to, 0, movedImage);
+    setImageData((prevImages) => {
+      const updatedImages = [...prevImages];
 
-    setImageData(updatedImages);
-    setFileSrcs(updatedImages.map((img) => img.src));
-    onChange(updatedImages.map((img) => img.src).join(","));
+      // Troca direta de posição entre os elementos
+      [updatedImages[from], updatedImages[to]] = [
+        updatedImages[to],
+        updatedImages[from],
+      ];
+
+      return updatedImages;
+    });
+
+    setFileSrcs((prevSrcs) => {
+      const updatedSrcs = [...prevSrcs];
+
+      // Troca direta de posição entre os elementos
+      [updatedSrcs[from], updatedSrcs[to]] = [
+        updatedSrcs[to],
+        updatedSrcs[from],
+      ];
+
+      onChange(updatedSrcs.join(",")); // Atualiza os valores corretamente
+
+      return updatedSrcs;
+    });
   };
 
   const handleDelete = (index: number) => {
@@ -250,18 +286,27 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         {fileSrcs.filter(Boolean).length > 1 ? (
           <div className="relative flex items-center gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
             <div className="flex flex-wrap gap-2">
-              {fileSrcs.map((src, index) => (
-                <div key={src} className="cursor-grab">
-                  <DraggableImage
-                    key={index}
-                    src={src}
-                    index={index}
-                    handleDelete={handleDelete}
-                    handleReplace={handleReplace}
-                    source={label}
-                  />
-                </div>
-              ))}
+              <ColumnsPhotoAlbum
+                photos={imageData}
+                spacing={5}
+                columns={2}
+                render={{
+                  image: ({ src }: RenderImageProps) => {
+                    const index = imageData.findIndex((img) => img.src === src);
+                    return (
+                      
+                      <DraggableImage
+                        key={index}
+                        src={src}
+                        index={index}
+                        handleDelete={handleDelete}
+                        handleReplace={handleReplace}
+                        source={label}
+                      />
+                    );
+                  },
+                }}
+              />
               <div
                 className={`text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border`}
                 onClick={() => fileInputRef.current?.click()}
@@ -338,21 +383,32 @@ export const PictureInput: React.FC<PictureInputProps> = ({
           }
         >
           <div className="w-[150mm]">
-            <Gallery
-              images={imageData}
-              enableImageSelection={false}
-              rowHeight={150}
-              thumbnailImageComponent={(props) => {
-                const index = props.index ?? 0;
-                return (
-                  <DraggableGalleryImage
-                    {...props}
-                    key={imageData[index].src}
-                    image={imageData[index]}
-                    index={index}
-                    moveImage={moveImage}
-                  />
-                );
+            <ColumnsPhotoAlbum
+              photos={imageData}
+              spacing={5}
+              columns={2}
+              render={{
+                image: ({
+                  src,
+                  width,
+                  height,
+                  ...imageProps
+                }: RenderImageProps) => {
+                  const index = imageData.findIndex((img) => img.src === src);
+                  return (
+                    <DraggableGalleryImage
+                      key={src}
+                      photo={{
+                        src,
+                        width: Number(width) || 100,
+                        height: Number(height) || 100,
+                      }}
+                      imageProps={imageProps}
+                      index={index}
+                      moveImage={moveImage}
+                    />
+                  );
+                },
               }}
             />
           </div>

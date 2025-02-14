@@ -9,6 +9,8 @@ import { nanoid } from "nanoid";
 import { io, Socket } from "socket.io-client";
 import DirectFinancingReportPreview from "@/reports/DirectFinancingReportPreview";
 import Clarity from "@microsoft/clarity";
+import Dialog from "@/components/modals/Dialog";
+import { Button, Input } from "@mui/joy";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const [timeVisible, setTimeVisible] = useState(0);
@@ -76,6 +78,10 @@ export default function FinancingPlanningReportSharedPage() {
   const page6TimeVisible = useVisibility(page6Ref);
   const page7TimeVisible = useVisibility(page7Ref);
   const page8TimeVisible = useVisibility(page8Ref);
+
+  const [requestName, setRequestName] = useState(!proposalData.reportConfig.requestName ? false : true);
+  const [viewerName, setViewerName] = useState("");
+
   useEffect(() => {
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
       transports: ["websocket"],
@@ -118,6 +124,7 @@ export default function FinancingPlanningReportSharedPage() {
       sessionTime: currentSessionTime,
       caseId: proposalData.id,
       id: sessionId,
+      viewerName: viewerName || localStorage.getItem('viewerName'),
       page1TimeVisible,
       page2TimeVisible,
       page3TimeVisible,
@@ -242,6 +249,41 @@ export default function FinancingPlanningReportSharedPage() {
             page8Ref={page8Ref}
           />
         )}
+
+        <Dialog
+          actions={
+            viewerName && (
+              <div className="flex justify-center w-full">
+                <Button
+                  onClick={() => {
+                    if (viewerName) {
+                      localStorage.setItem("viewerName", viewerName);
+                      setRequestName(false);
+                    }
+                  }}
+                >
+                  Visualizar Proposta
+                </Button>
+              </div>
+            )
+          }
+          title="Insira seu nome para continuar"
+          closeButton={false}
+          open={requestName}
+          onClose={() => {
+            if (viewerName) {
+              localStorage.setItem("viewerName", viewerName);
+              setRequestName(false);
+            }
+          }}
+        >
+          <div className="w-[300px] lg:w-[500px] p-6">
+            <Input
+              onChange={(e) => setViewerName(e.target.value)}
+              value={viewerName}
+            />
+          </div>
+        </Dialog>
       </div>
     </>
   );

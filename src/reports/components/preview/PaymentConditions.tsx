@@ -102,26 +102,61 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     const totalParts = downPaymentDischarges.length + 1;
 
     let globalPartNumber = 1;
-
-    let reinforcementDetails;
+    let reinforcementDetails = [];
 
     if (groupMonthlyInstallments) {
-      reinforcementDetails = [];
-      if (reinforcementDischarges.length > 0) {
-        const firstDate = computeDischargeDate(
-          initialDate,
-          reinforcementDischarges[0].month
+      const monthlyInstallments = reinforcementDischarges
+        .filter((d) => d.type === "Mensal")
+        .reduce(
+          (acc, discharge) => {
+            acc.amount = discharge.originalValue;
+            acc.totalInstallments += 1;
+            return acc;
+          },
+          {
+            date: computeDischargeDate(
+              initialDate,
+              reinforcementDischarges[0]?.month
+            ),
+            amount: 0,
+            totalInstallments: 0,
+          }
         );
-        const amount = toBRL(reinforcementDischarges[0].originalValue);
-        const totalInstallments = reinforcementDischarges.length;
 
-        reinforcementDetails.push({
-          date: firstDate,
-          amount,
-          totalInstallments,
-        });
+      if (monthlyInstallments.totalInstallments > 0) {
+        reinforcementDetails.push(monthlyInstallments);
       }
+
+      const otherInstallments = reinforcementDischarges
+        .filter((d) => d.type !== "Mensal") // Pega todas as parcelas que não são mensais
+        .sort((a, b) => a.month - b.month)
+        .reduce((acc, discharge) => {
+          const date = computeDischargeDate(initialDate, discharge.month);
+          const existingMonth = acc.find((item) => item.date === date);
+
+          if (existingMonth) {
+            existingMonth.parts.push({
+              partNumber: globalPartNumber++,
+              amount: toBRL(discharge.originalValue),
+            });
+          } else {
+            acc.push({
+              date,
+              parts: [
+                {
+                  partNumber: globalPartNumber++,
+                  amount: toBRL(discharge.originalValue),
+                },
+              ],
+            });
+          }
+
+          return acc;
+        }, []);
+
+      reinforcementDetails = [...reinforcementDetails, ...otherInstallments];
     } else {
+      // Se groupMonthlyInstallments for false, apenas mantemos tudo como está
       reinforcementDetails = reinforcementDischarges
         .sort((a, b) => a.month - b.month)
         .reduce((acc, discharge) => {
@@ -228,7 +263,8 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
                     {propertyData.financingFeesDate ===
                       propertyData.initialDate &&
-                      !separateDocumentation && (
+                      !separateDocumentation &&
+                      financingFees > 0 && (
                         <li style={{ color: secondary }}>
                           • Documentação:{" "}
                           <strong style={{ color }}>
@@ -271,7 +307,8 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
                         {isDocumentationDate &&
                           !hasDocumentation &&
-                          !separateDocumentation && (
+                          !separateDocumentation &&
+                          financingFees > 0 && (
                             <li style={{ color: secondary }}>
                               • Documentação:{" "}
                               <strong style={{ color }}>
@@ -309,31 +346,35 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
               </ul>
             </div>
           </div>
-          {separateDocumentation && totalReinforcementParts > 0 && (
-            <div className="rounded-3xl p-4 border h-min">
-              <h3 style={{ color }} className="text-xl mb-2">
-                Documentação
-              </h3>
-              <p style={{ color }} className="text-2xl font-bold ">
-                {toBRL(financingFees)}
-              </p>
-              <div className="max-h-[400px] overflow-y-auto scrollbar ">
-                {propertyData.financingFeesDate !==
-                  propertyData.initialDate && (
-                  <ul className="list-none space-y-2 text-sm mt-4">
-                    <span style={{ color: secondary }}>Data do pagamento:</span>
-                    <li>
-                      <strong>
-                        {dayjs(propertyData.financingFeesDate, "MM/YYYY")
-                          .format("MMMM [de] YYYY")
-                          .replace(/^./, (match) => match.toUpperCase())}
-                      </strong>
-                    </li>
-                  </ul>
-                )}
+          {separateDocumentation &&
+            totalReinforcementParts > 0 &&
+            financingFees > 0 && (
+              <div className="rounded-3xl p-4 border h-min">
+                <h3 style={{ color }} className="text-xl mb-2">
+                  Documentação
+                </h3>
+                <p style={{ color }} className="text-2xl font-bold ">
+                  {toBRL(financingFees)}
+                </p>
+                <div className="max-h-[400px] overflow-y-auto scrollbar ">
+                  {propertyData.financingFeesDate !==
+                    propertyData.initialDate && (
+                    <ul className="list-none space-y-2 text-sm mt-4">
+                      <span style={{ color: secondary }}>
+                        Data do pagamento:
+                      </span>
+                      <li>
+                        <strong>
+                          {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                            .format("MMMM [de] YYYY")
+                            .replace(/^./, (match) => match.toUpperCase())}
+                        </strong>
+                      </li>
+                    </ul>
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           {totalReinforcementParts > 0 && hasBankFinancing && (
             <div className="rounded-3xl p-4 border h-min lg:hidden">
               <h3 style={{ color }} className="text-xl mb-2">
@@ -389,20 +430,20 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                   <ul className="list-none space-y-3">
                     {reinforcementDetails.map((detail, i) => (
                       <li key={i} className="text-sm">
-                        {groupMonthlyInstallments ? (
-                          <>
-                            <ul style={{ color: secondary }} className="ml-1">
-                              <li>
-                                • Parcelas mensais ({detail.totalInstallments}
-                                x):{" "}
-                                <strong style={{ color }}>
-                                  {detail.amount}
-                                </strong>
-                              </li>
-                            </ul>
-                          </>
+                        {/* Se for uma parcela mensal agrupada e `groupMonthlyInstallments` for true */}
+                        {detail.totalInstallments &&
+                        groupMonthlyInstallments ? (
+                          <ul style={{ color: secondary }} className="ml-1">
+                            <li>
+                              • Parcelas mensais ({detail.totalInstallments}x):{" "}
+                              <strong style={{ color }}>
+                                {toBRL(detail.amount)}
+                              </strong>
+                            </li>
+                          </ul>
                         ) : (
                           <>
+                            {/* Exibe a data da parcela (seja anual, esporádica ou mensal não agrupada) */}
                             <span style={{ color }}>
                               {i + 1}) {detail.date}
                             </span>
@@ -471,30 +512,33 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </div>
         )}
 
-        {separateDocumentation && totalReinforcementParts === 0 && (
-          <div className="rounded-3xl p-4 border h-min">
-            <h3 style={{ color }} className="text-xl mb-2">
-              Documentação
-            </h3>
-            <p style={{ color }} className="text-2xl font-bold ">
-              {toBRL(financingFees)}
-            </p>
-            <div className="max-h-[400px] overflow-y-auto scrollbar ">
-              {propertyData.financingFeesDate !== propertyData.initialDate && (
-                <ul className="list-none space-y-2 text-sm mt-4">
-                  <span style={{ color: secondary }}>Data do pagamento:</span>
-                  <li>
-                    <strong>
-                      {dayjs(propertyData.financingFeesDate, "MM/YYYY")
-                        .format("MMMM [de] YYYY")
-                        .replace(/^./, (match) => match.toUpperCase())}
-                    </strong>
-                  </li>
-                </ul>
-              )}
+        {separateDocumentation &&
+          totalReinforcementParts === 0 &&
+          financingFees > 0 && (
+            <div className="rounded-3xl p-4 border h-min">
+              <h3 style={{ color }} className="text-xl mb-2">
+                Documentação
+              </h3>
+              <p style={{ color }} className="text-2xl font-bold ">
+                {toBRL(financingFees)}
+              </p>
+              <div className="max-h-[400px] overflow-y-auto scrollbar ">
+                {propertyData.financingFeesDate !==
+                  propertyData.initialDate && (
+                  <ul className="list-none space-y-2 text-sm mt-4">
+                    <span style={{ color: secondary }}>Data do pagamento:</span>
+                    <li>
+                      <strong>
+                        {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                          .format("MMMM [de] YYYY")
+                          .replace(/^./, (match) => match.toUpperCase())}
+                      </strong>
+                    </li>
+                  </ul>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
 
       {isAdvancedMode && (

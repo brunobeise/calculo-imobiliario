@@ -14,6 +14,7 @@ interface SharedModalProps {
   children: React.ReactNode;
   actions?: React.ReactNode;
   width?: number;
+  closeButton?: boolean;
 }
 
 export default function Dialog({
@@ -22,6 +23,7 @@ export default function Dialog({
   title,
   children,
   actions,
+  closeButton = true,
 }: SharedModalProps) {
   return (
     <Transition appear show={open} as={Fragment}>
@@ -55,9 +57,10 @@ export default function Dialog({
               className={`transform rounded-lg bg-whitefull shadow-xl transition-all max-h-[90vh] overflow-y-auto`}
               onClick={(e) => e.stopPropagation()}
             >
-              <ModalClose onClick={onClose} />
+              {closeButton && <ModalClose onClick={onClose} />}
+
               {title && (
-                <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div className={`px-4 pt-5 pb-4 sm:p-6 sm:pb-4 ${!closeButton ? 'flex justify-center' : ''}`}>
                   <DialogTitle className="text-lg font-semibold text-gray-900">
                     {title}
                   </DialogTitle>

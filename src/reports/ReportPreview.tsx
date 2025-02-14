@@ -25,8 +25,8 @@ import PictureInput from "@/components/inputs/PictureInput";
 import ItemListInput from "@/components/inputs/ItemListInput";
 import { ReportConfig } from "@/types/reportConfigTypes";
 import BooleanInput from "@/components/inputs/BooleanInput";
-import CaseSessionsDrawer from "@/components/shared/CaseSessionsDrawer";
 import BooleanInputSwitch from "@/components/inputs/SwitchInput";
+import SessionsDrawer from "@/components/session/SessionsDrawer";
 
 interface ReportPreviewProps {
   propertyData: PropertyData;
@@ -500,7 +500,8 @@ export default function ReportPreview({
                   },
                 })
               }
-            />
+            /> */}
+            {/* 
             <BooleanInputSwitch
               label="Exibir Botão de aceite"
               checked={configData.reportConfig?.displayAccepted}
@@ -566,7 +567,7 @@ export default function ReportPreview({
 
         <div className="mt-5 pr-4">{renderPreview()}</div>
         <div className="hidden xl:block w-[420px] uw:w-[520px]"></div>
-        <CaseSessionsDrawer caseId={proposal.id} />
+        <SessionsDrawer caseId={proposal.id} />
       </div>
     </>
   );
