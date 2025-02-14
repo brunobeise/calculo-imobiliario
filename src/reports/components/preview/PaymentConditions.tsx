@@ -421,7 +421,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                 className="rounded-3xl p-4 pr-2 border h-min "
               >
                 <h3 style={{ color }} className="text-xl mb-2">
-                  Reforços ({totalReinforcementParts}x)
+                  {hasBankFinancing ? 'Reforços' : 'Parcelamento'} ({totalReinforcementParts}x)
                 </h3>
                 <p style={{ color }} className="text-2xl font-bold mb-4">
                   {toBRL(totalReinforcement)}
