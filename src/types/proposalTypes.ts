@@ -31,4 +31,8 @@ export interface Proposal {
   sessions?: Session[];
   buildingId?: string;
   reportConfig?: ReportConfig;
+  _count: {
+    sessions: number;
+  };
+  hasNewSession: boolean;
 }

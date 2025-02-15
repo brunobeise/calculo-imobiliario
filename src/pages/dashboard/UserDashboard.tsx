@@ -3,15 +3,15 @@ import DashboardPaper from "./DashboardPaper";
 import { FaFileAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AiFillFileText } from "react-icons/ai";
 
 import {
   fetchLastSessions,
   fetchUserDashboardData,
 } from "@/store/dashboard/userDashboardReducer";
-import { Table } from "@mui/joy";
-import { SessionRow } from "../propostas/CaseSessionsModal";
+
+import SessionsTable from "@/components/session/SessionTable";
 
 interface UserDashboardProps {
   userId?: string;
@@ -20,7 +20,6 @@ interface UserDashboardProps {
 export default function UserDashboard(props: UserDashboardProps) {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.userDashboard);
-  const [openSessionId, setOpenSessionId] = useState<number | null>(null);
 
   useEffect(() => {
     dispatch(fetchUserDashboardData(props.userId));
@@ -55,34 +54,7 @@ export default function UserDashboard(props: UserDashboardProps) {
             <h2 className="text-lg font-bold mb-4">Últimas Sessões</h2>
           </div>
           <div>
-            {data.lastSessions.length > 0 ? (
-              <Table aria-label="session table">
-                <thead>
-                  <tr>
-                    <th style={{ width: 40 }} aria-label="empty" />
-                    <th>Proposta</th>
-                    <th>Tempo de sessão</th>
-                    <th>Data</th>
-                    <th className="w-[80px]"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.lastSessions.map((session) => (
-                    <SessionRow
-                      key={session.id}
-                      session={session}
-                      openSessionId={openSessionId}
-                      setOpenSessionId={setOpenSessionId}
-                      showName
-                    />
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <span className="text-center mt-10 text-grayText">
-                Nenhuma sessão até o momento
-              </span>
-            )}
+            <SessionsTable sessions={data.lastSessions} />
           </div>
         </div>
       </div>

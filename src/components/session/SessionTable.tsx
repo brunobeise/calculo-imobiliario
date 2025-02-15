@@ -4,10 +4,16 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/pt-br";
 import { Session } from "@/types/sessionTypes";
-import { Chip, IconButton, Sheet, Table } from "@mui/joy";
+import { Chip, IconButton, Table } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { formatTime } from "@/lib/formatter";
+import { FaRegClock } from "react-icons/fa";
+import { FaRegHourglassHalf } from "react-icons/fa6";
+import { FaFileAlt } from "react-icons/fa";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { navigate } from "vike/client/router";
+import { getCaseLink } from "@/lib/maps";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -64,10 +70,58 @@ function SessionRow(props: {
     "Descrição do imóvel",
   ];
 
+  const visiblePagesCount = Array.from({ length: 8 }, (_, i) => i + 1).filter(
+    (page) => session[`page${page}TimeVisible`] > 0
+  ).length;
+
   return (
     <>
-      <tr>
-        <td>
+      <div className="text-black flex items-center justify-between space-x-3 text-grayText">
+        <div className="flex">
+          {session.case && (
+            <div
+              onClick={() =>
+                navigate(getCaseLink(session.case.type) + "/" + session.case.id)
+              }
+              className="flex items-center space-x-2 pe-4 w-[200px] min-w-0 hover:text-primary cursor-pointer"
+            >
+              <FaFileAlt className="text-gray-500 flex-shrink-0" />
+              <span className="overflow-hidden text-ellipsis whitespace-nowrap block">
+                {session.case.name}
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center space-x-1 w-[80px]">
+            <FaRegClock className="text-gray-500" />
+            <span>{dayjs(session.createdAt).format("HH:mm")}</span>
+          </div>
+
+          <div className="flex items-center space-x-1 w-[80px]">
+            <FaRegHourglassHalf className="text-gray-500" />
+            <span>{formatTime(session.sessionTime)}</span>
+          </div>
+
+          {session.viewerName && (
+            <div className="flex items-center space-x-1 w-[120px]">
+              <IoPersonCircleOutline className="text-gray-500" />
+              <span>{session.viewerName}</span>
+            </div>
+          )}
+
+          {session.isNew && (
+            <Chip
+              size="sm"
+              className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe]"
+              variant="solid"
+              color="neutral"
+            >
+              Novo
+            </Chip>
+          )}
+        </div>
+
+        {visiblePagesCount > 1 ? (
           <IconButton
             aria-label="expand row"
             variant="plain"
@@ -77,54 +131,32 @@ function SessionRow(props: {
           >
             {isOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </td>
+        ) : (
+          <div className="w-[32px] h-[32px]" />
+        )}
+      </div>
 
-        <td>{dayjs(session.createdAt).format("HH:mm")}</td>
-        <td className="px-2">-</td>
-        <td>{formatTime(session.sessionTime)}</td>
-
-        <td className="ps-4">
-          {session.isNew && (
-            <Chip
-              size="sm"
-              className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe] mb-2"
-              variant="solid"
-              color="neutral"
-            >
-              Novo
-            </Chip>
-          )}
-        </td>
-      </tr>
       {isOpen && (
-        <tr>
-          <td colSpan={3} style={{ padding: 0 }}>
-            <Sheet
-              variant="soft"
-              sx={{
-                p: 1,
-                pl: 1,
-              }}
-            >
-              <Table size="sm" aria-label="page times">
-                <thead>
-                  <tr>
-                    <td>Página</td>
-                    <td>Tempo de visualização</td>
+        <div className="p-1">
+          <Table size="sm" aria-label="page times">
+            <thead>
+              <tr>
+                <th>Página</th>
+                <th>Tempo de visualização</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 8 }, (_, i) => i + 1).map((page) =>
+                session[`page${page}TimeVisible`] > 0 ? (
+                  <tr key={`page${page}`}>
+                    <td>{pageTitles[page - 1]}</td>
+                    <td>{formatTime(session[`page${page}TimeVisible`])}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {Array.from({ length: 8 }, (_, i) => i + 1).map((page) => (
-                    <tr key={`page${page}`}>
-                      <td>{pageTitles[page - 1]}</td>{" "}
-                      <td>{formatTime(session[`page${page}TimeVisible`])}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Sheet>
-          </td>
-        </tr>
+                ) : null
+              )}
+            </tbody>
+          </Table>
+        </div>
       )}
     </>
   );
@@ -141,9 +173,9 @@ const SessionsTable: React.FC<SessionsTableProps> = ({ sessions }) => {
   return (
     <div>
       {Object.entries(groupedSessions).map(([dateLabel, sessionList]) => (
-        <div key={dateLabel} className="mb-4">
-          <h3 className="text-lg font-bold border-b pb-1 mb-2">{dateLabel}</h3>
-          <div className="space-y-2">
+        <div key={dateLabel} className="mb-8">
+          <h3 className="text-md font-bold pb-1 mb-2">{dateLabel}</h3>
+          <div className="space-y-2 border-t border-border pt-2">
             {sessionList.map((session) => (
               <SessionRow
                 key={session.id}

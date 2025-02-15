@@ -9,7 +9,7 @@ import { AppDispatch } from "@/store/store";
 import { fetchCases } from "@/store/caseReducer";
 import CaseFormModal from "@/components/modals/CaseFormModal";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-import CaseSessionsModal from "./CaseSessionsModal";
+import CaseSessionsModal from "../../components/session/SessionsModal";
 import { useMenu } from "@/components/menu/MenuContext";
 import {
   FaEllipsisV,

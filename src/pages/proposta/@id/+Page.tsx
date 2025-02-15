@@ -79,8 +79,16 @@ export default function FinancingPlanningReportSharedPage() {
   const page7TimeVisible = useVisibility(page7Ref);
   const page8TimeVisible = useVisibility(page8Ref);
 
-  const [requestName, setRequestName] = useState(!proposalData.reportConfig.requestName ? false : true);
-  const [viewerName, setViewerName] = useState("");
+  const [requestName, setRequestName] = useState(
+    !proposalData.reportConfig.requestName
+      ? false
+      : localStorage.getItem("viewerName")
+      ? false
+      : true
+  );
+  const [viewerName, setViewerName] = useState(
+    localStorage.getItem("viewerName")
+  );
 
   useEffect(() => {
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
@@ -124,7 +132,7 @@ export default function FinancingPlanningReportSharedPage() {
       sessionTime: currentSessionTime,
       caseId: proposalData.id,
       id: sessionId,
-      viewerName: viewerName || localStorage.getItem('viewerName'),
+      viewerName: viewerName || localStorage.getItem("viewerName"),
       page1TimeVisible,
       page2TimeVisible,
       page3TimeVisible,
@@ -189,6 +197,7 @@ export default function FinancingPlanningReportSharedPage() {
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
               address: proposalData.address,
+              bedrooms: proposalData.bedrooms,
               bathrooms: proposalData.bathrooms,
               builtArea: proposalData.builtArea,
               cod: proposalData.cod,
@@ -228,6 +237,7 @@ export default function FinancingPlanningReportSharedPage() {
               description: proposalData.description || "",
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
+              bedrooms: proposalData.bedrooms,
               reportConfig: proposalData.reportConfig,
               address: proposalData.address,
               bathrooms: proposalData.bathrooms,

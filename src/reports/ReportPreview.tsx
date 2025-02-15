@@ -488,7 +488,7 @@ export default function ReportPreview({
                 })
               }
             />
-            {/* <BooleanInputSwitch
+            <BooleanInputSwitch
               label="Solicitar Nome"
               checked={configData.reportConfig?.requestName}
               onChange={(v) =>
@@ -500,7 +500,7 @@ export default function ReportPreview({
                   },
                 })
               }
-            /> */}
+            />
             {/* 
             <BooleanInputSwitch
               label="Exibir Botão de aceite"

@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { fetchCases } from "@/store/caseReducer";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-import CaseSessionsModal from "./CaseSessionsModal";
+import CaseSessionsModal from "../../components/session/SessionsModal";
 import { useMenu } from "@/components/menu/MenuContext";
 import {
   FaEllipsisV,
@@ -33,6 +33,7 @@ import StatusTag from "@/components/shared/CaseStatusTag";
 import { IoDuplicate } from "react-icons/io5";
 import DuplicateCaseModal from "./DuplicateCaseModal";
 import { navigate } from "vike/client/router";
+import { FaRegEye } from "react-icons/fa";
 
 const CaseCard = ({
   caseStudy,
@@ -192,6 +193,12 @@ const CaseCard = ({
             </div>
           </Tooltip>
         )}
+        <Tooltip title="Estudo compartilhado">
+          <div className=" text-primary border !absolute top-[140px] !right-5  rounded-full !border-none !bg-white rounded-full shadow-lg flex gap-1 items-center justify-center h-12 w-12">
+            {casestudy._count.sessions}
+            <FaRegEye className="text-md" />
+          </div>
+        </Tooltip>
         <div className="mt-4 mb-2">
           <Typography className="font-bold text-gray-800 !text-lg" level="h4">
             {casestudy.name}

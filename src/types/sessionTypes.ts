@@ -8,4 +8,5 @@ export interface Session {
   createdAt: Date;
   case: Proposal;
   isNew: boolean;
+  viewerName?: string;
 }
