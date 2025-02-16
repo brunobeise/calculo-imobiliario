@@ -187,10 +187,9 @@ export function calcDetailedTable(propertyData: PropertyData) {
     dischargesByMonth[discharge.month] += discharge.value;
   });
 
-  const totalInvestmentDischarges = propertyData.discharges.reduce(
-    (acc, val) => val.originalValue + acc,
-    0
-  );
+  const totalInvestmentDischarges = propertyData.discharges
+    .filter((d) => !d.isConstructionInterest)
+    .reduce((acc, val) => val.originalValue + acc, 0);
 
   const totalMonths = propertyData.financingMonths;
   const amortizationFixed =

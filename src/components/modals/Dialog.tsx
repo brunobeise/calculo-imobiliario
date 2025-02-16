@@ -27,7 +27,7 @@ export default function Dialog({
 }: SharedModalProps) {
   return (
     <Transition appear show={open} as={Fragment}>
-      <Modal as="div" className="relative z-[1001]" onClose={onClose}>
+      <Modal as="div" className="relative z-[10]" onClose={onClose}>
         <TransitionChild
           as={Fragment}
           enter="ease-out duration-200"

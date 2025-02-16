@@ -56,9 +56,11 @@ export default function PropertyDataCard({
 
   const totalDischarges = useMemo(() => {
     if (!propertyData) return 0;
-    return propertyData?.discharges.reduce((acc, val) => {
-      return acc + val.originalValue;
-    }, 0);
+    return propertyData?.discharges
+      .filter((d) => !d.isConstructionInterest)
+      .reduce((acc, val) => {
+        return acc + val.originalValue;
+      }, 0);
   }, [propertyData]);
 
   const totalFinanced =
