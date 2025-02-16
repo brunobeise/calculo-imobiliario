@@ -488,6 +488,30 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     </div>
   );
 
+  const cards = useMemo(() => {
+    let count = 0;
+
+    count++;
+    if (separateDocumentation && financingFees > 0) count++;
+    if (totalReinforcementParts > 0 && hasBankFinancing) count++;
+    if (totalReinforcementParts > 0) count++;
+    if (discharges.some((d) => d.isConstructionInterest)) count++;
+
+    return count;
+  }, [
+    separateDocumentation,
+    totalReinforcementParts,
+    financingFees,
+    hasBankFinancing,
+    discharges,
+  ]);
+
+  const columnsClass = useMemo(() => {
+    if (cards >= 3) return "lg:columns-3";
+    if (cards === 2) return "lg:columns-2";
+    return "columns-1";
+  }, [cards]);
+
   return (
     <div style={{ color }} className="p-3 px-8">
       <SectionTitle
@@ -504,13 +528,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </b>
         </span>
       </div>
-      <div className="columns-2 lg:columns-3 space-y-5 gap-4 break-inside-avoid">
-        <div className="flex flex-col gap-5">
-          <DownPaymentCard />
-          {separateDocumentation &&
-            totalReinforcementParts > 0 &&
-            financingFees > 0 && <FinancingFeesCard />}
-        </div>
+      <div className={`columns-2 ${columnsClass} space-y-5 gap-4 `}>
+        <DownPaymentCard />
+        {separateDocumentation && financingFees > 0 && <FinancingFeesCard />}
 
         {totalReinforcementParts > 0 && hasBankFinancing && <FinancingCard />}
 
