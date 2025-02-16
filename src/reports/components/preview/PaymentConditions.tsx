@@ -193,7 +193,6 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
     const totalReinforcementParts = reinforcementDischarges.length;
 
-    // 🆕 Criando array de juros de obra (Construction Interest)
     const constructionInterestDetails = constructionInterestDischarges
       .sort((a, b) => a.month - b.month)
       .map((discharge) => ({
@@ -226,7 +225,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   ]);
 
   const DownPaymentCard = () => (
-    <div className="rounded-3xl p-4 border h-min">
+    <div className="rounded-3xl p-4 border h-min break-inside-avoid">
       <h3 style={{ color }} className="text-xl mb-2">
         Entrada ({totalParts}x)
       </h3>
@@ -336,7 +335,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   );
 
   const FinancingFeesCard = () => (
-    <div className="rounded-3xl p-4 border h-min">
+    <div className="rounded-3xl p-4 border h-min break-inside-avoid">
       <h3 style={{ color }} className="text-xl mb-2">
         Documentação
       </h3>
