@@ -225,7 +225,14 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   ]);
 
   const DownPaymentCard = () => (
-    <div className="rounded-3xl p-4 border h-min break-inside-avoid">
+    <div
+      style={
+        {
+          "--scroll-thumb-color": color,
+        } as React.CSSProperties
+      }
+      className="rounded-3xl p-4 border h-min break-inside-avoid"
+    >
       <h3 style={{ color }} className="text-xl mb-2">
         Entrada ({totalParts}x)
       </h3>
@@ -452,7 +459,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         className="rounded-3xl p-4 pr-2 border h-min "
       >
         <h3 style={{ color }} className="text-xl mb-2">
-          Juros de Obra
+          Evolução de Obra
         </h3>
         <p style={{ color }} className="text-2xl font-bold mb-4">
           {toBRL(

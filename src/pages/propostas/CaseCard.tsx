@@ -24,6 +24,7 @@ import {
   FaExternalLinkAlt,
   FaTrash,
   FaLink,
+  FaRegEye,
 } from "react-icons/fa";
 import { MdFileOpen } from "react-icons/md";
 import { FaMagnifyingGlass } from "react-icons/fa6";
@@ -192,12 +193,12 @@ const CaseCard = ({
             </div>
           </Tooltip>
         )}
-        {/* <Tooltip title="Estudo compartilhado">
-          <div className=" text-primary border !absolute top-[140px] !right-5  rounded-full !border-none !bg-white rounded-full shadow-lg flex gap-1 items-center justify-center h-12 w-12">
-            {casestudy._count.sessions}
-            <FaRegEye className="text-md" />
-          </div>
-        </Tooltip> */}
+
+        <div className=" text-primary border !absolute h top-[130px] !right-[-2px] rounded  !border-none !bg-white hover:shadow-lg  shadow flex gap-1 items-center justify-center h-10 w-14">
+          {casestudy._count.sessions}
+          <FaRegEye className="text-md mt-1" />
+        </div>
+
         <div className="mt-4 mb-2">
           <Typography className="font-bold text-gray-800 !text-lg" level="h4">
             {casestudy.name}
