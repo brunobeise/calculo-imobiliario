@@ -59,7 +59,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
       )}
 
       <div
-        className={`w-64 z-[1000] fixed top-0 left-0 h-full bg-whitefull text-primary transform transition-transform ${
+        className={`w-64 z-[100] fixed top-0 left-0 h-full bg-whitefull text-primary transform transition-transform ${
           menuOpen || !isCaseMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >

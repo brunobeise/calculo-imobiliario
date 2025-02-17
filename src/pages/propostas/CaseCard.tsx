@@ -34,6 +34,7 @@ import StatusTag from "@/components/shared/CaseStatusTag";
 import { IoDuplicate } from "react-icons/io5";
 import DuplicateCaseModal from "./DuplicateCaseModal";
 import { navigate } from "vike/client/router";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const CaseCard = ({
   caseStudy,
@@ -99,7 +100,7 @@ const CaseCard = ({
           }
         }}
         className={`relative overflow-hidden min-h-[260px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-10 flex flex-col 
-                  bg-white cursor-pointer hover:shadow-xl`}
+                  bg-white cursor-pointer hover:shadow-lg`}
       >
         <div className="absolute w-full top-0 left-0">
           <div className="h-[150px] overflow-hidden flex justify-center items-top relative w-full">
@@ -193,11 +194,28 @@ const CaseCard = ({
             </div>
           </Tooltip>
         )}
+        {!realEstateCase && (
+          <Tooltip
+            title={casestudy.hasNewSession ? "Novas vizualizações!" : ""}
+          >
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                e.nativeEvent.stopImmediatePropagation();
+                setSessionsModal(true);
+              }}
+              className={`relative text-primary !absolute top-[130px] !right-[-2px] rounded !bg-white  shadow flex gap-1 items-center justify-center h-10 w-14 hover:shadow-lg`}
+            >
+              {casestudy._count?.sessions}
+              <FaRegEye className="text-md mt-1" />
+            </div>
+          </Tooltip>
+        )}
 
-        <div className=" text-primary border !absolute h top-[130px] !right-[-2px] rounded  !border-none !bg-white hover:shadow-lg  shadow flex gap-1 items-center justify-center h-10 w-14">
-          {casestudy._count.sessions}
-          <FaRegEye className="text-md mt-1" />
-        </div>
+        {casestudy.hasNewSession && !realEstateCase && (
+          <FaExclamationCircle className="absolute top-[127px] !right-[44px] text-primary bg-white rounded-full border-[1px] border-white text-lg" />
+        )}
 
         <div className="mt-4 mb-2">
           <Typography className="font-bold text-gray-800 !text-lg" level="h4">
