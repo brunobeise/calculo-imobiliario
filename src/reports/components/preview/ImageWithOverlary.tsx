@@ -18,9 +18,10 @@ const ImageWithOverlay: React.FC<ImageWithOverlayProps> = ({
       className={`h-[460px] overflow-hidden flex justify-center items-center relative w-full ${className}`}
     >
       <img
-        className="w-full h-full object-cover object-center"
+        className="w-[210mm] h-[460px] object-cover object-center"
         src={mainPhoto}
         alt="Main Photo"
+        decoding="async"
       />
       <div
         className="absolute bottom-0 w-full bg-gradient-to-t from-[#000000f0] to-transparent flex items-end pb-5 px-10 text-lg font-light"

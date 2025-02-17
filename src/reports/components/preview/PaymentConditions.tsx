@@ -234,7 +234,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
       className="rounded-3xl p-4 border h-min break-inside-avoid"
     >
       <h3 style={{ color }} className="text-xl mb-2">
-        Entrada ({totalParts}x)
+        Entrada {propertyData.downPayment > 0 && `${totalParts}x`}
       </h3>
       <p style={{ color }} className="text-2xl font-bold mb-4">
         {toBRL(
@@ -245,39 +245,39 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
       </p>
       <div className="max-h-[400px] overflow-y-auto scrollbar ">
         <ul className="list-none space-y-3 ">
-          <li className="text-sm">
-            <span style={{ color: color }}>
-              1){" "}
-              {dayjs(initialDate, "MM/YYYY")
-                .format("MMMM [de] YYYY")
-                .replace(/^./, (match) => match.toUpperCase())}
-            </span>
-            <ul style={{ color: secondary }} className="ml-1 my-1">
-              {propertyData.downPayment > 0 && (
+          {propertyData.downPayment > 0 && (
+            <li className="text-sm">
+              <span style={{ color: color }}>
+                1){" "}
+                {dayjs(initialDate, "MM/YYYY")
+                  .format("MMMM [de] YYYY")
+                  .replace(/^./, (match) => match.toUpperCase())}
+              </span>
+              <ul style={{ color: secondary }} className="ml-1 my-1">
                 <li>
                   • 1ª Parte:{" "}
                   <strong style={{ color }}>{toBRL(downPayment)}</strong>
                 </li>
-              )}
 
-              {propertyData.financingFeesDate === propertyData.initialDate &&
-                !separateDocumentation &&
-                financingFees > 0 && (
-                  <li style={{ color: secondary }}>
-                    • Documentação:{" "}
-                    <strong style={{ color }}>{toBRL(financingFees)}</strong>
-                  </li>
-                )}
-              {entryDetails
-                .filter((d) => d.description)
-                .map((detail, i) => (
-                  <li key={i} style={{ color: secondary }}>
-                    • {detail.description}{" "}
-                    <strong style={{ color }}>{detail.amount}</strong>
-                  </li>
-                ))}
-            </ul>
-          </li>
+                {propertyData.financingFeesDate === propertyData.initialDate &&
+                  !separateDocumentation &&
+                  financingFees > 0 && (
+                    <li style={{ color: secondary }}>
+                      • Documentação:{" "}
+                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
+                    </li>
+                  )}
+                {entryDetails
+                  .filter((d) => d.description)
+                  .map((detail, i) => (
+                    <li key={i} style={{ color: secondary }}>
+                      • {detail.description}{" "}
+                      <strong style={{ color }}>{detail.amount}</strong>
+                    </li>
+                  ))}
+              </ul>
+            </li>
+          )}
 
           {entryDetails.map((detail, i) => {
             const isDocumentationDate =
@@ -511,6 +511,8 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     hasBankFinancing,
     discharges,
   ]);
+
+  console.log(cards);
 
   const columnsClass = useMemo(() => {
     if (cards >= 3) return "lg:columns-3";
