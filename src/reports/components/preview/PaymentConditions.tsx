@@ -538,7 +538,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         <DownPaymentCard />
         {separateDocumentation && financingFees > 0 && <FinancingFeesCard />}
 
-        {totalReinforcementParts > 0 && hasBankFinancing && <FinancingCard />}
+        {hasBankFinancing && <FinancingCard />}
 
         {totalReinforcementParts > 0 && <ReinforcementsCard />}
 
