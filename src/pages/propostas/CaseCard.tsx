@@ -91,10 +91,9 @@ const CaseCard = ({
               "financingPlanningPropertyData",
               JSON.stringify(casestudy.propertyData)
             );
-            const url =
-              CaseStudyTypeLinkMap[
-                casestudy.type as keyof typeof CaseStudyTypeLinkMap
-              ] + "?newCase=false";
+            toggleMenu(false);
+            toggleBackdrop(false);
+            const url = getCaseLink(casestudy.type) + "/?newCase=false";
 
             navigate(url);
           }
@@ -194,7 +193,7 @@ const CaseCard = ({
             </div>
           </Tooltip>
         )}
-        {!realEstateCase && (
+        {!realEstateCase && !adminCase && (
           <Tooltip
             title={casestudy.hasNewSession ? "Novas vizualizações!" : ""}
           >
@@ -213,7 +212,7 @@ const CaseCard = ({
           </Tooltip>
         )}
 
-        {casestudy.hasNewSession && !realEstateCase && (
+        {casestudy.hasNewSession && !realEstateCase && !adminCase && (
           <FaExclamationCircle className="absolute top-[127px] !right-[44px] text-primary bg-white rounded-full border-[1px] border-white text-lg" />
         )}
 
