@@ -33,7 +33,7 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
     { label: "Saldo devedor", value: caseData.finalRow.outstandingBalance },
     { label: "Corretagem", value: caseData.brokerageFee },
     { label: "Impostos", value: caseData.capitalGainsTax },
-    { label: "Inv. Excendente", value: caseData.totalRentalShortfall },
+    { label: "Inv. Excedente", value: caseData.totalRentalShortfall },
   ];
 
   return (

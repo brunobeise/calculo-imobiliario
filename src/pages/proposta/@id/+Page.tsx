@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useData } from "vike-react/useData";
 import { Proposal } from "@/types/proposalTypes";
 import FinancingPlanningReportPreview from "@/reports/FinancingPlanningReportPreview";
@@ -13,19 +13,22 @@ import Dialog from "@/components/modals/Dialog";
 import { Button, Input } from "@mui/joy";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
-  const [timeVisible, setTimeVisible] = useState(0);
+  const timeVisibleRef = useRef(0);
   const visibilityTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          visibilityTimer.current = setInterval(() => {
-            setTimeVisible((prevTime) => prevTime + 1);
-          }, 1000);
+          if (!visibilityTimer.current) {
+            visibilityTimer.current = setInterval(() => {
+              timeVisibleRef.current += 1;
+            }, 1000);
+          }
         } else {
           if (visibilityTimer.current) {
             clearInterval(visibilityTimer.current);
+            visibilityTimer.current = null;
           }
         }
       },
@@ -33,27 +36,20 @@ function useVisibility(ref: React.RefObject<HTMLElement>) {
     );
 
     const currentRef = ref.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-      if (visibilityTimer.current) {
-        clearInterval(visibilityTimer.current);
-      }
+      if (currentRef) observer.unobserve(currentRef);
+      if (visibilityTimer.current) clearInterval(visibilityTimer.current);
     };
   }, [ref]);
 
-  return timeVisible;
+  return timeVisibleRef;
 }
 
 export default function FinancingPlanningReportSharedPage() {
-  const [socket, setSocket] = useState<Socket | null>(null);
-  const [sessionTime, setSessionTime] = useState(0);
-  const sessionTimeRef = useRef(sessionTime);
+  const socket = useRef<Socket | null>(null);
+  const sessionTimeRef = useRef(0);
   const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
@@ -99,7 +95,7 @@ export default function FinancingPlanningReportSharedPage() {
       console.log("Conectado ao servidor WebSocket com ID:", newSocket.id);
     });
 
-    setSocket(newSocket);
+    socket.current = newSocket;
     if (!auth.isAuthenticated)
       Clarity.init(import.meta.env.PUBLIC_ENV__CLARITY_TAG);
 
@@ -111,45 +107,55 @@ export default function FinancingPlanningReportSharedPage() {
 
   useEffect(() => {
     const sessionTimer = setInterval(() => {
-      setSessionTime((prevTime) => prevTime + 1);
+      sessionTimeRef.current += 1;
+
+      if (sessionTimeRef.current % 3 === 0) {
+        saveSessionData();
+      }
     }, 1000);
 
     return () => clearInterval(sessionTimer);
   }, []);
 
-  useEffect(() => {
-    sessionTimeRef.current = sessionTime;
-
-    if (sessionTime % 3 === 0) {
-      saveSessionData();
+  const saveSessionData = useCallback(() => {
+    if (!socket?.current.connected || auth.isAuthenticated) {
+      console.warn("Socket não conectado. Dados não enviados.");
+      return;
     }
-  }, [sessionTime]);
 
-  const saveSessionData = () => {
     const currentSessionTime = sessionTimeRef.current;
-
     const dataToSend = {
       sessionTime: currentSessionTime,
       caseId: proposalData.id,
       id: sessionId,
       viewerName: viewerName || localStorage.getItem("viewerName"),
-      page1TimeVisible,
-      page2TimeVisible,
-      page3TimeVisible,
-      page4TimeVisible,
-      page5TimeVisible,
-      page6TimeVisible,
-      page7TimeVisible,
-      page8TimeVisible,
+      page1TimeVisible: page1TimeVisible.current,
+      page2TimeVisible: page2TimeVisible.current,
+      page3TimeVisible: page3TimeVisible.current,
+      page4TimeVisible: page4TimeVisible.current,
+      page5TimeVisible: page5TimeVisible.current,
+      page6TimeVisible: page6TimeVisible.current,
+      page7TimeVisible: page7TimeVisible.current,
+      page8TimeVisible: page8TimeVisible.current,
     };
 
-    if (socket?.connected && !auth.isAuthenticated) {
-      socket.emit("track_session_data", dataToSend);
-      console.log("Dados enviados via WebSocket:", dataToSend);
-    } else {
-      console.warn("Socket não conectado. Dados não enviados.");
-    }
-  };
+    socket.current.emit("track_session_data", dataToSend);
+    console.log("Dados enviados via WebSocket:", dataToSend);
+  }, [
+    auth,
+    socket,
+    sessionId,
+    proposalData.id,
+    viewerName,
+    page1TimeVisible,
+    page2TimeVisible,
+    page3TimeVisible,
+    page4TimeVisible,
+    page5TimeVisible,
+    page6TimeVisible,
+    page7TimeVisible,
+    page8TimeVisible,
+  ]);
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
