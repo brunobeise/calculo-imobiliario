@@ -12,7 +12,7 @@ interface DonutChartProps {
     backgroundColor?: string[];
   }[];
   tooltipFormatter?: (value: number) => string;
-  height?: number;
+  width?: number;
   absoluteLegends?: boolean;
 }
 
@@ -21,6 +21,7 @@ export function DonutChart({
   datasets,
   tooltipFormatter = (value) => `Propostas: ${value}`,
   absoluteLegends = false,
+  width,
 }: DonutChartProps) {
   const colors = datasets[0]?.backgroundColor || [
     "#002f57",
@@ -65,14 +66,15 @@ export function DonutChart({
   };
 
   return (
-    <div className={`flex flex-col items-center`}>
-      <div className={`${absoluteLegends ? "ps-24" : "px-20"}`}>
-        <Doughnut options={options} data={data} />
+    <div className={`flex flex-col items-center h-min`}>
+      <div>
+        <Doughnut width={width} options={options} data={data} />
       </div>
+
       <div
         className={`${
           absoluteLegends ? "absolute" : "mt-5"
-        }  grid grid-cols-1  gap-4 w-full text-primary text-nowrap`}
+        }  flex flex-col gap-x-8 gap-y-2 w-full text-primary text-nowrap`}
       >
         {labels.map((label, index) => (
           <div key={index} className="flex items-center space-x-2">

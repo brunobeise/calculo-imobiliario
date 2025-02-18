@@ -107,11 +107,12 @@ export default function UserDashboard(props: UserDashboardProps) {
         </div>
 
         <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold mb-4">Propostas por Tipo</h2>
             <Select
               value={proposalTypeChartFilter}
               onChange={(_, v) => setProposalTypeChartFilter(v || "")}
+              className="!min-w-[170px]"
             >
               <Option value="last_7_days">Últimos 7 dias</Option>
               <Option value="last_30_days">Últimos 30 dias</Option>
@@ -125,7 +126,7 @@ export default function UserDashboard(props: UserDashboardProps) {
 
           <div className="py-5">
             <DonutChart
-              height={100}
+              width={300}
               labels={data.proposalTypeChart.labels.map((label) =>
                 getCaseTitle(label)
               )}
@@ -144,6 +145,7 @@ export default function UserDashboard(props: UserDashboardProps) {
             <Select
               value={proposalChartFilter}
               onChange={(_, v) => setProposalChartFilter(v || "")}
+              className="!min-w-[170px]"
             >
               <Option value="last_7_days">Últimos 7 dias</Option>
               <Option value="last_30_days">Últimos 30 dias</Option>
@@ -175,11 +177,12 @@ export default function UserDashboard(props: UserDashboardProps) {
           )}
         </div>
         <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <h2 className="text-lg font-bold mb-4">Nível das Propostas</h2>
             <Select
               value={proposalSubTypeChartFilter}
               onChange={(_, v) => setProposalSubTypeChartFilter(v || "")}
+              className="!min-w-[180px]"
             >
               <Option value="last_7_days">Últimos 7 dias</Option>
               <Option value="last_30_days">Últimos 30 dias</Option>
@@ -193,8 +196,7 @@ export default function UserDashboard(props: UserDashboardProps) {
 
           <div className="py-5 relative">
             <DonutChart
-              absoluteLegends
-              height={100}
+              width={300}
               labels={data.proposalSubTypeChart.labels}
               datasets={[
                 {
