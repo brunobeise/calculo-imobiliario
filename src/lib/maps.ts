@@ -9,8 +9,8 @@ export const CaseStudyLinkTypeMap = {
 };
 
 export const CaseStudyTypeMap = {
-  financingPlanning: "Planejamento de Financiamento",
-  planejamentofinanciamento: "Planejamento de Financiamento",
+  financingPlanning: "Financiamento Bancário",
+  planejamentofinanciamento: "Financiamento Bancário",
   directFinancing: "Parcelamento Direto",
   parcelamentodireto: "Parcelamento Direto",
 };

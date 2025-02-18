@@ -38,7 +38,7 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
   }, [dispatch, proposalChartFilter, props.realEstate]);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="p-3">
       <div className="grid grid-cols-3 gap-10 ">
         <DashboardPaper
           loading={data.activeUsers === undefined}

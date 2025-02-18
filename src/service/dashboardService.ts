@@ -36,6 +36,47 @@ export const dashboardService = {
     return response.data;
   },
 
+  async getUserProposalsChart(filter: string, userId: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/dashboard/proposals-chart/" + filter + "/" + userId
+    );
+    return response.data;
+  },
+
+  async getOwnerProposalsTypeChart(filter: string, realEstateId?: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/dashboard/proposals-type-chart/" +
+        filter +
+        "/" +
+        (realEstateId || "undefined")
+    );
+    return response.data;
+  },
+
+  async getUserProposalsTypeChart(filter: string, userId: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/dashboard/proposals-type-chart/" + filter + "/" + userId
+    );
+    return response.data;
+  },
+
+  async getOwnerProposalsSubTypeChart(filter: string, realEstateId?: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/dashboard/proposals-sub-type-chart/" +
+        filter +
+        "/" +
+        (realEstateId || "undefined")
+    );
+    return response.data;
+  },
+
+  async getUserProposalsSubTypeChart(filter: string, userId: string) {
+    const response = await api.get<{ values: number[]; labels: [] }>(
+      "/dashboard/proposals-sub-type-chart/" + filter + "/" + userId
+    );
+    return response.data;
+  },
+
   async getOwnerDashboardData(realEstateId?: string) {
     const response = await api.get(
       "/dashboard/owner/" + (realEstateId || "undefined")
