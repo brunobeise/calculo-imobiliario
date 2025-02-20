@@ -508,7 +508,7 @@ export default function PropertyDataDischargesControl({
                         ? "installment"
                         : "false"
                     }
-                    onChange={(event, newValue) => {
+                    onChange={(_event, newValue) => {
                       if (newValue === "construction") {
                         setValue("isConstructionInterest", true);
                         setValue("isDownPayment", false);
