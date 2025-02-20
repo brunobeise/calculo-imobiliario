@@ -19,7 +19,7 @@ const data = {
   finalYear: 7,
   propertyAppreciationRate: 10,
   rentAppreciationRate: 8,
-  interestRate: 10,
+  interestRate: 0,
   outstandingBalance: 0,
   brokerageFee: 6,
   PVDiscountRate: 8,

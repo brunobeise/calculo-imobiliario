@@ -109,9 +109,8 @@ export default function NewCase(props: NewCaseProps) {
           subType={context === "newAdvancedCase" ? "Avançado" : "Simplificado"}
           finish={(p) => {
             if (p) {
-              console.log(p);
-
               setMultiplePropertyData({
+                ...getInitialValues(location.pathname),
                 ...p,
                 subsidy: p.subsidy || 0,
                 initialRentValue: p.initialRentValue || 0,
