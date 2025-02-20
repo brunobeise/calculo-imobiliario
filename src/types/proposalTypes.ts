@@ -25,6 +25,7 @@ export interface Proposal {
   landArea?: string;
   address?: string;
   cod?: string;
+  value?: number;
   subType: string;
   user: User;
   isArchived: boolean;

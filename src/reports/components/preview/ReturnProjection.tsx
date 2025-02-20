@@ -91,29 +91,36 @@ export default function ProjectionReturn({
             <span className="text-green">{toBRL(totalProfit)}</span>
           </p>
           <span className="text-xl lg:text-3xl mx-4">/</span>
-          <p
-            style={{ color }}
-            className="text-lg text-nowrap lg:text-xl font-bold text-nowrap"
-          >
-            <span className="text-red ">
-              {toBRL(
-                propertyData.financingFees +
-                  propertyData.downPayment +
-                  caseData.totalRentalShortfall
-              )}
-            </span>{" "}
-            = Investimento
-          </p>
+          {propertyData.financingFees +
+            propertyData.downPayment +
+            caseData.totalRentalShortfall >
+            0 && (
+            <p
+              style={{ color }}
+              className="text-lg text-nowrap lg:text-xl font-bold text-nowrap"
+            >
+              <span className="text-red ">
+                {toBRL(
+                  propertyData.financingFees +
+                    propertyData.downPayment +
+                    caseData.totalRentalShortfall
+                )}
+              </span>{" "}
+              = Investimento
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4 text-[0.9rem] lg:text-md px-10 py-4">
           <div className="space-y-2 flex items-end flex-col pe-5">
-            <div className="flex gap-1">
-              <p className="font-medium">Valor do imóvel - </p>
-              <strong className="text-green">
-                {toBRL(caseData.finalRow.propertyValue)}
-              </strong>
-            </div>
+            {caseData.finalRow.propertyValue > 0 && (
+              <div className="flex gap-1">
+                <p className="font-medium">Valor do imóvel - </p>
+                <strong className="text-green">
+                  {toBRL(caseData.finalRow.propertyValue)}
+                </strong>
+              </div>
+            )}
             {caseData.finalRow.totalCapital > 0 && (
               <div className="flex gap-1">
                 <p className="font-medium">Retorno Aplicação - </p>
@@ -122,38 +129,43 @@ export default function ProjectionReturn({
                 </strong>
               </div>
             )}
-
-            <div className="flex gap-1">
-              <p className="font-medium">Dívida Quitada - </p>
-              <strong className="text-red">
-                {toBRL(caseData.finalRow.outstandingBalance || 0)}
-              </strong>
-            </div>
-            {propertyData.considerCapitalGainsTax && (
+            {caseData.finalRow.outstandingBalance > 0 && (
               <div className="flex gap-1">
-                <p className="font-medium">Impostos - </p>
+                <p className="font-medium">Dívida Quitada - </p>
                 <strong className="text-red">
-                  {toBRL(caseData.capitalGainsTax)}
+                  {toBRL(caseData.finalRow.outstandingBalance)}
                 </strong>
               </div>
             )}
-            <div className="flex gap-1">
-              <p className="font-medium">Corretagem - </p>
-              <strong className="text-red">
-                {toBRL(caseData.brokerageFee)}
-              </strong>
-            </div>
+            {propertyData.considerCapitalGainsTax &&
+              caseData.capitalGainsTax > 0 && (
+                <div className="flex gap-1">
+                  <p className="font-medium">Impostos - </p>
+                  <strong className="text-red">
+                    {toBRL(caseData.capitalGainsTax)}
+                  </strong>
+                </div>
+              )}
+            {caseData.brokerageFee > 0 && (
+              <div className="flex gap-1">
+                <p className="font-medium">Corretagem - </p>
+                <strong className="text-red">
+                  {toBRL(caseData.brokerageFee)}
+                </strong>
+              </div>
+            )}
           </div>
 
           <div className="space-y-2 flex items-start flex-col ps-5">
-            <div className="flex gap-1">
-              <strong className="text-red">{toBRL(downPayment)} - </strong>
-              <p className="font-medium">Entrada </p>
-            </div>
-            {propertyData.discharges.reduce(
-              (acc, val) => (val.isDownPayment ? acc + val.value : acc),
-              0
-            ) > 0 && (
+            {downPayment > 0 && (
+              <div className="flex gap-1">
+                <strong className="text-red">{toBRL(downPayment)} - </strong>
+                <p className="font-medium">Entrada </p>
+              </div>
+            )}
+            {propertyData.discharges.some(
+              (val) => val.isDownPayment && val.value > 0
+            ) && (
               <div className="flex gap-1 text-nowrap">
                 <strong className="text-red">
                   {toBRL(
@@ -169,15 +181,15 @@ export default function ProjectionReturn({
                 </p>
               </div>
             )}
-
-            <div className="flex gap-1">
-              <strong className="text-red">{toBRL(financingFees)} - </strong>
-              <p className="font-medium">Documentação </p>
-            </div>
-            {propertyData.discharges.reduce(
-              (acc, val) => (!val.isDownPayment ? acc + val.value : acc),
-              0
-            ) > 0 && (
+            {financingFees > 0 && (
+              <div className="flex gap-1">
+                <strong className="text-red">{toBRL(financingFees)} - </strong>
+                <p className="font-medium">Documentação </p>
+              </div>
+            )}
+            {propertyData.discharges.some(
+              (val) => !val.isDownPayment && val.value > 0
+            ) && (
               <div className="flex gap-1">
                 <strong className="text-red">
                   {" "}
@@ -193,28 +205,24 @@ export default function ProjectionReturn({
                 <p className="font-medium">Reforços </p>
               </div>
             )}
-
-            <div className="flex gap-1">
-              <strong className="text-red">
-                {toBRL(
-                  isFinancingPlanningData(caseData)
-                    ? caseData.detailedTable.reduce((acc, val) => {
-                        return val.rentalAmount < 0
-                          ? acc + val.rentalAmount * -1
-                          : acc;
-                      }, 0)
-                    : Array.isArray(caseData.detailedTable)
-                    ? caseData.detailedTable.reduce((acc, val) => {
-                        return val.rentalAmount < 0
-                          ? acc + val.rentalAmount * -1
-                          : acc;
-                      }, 0)
-                    : 0
-                )}
-                -{" "}
-              </strong>
-              <p className="font-medium">Aluguel - Parcela </p>
-            </div>
+            {caseData.detailedTable.some((val) => val.rentalAmount < 0) &&
+              isFinancingPlanningData(caseData) && (
+                <div className="flex gap-1">
+                  <strong className="text-red">
+                    {toBRL(
+                      isFinancingPlanningData(caseData)
+                        ? caseData.detailedTable.reduce((acc, val) => {
+                            return val.rentalAmount < 0
+                              ? acc + val.rentalAmount * -1
+                              : acc;
+                          }, 0)
+                        : 0
+                    )}
+                    -{" "}
+                  </strong>
+                  <p className="font-medium">Aluguel - Parcela </p>
+                </div>
+              )}
           </div>
         </div>
       </div>

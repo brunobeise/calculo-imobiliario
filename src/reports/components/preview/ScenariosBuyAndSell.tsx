@@ -22,7 +22,6 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
     { label: "Documentação", value: propertyData.financingFees },
     { label: "Parcela (finan.)", value: propertyData.installmentValue },
   ];
-
   const saleLines = [
     { label: "Venda", value: caseData.finalRow.propertyValue, green: true },
     {

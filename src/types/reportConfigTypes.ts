@@ -7,4 +7,5 @@ export interface ReportConfig {
   displayAccepted: boolean;
   saveSessions: boolean;
   pageViewMap: boolean[];
+  highlightSumPaymentsValues: boolean;
 }

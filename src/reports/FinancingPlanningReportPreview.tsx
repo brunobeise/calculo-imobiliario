@@ -162,9 +162,13 @@ const FinancingPlanningReportPreview = forwardRef<
                 />
               )}
               <PaymentConditions
+                highlightSumPaymentsValues={
+                  configData.reportConfig.highlightSumPaymentsValues
+                }
                 groupMonthlyInstallments={
                   configData.reportConfig.groupMonthlyInstallments
                 }
+                propertyValue={configData.value}
                 separateDocumentation={
                   configData.reportConfig.separateDocumentation
                 }

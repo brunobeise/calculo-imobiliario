@@ -16,6 +16,7 @@ export interface Building {
   cod?: string;
   createdAt?: string;
   isArchived: boolean;
+  value?: number;
   creator?: {
     fullName: string;
     id: string;

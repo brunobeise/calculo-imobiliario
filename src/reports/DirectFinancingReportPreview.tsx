@@ -1,6 +1,5 @@
 import { forwardRef } from "react";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import CalculationTable from "./components/preview/CalculationTable";
 import { User } from "@/types/userTypes";
 import UserSignature from "@/components/user/UserSignature";
 import ImageWithOverlay from "./components/preview/ImageWithOverlary";
@@ -159,6 +158,10 @@ const DirectFinancingReportPreview = forwardRef<
                 />
               )}
               <PaymentConditions
+                highlightSumPaymentsValues={
+                  configData.reportConfig.highlightSumPaymentsValues
+                }
+                propertyValue={configData.value}
                 groupMonthlyInstallments={
                   configData.reportConfig.groupMonthlyInstallments
                 }
@@ -189,14 +192,6 @@ const DirectFinancingReportPreview = forwardRef<
                 title="Cálculo do investimento"
                 color={custom.primaryColor}
               />
-              <div className="w-full px-12 my-10">
-                <CalculationTable
-                  color={custom.primaryColor}
-                  secondary={custom.secondaryColor}
-                  propertyData={propertyData}
-                  caseData={caseData}
-                />
-              </div>
 
               <ScenariosBuyAndSell
                 propertyData={propertyData}

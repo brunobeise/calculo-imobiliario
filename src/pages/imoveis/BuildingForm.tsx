@@ -14,6 +14,7 @@ import { BuildingCategorySelect } from "@/components/inputs/BuildingCategorySele
 import { Button } from "@mui/joy";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { useAuth } from "@/auth";
+import CurrencyInput from "@/components/inputs/CurrencyInput";
 
 export default function BuildingForm({ initialData, onSubmit }) {
   const {
@@ -186,6 +187,26 @@ export default function BuildingForm({ initialData, onSubmit }) {
                 onChange={(v) => setValue("propertyName", v)}
                 error={errors.propertyName?.message}
               />
+            )}
+          />
+        </div>
+        <div className="col-span-2">
+          <Controller
+            name="value"
+            control={control}
+            rules={{
+              required: "O nome do imóvel é obrigatório.",
+              minLength: { value: 3, message: "Mínimo de 3 caracteres." },
+              maxLength: { value: 50, message: "Máximo de 50 caracteres." },
+            }}
+            render={({ field }) => (
+              <div className="ps-3 pe-3">
+                <CurrencyInput
+                  {...field}
+                  label="Valor do Imóvel"
+                  onChange={(v) => setValue("value", Number(v.target.value))}
+                />
+              </div>
             )}
           />
         </div>

@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { toBRL } from "@/lib/formatter";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import SectionTitle from "./SectionTitle";
+import { GiHouseKeys } from "react-icons/gi";
 
 interface PaymentConditionsProps {
   color: string;
@@ -13,6 +14,8 @@ interface PaymentConditionsProps {
   hasBankFinancing?: boolean;
   separateDocumentation: boolean;
   groupMonthlyInstallments: boolean;
+  propertyValue?: number;
+  highlightSumPaymentsValues: boolean;
 }
 
 const PaymentConditions: React.FC<PaymentConditionsProps> = ({
@@ -23,8 +26,18 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   hasBankFinancing = true,
   separateDocumentation,
   groupMonthlyInstallments,
+  propertyValue,
+  highlightSumPaymentsValues,
 }) => {
   const { discharges, initialDate, downPayment, financingFees } = propertyData;
+
+  const computeDischargeDate = (initialDate, monthsToAdd) => {
+    const [month, year] = initialDate.split("/").map(Number);
+    return dayjs(`${year}-${month}-01`)
+      .add(monthsToAdd, "month")
+      .format("MMMM [de] YYYY")
+      .replace(/^./, (match) => match.toUpperCase());
+  };
 
   const {
     entryDetails,
@@ -35,25 +48,30 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     totalReinforcementParts,
     totalFinancing,
     constructionInterestDetails,
+    installmentPlanDetails,
+    totalInstallmentPlan,
+    totalInstallmentPlanParts,
   } = useMemo(() => {
     const downPaymentDischarges = discharges.filter(
-      (d) => d.isDownPayment && !d.isConstructionInterest
+      (d) =>
+        d.isDownPayment && !d.isConstructionInterest && !d.isInstallmentPlan
     );
+
     const reinforcementDischarges = discharges.filter(
-      (d) => !d.isDownPayment && !d.isConstructionInterest
+      (d) =>
+        !d.isDownPayment &&
+        !d.isConstructionInterest &&
+        !d.isInstallmentPlan &&
+        !d.type.includes("Entrega das Chaves")
     );
     const constructionInterestDischarges = discharges.filter(
       (d) => d.isConstructionInterest
     );
+    const installmentDischarges = discharges.filter((d) => d.isInstallmentPlan);
 
-    const computeDischargeDate = (initialDate, monthsToAdd) => {
-      const [month, year] = initialDate.split("/").map(Number);
-      return dayjs(`${year}-${month}-01`)
-        .add(monthsToAdd, "month")
-        .format("MMMM [de] YYYY")
-        .replace(/^./, (match) => match.toUpperCase());
-    };
-
+    // -------------------
+    // ENTRADA (Down Payment)
+    // -------------------
     let entryDetails = downPaymentDischarges
       .map((discharge, index) => ({
         originalDate: dayjs(initialDate, "MM/YYYY").add(
@@ -95,6 +113,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
       financingFees +
       downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0);
 
+    // -------------------
+    // TOTAL DE FINANCIAMENTO
+    // -------------------
     const totalFinancing = Math.round(
       propertyData.propertyValue -
         downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
@@ -103,16 +124,19 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         propertyData.subsidy
     );
 
+    // -------------------
+    // REFORÇOS
+    // -------------------
     const totalReinforcement = Math.round(
       reinforcementDischarges.reduce((sum, d) => sum + d.originalValue, 0)
     );
-
     const totalParts = downPaymentDischarges.length + 1;
 
     let globalPartNumber = 1;
     let reinforcementDetails = [];
 
     if (groupMonthlyInstallments) {
+      // Agrupando reforços mensais
       const monthlyInstallments = reinforcementDischarges
         .filter((d) => d.type === "Mensal")
         .reduce(
@@ -135,6 +159,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         reinforcementDetails.push(monthlyInstallments);
       }
 
+      // Agrupando reforços que não são mensais
       const otherInstallments = reinforcementDischarges
         .filter((d) => d.type !== "Mensal")
         .sort((a, b) => a.month - b.month)
@@ -193,6 +218,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
     const totalReinforcementParts = reinforcementDischarges.length;
 
+    // -------------------
+    // JUROS DE OBRA
+    // -------------------
     const constructionInterestDetails = constructionInterestDischarges
       .sort((a, b) => a.month - b.month)
       .map((discharge) => ({
@@ -201,6 +229,105 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         description: discharge.description,
       }));
 
+    // -------------------
+    // PARCELAMENTO (NOVO)
+    // -------------------
+    let globalInstallmentPlanNumber = 1;
+    let installmentPlanDetails = [];
+
+    if (groupMonthlyInstallments) {
+      // 1) Parcelas Mensais
+      const monthlyInstallments = installmentDischarges
+        .filter((d) => d.type === "Mensal")
+        .reduce(
+          (acc, discharge) => {
+            acc.amount = discharge.originalValue; // soma sempre com o último valor
+            acc.totalInstallments += 1;
+            return acc;
+          },
+          {
+            date: computeDischargeDate(
+              initialDate,
+              installmentDischarges[0]?.month
+            ),
+            amount: 0,
+            totalInstallments: 0,
+          }
+        );
+
+      if (monthlyInstallments.totalInstallments > 0) {
+        installmentPlanDetails.push(monthlyInstallments);
+      }
+
+      // 2) Parcelas que não são Mensais
+      const otherInstallments = installmentDischarges
+        .filter((d) => d.type !== "Mensal")
+        .sort((a, b) => a.month - b.month)
+        .reduce((acc, discharge) => {
+          const date = computeDischargeDate(initialDate, discharge.month);
+          const existingMonth = acc.find((item) => item.date === date);
+
+          if (existingMonth) {
+            existingMonth.parts.push({
+              partNumber: globalInstallmentPlanNumber++,
+              amount: discharge.originalValue, // armazenamos como número
+            });
+          } else {
+            acc.push({
+              date,
+              parts: [
+                {
+                  partNumber: globalInstallmentPlanNumber++,
+                  amount: discharge.originalValue,
+                },
+              ],
+            });
+          }
+
+          return acc;
+        }, []);
+
+      installmentPlanDetails = [
+        ...installmentPlanDetails,
+        ...otherInstallments,
+      ];
+    } else {
+      // Sem agrupar mensal
+      installmentPlanDetails = installmentDischarges
+        .sort((a, b) => a.month - b.month)
+        .reduce((acc, discharge) => {
+          const date = computeDischargeDate(initialDate, discharge.month);
+          const existingMonth = acc.find((item) => item.date === date);
+
+          if (existingMonth) {
+            existingMonth.parts.push({
+              partNumber: globalInstallmentPlanNumber++,
+              amount: discharge.originalValue,
+            });
+          } else {
+            acc.push({
+              date,
+              parts: [
+                {
+                  partNumber: globalInstallmentPlanNumber++,
+                  amount: discharge.originalValue,
+                },
+              ],
+            });
+          }
+
+          return acc;
+        }, []);
+    }
+
+    const totalInstallmentPlan = Math.round(
+      installmentDischarges.reduce((sum, d) => sum + d.originalValue, 0)
+    );
+    const totalInstallmentPlanParts = installmentDischarges.length;
+
+    // -------------------
+    // RETORNO
+    // -------------------
     return {
       entryDetails,
       totalDownPayment,
@@ -210,6 +337,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
       totalReinforcementParts,
       totalFinancing,
       constructionInterestDetails,
+      installmentPlanDetails,
+      totalInstallmentPlan,
+      totalInstallmentPlanParts,
     };
   }, [
     discharges,
@@ -223,7 +353,6 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     groupMonthlyInstallments,
     initialDate,
   ]);
-
   const DownPaymentCard = () => (
     <div
       style={
@@ -408,12 +537,15 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         className="rounded-3xl p-4 pr-2 border h-min "
       >
         <h3 style={{ color }} className="text-xl mb-2">
-          {hasBankFinancing ? "Reforços" : "Parcelamento"} (
-          {totalReinforcementParts}x)
+          {"Reforços"} ({totalReinforcementParts}x)
         </h3>
-        <p style={{ color }} className="text-2xl font-bold mb-4">
-          {toBRL(totalReinforcement)}
-        </p>
+
+        {highlightSumPaymentsValues && (
+          <p style={{ color }} className="text-2xl font-bold mb-4">
+            {toBRL(totalReinforcement)}
+          </p>
+        )}
+
         <div className="max-h-[400px] overflow-y-auto scrollbar ">
           <ul className="list-none space-y-3">
             {reinforcementDetails.map((detail, i) => (
@@ -461,15 +593,18 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         <h3 style={{ color }} className="text-xl mb-2">
           Evolução de Obra
         </h3>
-        <p style={{ color }} className="text-2xl font-bold mb-4">
-          {toBRL(
-            discharges.reduce(
-              (acc, val) =>
-                val.isConstructionInterest ? acc + val.value : acc,
-              0
-            )
-          )}
-        </p>
+        {highlightSumPaymentsValues && (
+          <p style={{ color }} className="text-2xl font-bold mb-4">
+            {toBRL(
+              discharges.reduce(
+                (acc, val) =>
+                  val.isConstructionInterest ? acc + val.value : acc,
+                0
+              )
+            )}
+          </p>
+        )}
+
         <div className="max-h-[400px] overflow-y-auto scrollbar ">
           <ul className="list-none space-y-3">
             {constructionInterestDetails.length > 0 && (
@@ -494,6 +629,130 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     </div>
   );
 
+  const InstallmentPlanCard = () => {
+    const onlyMonthlyInstallments =
+      groupMonthlyInstallments &&
+      installmentPlanDetails.length === 1 &&
+      installmentPlanDetails[0]?.totalInstallments;
+
+    return (
+      <div className="!overflow-hidden relative rounded-3xl break-inside-avoid">
+        <div
+          style={
+            {
+              "--scroll-thumb-color": color,
+            } as React.CSSProperties
+          }
+          className="rounded-3xl p-4 pr-2 border h-min"
+        >
+          <h3 style={{ color }} className="text-xl mb-2">
+            Parcelamento
+            {!onlyMonthlyInstallments && ` (${totalInstallmentPlanParts}x)`}
+          </h3>
+
+          {onlyMonthlyInstallments ? (
+            <p style={{ color }} className="text-xl mb-2">
+              {installmentPlanDetails[0].totalInstallments}x de{" "}
+              <strong style={{ color }} className="font-bold text-2xl ">
+                {toBRL(installmentPlanDetails[0].amount)}
+              </strong>
+              <p className="!text-sm mt-3" style={{ color: secondary }}>
+                Início em {installmentPlanDetails[0].date}
+              </p>
+            </p>
+          ) : (
+            <p style={{ color }} className="text-2xl font-bold mb-4">
+              {toBRL(totalInstallmentPlan)}
+            </p>
+          )}
+
+          <div className="max-h-[400px] overflow-y-auto scrollbar">
+            <ul className="list-none space-y-3">
+              {installmentPlanDetails.map((detail, i) => (
+                <li key={i} className="text-sm">
+                  {detail.totalInstallments && groupMonthlyInstallments ? (
+                    <>
+                      {!onlyMonthlyInstallments && (
+                        <ul style={{ color: secondary }} className="ml-1">
+                          <li>
+                            • Parcelas mensais ({detail.totalInstallments}x):{" "}
+                            <strong style={{ color }}>
+                              {toBRL(detail.amount)}
+                            </strong>
+                          </li>
+                        </ul>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ color }}>
+                        {i + 1}) {detail.date}
+                      </span>
+                      <ul style={{ color: secondary }} className="ml-1">
+                        {detail.parts?.map((part, j) => (
+                          <li key={j}>
+                            • {part.partNumber}ª Parcela:{" "}
+                            <strong style={{ color }}>
+                              {toBRL(part.amount)}
+                            </strong>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const KeyHandoverCard = () => {
+    const keyHandover = discharges.filter((d) =>
+      d.type?.includes("Entrega das Chaves")
+    )[0];
+
+    if (!keyHandover) return null;
+    const date = computeDischargeDate(initialDate, keyHandover.month);
+
+    const value = keyHandover.originalValue;
+
+    return (
+      <div className="!overflow-hidden relative rounded-3xl break-inside-avoid">
+        <div
+          style={
+            {
+              "--scroll-thumb-color": color, // caso você use a var color no estilo
+            } as React.CSSProperties
+          }
+          className="rounded-3xl p-4 pr-2 border h-min"
+        >
+          <h3
+            style={{ color }}
+            className="text-lg flex items-center gap-2 mb-2"
+          >
+            Entrega das Chaves <GiHouseKeys className="text-3xl" />
+          </h3>
+          <p style={{ color }} className="text-2xl font-bold mb-4">
+            {toBRL(value)}
+          </p>
+          <div className="max-h-[400px] overflow-y-auto scrollbar">
+            <ul className="list-none space-y-3">
+              <li className="text-sm">
+                <span style={{ color: secondary }}>
+                  Data: <span style={{ color }}>{date}</span>
+                </span>
+                <br />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const cards = useMemo(() => {
     let count = 0;
 
@@ -511,8 +770,6 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     hasBankFinancing,
     discharges,
   ]);
-
-  console.log(cards);
 
   const columnsClass = useMemo(() => {
     if (cards >= 3) return "lg:columns-3";
@@ -532,7 +789,17 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         <span>
           Valor do imóvel:{" "}
           <b style={{ color: color }} className="font-bold">
-            {toBRL(propertyData.propertyValue)}
+            {propertyValue !== undefined &&
+            propertyValue !== null &&
+            propertyValue !== propertyData.propertyValue &&
+            propertyValue !== 0 ? (
+              <>
+                <s className="me-1">{toBRL(propertyValue)}</s>{" "}
+                {toBRL(propertyData.propertyValue)}
+              </>
+            ) : (
+              toBRL(propertyData.propertyValue)
+            )}
           </b>
         </span>
       </div>
@@ -541,6 +808,14 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         {separateDocumentation && financingFees > 0 && <FinancingFeesCard />}
 
         {hasBankFinancing && <FinancingCard />}
+
+        {discharges.filter((d) => d.isInstallmentPlan).length > 0 && (
+          <InstallmentPlanCard />
+        )}
+
+        {discharges.some((d) => d.type.includes("Entrega das Chaves")) && (
+          <KeyHandoverCard />
+        )}
 
         {totalReinforcementParts > 0 && <ReinforcementsCard />}
 

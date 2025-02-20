@@ -25,6 +25,7 @@ import { navigate } from "vike/client/router";
 import { FaLink } from "react-icons/fa6";
 import ScrapModal from "@/pages/scrap/ScrapModal";
 import { useAuth } from "@/auth";
+import { toBRL } from "@/lib/formatter";
 
 export default function Building() {
   const pageContext = usePageContext();
@@ -119,6 +120,11 @@ export default function Building() {
       <div className="px-12 pt-6 mb-10 w-full">
         <div className="grid grid-cols-1 gap-4 mb-4 text-lg">
           <div className="flex flex-col gap-2">
+            {building?.value && (
+              <p>
+                <strong>Valor do imóvel:</strong> {toBRL(building.value)}{" "}
+              </p>
+            )}
             {building?.suites && (
               <p>
                 <strong>Dormitórios:</strong> {building?.suites}{" "}

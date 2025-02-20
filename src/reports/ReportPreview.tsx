@@ -27,6 +27,7 @@ import { ReportConfig } from "@/types/reportConfigTypes";
 import BooleanInput from "@/components/inputs/BooleanInput";
 import BooleanInputSwitch from "@/components/inputs/SwitchInput";
 import SessionsDrawer from "@/components/session/SessionsDrawer";
+import CurrencyInput from "@/components/inputs/CurrencyInput";
 
 interface ReportPreviewProps {
   propertyData: PropertyData;
@@ -52,6 +53,7 @@ export interface ReportData {
   cod?: string;
   subType: string;
   buildingId?: string;
+  value?: number;
   reportConfig: ReportConfig;
 }
 
@@ -83,6 +85,7 @@ export default function ReportPreview({
     suites: proposal.suites,
     subType: proposal.subType,
     buildingId: proposal.buildingId,
+    value: proposal.value,
     reportConfig: proposal.reportConfig,
   };
 
@@ -198,6 +201,7 @@ export default function ReportPreview({
                 landArea: building.landArea,
                 address: building.address,
                 cod: building.cod,
+                value: building.value,
                 buildingId: building.id,
               });
             }}
@@ -213,6 +217,18 @@ export default function ReportPreview({
                   onChange({ ...configData, propertyName: e.target.value })
                 }
                 value={configData.propertyName}
+              />
+            </FormControl>
+
+            <FormControl className="col-span-2">
+              <CurrencyInput
+                infoTooltip=""
+                noHeight
+                label="Valor Original"
+                onChange={(e) =>
+                  onChange({ ...configData, value: Number(e.target.value) })
+                }
+                value={configData.value}
               />
             </FormControl>
 
@@ -497,6 +513,19 @@ export default function ReportPreview({
                   reportConfig: {
                     ...configData.reportConfig,
                     requestName: v,
+                  },
+                })
+              }
+            />
+            <BooleanInputSwitch
+              label="Exibir soma dos pagamentos"
+              checked={configData.reportConfig?.highlightSumPaymentsValues}
+              onChange={(v) =>
+                onChange({
+                  ...configData,
+                  reportConfig: {
+                    ...configData.reportConfig,
+                    highlightSumPaymentsValues: v,
                   },
                 })
               }

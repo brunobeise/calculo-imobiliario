@@ -28,7 +28,9 @@ export default function PropertyDataNewCaseForm({
     initialDate: dayjs().format("MM/YYYY"),
     initialFinancingMonth: dayjs().add(1, "month").format("MM/YYYY"),
     initialRentMonth: dayjs().add(1, "month").format("MM/YYYY"),
+    financingFeesDate: dayjs().format("MM/YYYY"),
     downPayment: 0,
+    financingFees: 0,
   } as unknown as PropertyData);
 
   const type = getCaseTypeByLink(usePageContext().urlPathname);
@@ -76,10 +78,18 @@ export default function PropertyDataNewCaseForm({
         (activeStep === 1 && !form.propertyValue) ||
         (activeStep === 1 && !form.propertyAppreciationRate) ||
         (activeStep === 2 && !form.downPayment) ||
-        (type === 'financingPlanning' && activeStep === 3 && !form.interestRate) ||
-        (type === 'financingPlanning' && activeStep === 3 && !form.installmentValue) ||
-        (type === 'financingPlanning' && activeStep === 3 && !form.financingFees) ||
-        (type === 'financingPlanning' && activeStep === 3 && !form.financingMonths) ||
+        (type === "financingPlanning" &&
+          activeStep === 3 &&
+          !form.interestRate) ||
+        (type === "financingPlanning" &&
+          activeStep === 3 &&
+          !form.installmentValue) ||
+        (type === "financingPlanning" &&
+          activeStep === 3 &&
+          form.financingFees === undefined) ||
+        (type === "financingPlanning" &&
+          activeStep === 3 &&
+          !form.financingMonths) ||
         (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
         (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
         (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
@@ -89,8 +99,10 @@ export default function PropertyDataNewCaseForm({
     else
       return (
         (activeStep === 0 && !form.propertyValue) ||
-        (type === 'financingPlanning' && activeStep === 2 && !form.installmentValue) ||
-        (activeStep === 2 &&  !form.financingFees)
+        (type === "financingPlanning" &&
+          activeStep === 2 &&
+          !form.installmentValue) ||
+        (activeStep === 2 && form.financingFees === undefined)
       );
   };
 

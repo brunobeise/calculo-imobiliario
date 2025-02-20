@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useState } from "react";
 import { Discharge } from "./PropertyDataDischargesControl";
-import defaultvalues from "./propertyDataInivitalValues/financingPlanning";
 
 export const propertyDataContext = createContext<PropertyDataContextType>({
   propertyData: undefined,
@@ -65,10 +64,8 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const setMultiplePropertyData = (values: Partial<PropertyData>) => {
-    const defaultState: PropertyData = defaultvalues;
     setPropertyDataState((prevState) => {
       return {
-        ...defaultState,
         ...prevState,
         ...values,
       };

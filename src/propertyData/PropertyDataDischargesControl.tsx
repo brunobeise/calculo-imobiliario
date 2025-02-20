@@ -7,14 +7,12 @@ import {
   FormLabel,
   Input,
   Option,
-  Radio,
-  RadioGroup,
   Select,
   Sheet,
   Table,
 } from "@mui/joy";
 import { useState } from "react";
-import { FaCheckCircle, FaPlus, FaTimesCircle, FaTrash } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import { PropertyData } from "./PropertyDataContext";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { useForm, Controller } from "react-hook-form";
@@ -34,6 +32,7 @@ export interface Discharge {
   type: string;
   isDownPayment: boolean;
   isConstructionInterest: boolean;
+  isInstallmentPlan: boolean;
   indexType?: string;
   indexValue?: number;
   originalValue: number;
@@ -72,6 +71,7 @@ export default function PropertyDataDischargesControl({
       installments: 1,
       isDownPayment: true,
       isConstructionInterest: false,
+      isInstallmentPlan: false,
       indexType: null,
       indexValue: 0,
       description: "",
@@ -85,6 +85,7 @@ export default function PropertyDataDischargesControl({
     installments: number | null;
     isDownPayment: boolean;
     isConstructionInterest: boolean;
+    isInstallmentPlan: boolean;
     indexType?: string | null;
     indexValue?: number;
     description?: string;
@@ -99,6 +100,7 @@ export default function PropertyDataDischargesControl({
       "three-yearly": "Tri-Anual",
       personalized: "Aporte Único",
       "payment-in-kind": "Dação em Pagamento",
+      "key-handover": "Entrega das Chaves",
     };
 
     const increment = (type: string): number => {
@@ -145,7 +147,8 @@ export default function PropertyDataDischargesControl({
     if (
       data.dischargeType &&
       data.dischargeType !== "personalized" &&
-      data.dischargeType !== "payment-in-kind"
+      data.dischargeType !== "payment-in-kind" &&
+      data.dischargeType !== "key-handover"
     ) {
       const step = increment(data.dischargeType);
       for (let i = startMonth; installmentCount < maxInstallments; i += step) {
@@ -167,6 +170,7 @@ export default function PropertyDataDischargesControl({
           initialMonth: startMonth,
           isDownPayment: data.isDownPayment,
           isConstructionInterest: data.isConstructionInterest,
+          isInstallmentPlan: data.isInstallmentPlan,
           indexType: data.indexType || undefined,
           indexValue: data.indexValue || undefined,
           originalValue: data.amount,
@@ -174,9 +178,10 @@ export default function PropertyDataDischargesControl({
         installmentCount++;
       }
     } else if (
-      (data.dischargeType === "personalized" ||
+      ((data.dischargeType === "personalized" ||
         data.dischargeType === "payment-in-kind") &&
-      startMonth
+        startMonth) ||
+      data.dischargeType === "key-handover"
     ) {
       newDischarges.push({
         month: startMonth,
@@ -185,7 +190,12 @@ export default function PropertyDataDischargesControl({
         initialMonth: data.dischargeType === "payment-in-kind" ? 0 : startMonth,
         isConstructionInterest: false,
         isDownPayment:
-          data.dischargeType === "payment-in-kind" ? true : data.isDownPayment,
+          data.dischargeType === "payment-in-kind"
+            ? true
+            : data.dischargeType === "key-handover"
+            ? false
+            : data.isDownPayment,
+        isInstallmentPlan: false,
         indexType: undefined,
         indexValue: undefined,
         originalValue: data.amount,
@@ -239,6 +249,7 @@ export default function PropertyDataDischargesControl({
           count: 0,
           isDownPayment: discharge.isDownPayment,
           isConstructionInterest: discharge.isConstructionInterest,
+          isInstallmentPlan: discharge.isInstallmentPlan,
           indexType: discharge.indexType,
           originalValue: discharge.originalValue,
         };
@@ -303,8 +314,7 @@ export default function PropertyDataDischargesControl({
             <thead>
               <tr>
                 <th>Tipo</th>
-                <th className="w-[80px]">Entrada</th>
-                <th>Mês</th>
+                <th>Modelo</th>
                 <th>Parcelas</th> <th>Valor</th>
                 <th className="w-[40px]"></th>
               </tr>
@@ -314,22 +324,21 @@ export default function PropertyDataDischargesControl({
                 (item, index) => (
                   <tr key={index}>
                     <td>{item.type}</td>
-                    <td className="flex justify-center items-center">
-                      {item.isDownPayment ? (
-                        <FaCheckCircle color={`green`} />
-                      ) : (
-                        <FaTimesCircle color="gray" />
-                      )}
-                    </td>
                     <td>
-                      {dayjs(propertyData.initialDate, "MM/YYYY")
-                        .add(item.initialMonth, "month")
-                        .format("MM/YYYY")}
+                      {item.isConstructionInterest
+                        ? "Evolução de Obra"
+                        : item.isDownPayment
+                        ? "Entrada"
+                        : item.isInstallmentPlan
+                        ? "Parcelamento"
+                        : "Reforços"}
                     </td>
+
                     <td>{item.count}x</td>
                     <td>{toBRL(item.originalValue)}</td>
-                    <td className="flex justify-end items-center w-[40px]">
+                    <td className="w-[40px]">
                       <FaTrash
+                        className="hover:opacity-90"
                         onClick={() => handleRemoveDischargeGroup(item)}
                         style={{ cursor: "pointer" }}
                         title="Remover Grupo"
@@ -351,8 +360,8 @@ export default function PropertyDataDischargesControl({
         }}
         open={addDischargeModal}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-rows !gap-4 p-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-[500px]">
+          <div className="grid grid-rows !gap-4 p-1 py-3">
             <FormControl error={!!errors.dischargeType}>
               <FormLabel>Tipo:</FormLabel>
               <Controller
@@ -375,6 +384,7 @@ export default function PropertyDataDischargesControl({
                     <Option value={"payment-in-kind"}>
                       Dação em Pagamento
                     </Option>
+                    <Option value={"key-handover"}>Entrega das Chaves</Option>
                   </Select>
                 )}
               />
@@ -385,54 +395,54 @@ export default function PropertyDataDischargesControl({
               )}
             </FormControl>
 
-            {watch("dischargeType") !== "payment-in-kind" && (
-              <FormControl error={!!errors.month}>
-                <Controller
-                  name="month"
-                  control={control}
-                  rules={{
-                    required: "Mês é obrigatório",
-                    validate: (value) => {
-                      const selectedDate = dayjs(value, "MM/YYYY");
-                      if (!selectedDate.isValid()) {
-                        return "Data inválida";
-                      }
-                      if (
-                        !selectedDate.isAfter(
-                          dayjs(propertyData.initialDate, "MM/YYYY")
-                        )
-                      ) {
-                        return `O mês selecionado deve ser superior a ${dayjs(
-                          propertyData.initialDate,
-                          "MM/YYYY"
-                        ).format("MM/YYYY")}`;
-                      }
-                      return true;
-                    },
-                  }}
-                  render={({ field }) => (
-                    <DatePicker
-                      defaultValue={field.value}
-                      noHeight
-                      label={
-                        dischargeType !== "personalized" &&
-                        dischargeType !== "payment-in-kind"
-                          ? "Mês inicial"
-                          : "Mês"
-                      }
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-                {errors.month && (
-                  <FormHelperText>{errors.month.message}</FormHelperText>
+            <FormControl error={!!errors.month}>
+              <Controller
+                name="month"
+                control={control}
+                rules={{
+                  required: "Mês é obrigatório",
+                  validate: (value) => {
+                    const selectedDate = dayjs(value, "MM/YYYY");
+                    if (!selectedDate.isValid()) {
+                      return "Data inválida";
+                    }
+                    if (
+                      !selectedDate.isAfter(
+                        dayjs(propertyData.initialDate, "MM/YYYY")
+                      )
+                    ) {
+                      return `O mês selecionado deve ser superior a ${dayjs(
+                        propertyData.initialDate,
+                        "MM/YYYY"
+                      ).format("MM/YYYY")}`;
+                    }
+                    return true;
+                  },
+                }}
+                render={({ field }) => (
+                  <DatePicker
+                    defaultValue={field.value}
+                    noHeight
+                    label={
+                      dischargeType !== "personalized" &&
+                      dischargeType !== "payment-in-kind" &&
+                      watch("dischargeType") !== "key-handover"
+                        ? "Mês inicial"
+                        : "Mês"
+                    }
+                    onChange={field.onChange}
+                  />
                 )}
-              </FormControl>
-            )}
+              />
+              {errors.month && (
+                <FormHelperText>{errors.month.message}</FormHelperText>
+              )}
+            </FormControl>
 
             {watch("dischargeType") &&
               watch("dischargeType") !== "personalized" &&
-              watch("dischargeType") !== "payment-in-kind" && (
+              watch("dischargeType") !== "payment-in-kind" &&
+              watch("dischargeType") !== "key-handover" && (
                 <FormControl error={!!errors.installments}>
                   <FormLabel>Número de parcelas</FormLabel>
                   <Controller
@@ -461,7 +471,6 @@ export default function PropertyDataDischargesControl({
                   )}
                 </FormControl>
               )}
-
             <FormControl error={!!errors.amount}>
               <Controller
                 name="amount"
@@ -473,7 +482,7 @@ export default function PropertyDataDischargesControl({
                 render={({ field }) => (
                   <CurrencyInput
                     noHeight
-                    label="Valor do aporte"
+                    label="Valor"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />
@@ -483,136 +492,128 @@ export default function PropertyDataDischargesControl({
                 <FormHelperText>{errors.amount.message}</FormHelperText>
               )}
             </FormControl>
-
-            {watch("dischargeType") !== "payment-in-kind" && (
-              <div className="flex items-center">
-                <FormControl className={"my-2"}>
-                  <Controller
-                    name="isDownPayment"
-                    control={control}
-                    render={({ field }) => (
-                      <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Modelo de amortização:
-                        </label>
-                        <RadioGroup
-                          name="isDownPayment"
-                          value={field.value}
-                          onChange={(event) => {
-                            const newValue = event.target.value === "true";
-                            setValue("isDownPayment", newValue);
-                            setValue("isConstructionInterest", false); // Se selecionar um deles, desmarca "Evolução de Obra"
-                          }}
-                        >
-                          <div className="flex gap-10">
-                            <Radio
-                              checked={
-                                field.value === true &&
-                                !watch("isConstructionInterest")
-                              }
-                              value="true"
-                              label="Entrada"
-                            />
-                            <Radio
-                              checked={
-                                field.value === false &&
-                                !watch("isConstructionInterest")
-                              }
-                              value="false"
-                              label="Reforços"
-                            />
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    )}
-                  />
-                </FormControl>
-
-                <Radio
-                  className="mt-5 ms-8"
-                  onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    setValue("isConstructionInterest", isChecked);
-                    if (isChecked) {
-                      setValue("isDownPayment", false); // Se "Evolução de Obra" for marcado, define "isDownPayment" como false
+            {watch("dischargeType") !== "payment-in-kind" &&
+              watch("dischargeType") !== "key-handover" && (
+                <FormControl className="my-2">
+                  <FormLabel className="block text-sm mb-2">
+                    Modelo de amortização:
+                  </FormLabel>
+                  <Select
+                    value={
+                      watch("isDownPayment")
+                        ? "true"
+                        : watch("isConstructionInterest")
+                        ? "construction"
+                        : watch("isInstallmentPlan")
+                        ? "installment"
+                        : "false"
                     }
-                  }}
-                  checked={!!watch("isConstructionInterest")}
-                  label="Evolução de Obra"
-                />
-              </div>
-            )}
-
-            {dischargeType === "payment-in-kind" && (
-              <FormControl error={!!errors.description}>
-                <FormLabel>Descrição:</FormLabel>
-                <Controller
-                  name="description"
-                  control={control}
-                  rules={{
-                    required: "Descrição é obrigatória para Dação em Pagamento",
-                  }}
-                  render={({ field }) => (
-                    <Input {...field} error={!!errors.description} />
-                  )}
-                />
-                {errors.description && (
-                  <FormHelperText>{errors.description.message}</FormHelperText>
-                )}
-              </FormControl>
-            )}
-
-            {watch("dischargeType") !== "payment-in-kind" && (
-              <div className="grid grid-cols-2 gap-4">
-                <FormControl error={!!errors.indexType}>
-                  <FormLabel>Tipo do Índice</FormLabel>
-                  <Controller
-                    name="indexType"
-                    control={control}
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        onChange={(_e, v) => field.onChange(v)}
-                        value={field.value}
-                      >
-                        <Option value={"INCC - M"}>INCC - M</Option>
-                        <Option value={"IGP - M"}>IGP - M</Option>
-                        <Option value={"IPCA"}>IPCA</Option>
-                        <Option value={"TR"}>TR</Option>
-                        <Option value={"CDI"}>CDI</Option>
-                      </Select>
-                    )}
-                  />
-                  {errors.indexType && (
+                    onChange={(event, newValue) => {
+                      if (newValue === "construction") {
+                        setValue("isConstructionInterest", true);
+                        setValue("isDownPayment", false);
+                        setValue("isInstallmentPlan", false);
+                      } else if (newValue === "installment") {
+                        setValue("isInstallmentPlan", true);
+                        setValue("isDownPayment", false);
+                        setValue("isConstructionInterest", false);
+                      } else {
+                        setValue("isConstructionInterest", false);
+                        setValue("isInstallmentPlan", false);
+                        setValue("isDownPayment", newValue === "true");
+                      }
+                    }}
+                  >
+                    <Option value="true">Entrada</Option>
+                    <Option value="false">Reforços</Option>
+                    <Option value="construction">Evolução de Obra</Option>
+                    <Option value="installment">Parcelamento</Option>
+                  </Select>
+                  {watch("isConstructionInterest") && (
                     <FormHelperText>
-                      {errors.indexType.message.toString()}
+                      * Pagamentos como Evolução de Obra não alteram o total
+                      financiado
                     </FormHelperText>
                   )}
                 </FormControl>
-                <FormControl error={!!errors.indexValue}>
+              )}
+            {dischargeType === "payment-in-kind" &&
+              watch("dischargeType") !== "key-handover" && (
+                <FormControl error={!!errors.description}>
+                  <FormLabel>Descrição:</FormLabel>
                   <Controller
-                    name="indexValue"
+                    name="description"
                     control={control}
+                    rules={{
+                      required:
+                        "Descrição é obrigatória para Dação em Pagamento",
+                    }}
                     render={({ field }) => (
-                      <PercentageInput
-                        required={false}
-                        noHeight
-                        min={0}
-                        value={field.value ?? 0}
-                        onChange={(e) => field.onChange(e || 0)}
-                        label="Taxa (mensal)"
-                      />
+                      <Input {...field} error={!!errors.description} />
                     )}
                   />
-                  {errors.indexValue && (
-                    <FormHelperText>{errors.indexValue.message}</FormHelperText>
+                  {errors.description && (
+                    <FormHelperText>
+                      {errors.description.message}
+                    </FormHelperText>
                   )}
                 </FormControl>
-              </div>
-            )}
+              )}
+            {watch("dischargeType") !== "payment-in-kind" &&
+              watch("dischargeType") !== "key-handover" && (
+                <div className="grid grid-cols-2 gap-4">
+                  <FormControl error={!!errors.indexType}>
+                    <FormLabel>Tipo do Índice</FormLabel>
+                    <Controller
+                      name="indexType"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          onChange={(_e, v) => field.onChange(v)}
+                          value={field.value}
+                        >
+                          <Option value={"INCC - M"}>INCC - M</Option>
+                          <Option value={"CUB"}>CUB</Option>
+                          <Option value={"IGP - M"}>IGP - M</Option>
+                          <Option value={"IPCA"}>IPCA</Option>
+                          <Option value={"TR"}>TR</Option>
+                          <Option value={"CDI"}>CDI</Option>
+                        </Select>
+                      )}
+                    />
+                    {errors.indexType && (
+                      <FormHelperText>
+                        {errors.indexType.message.toString()}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                  <FormControl error={!!errors.indexValue}>
+                    <Controller
+                      name="indexValue"
+                      control={control}
+                      render={({ field }) => (
+                        <PercentageInput
+                          required={false}
+                          noHeight
+                          min={0}
+                          value={field.value ?? 0}
+                          onChange={(e) => field.onChange(e || 0)}
+                          label="Taxa (mensal)"
+                        />
+                      )}
+                    />
+                    {errors.indexValue && (
+                      <FormHelperText>
+                        {errors.indexValue.message}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </div>
+              )}
           </div>
 
-          <div className="flex justify-between px-3 mt-5">
+          <div className="flex justify-between mt-5 mb-2">
             <Button
               variant="plain"
               color="neutral"
