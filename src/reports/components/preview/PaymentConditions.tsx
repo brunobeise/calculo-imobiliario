@@ -5,6 +5,7 @@ import { toBRL } from "@/lib/formatter";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import SectionTitle from "./SectionTitle";
 import { GiHouseKeys } from "react-icons/gi";
+import { Divider } from "@mui/joy";
 
 interface PaymentConditionsProps {
   color: string;
@@ -41,8 +42,6 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
   const {
     entryDetails,
-    totalDownPayment,
-    totalParts,
     reinforcementDetails,
     totalReinforcement,
     totalReinforcementParts,
@@ -79,7 +78,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           "month"
         ),
         date: computeDischargeDate(initialDate, discharge.month),
-        partLabel: `${index + 2}ª Parte:`,
+        partLabel: `${index + 1}ª Parte:`,
         amount: toBRL(discharge.originalValue),
         description: discharge.description,
       }))
@@ -360,77 +359,27 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           "--scroll-thumb-color": color,
         } as React.CSSProperties
       }
-      className="rounded-3xl p-4 border h-min break-inside-avoid"
+      className="rounded-3xl p-4 pe-3 border h-min break-inside-avoid"
     >
-      <h3 style={{ color }} className="text-xl mb-2">
-        Entrada {propertyData.downPayment > 0 && `${totalParts}x`}
-      </h3>
-      <p style={{ color }} className="text-2xl font-bold mb-4">
-        {toBRL(
-          separateDocumentation
-            ? totalDownPayment - financingFees
-            : totalDownPayment
-        )}
-      </p>
-      <div className="max-h-[400px] overflow-y-auto scrollbar ">
-        <ul className="list-none space-y-3 ">
-          {propertyData.downPayment > 0 && (
-            <li className="text-sm">
-              <span style={{ color: color }}>
-                1){" "}
-                {dayjs(initialDate, "MM/YYYY")
-                  .format("MMMM [de] YYYY")
-                  .replace(/^./, (match) => match.toUpperCase())}
-              </span>
-              <ul style={{ color: secondary }} className="ml-1 my-1">
-                <li>
-                  • 1ª Parte:{" "}
-                  <strong style={{ color }}>{toBRL(downPayment)}</strong>
-                </li>
-
-                {propertyData.financingFeesDate === propertyData.initialDate &&
-                  !separateDocumentation &&
-                  financingFees > 0 && (
-                    <li style={{ color: secondary }}>
-                      • Documentação:{" "}
-                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
-                    </li>
-                  )}
-                {entryDetails
-                  .filter((d) => d.description)
-                  .map((detail, i) => (
-                    <li key={i} style={{ color: secondary }}>
-                      • {detail.description}{" "}
-                      <strong style={{ color }}>{detail.amount}</strong>
-                    </li>
-                  ))}
-              </ul>
-            </li>
+      <div className="max-h-[318px] overflow-y-auto scrollbar ">
+        <h3 style={{ color }} className="text-xl mb-2">
+          {entryDetails.length > 1 ? "Entrada no ato:" : "Entrada"}
+        </h3>
+        <p style={{ color }} className="text-2xl font-bold mb-2">
+          {toBRL(propertyData.downPayment)}
+        </p>
+        <div>
+          {discharges.some((d) => d.isDownPayment) && (
+            <span style={{ color: secondary }} className="block mt-4 mb-[-5px] text-sm ">
+              Entrada parcelada:
+            </span>
           )}
-
-          {entryDetails.map((detail, i) => {
-            const isDocumentationDate =
-              dayjs(detail.originalDate).format("MM/YYYY") ===
-              propertyData.financingFeesDate;
-
-            const hasDocumentation = entryDetails.some(
-              (d) => d.partLabel === "Documentação:" && isDocumentationDate
-            );
-
-            if (detail.description) return null;
-            if (hasDocumentation && separateDocumentation) return null;
-
-            return (
-              <li key={i} className="text-sm">
-                <span>{`${i + 2}) ${detail.date}`}</span>
-                <ul>
-                  <li style={{ color: secondary }}>
-                    • {detail.partLabel}{" "}
-                    <strong style={{ color }}>{detail.amount}</strong>
-                  </li>
-
-                  {isDocumentationDate &&
-                    !hasDocumentation &&
+          <ul className="list-none space-y-3">
+            {propertyData.downPayment > 0 && (
+              <>
+                <ul style={{ color: secondary }} className="ml-1 my-1">
+                  {propertyData.financingFeesDate ===
+                    propertyData.initialDate &&
                     !separateDocumentation &&
                     financingFees > 0 && (
                       <li style={{ color: secondary }}>
@@ -440,32 +389,111 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
                         </strong>
                       </li>
                     )}
+                  {entryDetails
+                    .filter((d) => d.description)
+                    .map((detail, i) => (
+                      <li key={i} style={{ color: secondary }}>
+                        • {detail.description}{" "}
+                        <strong style={{ color }}>{detail.amount}</strong>
+                      </li>
+                    ))}
                 </ul>
-              </li>
-            );
-          })}
-
-          {propertyData.financingFeesDate !== propertyData.initialDate &&
-            !entryDetails.some(
-              (detail) =>
-                dayjs(detail.originalDate).format("MM/YYYY") ===
-                propertyData.financingFeesDate
-            ) && (
-              <li className="text-sm">
-                <span>
-                  {dayjs(propertyData.financingFeesDate, "MM/YYYY")
-                    .format("MMMM [de] YYYY")
-                    .replace(/^./, (match) => match.toUpperCase())}
-                </span>
-                <ul>
-                  <li style={{ color: secondary }}>
-                    • Documentação:{" "}
-                    <strong style={{ color }}>{toBRL(financingFees)}</strong>
-                  </li>
-                </ul>
-              </li>
+              </>
             )}
-        </ul>
+
+            {entryDetails.map((detail, i) => {
+              const isDocumentationDate =
+                dayjs(detail.originalDate).format("MM/YYYY") ===
+                propertyData.financingFeesDate;
+
+              const hasDocumentation = entryDetails.some(
+                (d) => d.partLabel === "Documentação:" && isDocumentationDate
+              );
+
+              if (detail.description) return null;
+              if (hasDocumentation && separateDocumentation) return null;
+
+              return (
+                <li key={i} className="text-sm">
+                  <span>{`${i + 1}) ${detail.date}`}</span>
+                  <ul>
+                    <li style={{ color: secondary }}>
+                      • {detail.partLabel}{" "}
+                      <strong style={{ color }}>{detail.amount}</strong>
+                    </li>
+
+                    {isDocumentationDate &&
+                      !hasDocumentation &&
+                      !separateDocumentation &&
+                      financingFees > 0 && (
+                        <li style={{ color: secondary }}>
+                          • Documentação:{" "}
+                          <strong style={{ color }}>
+                            {toBRL(financingFees)}
+                          </strong>
+                        </li>
+                      )}
+                  </ul>
+                </li>
+              );
+            })}
+
+            {propertyData.financingFeesDate !== propertyData.initialDate &&
+              !entryDetails.some(
+                (detail) =>
+                  dayjs(detail.originalDate).format("MM/YYYY") ===
+                  propertyData.financingFeesDate
+              ) && (
+                <li className="text-sm">
+                  <span>
+                    {dayjs(propertyData.financingFeesDate, "MM/YYYY")
+                      .format("MMMM [de] YYYY")
+                      .replace(/^./, (match) => match.toUpperCase())}
+                  </span>
+                  <ul>
+                    <li style={{ color: secondary }}>
+                      • Documentação:{" "}
+                      <strong style={{ color }}>{toBRL(financingFees)}</strong>
+                    </li>
+                  </ul>
+                </li>
+              )}
+          </ul>
+
+          {discharges.some((d) => d.isDownPayment) && (
+            <>
+              <Divider className="!my-4" />
+              <span style={{ color: secondary }} className="block text-sm">
+                Total Parcelado:{" "}
+                <strong style={{ color }}>
+                  {" "}
+                  {toBRL(
+                    discharges
+                      .filter((d) => d.isDownPayment)
+                      .reduce((acc, val) => acc + val.originalValue, 0)
+                  )}
+                </strong>
+              </span>
+              {propertyData.downPayment > 0 && (
+                <span
+                  style={{ color: secondary }}
+                  className="block mt-2 text-sm"
+                >
+                  Ato + Parcelamento:{" "}
+                  <strong style={{ color }}>
+                    {" "}
+                    {toBRL(
+                      discharges
+                        .filter((d) => d.isDownPayment)
+                        .reduce((acc, val) => acc + val.originalValue, 0) +
+                        propertyData.downPayment
+                    )}
+                  </strong>
+                </span>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -651,9 +679,9 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </h3>
 
           {onlyMonthlyInstallments ? (
-            <p style={{ color }} className="text-xl mb-2">
+            <p style={{ color }} className="text-lg mb-2">
               {installmentPlanDetails[0].totalInstallments}x de{" "}
-              <strong style={{ color }} className="font-bold text-2xl ">
+              <strong style={{ color }} className="font-bold text-xl ">
                 {toBRL(installmentPlanDetails[0].amount)}
               </strong>
               <p className="!text-sm mt-3" style={{ color: secondary }}>

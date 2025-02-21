@@ -157,7 +157,7 @@ export default function Login() {
         <div>
           <Button
             type="submit"
-            sx={{ mt: 1 /* margin top */ }}
+            sx={{ mt: 1 }}
             loading={loading}
             className="w-full"
           >
@@ -166,7 +166,7 @@ export default function Login() {
               : forgotPassword
               ? awaitingCode
                 ? "Verificar Código"
-                : "Enviar e-mail de confirmação"
+                : "Recuperar Senha"
               : "Entrar"}
           </Button>
           {!forgotPassword && !isFirstAccess && (
