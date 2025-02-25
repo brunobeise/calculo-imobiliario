@@ -130,6 +130,7 @@ export default function FinancingPlanning(): JSX.Element {
       icon: id ? <FaEdit /> : <FaSave />,
       tooltip: id ? "Editar" : "Salvar",
     },
+    
 
     ...(actualCase
       ? [

@@ -370,7 +370,10 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         </p>
         <div>
           {discharges.some((d) => d.isDownPayment) && (
-            <span style={{ color: secondary }} className="block mt-4 mb-[-5px] text-sm ">
+            <span
+              style={{ color: secondary }}
+              className="block mt-4 mb-[-5px] text-sm "
+            >
               Entrada parcelada:
             </span>
           )}
@@ -609,7 +612,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   );
 
   const ConstructionInterestCard = () => (
-    <div className="!overflow-hidden relative rounded-3xl">
+    <div className="relative rounded-3xl break-inside-avoid">
       <div
         style={
           {
@@ -633,7 +636,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </p>
         )}
 
-        <div className="max-h-[400px] overflow-y-auto scrollbar ">
+        <div className="max-h-[365px] overflow-y-auto scrollbar ">
           <ul className="list-none space-y-3">
             {constructionInterestDetails.length > 0 && (
               <>
@@ -831,7 +834,12 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           </b>
         </span>
       </div>
-      <div className={`columns-2 ${columnsClass} space-y-5 gap-4 `}>
+      <div
+        style={{
+          WebkitColumnCount: 2,
+        }}
+        className={`columns-2 ${columnsClass} space-y-5 gap-4 `}
+      >
         <DownPaymentCard />
         {separateDocumentation && financingFees > 0 && <FinancingFeesCard />}
 
