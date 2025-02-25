@@ -25,9 +25,15 @@ export default function Buildings() {
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [orderBy, setOrderBy] = useState(
+    localStorage.getItem("orderBy") || "propertyName"
+  );
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">(
+    (localStorage.getItem("sortDirection") as "asc" | "desc") || "desc"
+  );
+
   const [currentPage, setCurrentPage] = useState(1);
-  const [orderBy, setOrderBy] = useState("propertyName");
+
   const [limit, setLimit] = useState(10);
   useEffect(() => {
     const queryParams = {
@@ -40,6 +46,14 @@ export default function Buildings() {
     };
     dispatch(fetchBuildings(queryParams));
   }, [dispatch, search, category, sortDirection, currentPage, orderBy, limit]);
+
+  useEffect(() => {
+    localStorage.setItem("orderBy", orderBy);
+  }, [orderBy]);
+
+  useEffect(() => {
+    localStorage.setItem("sortDirection", sortDirection);
+  }, [sortDirection]);
 
   const header = (
     <div className="flex items-center justify-between">

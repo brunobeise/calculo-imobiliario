@@ -9,7 +9,7 @@ import { caseDataContext } from "./CaseData";
 import { calcCaseData } from "./Calculator";
 import TableRentAppreciation from "@/components/tables/TableRentAppreciation";
 import TablePropertyAppreciation from "@/components/tables/TablePropertyAppreciation";
-import { FaEdit, FaExternalLinkAlt, FaSave } from "react-icons/fa";
+import { FaExternalLinkAlt, FaSave } from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
 import PropertyDataCard from "@/propertyData/ProperyDataCard";
@@ -26,6 +26,7 @@ import { uploadImage } from "@/lib/imgur";
 import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
 import ReportPreview from "@/reports/ReportPreview";
+import { RiEdit2Fill } from "react-icons/ri";
 
 export default function DirectFinancing(): JSX.Element {
   const pageContext = usePageContext();
@@ -125,7 +126,7 @@ export default function DirectFinancing(): JSX.Element {
           setCaseFormModal(true);
         }
       },
-      icon: id ? <FaEdit /> : <FaSave />,
+      icon: id ? <RiEdit2Fill /> : <FaSave />,
       tooltip: id ? "Editar" : "Salvar",
     },
 

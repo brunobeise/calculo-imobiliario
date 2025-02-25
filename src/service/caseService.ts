@@ -21,6 +21,7 @@ export const caseService = {
     id: string;
     propertyName: string;
     name: string;
+    shared: boolean;
   }) {
     try {
       const response = await api.post("/cases-duplicate", params);

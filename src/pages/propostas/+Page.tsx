@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from "react";
 import {
-  FaBook,
   FaCaretDown,
   FaCaretUp,
   FaFileAlt,
@@ -188,7 +187,7 @@ export default function MyCases() {
     return (
       <div
         ref={dropdownRef}
-        className="bg-white absolute top-14 shadow-lg w-max z-[2]"
+        className="bg-white absolute top-14 shadow-lg w-[240px] z-[2]"
       >
         <ContextSelectorButton
           onClick={() => {
@@ -197,11 +196,12 @@ export default function MyCases() {
           }}
           title={
             <div className="flex items-center text-primary gap-2">
-              <FaBook className="text-sm" />
+              <FaFileAlt className="text-sm" />
               <h3 className="font-bold !text-sm">Minhas Propostas</h3>
             </div>
           }
         />
+
         <ContextSelectorButton
           onClick={() => {
             setCasesContext("realEstateCases");
@@ -240,7 +240,10 @@ export default function MyCases() {
 
   const header = (
     <div className="flex justify-between ">
-      <div className="flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative">
+      <div
+        onClick={() => setCasesContextDropdown(!casesContextDropdown)}
+        className="cursor-pointer flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative"
+      >
         {casesContext === "myCases" && <FaFileAlt className="text-xl" />}
         {casesContext === "realEstateCases" && (
           <FaShareAltSquare className="text-md" />
