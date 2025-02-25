@@ -212,6 +212,7 @@ export default function FinancingPlanningReportSharedPage() {
               suites: proposalData.suites,
               subType: proposalData.subType,
               reportConfig: proposalData.reportConfig,
+              value: proposalData.value,
             }}
             ref={componentRef}
             page1Ref={page1Ref}
@@ -253,6 +254,7 @@ export default function FinancingPlanningReportSharedPage() {
               parkingSpaces: proposalData.parkingSpaces,
               suites: proposalData.suites,
               subType: proposalData.subType,
+              value: proposalData.value,
             }}
             ref={componentRef}
             page1Ref={page1Ref}
