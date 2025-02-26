@@ -14,6 +14,7 @@ interface CalculationTableProps {
   };
   color: string;
   secondary: string;
+  displayRentalAmount?: boolean;
 }
 
 const CalculationTable = ({
@@ -21,13 +22,14 @@ const CalculationTable = ({
   caseData,
   color,
   secondary,
+  displayRentalAmount = true,
 }: CalculationTableProps) => {
   return (
     <>
       <SectionTitle
         color={color}
         secondary={secondary}
-        title="Valorização do Imóvel e Projeção do Aluguel"
+        title={"Valorização do Imóvel e Projeção do Aluguel"}
         icon={<GrLineChart />}
       />
       <table
@@ -53,7 +55,9 @@ const CalculationTable = ({
             </th>
             <th
               style={{ borderColor: secondary }}
-              className="px-4 py-3 border-r border-b text-left"
+              className={`px-4 py-3 text-left ${
+                !displayRentalAmount ? "" : "border-r"
+              }`}
             >
               <div className="flex flex-col">
                 <strong>Projeção Aluguel</strong>
@@ -62,15 +66,19 @@ const CalculationTable = ({
                 </span>
               </div>
             </th>
-            <th
-              style={{ borderColor: secondary }}
-              className="px-4 py-3 border-b text-left"
-            >
-              <div className="flex flex-col">
-                <strong>Diferença</strong>
-                <span className="text-sm font-normal">aluguel - parcela</span>
-              </div>
-            </th>
+            {displayRentalAmount && (
+              <th
+                style={{ borderColor: secondary }}
+                className={`px-4 py-3 border-b text-left ${
+                  displayRentalAmount ? "" : "border-r"
+                }`}
+              >
+                <div className="flex flex-col">
+                  <strong>Diferença</strong>
+                  <span className="text-sm font-normal">aluguel - parcela</span>
+                </div>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -95,16 +103,20 @@ const CalculationTable = ({
                   </td>
                   <td
                     style={{ color, borderColor: secondary }}
-                    className="px-4 py-3 border-r border-t"
+                    className={`px-4 py-3 border-t ${
+                      displayRentalAmount ? "border-r" : ""
+                    }`}
                   >
                     {toBRL(item.rentValue)}
                   </td>
-                  <td
-                    style={{ color, borderColor: secondary }}
-                    className="px-4 py-3 border-t"
-                  >
-                    {toBRL(item.rentalAmount)}
-                  </td>
+                  {displayRentalAmount && (
+                    <td
+                      style={{ color, borderColor: secondary }}
+                      className="px-4 py-3 border-t"
+                    >
+                      {toBRL(item.rentalAmount)}
+                    </td>
+                  )}
                 </tr>
               );
           })}

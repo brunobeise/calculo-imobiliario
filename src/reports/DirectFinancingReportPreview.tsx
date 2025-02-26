@@ -16,6 +16,7 @@ import ConsideredData from "./components/preview/ConsideredData";
 import DetailChartAnalysis from "./components/preview/DetailChartAnalysis";
 import { calcCaseData } from "@/pages/parcelamentodireto/@id/Calculator";
 import { ReportData } from "./ReportPreview";
+import CalculationTable from "./components/preview/CalculationTable";
 
 interface DirectFinancingReportPreviewProps {
   configData: ReportData;
@@ -192,6 +193,16 @@ const DirectFinancingReportPreview = forwardRef<
                 title="Cálculo do investimento"
                 color={custom.primaryColor}
               />
+
+              <div className="w-full px-12 my-10">
+                <CalculationTable
+                  displayRentalAmount={false}
+                  color={custom.primaryColor}
+                  secondary={custom.secondaryColor}
+                  propertyData={propertyData}
+                  caseData={caseData}
+                />
+              </div>
 
               <ScenariosBuyAndSell
                 propertyData={propertyData}

@@ -96,7 +96,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({
           </Button>
         </>
       }
-      title="Criar Usuário"
+      title={editUser ? "Editar Usuário" : "Criar Usuário"}
       open={open}
       onClose={onClose}
     >

@@ -53,15 +53,19 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
       />
 
       <div style={{ color }} className="text-left">
-        <div id="investiemnto-inicial" className="pe-2">
-          <div className="flex text-md lg:text-lg">
-            <span style={{ color: secondary }}>Investimento inicial</span>
-            <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-            <strong className="text-red">
-              {toBRL(propertyData.downPayment + propertyData.financingFees)}
-            </strong>
+        {propertyData.downPayment + propertyData.financingFees !==
+          caseData.totalInvestment && (
+          <div id="investiemnto-inicial" className="pe-2">
+            <div className="flex text-md lg:text-lg">
+              <span style={{ color: secondary }}>Investimento inicial</span>
+              <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
+              <strong className="text-red">
+                {toBRL(propertyData.downPayment + propertyData.financingFees)}
+              </strong>
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="flex text-md lg:text-lg">
           <span style={{ color: secondary }}>Investimento Total</span>
           <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
@@ -69,13 +73,15 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
             {toBRL(caseData.totalInvestment)}
           </strong>
         </div>
-        <div className="flex text-[0.9rem] text-nowrap lg:text-lg">
-          <span style={{ color: secondary }}> Inv. total valor presente</span>
-          <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
-          <strong className="text-red">
-            {toBRL(caseData.investedEquityPresentValue)}
-          </strong>
-        </div>
+        {caseData.investedEquityPresentValue !== caseData.totalInvestment && (
+          <div className="flex text-[0.9rem] text-nowrap lg:text-lg">
+            <span style={{ color: secondary }}> Inv. total valor presente</span>
+            <div className="flex-grow border-b border-dotted mx-1 mb-1"></div>
+            <strong className="text-red">
+              {toBRL(caseData.investedEquityPresentValue)}
+            </strong>
+          </div>
+        )}
       </div>
       <div style={{ color }} className="text-right flex flex-col items-end">
         <p className=" text-md lg:text-xl">
