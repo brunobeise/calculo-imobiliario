@@ -121,7 +121,7 @@ const DraggableGalleryImage: React.FC<DraggableGalleryImageProps> = ({
         isOver || hoverIndex === index ? "opacity-50" : ""
       }`}
     >
-      <span className="text-white absolute ">{index}</span>
+      <span className="absolute rounded-full flex items-center justify-center bg-white text-primary w-6 h-6 m-2">{index + 1}</span>
       <img {...imageProps} src={photo.src} alt="Gallery Image" />
     </div>
   );
@@ -276,6 +276,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         </FormLabel>
         {multiple && fileSrcs.length > 2 && (
           <button
+            type="button"
             onClick={() => setSortModal(true)}
             className="!absolute !top-11 !right-2 !z-10  hover:text-grayScale-800 p-1 rounded bg-whitefull"
           >
@@ -286,27 +287,17 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         {fileSrcs.filter(Boolean).length > 1 ? (
           <div className="relative flex items-center gap-2 border border-border rounded p-4 min-h-24 w-full overflow-hidden">
             <div className="flex flex-wrap gap-2">
-              <ColumnsPhotoAlbum
-                photos={imageData}
-                spacing={5}
-                columns={2}
-                render={{
-                  image: ({ src }: RenderImageProps) => {
-                    const index = imageData.findIndex((img) => img.src === src);
-                    return (
-                      
-                      <DraggableImage
-                        key={index}
-                        src={src}
-                        index={index}
-                        handleDelete={handleDelete}
-                        handleReplace={handleReplace}
-                        source={label}
-                      />
-                    );
-                  },
-                }}
-              />
+              {fileSrcs.filter(Boolean).map((src, index) => (
+                <DraggableImage
+                  key={index}
+                  src={src}
+                  index={index}
+                  handleDelete={handleDelete}
+                  handleReplace={handleReplace}
+                  source={label}
+                />
+              ))}
+
               <div
                 className={`text-2xl flex items-center justify-center h-20 w-20 border border-grayScale-400 border-dashed rounded text-grayText hover:border-grayScale-400 cursor-pointer hover:bg-border`}
                 onClick={() => fileInputRef.current?.click()}
@@ -400,8 +391,8 @@ export const PictureInput: React.FC<PictureInputProps> = ({
                       key={src}
                       photo={{
                         src,
-                        width: Number(width) || 100,
-                        height: Number(height) || 100,
+                        width: Number(width),
+                        height: Number(height),
                       }}
                       imageProps={imageProps}
                       index={index}

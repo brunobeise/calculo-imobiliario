@@ -37,6 +37,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
       landArea: "",
       cod: "",
       features: [],
+      value: undefined,
     },
   });
 
@@ -195,7 +196,6 @@ export default function BuildingForm({ initialData, onSubmit }) {
             name="value"
             control={control}
             rules={{
-              required: "O nome do imóvel é obrigatório.",
               minLength: { value: 3, message: "Mínimo de 3 caracteres." },
               maxLength: { value: 50, message: "Máximo de 50 caracteres." },
             }}
@@ -204,7 +204,13 @@ export default function BuildingForm({ initialData, onSubmit }) {
                 <CurrencyInput
                   {...field}
                   label="Valor do Imóvel"
-                  onChange={(v) => setValue("value", Number(v.target.value))}
+                  onChange={(v) => {
+                    console.log(Number(v.target.value) > 0);
+
+                    Number(v.target.value) > 0
+                      ? setValue("value", Number(v.target.value))
+                      : setValue("value", null);
+                  }}
                 />
               </div>
             )}
