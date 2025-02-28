@@ -133,11 +133,13 @@ const DirectFinancingReportPreview = forwardRef<
                 className="h-[460px]"
               />
               {isAdvancedMode ? (
-                <Summary
-                  secondary={custom.secondaryColor}
-                  color={custom.primaryColor}
-                  items={sections}
-                />
+                configData.reportConfig.displaySummary && (
+                  <Summary
+                    secondary={custom.secondaryColor}
+                    color={custom.primaryColor}
+                    items={sections}
+                  />
+                )
               ) : (
                 <PropertyDescription
                   photoViewer={configData.reportConfig.photoViewer}

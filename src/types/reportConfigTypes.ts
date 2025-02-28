@@ -8,4 +8,5 @@ export interface ReportConfig {
   saveSessions: boolean;
   pageViewMap: boolean[];
   highlightSumPaymentsValues: boolean;
+  displaySummary: boolean
 }

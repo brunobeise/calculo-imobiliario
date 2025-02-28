@@ -530,6 +530,22 @@ export default function ReportPreview({
                 })
               }
             />
+            {configData.subType === "Avançado" && (
+              <BooleanInputSwitch
+                label="Mostrar Sumário"
+                checked={configData.reportConfig.displaySummary}
+                onChange={(v) =>
+                  onChange({
+                    ...configData,
+                    reportConfig: {
+                      ...configData.reportConfig,
+                      displaySummary: v,
+                    },
+                  })
+                }
+              />
+            )}
+
             {/* 
             <BooleanInputSwitch
               label="Exibir Botão de aceite"
