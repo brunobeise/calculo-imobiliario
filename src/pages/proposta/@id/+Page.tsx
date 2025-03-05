@@ -11,6 +11,7 @@ import DirectFinancingReportPreview from "@/reports/DirectFinancingReportPreview
 import Clarity from "@microsoft/clarity";
 import Dialog from "@/components/modals/Dialog";
 import { Button, Input } from "@mui/joy";
+import { usePageContext } from "vike-react/usePageContext";
 
 function useVisibility(ref: React.RefObject<HTMLElement>) {
   const timeVisibleRef = useRef(0);
@@ -53,6 +54,8 @@ export default function FinancingPlanningReportSharedPage() {
   const proposalData = useData<Proposal>();
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const pageContext = usePageContext();
+  const queryWhatsapp = pageContext.urlParsed.search.whatsapp;
 
   const auth = useAuth();
 
@@ -89,6 +92,9 @@ export default function FinancingPlanningReportSharedPage() {
   useEffect(() => {
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
       transports: ["websocket"],
+      query: {
+        whatsapp: queryWhatsapp,
+      },
     });
 
     newSocket.on("connect", () => {
