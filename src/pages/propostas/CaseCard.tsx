@@ -55,6 +55,7 @@ const CaseCard = ({
   const [duplicateCase, setDuplicateCase] = useState<Proposal | undefined>(
     undefined
   );
+  const [hasNewSession, setHasNewSession] = useState(casestudy.hasNewSession);
 
   const handleDelete = async () => {
     setDeleteLoading(true);
@@ -186,7 +187,7 @@ const CaseCard = ({
             )}
           </Menu>
         </Dropdown>
-        {casestudy.shared && (
+        {caseStudy.shared && (
           <Tooltip title="Estudo compartilhado">
             <div className=" text-primary border !absolute !top-2 !left-2 !p-[3px] !border-none !bg-white rounded-full shadow-lg">
               <IoShareSocialSharp className="text-md" />
@@ -202,6 +203,7 @@ const CaseCard = ({
                 e.stopPropagation();
                 e.preventDefault();
                 e.nativeEvent.stopImmediatePropagation();
+                setHasNewSession(false);
                 setSessionsModal(true);
               }}
               className={`relative text-primary !absolute top-[130px] !right-[-2px] rounded !bg-white  shadow flex gap-1 items-center justify-center h-10 w-14 hover:shadow-lg`}
@@ -212,7 +214,7 @@ const CaseCard = ({
           </Tooltip>
         )}
 
-        {casestudy.hasNewSession && !realEstateCase && !adminCase && (
+        {hasNewSession && !realEstateCase && !adminCase && (
           <FaExclamationCircle className="absolute top-[127px] !right-[44px] text-primary bg-white rounded-full border-[1px] border-white text-lg" />
         )}
 
