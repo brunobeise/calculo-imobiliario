@@ -23,8 +23,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
 const menuItems = [
-  { path: "/cenarios", label: "Nova Proposta", icon: <FaFileCirclePlus /> },
   { path: "/dashboard", label: "Dashboard", icon: <BiSolidDashboard /> },
+  { path: "/cenarios", label: "Nova Proposta", icon: <FaFileCirclePlus /> },
+
   { path: "/propostas", label: "Propostas", icon: <FaFileAlt /> },
   {
     path: "/imobiliaria",
