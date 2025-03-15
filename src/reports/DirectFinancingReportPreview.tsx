@@ -198,7 +198,7 @@ const DirectFinancingReportPreview = forwardRef<
 
               <div className="w-full px-12 my-10">
                 <CalculationTable
-                  displayRentalAmount={false}
+               
                   color={custom.primaryColor}
                   secondary={custom.secondaryColor}
                   propertyData={propertyData}
