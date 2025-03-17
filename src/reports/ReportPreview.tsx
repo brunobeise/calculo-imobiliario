@@ -187,6 +187,8 @@ export default function ReportPreview({
             buildingPhoto={configData.mainPhoto}
             onUnlink={() => onChange({ ...configData, buildingId: null })}
             onLink={(building) => {
+              console.log(building.bedrooms);
+              
               onChange({
                 ...configData,
                 mainPhoto: building.mainPhoto,
@@ -195,6 +197,7 @@ export default function ReportPreview({
                 additionalPhotos: building.additionalPhotos,
                 features: building.features,
                 suites: building.suites,
+                bedrooms: building.bedrooms,
                 bathrooms: building.bathrooms,
                 parkingSpaces: building.parkingSpaces,
                 builtArea: building.builtArea,
@@ -259,7 +262,7 @@ export default function ReportPreview({
             </FormControl>
 
             <FormControl>
-              <FormLabel component="label" htmlFor="suites">
+              <FormLabel component="label" htmlFor="bedrooms">
                 Quartos
               </FormLabel>
               <Input

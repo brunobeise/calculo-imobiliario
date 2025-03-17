@@ -85,10 +85,7 @@ const PropertyDataDisplay: React.FC<PropertyDataDisplayProps> = ({
               <strong>Taxa de Apreciação Aluguel:</strong>{" "}
               {propertyData.rentAppreciationRate}%
             </p>
-            <p>
-              <strong>Taxa de Desconto VP:</strong>{" "}
-              {propertyData.PVDiscountRate}%
-            </p>
+          
             <p>
               <strong>Taxa de corretagem:</strong> {propertyData.brokerageFee}%
             </p>

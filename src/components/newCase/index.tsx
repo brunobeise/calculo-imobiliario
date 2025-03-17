@@ -115,7 +115,7 @@ export default function NewCase(props: NewCaseProps) {
                 subsidy: p.subsidy || 0,
                 initialRentValue: p.initialRentValue || 0,
                 rentAppreciationRate: p.rentAppreciationRate || 0,
-                monthlyYieldRate: p.monthlyYieldRate || 0,
+                annualYieldRate: p.annualYieldRate || 0,
               });
               props.setNewCase(false);
             } else {

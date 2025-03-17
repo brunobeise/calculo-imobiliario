@@ -125,9 +125,9 @@ export default function Building() {
                 <strong>Valor do imóvel:</strong> {toBRL(building.value)}{" "}
               </p>
             )}
-            {building?.suites && (
+            {building?.bedrooms && (
               <p>
-                <strong>Dormitórios:</strong> {building?.suites}{" "}
+                <strong>Dormitórios:</strong> {building?.bedrooms} {building.suites ? `(${building.suites} suítes)` : ''}
               </p>
             )}
             {building?.bathrooms && (

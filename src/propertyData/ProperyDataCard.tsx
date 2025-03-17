@@ -158,7 +158,7 @@ export default function PropertyDataCard({
               <div className="grid grid-cols-2 gap-5">
                 {!isFieldHidden("initialRentValue") && (
                   <CurrencyInput
-                    label="Valor Inicial do aluguel:"
+                    label="Valor Inicial do aluguel HOJE:"
                     id="initialRentValue"
                     value={propertyData.initialRentValue}
                     onChange={(v) =>
@@ -284,6 +284,7 @@ export default function PropertyDataCard({
                     "MM/YYYY"
                   ).format("MM/YYYY")}
                   label="Data do pagamento da documentação"
+                  disabled={!propertyData.financingFees}
                   onChange={(v) => setPropertyData("financingFeesDate", v)}
                 />
               </div>
@@ -469,6 +470,7 @@ export default function PropertyDataCard({
                     "MM/YYYY"
                   ).format("MM/YYYY")}
                   label="Data do pagamento da documentação"
+                  disabled={!propertyData.financingFees}
                   onChange={(v) => setPropertyData("financingFeesDate", v)}
                 />
               </div>
@@ -562,27 +564,16 @@ export default function PropertyDataCard({
               />
             )}
 
-            {!isFieldHidden("monthlyYieldRate") && (
+            {!isFieldHidden("annualYieldRate") && (
               <PercentageInput
-                label="Rendimento aplicação no mercado financeiro:"
-                id="monthlyYieldRate"
-                value={propertyData.monthlyYieldRate}
+                label="Rendimento anual aplicação no mercado financeiro:"
+                id="annualYieldRate"
+                value={propertyData.annualYieldRate}
                 infoTooltip="Taxa de retorno anual estimada ao investir o dinheiro no mercado financeiro, como poupança, ações ou fundos de investimento."
-                onChange={(v) =>
-                  handleChangeNumber("monthlyYieldRate", v.target.value)
-                }
-              />
-            )}
-
-            {!isFieldHidden("PVDiscountRate") && (
-              <PercentageInput
-                label="Taxa de desconto anual para valor presente:"
-                id="PVDiscountRate"
-                value={propertyData.PVDiscountRate}
-                infoTooltip="Percentual usado para ajustar o valor de um dinheiro que você vai receber no futuro, trazendo-o para o valor que ele teria hoje."
-                onChange={(v) =>
-                  handleChangeNumber("PVDiscountRate", v.target.value)
-                }
+                onChange={(v) => {
+                  handleChangeNumber("annualYieldRate", v.target.value);
+                  handleChangeNumber("PVDiscountRate", v.target.value);
+                }}
               />
             )}
 
@@ -602,7 +593,7 @@ export default function PropertyDataCard({
               />
             )}
 
-            {!isFieldHidden("cdi") && (
+            {/* {!isFieldHidden("cdi") && (
               <PercentageInput
                 label="CDI"
                 id="cdi"
@@ -610,7 +601,7 @@ export default function PropertyDataCard({
                 infoTooltip="Taxa média de juros dos empréstimos entre bancos no Brasil, utilizada para comparar o investimento imobiliário."
                 onChange={(v) => handleChangeNumber("cdi", v.target.value)}
               />
-            )}
+            )} */}
 
             {!isFieldHidden("rentAppreciationRate") && (
               <PercentageInput

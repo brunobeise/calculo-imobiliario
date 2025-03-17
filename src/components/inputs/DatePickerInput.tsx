@@ -10,6 +10,7 @@ interface DatePickerProps {
   defaultValue?: string;
   noHeight?: boolean;
   width?: string;
+  disabled?: boolean;
 }
 
 const months = [
@@ -34,6 +35,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   defaultValue,
   noHeight,
   width = "100%",
+  disabled = false,
 }) => {
   const initialMonth = defaultValue
     ? dayjs(defaultValue, "MM/YYYY").month()
@@ -104,9 +106,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </div>
       <div className="flex items-center space-x-2">
         <Input
+          disabled={disabled}
           style={{ width: width }}
           type="text"
-          value={inputValue}
+          value={disabled ? "" : inputValue}
           readOnly
           endDecorator={
             <div onClick={toggleModal} className="cursor-pointer text-grayText">

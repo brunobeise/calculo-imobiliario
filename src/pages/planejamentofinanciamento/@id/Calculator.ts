@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 export function calcCaseData(propertyData: PropertyData) {
   const detailedTable = calcDetailedTable(propertyData);
 
+
   const isFinancingFeesInitial =
     propertyData.financingFeesDate === propertyData.initialDate;
 
@@ -342,11 +343,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
       initialInvestment += propertyData.financingFees;
     }
 
-    // Rendimento do capital atual (se for positivo)
+    const annualYieldRate = propertyData.annualYieldRate / 100;
+    const monthlyYieldRate = Math.pow(1 + annualYieldRate, 1 / 12) - 1;
+
     const capitalYield =
-      initialCapital > 0
-        ? (initialCapital * propertyData.monthlyYieldRate) / 100
-        : 0;
+      initialCapital >= 0 ? initialCapital * monthlyYieldRate : 0;
 
     // Valor atualizado do imóvel (valorização)
     const propertyValue = calcPropertyValuation(

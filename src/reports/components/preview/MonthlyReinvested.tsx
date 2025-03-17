@@ -217,7 +217,7 @@ export default function MonthlyReinvested(props: MonthlyReinvestedProps) {
         <p style={{ color: secondary }}>
           Juros Considerados:{" "}
           <span style={{ color }} className="font-bold">
-            {propertyData.monthlyYieldRate + "%/mês"}
+            {propertyData.annualYieldRate + "%/ano"}
           </span>
         </p>
       </div>

@@ -261,13 +261,26 @@ export default function BuildingForm({ initialData, onSubmit }) {
           />
         </div>
         <Controller
-          name="suites"
+          name="bedrooms"
           control={control}
           rules={{}}
           render={({ field }) => (
             <TextInput
               {...field}
               label="Número de Quartos"
+              onChange={(v) => setValue("bedrooms", v)}
+              error={errors.suites?.message}
+            />
+          )}
+        />
+        <Controller
+          name="suites"
+          control={control}
+          rules={{}}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label="Número de Suites"
               onChange={(v) => setValue("suites", v)}
               error={errors.suites?.message}
             />

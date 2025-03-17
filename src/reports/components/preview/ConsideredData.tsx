@@ -58,11 +58,7 @@ export default function ConsideredData(props: ConsideredDataProps) {
               )}
             </p>
           )}
-          {propertyData.PVDiscountRate > 0 && (
-            <p>
-              Taxa de desconto (VP): {propertyData.PVDiscountRate.toFixed(2)}%
-            </p>
-          )}
+        
         </div>
 
         <div className="flex flex-col gap-1">
@@ -104,10 +100,10 @@ export default function ConsideredData(props: ConsideredDataProps) {
             <p>Cálculo feito em: {propertyData.finalYear} anos</p>
           )}
           {caseData.finalRow?.totalCapital > 0 &&
-            propertyData.monthlyYieldRate > 0 && (
+            propertyData.annualYieldRate > 0 && (
               <p>
                 Rendimento mercado financeiro:{" "}
-                {propertyData.monthlyYieldRate.toFixed(2)}%
+                {propertyData.annualYieldRate.toFixed(2)}%
               </p>
             )}
         </div>

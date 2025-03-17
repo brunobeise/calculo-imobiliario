@@ -250,7 +250,7 @@ export default function DirectFinancing(): JSX.Element {
             titles={
               actualCase?.subType === "Simplificado"
                 ? ["Custos e Valores do Imóvel", "Fluxo de Pagamento"]
-                : ["Dados do imóvel e Financiamento", "Fluxo de Pagamento"]
+                : ["Dados do imóvel e Parcelamento", "Fluxo de Pagamento"]
             }
             hideSheets={hideSheets}
             hideFields={hideFields}

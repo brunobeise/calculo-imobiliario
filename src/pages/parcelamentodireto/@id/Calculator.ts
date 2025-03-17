@@ -29,8 +29,6 @@ export function calcCaseData(propertyData: PropertyData) {
     capitalGainsTax
   );
 
-  console.log(detailedTable[detailedTable.length - 1]);
-
   return {
     totalInvestment:
       propertyData.downPayment +
@@ -250,10 +248,11 @@ export function calcDetailedTable(propertyData: PropertyData) {
     totalRentalShortfall += investmentExcess;
     initialInvestment += investmentExcess;
 
+    const annualYieldRate = propertyData.annualYieldRate / 100;
+    const monthlyYieldRate = Math.pow(1 + annualYieldRate, 1 / 12) - 1;
+
     const capitalYield =
-      initialCapital >= 0
-        ? (initialCapital * propertyData.monthlyYieldRate) / 100
-        : 0;
+      initialCapital >= 0 ? initialCapital * monthlyYieldRate : 0;
 
     const propertyValue = calcPropertyValuation(
       propertyData.propertyValue,

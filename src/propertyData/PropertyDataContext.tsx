@@ -18,7 +18,7 @@ export type PropertyData = {
   inCashFees: number;
   financingFees: number;
   financingFeesDate: string;
-  monthlyYieldRate: number;
+  annualYieldRate: number;
   rentMonthlyYieldRate: number;
   personalBalance: number;
   finalYear: number;

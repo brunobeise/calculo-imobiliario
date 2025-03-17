@@ -50,9 +50,13 @@ export default function LinkBuildingButton({
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [orderBy, setOrderBy] = useState(
+    localStorage.getItem("orderBy") || "propertyName"
+  );
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">(
+    (localStorage.getItem("sortDirection") as "asc" | "desc") || "desc"
+  );
   const [currentPage, setCurrentPage] = useState(1);
-  const [orderBy, setOrderBy] = useState("propertyName");
 
   const [syncLoading, setSyncLoading] = useState(false);
 

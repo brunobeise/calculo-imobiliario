@@ -152,8 +152,7 @@ export default function PropertyDescription({
           </div>
         )}
       </div>
-
-      {imageData.length > 0 && (
+      {imageData.length > 0 && configData.additionalPhotos.length > 1 && (
         <div className="my-4">
           <ColumnsPhotoAlbum
             photos={imageData}

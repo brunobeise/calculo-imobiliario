@@ -132,20 +132,19 @@ const DirectFinancingReportPreview = forwardRef<
                 overlayHeight={200}
                 className="h-[460px]"
               />
-              {isAdvancedMode ? (
-                configData.reportConfig.displaySummary && (
-                  <Summary
-                    secondary={custom.secondaryColor}
-                    color={custom.primaryColor}
-                    items={sections}
-                  />
-                )
-              ) : (
-                <PropertyDescription
-                  photoViewer={configData.reportConfig.photoViewer}
-                  color={custom.primaryColor}
+
+              <PropertyDescription
+                photoViewer={configData.reportConfig.photoViewer}
+                color={custom.primaryColor}
+                secondary={custom.secondaryColor}
+                configData={configData}
+              />
+
+              {configData.reportConfig.displaySummary && (
+                <Summary
                   secondary={custom.secondaryColor}
-                  configData={configData}
+                  color={custom.primaryColor}
+                  items={sections}
                 />
               )}
             </div>
@@ -198,7 +197,6 @@ const DirectFinancingReportPreview = forwardRef<
 
               <div className="w-full px-12 my-10">
                 <CalculationTable
-               
                   color={custom.primaryColor}
                   secondary={custom.secondaryColor}
                   propertyData={propertyData}
@@ -269,18 +267,6 @@ const DirectFinancingReportPreview = forwardRef<
 
           {isPageViewActive(7) && isAdvancedMode && (
             <div id="section5" ref={page8Ref} className="w-full">
-              <ReportDivider
-                bars={30}
-                title="Descrição do Imóvel"
-                color={custom.primaryColor}
-              />
-              <PropertyDescription
-                photoViewer={configData.reportConfig.photoViewer}
-                color={custom.primaryColor}
-                secondary={custom.secondaryColor}
-                configData={configData}
-              />
-
               <ReportDivider
                 bars={29}
                 title="Dados Considerados"

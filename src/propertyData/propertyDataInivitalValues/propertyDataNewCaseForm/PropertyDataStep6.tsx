@@ -35,28 +35,16 @@ export default function PropertyDataStep6({
           onChange={(v) => setForm("brokerageFee", Number(v.target.value))}
         />
 
-        <PercentageInput
-          label="CDI:"
-          id="cdi"
-          value={form.cdi}
-          onChange={(v) => setForm("cdi", Number(v.target.value))}
-        />
-
-        <PercentageInput
-          placeholder={8}
-          label="Taxa de desconto anual para valor presente:"
-          id="PVDiscountRate"
-          value={form.PVDiscountRate}
-          onChange={(v) => setForm("PVDiscountRate", Number(v.target.value))}
-        />
-
         {form.investTheRest && (
           <PercentageInput
-            label="Rendimento mensal aplicação no mercado financeiro:"
-            placeholder={"0,9"}
-            id="monthlyYieldRate"
-            value={form.monthlyYieldRate}
-            onChange={(v) => setForm("monthlyYieldRate", Number(v.target.value))}
+            label="Rendimento anual aplicação no mercado financeiro:"
+            placeholder={"12"}
+            id="annualYieldRate"
+            value={form.annualYieldRate}
+            onChange={(v) => {
+              setForm("annualYieldRate", Number(v.target.value));
+              setForm("PVDiscontRate", Number(v.target.value));
+            }}
           />
         )}
       </div>

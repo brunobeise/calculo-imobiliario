@@ -32,7 +32,7 @@ export default function PropertyDataStep5({
         {!form.isHousing && (
           <>
             <CurrencyInput
-              label="Valor inicial do aluguel:"
+              label="Valor inicial do aluguel HOJE:"
               id="initialRentValue"
               value={form.initialRentValue}
               onChange={(v) => setForm("initialRentValue", Number(v.target.value))}

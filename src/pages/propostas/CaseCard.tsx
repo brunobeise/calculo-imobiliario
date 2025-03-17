@@ -64,7 +64,7 @@ const CaseCard = ({
       await caseService.updateCase(casestudy.id, {
         isArchived: true,
       });
-      dispatch(fetchCases(undefined));
+      dispatch(fetchCases({ type: casestudy.type }));
     } catch (error) {
       console.error("Erro ao editar case:", error);
     } finally {

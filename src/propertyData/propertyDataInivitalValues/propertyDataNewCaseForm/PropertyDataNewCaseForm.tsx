@@ -92,9 +92,7 @@ export default function PropertyDataNewCaseForm({
           !form.financingMonths) ||
         (activeStep === 4 && !form.isHousing && !form.initialRentValue) ||
         (activeStep === 4 && !form.isHousing && !form.rentAppreciationRate) ||
-        (activeStep === 5 && form.investTheRest && !form.monthlyYieldRate) ||
-        (activeStep === 5 && !form.PVDiscountRate) ||
-        (activeStep === 5 && !form.brokerageFee)
+        (activeStep === 5 && form.investTheRest && !form.annualYieldRate)
       );
     else
       return (

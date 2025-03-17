@@ -12,7 +12,7 @@ const data = {
   inCashFees: 17000,
   financingFees: 11000,
   financingFeesDate: dayjs().add(1, "month").format("MM/YYYY"),
-  monthlyYieldRate: 0.8,
+  annualYieldRate: 12,
   rentMonthlyYieldRate: 0.8,
   personalBalance: 517000,
   finalYear: 7,
