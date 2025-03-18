@@ -45,7 +45,7 @@ const ReinforcementsCard = ({
     [handleHeight]
   );
 
-  const handleResize = (e, { size }) => {
+  const handleResize = (_, { size }) => {
     setHeight(size.height);
     debouncedHandleHeight(size.height);
   };
