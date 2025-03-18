@@ -5,7 +5,7 @@ import UserSignature from "@/components/user/UserSignature";
 import ImageWithOverlay from "./components/preview/ImageWithOverlary";
 import Summary from "./components/preview/Summary";
 import ReportDivider from "./components/preview/ReportDivider";
-import PaymentConditions from "./components/preview/PaymentConditions";
+import PaymentConditions from "./components/preview/PaymentConditions/PaymentConditions";
 import ProjectionReturn from "./components/preview/ReturnProjection";
 import ScenariosBuyAndSell from "./components/preview/ScenariosBuyAndSell";
 import InitialDivisionCharts from "./components/preview/InitialDivisionCharts";
@@ -37,6 +37,12 @@ interface DirectFinancingReportPreviewProps {
   page6Ref?: React.RefObject<HTMLDivElement>;
   page7Ref?: React.RefObject<HTMLDivElement>;
   page8Ref?: React.RefObject<HTMLDivElement>;
+  handlePaymentConditionsConfig?: (payload: {
+    order: string[];
+    downPaymentHeight: number;
+    reinforcementsHeight: number;
+    contructionInterestHeight: number;
+  }) => void;
 }
 
 const DirectFinancingReportPreview = forwardRef<
@@ -47,6 +53,7 @@ const DirectFinancingReportPreview = forwardRef<
     {
       configData,
       propertyData,
+      handlePaymentConditionsConfig,
       user,
       preview,
       page1Ref,
@@ -175,6 +182,8 @@ const DirectFinancingReportPreview = forwardRef<
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
                 hasBankFinancing={false}
+                handlePaymentConditionsConfig={handlePaymentConditionsConfig}
+                config={configData.reportConfig.paymentConditionsConfig}
               />
               {isAdvancedMode && (
                 <ProjectionReturn

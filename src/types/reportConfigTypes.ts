@@ -8,5 +8,11 @@ export interface ReportConfig {
   saveSessions: boolean;
   pageViewMap: boolean[];
   highlightSumPaymentsValues: boolean;
-  displaySummary: boolean
+  displaySummary: boolean;
+  paymentConditionsConfig: {
+    order: string[];
+    downPaymentHeight: number;
+    reinforcementsHeight: number;
+    contructionInterestHeight: number;
+  };
 }

@@ -6,7 +6,7 @@ import UserSignature from "@/components/user/UserSignature";
 import ImageWithOverlay from "./components/preview/ImageWithOverlary";
 import Summary from "./components/preview/Summary";
 import ReportDivider from "./components/preview/ReportDivider";
-import PaymentConditions from "./components/preview/PaymentConditions";
+import PaymentConditions from "./components/preview/PaymentConditions/PaymentConditions";
 import ProjectionReturn from "./components/preview/ReturnProjection";
 import ScenariosBuyAndSell from "./components/preview/ScenariosBuyAndSell";
 import UnderstandFinancing from "./components/preview/UnderstandFinancing";
@@ -21,6 +21,12 @@ import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 
 interface FinancingPlanningReportPreviewProps {
   configData: ReportData;
+  handlePaymentConditionsConfig?: (payload: {
+    order: string[];
+    downPaymentHeight: number;
+    reinforcementsHeight: number;
+    contructionInterestHeight: number;
+  }) => void;
   propertyData?: PropertyData;
   user?: User;
   preview?: boolean;
@@ -50,6 +56,7 @@ const FinancingPlanningReportPreview = forwardRef<
       propertyData,
       user,
       preview,
+      handlePaymentConditionsConfig,
       page1Ref,
       page2Ref,
       page3Ref,
@@ -60,6 +67,7 @@ const FinancingPlanningReportPreview = forwardRef<
       page8Ref,
       custom,
     }: FinancingPlanningReportPreviewProps,
+
     ref
   ) => {
     if (!propertyData) return null;
@@ -163,6 +171,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 />
               )}
               <PaymentConditions
+                handlePaymentConditionsConfig={handlePaymentConditionsConfig}
                 highlightSumPaymentsValues={
                   configData.reportConfig.highlightSumPaymentsValues
                 }
@@ -177,6 +186,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 propertyData={propertyData}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
+                config={configData.reportConfig.paymentConditionsConfig}
               />
               {isAdvancedMode && (
                 <ProjectionReturn

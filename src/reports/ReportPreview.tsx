@@ -140,6 +140,21 @@ export default function ReportPreview({
     }
   };
 
+  const handlePaymentConditionsConfig = (payload: {
+    order: string[];
+    downPaymentHeight: number;
+    reinforcementsHeight: number;
+    contructionInterestHeight: number;
+  }) => {
+    onChange({
+      ...configData,
+      reportConfig: {
+        ...configData.reportConfig,
+        paymentConditionsConfig: payload,
+      },
+    });
+  };
+
   const renderPreview = () => {
     if (context === "directFinancing")
       return (
@@ -155,6 +170,7 @@ export default function ReportPreview({
           configData={configData}
           ref={componentRef}
           user={userData}
+          handlePaymentConditionsConfig={handlePaymentConditionsConfig}
         />
       );
 
@@ -172,6 +188,7 @@ export default function ReportPreview({
           configData={configData}
           ref={componentRef}
           user={userData}
+          handlePaymentConditionsConfig={handlePaymentConditionsConfig}
         />
       );
   };
@@ -188,7 +205,7 @@ export default function ReportPreview({
             onUnlink={() => onChange({ ...configData, buildingId: null })}
             onLink={(building) => {
               console.log(building.bedrooms);
-              
+
               onChange({
                 ...configData,
                 mainPhoto: building.mainPhoto,
