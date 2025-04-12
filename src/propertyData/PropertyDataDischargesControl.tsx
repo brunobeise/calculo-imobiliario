@@ -17,7 +17,7 @@ import { PropertyData } from "./PropertyDataContext";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { useForm, Controller } from "react-hook-form";
 import { toBRL } from "@/lib/formatter";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaPen } from "react-icons/fa6";
 
 import PercentageInput from "@/components/inputs/PercentageInput";
 import DatePicker from "@/components/inputs/DatePickerInput";
@@ -39,6 +39,18 @@ export interface Discharge {
   description?: string;
 }
 
+const typeMap: Record<string, string> = {
+  monthly: "Mensal",
+  bimonthly: "Bimestral",
+  quarterly: "Trimestral",
+  "semi-annual": "Semestral",
+  annual: "Anual",
+  "three-yearly": "Tri-Anual",
+  personalized: "Aporte Único",
+  "payment-in-kind": "Dação em Pagamento",
+  "key-handover": "Entrega das Chaves",
+};
+
 export default function PropertyDataDischargesControl({
   propertyData,
   setPropertyData,
@@ -55,6 +67,9 @@ export default function PropertyDataDischargesControl({
 }) {
   const [addDischargeModal, setAddDischargeModal] = useState(false);
   const [dischargesDetailModal, setDischargesDetailModal] = useState(false);
+  const [editDischargeIndex, setEditDischargeIndex] = useState<number | null>(
+    null
+  );
 
   const {
     control,
@@ -91,17 +106,6 @@ export default function PropertyDataDischargesControl({
     description?: string;
   }) => {
     setAddDischargeModal(false);
-    const typeMap: Record<string, string> = {
-      monthly: "Mensal",
-      bimonthly: "Bimestral",
-      quarterly: "Trimestral",
-      "semi-annual": "Semestral",
-      annual: "Anual",
-      "three-yearly": "Tri-Anual",
-      personalized: "Aporte Único",
-      "payment-in-kind": "Dação em Pagamento",
-      "key-handover": "Entrega das Chaves",
-    };
 
     const increment = (type: string): number => {
       switch (type) {
@@ -203,21 +207,25 @@ export default function PropertyDataDischargesControl({
       });
     }
 
-    setPropertyData("discharges", [
-      ...propertyData.discharges,
-      ...newDischarges,
-    ]);
+    if (editDischargeIndex !== null) {
+      const original = propertyData.discharges[editDischargeIndex];
+      const filtered = propertyData.discharges.filter(
+        (d) =>
+          d.initialMonth !== original.initialMonth || d.type !== original.type
+      );
+
+      setPropertyData("discharges", [...filtered, ...newDischarges]);
+      setEditDischargeIndex(null);
+    } else {
+      setPropertyData("discharges", [
+        ...propertyData.discharges,
+        ...newDischarges,
+      ]);
+    }
 
     setTimeout(() => {
       reset();
     }, 500);
-  };
-
-  const handleRemoveDischarge = (indexToRemove: number) => {
-    setPropertyData(
-      "discharges",
-      propertyData.discharges.filter((_, index) => index !== indexToRemove)
-    );
   };
 
   const handleRemoveDischargeGroup = (group: GroupedDischarge) => {
@@ -300,7 +308,22 @@ export default function PropertyDataDischargesControl({
 
         <Button
           size="sm"
-          onClick={() => setAddDischargeModal(true)}
+          onClick={() => {
+            reset({
+              dischargeType: null,
+              month: dayjs().add(1, "month").format("MM/YYYY"),
+              amount: 0,
+              installments: 1,
+              isDownPayment: true,
+              isConstructionInterest: false,
+              isInstallmentPlan: false,
+              indexType: null,
+              indexValue: 0,
+              description: "",
+            });
+            setEditDischargeIndex(null);
+            setAddDischargeModal(true);
+          }}
           className="ms-2"
           color="primary"
         >
@@ -310,13 +333,14 @@ export default function PropertyDataDischargesControl({
       <Divider />
       {propertyData.discharges.length > 0 && (
         <div className={`overflow-y-auto max-h-[100%]`}>
-          <Table stickyHeader>
+          <Table variant="outlined" stickyHeader>
             <thead>
               <tr>
-                <th>Tipo</th>
-                <th>Modelo</th>
-                <th>Parcelas</th> <th>Valor</th>
-                <th className="w-[40px]"></th>
+                <th className="!bg-grayScale-100">Tipo</th>
+                <th className="!bg-grayScale-100">Modelo</th>
+                <th className="!bg-grayScale-100">Parcelas</th>
+                <th className="!bg-grayScale-100">Valor</th>
+                <th className="w-[80px] !bg-grayScale-100"></th>
               </tr>
             </thead>
             <tbody>
@@ -336,12 +360,55 @@ export default function PropertyDataDischargesControl({
 
                     <td>{item.count}x</td>
                     <td>{toBRL(item.originalValue)}</td>
-                    <td className="w-[40px]">
+                    <td className="flex justify-end items-center gap-2 w-[80px]">
+                      <FaPen
+                        className="cursor-pointer text-grayScale-700 hover:opacity-90"
+                        onClick={() => {
+                          const dischargeToEdit = groupDischarges(
+                            propertyData.discharges
+                          )[index];
+
+                          const dischargeIndex =
+                            propertyData.discharges.findIndex(
+                              (d) =>
+                                d.initialMonth ===
+                                  dischargeToEdit.initialMonth &&
+                                d.type === dischargeToEdit.type
+                            );
+
+                          const d = propertyData.discharges[dischargeIndex];
+                          reset({
+                            dischargeType:
+                              Object.keys(typeMap).find(
+                                (k) => typeMap[k] === d.type
+                              ) ?? null,
+                            month: dayjs(propertyData.initialDate, "MM/YYYY")
+                              .add(d.month, "month")
+                              .format("MM/YYYY"),
+                            amount: d.originalValue,
+                            installments:
+                              groupDischarges(propertyData.discharges).find(
+                                (g) =>
+                                  g.initialMonth === d.initialMonth &&
+                                  g.type === d.type
+                              )?.count ?? 1,
+                            isDownPayment: d.isDownPayment,
+                            isConstructionInterest: d.isConstructionInterest,
+                            isInstallmentPlan: d.isInstallmentPlan,
+                            indexType: d.indexType ?? null,
+                            indexValue: d.indexValue ?? 0,
+                            description: d.description ?? "",
+                          });
+
+                          setEditDischargeIndex(dischargeIndex);
+                          setAddDischargeModal(true);
+                        }}
+                        title="Editar"
+                      />
                       <FaTrash
-                        className="hover:opacity-90"
+                        className="cursor-pointer text-grayScale-700 hover:opacity-90"
                         onClick={() => handleRemoveDischargeGroup(item)}
-                        style={{ cursor: "pointer" }}
-                        title="Remover Grupo"
+                        title="Remover"
                       />
                     </td>
                   </tr>
@@ -353,7 +420,11 @@ export default function PropertyDataDischargesControl({
       )}
 
       <Dialog
-        title={"Novo Aporte Adicional"}
+        title={
+          editDischargeIndex !== null
+            ? "Editar Aporte"
+            : "Novo Aporte Adicional"
+        }
         onClose={() => {
           reset();
           setAddDischargeModal(false);
@@ -625,7 +696,7 @@ export default function PropertyDataDischargesControl({
               Cancelar
             </Button>
             <Button type="submit" variant="solid" color="primary">
-              Adicionar
+              {editDischargeIndex !== null ? "Adicionar" : "Salvar"}
             </Button>
           </div>
         </form>
@@ -634,10 +705,10 @@ export default function PropertyDataDischargesControl({
       <Dialog
         open={dischargesDetailModal}
         onClose={() => setDischargesDetailModal(false)}
-        title={title || "Aportes Adicionais"}
+        title={"Visão Detalhada"}
       >
-        <div className="overflow-y-auto w-[800px]">
-          <Table>
+        <div className="overflow-y-auto max-h-[720px] w-[800px]">
+          <Table stickyHeader>
             <thead>
               <tr>
                 <th className="w-[90px]">Mês</th>
@@ -645,7 +716,6 @@ export default function PropertyDataDischargesControl({
                 <th>Valor Original</th>
                 <th>Valor real</th>
                 {propertyData.PVDiscountRate && <th>Valor Presente</th>}
-                <th className="w-[30px]"></th>
               </tr>
             </thead>
             <tbody>
@@ -675,12 +745,6 @@ export default function PropertyDataDischargesControl({
                       {propertyData.PVDiscountRate && (
                         <td>{toBRL(presentValue)}</td>
                       )}
-                      <td className="flex justify-end items-center">
-                        <FaTrash
-                          onClick={() => handleRemoveDischarge(index)}
-                          style={{ cursor: "pointer" }}
-                        />
-                      </td>
                     </tr>
                   );
                 })}

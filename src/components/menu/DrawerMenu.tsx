@@ -91,7 +91,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           onClick={() => navigate("/usuario").then(() => toggleBackdrop(false))}
         >
           <ListItem
-            className={`!ms-5 !h-12 !px-2 !my-3 !mb-4 flex items-center ${
+            className={`!ms-5 !h-10 !px-1 !my-3 !mb-5 flex items-center ${
               pageContext.urlPathname === "/usuario" ? "!text-primary" : ""
             }`}
           >
@@ -111,7 +111,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                 />
               )}
             </div>
-            <Typography className="!ms-4 flex-1">
+            <Typography className="!ms-3 !text-[0.96rem] flex-1">
               {userData?.fullName ? (
                 <p
                   className={`font-bold ${
@@ -127,7 +127,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
               )}
               {userData?.role ? (
                 <p
-                  className={`text-sm ${
+                  className={`text-xs ${
                     pageContext.urlPathname === "/usuario"
                       ? "!text-primary"
                       : "!text-black"
