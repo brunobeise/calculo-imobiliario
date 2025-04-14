@@ -187,9 +187,17 @@ export default function PropertyDataDischargesControl({
         startMonth) ||
       data.dischargeType === "key-handover"
     ) {
+      const monthsUntilHandover = startMonth;
+      const monthlyRate = data.indexValue ? data.indexValue / 100 : 0;
+
+      const correctedValue =
+        data.dischargeType === "key-handover" && data.indexValue
+          ? data.amount * Math.pow(1 + monthlyRate, monthsUntilHandover)
+          : data.amount;
+
       newDischarges.push({
         month: startMonth,
-        value: data.amount,
+        value: correctedValue,
         type: `${typeMap[data.dischargeType]} ${startMonth}`,
         initialMonth: data.dischargeType === "payment-in-kind" ? 0 : startMonth,
         isConstructionInterest: false,
@@ -200,12 +208,13 @@ export default function PropertyDataDischargesControl({
             ? false
             : data.isDownPayment,
         isInstallmentPlan: false,
-        indexType: undefined,
-        indexValue: undefined,
+        indexType: data.indexType || undefined,
+        indexValue: data.indexValue || undefined,
         originalValue: data.amount,
         description: data.description,
       });
     }
+
 
     if (editDischargeIndex !== null) {
       const original = propertyData.discharges[editDischargeIndex];
@@ -630,58 +639,62 @@ export default function PropertyDataDischargesControl({
                   )}
                 </FormControl>
               )}
-            {watch("dischargeType") !== "payment-in-kind" &&
-              watch("dischargeType") !== "key-handover" && (
-                <div className="grid grid-cols-2 gap-4">
-                  <FormControl error={!!errors.indexType}>
-                    <FormLabel>Tipo do Índice</FormLabel>
-                    <Controller
-                      name="indexType"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          {...field}
-                          onChange={(_e, v) => field.onChange(v)}
-                          value={field.value}
-                        >
-                          <Option value={"INCC - M"}>INCC - M</Option>
-                          <Option value={"CUB"}>CUB</Option>
-                          <Option value={"IGP - M"}>IGP - M</Option>
-                          <Option value={"IPCA"}>IPCA</Option>
-                          <Option value={"TR"}>TR</Option>
-                          <Option value={"CDI"}>CDI</Option>
-                        </Select>
-                      )}
-                    />
-                    {errors.indexType && (
-                      <FormHelperText>
-                        {errors.indexType.message.toString()}
-                      </FormHelperText>
+            {watch("dischargeType") !== "payment-in-kind" && (
+              <div className="grid grid-cols-2 gap-4">
+                {watch("dischargeType") === "key-handover" && (
+                  <small className="text-gray-500 text-grayText col-span-2">
+                    Você pode corrigir o valor da entrega das chaves até a data
+                    selecionada informando uma taxa. Deixe em branco para
+                    usar o valor atual, sem correção:
+                  </small>
+                )}
+                <FormControl error={!!errors.indexType}>
+                  <FormLabel>Tipo do Índice</FormLabel>
+                  <Controller
+                    name="indexType"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        onChange={(_e, v) => field.onChange(v)}
+                        value={field.value}
+                      >
+                        <Option value={"INCC - M"}>INCC - M</Option>
+                        <Option value={"CUB"}>CUB</Option>
+                        <Option value={"IGP - M"}>IGP - M</Option>
+                        <Option value={"IPCA"}>IPCA</Option>
+                        <Option value={"TR"}>TR</Option>
+                        <Option value={"CDI"}>CDI</Option>
+                      </Select>
                     )}
-                  </FormControl>
-                  <FormControl error={!!errors.indexValue}>
-                    <Controller
-                      name="indexValue"
-                      control={control}
-                      render={({ field }) => (
-                        <PercentageInput
-                          required={false}
-                          noHeight
-                          min={0}
-                          value={field.value ?? 0}
-                          onChange={(e) => field.onChange(e || 0)}
-                          label="Taxa (mensal)"
-                        />
-                      )}
-                    />
-                    {errors.indexValue && (
-                      <FormHelperText>
-                        {errors.indexValue.message}
-                      </FormHelperText>
+                  />
+                  {errors.indexType && (
+                    <FormHelperText>
+                      {errors.indexType.message?.toString()}
+                    </FormHelperText>
+                  )}
+                </FormControl>
+                <FormControl error={!!errors.indexValue}>
+                  <Controller
+                    name="indexValue"
+                    control={control}
+                    render={({ field }) => (
+                      <PercentageInput
+                        required={false}
+                        noHeight
+                        min={0}
+                        value={field.value ?? 0}
+                        onChange={(e) => field.onChange(e || 0)}
+                        label="Taxa (mensal)"
+                      />
                     )}
-                  </FormControl>
-                </div>
-              )}
+                  />
+                  {errors.indexValue && (
+                    <FormHelperText>{errors.indexValue.message}</FormHelperText>
+                  )}
+                </FormControl>
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between mt-5 mb-2">

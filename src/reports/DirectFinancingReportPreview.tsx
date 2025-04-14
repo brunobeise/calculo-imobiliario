@@ -147,7 +147,7 @@ const DirectFinancingReportPreview = forwardRef<
                 configData={configData}
               />
 
-              {configData.reportConfig.displaySummary && (
+              {configData.reportConfig.displaySummary && isAdvancedMode && (
                 <Summary
                   secondary={custom.secondaryColor}
                   color={custom.primaryColor}

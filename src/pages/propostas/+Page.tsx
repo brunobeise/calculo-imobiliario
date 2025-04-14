@@ -14,7 +14,7 @@ import {
   fetchCases,
   fetchRealEstateCases,
 } from "@/store/caseReducer";
-import CaseCard from "./CaseCard";
+import CaseCard from "./ProposalCard";
 import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
 import SearchInput from "@/components/inputs/SearchInput";
@@ -23,7 +23,7 @@ import { FaTableList } from "react-icons/fa6";
 import { FaSortAmountDown } from "react-icons/fa";
 import { FaSortAmountUp } from "react-icons/fa";
 import PageStructure from "@/components/structure/PageStructure";
-import CaseTableRow from "./CaseTableRow";
+import CaseTableRow from "./ProposalTableRow";
 import Pagination from "@/components/shared/Pagination";
 import ContextSelectorButton from "@/components/shared/ContextSelectorButton";
 import { FaShareAltSquare } from "react-icons/fa";
@@ -33,6 +33,8 @@ import { navigate } from "vike/client/router";
 import { RiAdminFill } from "react-icons/ri";
 import StatusFilter from "@/components/shared/StatusFilter";
 import { useMenu } from "@/components/menu/MenuContext";
+import ProposalBoard from "./ProposalBoard";
+import { MdViewKanban } from "react-icons/md";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
@@ -101,7 +103,7 @@ export default function MyCases() {
     return Number(localStorage.getItem("limit")) || 10;
   });
 
-  const [showMode, setShowMode] = useState<"table" | "cards">(() => {
+  const [showMode, setShowMode] = useState<"table" | "cards" | "board">(() => {
     return (localStorage.getItem("showMode") as "table" | "cards") || "cards";
   });
 
@@ -113,9 +115,9 @@ export default function MyCases() {
       maxDate,
       search,
       sortDirection,
-      currentPage,
+      currentPage: showMode === "board" ? 1 : currentPage,
       orderBy,
-      limit,
+      limit: showMode === "board" ? 1000000 : limit,
       type,
       userId: filterByUser,
       statuses,
@@ -137,6 +139,7 @@ export default function MyCases() {
     casesContext,
     filterByUser,
     statuses,
+    showMode,
   ]);
 
   useEffect(() => {
@@ -206,6 +209,7 @@ export default function MyCases() {
           onClick={() => {
             setCasesContext("realEstateCases");
             setCasesContextDropdown(false);
+            if (showMode === "board") setShowMode("cards");
           }}
           title={
             <div className="flex items-center text-primary gap-2">
@@ -219,6 +223,7 @@ export default function MyCases() {
             onClick={() => {
               setCasesContext("adminCases");
               setCasesContextDropdown(false);
+              if (showMode === "board") setShowMode("cards");
             }}
             title={
               <div className="flex items-center text-primary gap-2">
@@ -269,6 +274,28 @@ export default function MyCases() {
         {casesContextDropdown && <CasesContextSelect />}
       </div>
       <div className="flex gap-5 items-end">
+        <div className="flex items-center gap-5 text-xl mb-1 mr-5">
+          <IoGrid
+            onClick={() => setShowMode("cards")}
+            className={` cursor-pointer ${
+              showMode === "cards" ? "text-primary" : "text-grayScale-400"
+            }`}
+          />
+          <FaTableList
+            onClick={() => setShowMode("table")}
+            className={` cursor-pointer ${
+              showMode === "table" ? "text-primary" : "text-grayScale-400"
+            }`}
+          />
+          {casesContext === "myCases" && (
+            <MdViewKanban
+              onClick={() => setShowMode("board")}
+              className={` cursor-pointer text-2xl ${
+                showMode === "board" ? "text-primary" : "text-grayScale-400"
+              }`}
+            />
+          )}
+        </div>
         <div className="flex flex-col gap-2">
           <FormLabel htmlFor="case-type-select">Tipo de proposta:</FormLabel>
           <Select
@@ -364,52 +391,65 @@ export default function MyCases() {
           </span>
         )}
 
-        <IoGrid
-          onClick={() => setShowMode("cards")}
-          className=" cursor-pointer"
-        />
-        <FaTableList
-          onClick={() => setShowMode("table")}
-          className=" cursor-pointer"
-        />
+     
       </div>
     </div>
   );
 
   const content = (
     <>
-      {showMode === "cards" ? (
+      {showMode === "cards" && (
         <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
-          {data.map((caseStudy) => (
+          {data.map((proposal) => (
             <CaseCard
               adminCase={casesContext === "adminCases"}
               realEstateCase={casesContext === "realEstateCases"}
-              key={caseStudy.name}
-              caseStudy={caseStudy}
+              key={proposal.name}
+              data={proposal}
             />
           ))}
         </div>
-      ) : (
+      )}
+
+      {showMode === "table" && (
         <div className="p-2 pe-4">
-          <Table color="neutral" variant="plain">
+          <Table color="neutral" variant="outlined">
             <thead>
               <tr>
-                <th className="w-[80px]"></th>
-                <th>Nome</th>
-                <th>Nome do imóvel</th>
-                <th>Descrição</th>
-                <th>Tags</th>
-                <th>Criado em</th>
-                <th>Ações</th>
+                <th className="w-[500px] !bg-grayScale-100">Proposta</th>
+                <th className="!bg-grayScale-100">Status</th>
+
+                {casesContext === "adminCases" ||
+                casesContext === "realEstateCases" ? (
+                  <th className="!bg-grayScale-100">Criado por</th>
+                ) : (
+                  <th className="!bg-grayScale-100">Visualizações</th>
+                )}
+                <th className="!bg-grayScale-100">Criado em</th>
+                <th className="!bg-grayScale-100">Ações</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((caseStudy) => (
-                <CaseTableRow key={caseStudy.name} caseStudy={caseStudy} />
+              {data.map((proposal) => (
+                <CaseTableRow
+                  adminCase={casesContext === "adminCases"}
+                  realEstateCase={casesContext === "realEstateCases"}
+                  key={proposal.id}
+                  data={proposal}
+                />
               ))}
             </tbody>
           </Table>
         </div>
+      )}
+
+      {showMode === "board" && (
+        <ProposalBoard
+          adminCase={casesContext === "adminCases"}
+          realEstateCase={casesContext === "realEstateCases"}
+          statuses={statuses}
+          data={data}
+        />
       )}
       {loading && data.length === 0 && (
         <div className="w-full text-center">
@@ -434,7 +474,7 @@ export default function MyCases() {
       loading={loading}
       contentHeader={contentHeader}
       header={header}
-      footer={footer}
+      footer={showMode === "board" ? null : footer}
     />
   );
 }

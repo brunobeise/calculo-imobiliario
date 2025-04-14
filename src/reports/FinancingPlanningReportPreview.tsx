@@ -151,7 +151,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 configData={configData}
               />
 
-              {configData.reportConfig.displaySummary && (
+              {configData.reportConfig.displaySummary && isAdvancedMode && (
                 <Summary
                   secondary={custom.secondaryColor}
                   color={custom.primaryColor}
@@ -306,12 +306,10 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
 
-          <div className="flex justify-center my-10 w-full">
-            <img
-              className="max-w-[150px] max-h-[100px]"
-              src={user?.realEstate?.logo}
-            />
-          </div>
+          <p className="text-xs text-gray-500 my-4 flex items-center justify-center gap-1">
+            Feito com <span className="text-red-500">❤️</span> no{" "}
+            <strong>ImobDeal</strong>
+          </p>
         </div>
       </div>
     );

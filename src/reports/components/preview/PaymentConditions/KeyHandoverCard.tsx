@@ -1,7 +1,7 @@
-import React from "react";
 import { GiHouseKeys } from "react-icons/gi";
 import { toBRL } from "@/lib/formatter";
 import { DraggableCard } from "./DraggableCard";
+import { Discharge } from "@/propertyData/PropertyDataDischargesControl";
 
 const KeyHandoverCard = ({
   color,
@@ -13,40 +13,49 @@ const KeyHandoverCard = ({
   index,
   moveCard,
 }) => {
-  const keyHandover = discharges.find((d) =>
+  const keyHandover: Discharge = discharges.find((d) =>
     d.type?.includes("Entrega das Chaves")
   );
 
   if (!keyHandover) return null;
 
   const date = computeDischargeDate(initialDate, keyHandover.month);
-  const value = keyHandover.originalValue;
 
   return (
     <DraggableCard id={id} index={index} moveCard={moveCard} isResizing={false}>
       <div className="relative rounded-3xl break-inside-avoid">
         <div
-          style={{ "--scroll-thumb-color": color } as React.CSSProperties}
-          className="rounded-3xl p-4 pr-2 border h-min"
+          style={{ borderColor: secondary }}
+          className="rounded-3xl p-5 border shadow-sm bg-white"
         >
           <h3
             style={{ color }}
-            className="text-lg flex items-center gap-2 mb-2"
+            className="text-lg font-semibold flex items-center gap-2 mb-2"
           >
-            Entrega das Chaves <GiHouseKeys className="text-3xl" />
+            Entrega das Chaves{" "}
+            <GiHouseKeys className="text-2xl" style={{ color }} />
           </h3>
-          <p style={{ color }} className="text-2xl font-bold mb-4">
-            {toBRL(value)}
+
+          <p style={{ color }} className="text-3xl font-bold mb-2">
+            {toBRL(keyHandover.originalValue)}
           </p>
-          <div className="max-h-[400px] overflow-y-auto scrollbar">
-            <ul className="list-none space-y-3">
-              <li className="text-sm">
-                <span style={{ color: secondary }}>
-                  Data: <span style={{ color }}>{date}</span>
-                </span>
-              </li>
-            </ul>
-          </div>
+
+          {keyHandover.value !== keyHandover.originalValue &&
+            keyHandover.indexType && (
+              <div className="mb-4">
+                <p className="text-xs text-gray-500 mt-1 italic">
+                  Correção baseada no índice {keyHandover.indexType} (
+                  {keyHandover.indexValue} %/m)
+                </p>
+              </div>
+            )}
+
+          <p className="text-sm text-gray-600">
+            <span className="font-medium">Data:</span>{" "}
+            <span style={{ color }} className="font-medium">
+              {date}
+            </span>
+          </p>
         </div>
       </div>
     </DraggableCard>

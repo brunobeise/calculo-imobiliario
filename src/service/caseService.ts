@@ -90,12 +90,15 @@ export const caseService = {
     }
   },
 
-  async updateCase(caseId: string, data: Partial<Proposal>) {
+  async updateCase(caseId: string, data: Partial<Proposal>, alert?: string) {
     try {
       const response = await api.put("/cases/" + caseId, data);
-      data.isArchived
-        ? notify("success", "Proposta excluída com sucesso!")
-        : notify("success", "Proposta atualizada com sucesso!");
+      if (alert && alert !== "disabled") {
+        notify("success", alert);
+      } else if (alert !== "disabled")
+        data.isArchived
+          ? notify("success", "Proposta excluída com sucesso!")
+          : notify("success", "Proposta atualizada com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao atualizar a proposta.");
