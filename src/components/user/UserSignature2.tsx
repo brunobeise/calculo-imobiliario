@@ -1,6 +1,6 @@
+import { formatPhone } from "@/lib/formatter";
 import { RootState } from "@/store/store";
 import { User } from "@/types/userTypes";
-import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 
 interface UserSignatureProps {
@@ -77,7 +77,20 @@ export default function UserSignature2(props: UserSignatureProps) {
             <span className="text-sm">
               <strong>{data.fullName?.toUpperCase()} </strong>{" "}
               <span className="ms-2 font-light">CRECI {data.creci}</span>
-              <span className="ms-2">{dayjs().format("DD/MM/YY")}</span>
+              <span className="ms-2">
+                {data.whatsapp ? (
+                  <a
+                    href={data.whatsapp}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    {formatPhone(data.phone)}
+                  </a>
+                ) : (
+                  formatPhone(data.phone)
+                )}
+              </span>
             </span>{" "}
           </div>
         </div>
