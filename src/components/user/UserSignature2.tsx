@@ -29,9 +29,9 @@ export default function UserSignature2(props: UserSignatureProps) {
         backgroundColor: props.primaryColor,
         color: props.backgroundColor,
       }}
-      className="p-5 w-full "
+      className="p-5 w-full flex justify-center pe-10"
     >
-      <div className="flex items-center h-[110px] ps-10">
+      <div className="flex items-center h-[110px]">
         <div className="w-[90px] h-[90px]">
           <img
             style={{
@@ -55,7 +55,7 @@ export default function UserSignature2(props: UserSignatureProps) {
           />
         </div>
 
-        <div className="w-[400px] ms-5">
+        <div className="ms-5">
           <div className="grid grid-rows">
             <h3
               style={{
