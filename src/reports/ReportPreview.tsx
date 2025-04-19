@@ -92,24 +92,14 @@ export default function ReportPreview({
   const [activeItem, setActiveItem] = useState("property");
 
   const handleDrop = (image: string, source: string) => {
-    console.log("Imagem recebida:", image, "de", source);
-    console.log("ConfigData antes da alteração:", configData);
-
     if (source === "Foto Principal") {
       const updatedAdditionalPhotos = [
         ...configData.additionalPhotos,
         configData.mainPhoto,
       ].filter(Boolean); // Remove valores falsos (null, undefined, "")
 
-      console.log("Nova lista de fotos adicionais:", updatedAdditionalPhotos);
-
       onChange({
         ...configData,
-        mainPhoto: image,
-        additionalPhotos: updatedAdditionalPhotos,
-      });
-
-      console.log("ConfigData atualizado (Foto Principal):", {
         mainPhoto: image,
         additionalPhotos: updatedAdditionalPhotos,
       });
@@ -122,18 +112,8 @@ export default function ReportPreview({
         newAdditionalPhotos.push(configData.mainPhoto);
       }
 
-      console.log(
-        "Nova lista de fotos adicionais (após troca):",
-        newAdditionalPhotos
-      );
-
       onChange({
         ...configData,
-        mainPhoto: image,
-        additionalPhotos: newAdditionalPhotos,
-      });
-
-      console.log("ConfigData atualizado (Fotos Adicionais):", {
         mainPhoto: image,
         additionalPhotos: newAdditionalPhotos,
       });
@@ -204,8 +184,6 @@ export default function ReportPreview({
             buildingPhoto={configData.mainPhoto}
             onUnlink={() => onChange({ ...configData, buildingId: null })}
             onLink={(building) => {
-              console.log(building.bedrooms);
-
               onChange({
                 ...configData,
                 mainPhoto: building.mainPhoto,

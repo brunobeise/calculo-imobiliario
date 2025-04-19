@@ -73,8 +73,6 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
         subType,
       });
 
-      console.log(data);
-
       reset();
       onClose();
 

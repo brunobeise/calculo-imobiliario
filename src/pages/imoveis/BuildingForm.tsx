@@ -205,8 +205,6 @@ export default function BuildingForm({ initialData, onSubmit }) {
                   {...field}
                   label="Valor do Imóvel"
                   onChange={(v) => {
-                    console.log(Number(v.target.value) > 0);
-
                     Number(v.target.value) > 0
                       ? setValue("value", Number(v.target.value))
                       : setValue("value", null);
