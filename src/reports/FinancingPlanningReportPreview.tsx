@@ -306,7 +306,10 @@ const FinancingPlanningReportPreview = forwardRef<
             </div>
           )}
 
-          <p className="text-xs text-gray-500 my-4 flex items-center justify-center gap-1">
+          <p
+            style={{ color: custom.secondaryColor }}
+            className="text-xs my-4 flex items-center justify-center gap-1"
+          >
             Feito com <span className="text-red-500">❤️</span> no{" "}
             <strong>ImobDeal</strong>
           </p>

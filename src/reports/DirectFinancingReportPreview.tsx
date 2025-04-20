@@ -290,12 +290,13 @@ const DirectFinancingReportPreview = forwardRef<
             </div>
           )}
 
-          <div className="flex justify-center my-10 w-full">
-            <img
-              className="max-w-[150px] max-h-[100px]"
-              src={user?.realEstate?.logo}
-            />
-          </div>
+          <p
+            style={{ color: custom.secondaryColor }}
+            className="text-xs my-4 flex items-center justify-center gap-1"
+          >
+            Feito com <span className="text-red-500">❤️</span> no{" "}
+            <strong>ImobDeal</strong>
+          </p>
         </div>
       </div>
     );
