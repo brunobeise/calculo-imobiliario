@@ -25,7 +25,7 @@ const KeyHandoverCard = ({
     <DraggableCard id={id} index={index} moveCard={moveCard} isResizing={false}>
       <div className="relative rounded-3xl break-inside-avoid">
         <div
-          style={{ borderColor: secondary }}
+          style={{ borderColor: color }}
           className="rounded-3xl p-5 border shadow-sm"
         >
           <h3
@@ -51,7 +51,9 @@ const KeyHandoverCard = ({
             )}
 
           <p className="text-sm text-gray-600">
-            <span className="font-medium">Data:</span>{" "}
+            <span style={{ color: secondary }} className="font-medium">
+              Data:
+            </span>{" "}
             <span style={{ color }} className="font-medium">
               {date}
             </span>
