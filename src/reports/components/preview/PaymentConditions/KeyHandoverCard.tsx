@@ -26,7 +26,7 @@ const KeyHandoverCard = ({
       <div className="relative rounded-3xl break-inside-avoid">
         <div
           style={{ borderColor: secondary }}
-          className="rounded-3xl p-5 border shadow-sm bg-white"
+          className="rounded-3xl p-5 border shadow-sm"
         >
           <h3
             style={{ color }}
