@@ -13,6 +13,7 @@ export const categories = [
   { value: "RETAIL", label: "Varejo" },
   { value: "HOTEL", label: "Hotel" },
   { value: "OFFICE", label: "Escritório" },
+  { value: "SEMI_DETACHED", label: "Geminado" },
 ];
 
 interface BuildingCategorySelectProps {
