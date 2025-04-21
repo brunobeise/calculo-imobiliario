@@ -112,7 +112,7 @@ export default function FinancingPlanningReportSharedPage() {
   }, []);
 
   useEffect(() => {
-    if (requestName || !viewerName) return;
+    if (requestName && !viewerName) return;
 
     const sessionTimer = setInterval(() => {
       sessionTimeRef.current += 1;

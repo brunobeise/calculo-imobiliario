@@ -16,6 +16,7 @@ import { TiThMenu } from "react-icons/ti";
 import { usePageContext } from "vike-react/usePageContext";
 import Dialog from "@/components/modals/Dialog";
 import { Button, Input } from "@mui/joy";
+import { useAuth } from "@/auth";
 
 export default function PortfolioSharedPage() {
   const portfolioData = useData<Portfolio>();
@@ -45,6 +46,7 @@ export default function PortfolioSharedPage() {
   const itemTimes = useRef<number[]>(
     new Array(portfolioData.items.length).fill(0)
   );
+  const auth = useAuth();
 
   useEffect(() => {
     const newSocket = io(import.meta.env.PUBLIC_ENV__API_URL, {
@@ -64,7 +66,7 @@ export default function PortfolioSharedPage() {
   }, []);
 
   useEffect(() => {
-    if (requestName || !viewerName) return;
+    if (requestName && !viewerName) return;
 
     const interval = setInterval(() => {
       sessionTime.current += 1;
@@ -79,7 +81,12 @@ export default function PortfolioSharedPage() {
   }, [currentIndex, requestName, viewerName]);
 
   const sendTrackingData = () => {
-    if (!socket.current?.connected || requestName || !viewerName) return;
+    if (
+      !socket?.current.connected ||
+      auth.isAuthenticated ||
+      (requestName && !viewerName)
+    )
+      return;
 
     const dataToSend = {
       id: sessionId.current,
