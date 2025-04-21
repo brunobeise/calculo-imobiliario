@@ -10,3 +10,14 @@ export interface Session {
   isNew: boolean;
   viewerName?: string;
 }
+
+export interface PortfolioSession {
+  id: string;
+  sessionTime: number;
+  portfolioId: string;
+  [key: `item${number}TimeVisible`]: number | null;
+  [key: `item${number}Name`]: string;
+  createdAt: Date;
+  isNew: boolean;
+  viewerName?: string;
+}

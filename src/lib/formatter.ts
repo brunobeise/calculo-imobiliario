@@ -33,6 +33,7 @@ export function formatTime(seconds: number | null) {
 }
 
 export function formatPhone(phone: string) {
+  if(!phone) return ""
   const cleaned = phone.replace(/\D/g, "");
   return cleaned.replace(/(\d{2})(\d{5})(\d{4})/, "$1 $2-$3");
 }

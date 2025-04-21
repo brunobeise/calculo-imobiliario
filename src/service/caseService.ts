@@ -81,7 +81,7 @@ export const caseService = {
     }
   },
 
-  async getCaseToProposal(caseId: string) {
+  async getSharedProposal(caseId: string) {
     try {
       const response = await api.get<Proposal>("/proposal-case/" + caseId);
       return response.data;

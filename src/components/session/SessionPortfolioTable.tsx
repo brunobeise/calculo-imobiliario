@@ -3,24 +3,21 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/pt-br";
-import { Session } from "@/types/sessionTypes";
 import { Chip, IconButton, Table } from "@mui/joy";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { formatTime } from "@/lib/formatter";
 import { FaRegClock } from "react-icons/fa";
-import { FaRegHourglassHalf } from "react-icons/fa6";
-import { FaFileAlt } from "react-icons/fa";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { navigate } from "vike/client/router";
-import { getCaseLink } from "@/lib/maps";
+import { FaRegHourglassHalf } from "react-icons/fa6";
+import { PortfolioSession } from "@/types/sessionTypes";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.locale("pt-br");
 
-const groupSessionsByDate = (sessions: Session[]) => {
-  const grouped: Record<string, Session[]> = {};
+const groupSessionsByDate = (sessions: PortfolioSession[]) => {
+  const grouped: Record<string, PortfolioSession[]> = {};
   const now = dayjs();
 
   sessions.forEach((session) => {
@@ -46,11 +43,10 @@ const groupSessionsByDate = (sessions: Session[]) => {
   return grouped;
 };
 
-function SessionRow(props: {
-  session: Session;
-  openSessionId: number | null;
-  setOpenSessionId: (id: number | null) => void;
-  showName?: boolean;
+function PortfolioSessionRow(props: {
+  session: PortfolioSession;
+  openSessionId: string | null;
+  setOpenSessionId: (id: string | null) => void;
 }) {
   const { session, openSessionId, setOpenSessionId } = props;
   const isOpen = openSessionId === session.id;
@@ -59,39 +55,14 @@ function SessionRow(props: {
     setOpenSessionId(isOpen ? null : session.id);
   };
 
-  const pageTitles = [
-    "Introdução",
-    "Pagamento e retorno esperado",
-    "Cálculo do investimento",
-    "Divisão do capital",
-    "Conversão para valor presente",
-    "Reinvestimento em Renda Fixa",
-    "Análise Gráfica Detalhada",
-    "Descrição do imóvel",
-  ];
-
-  const visiblePagesCount = Array.from({ length: 8 }, (_, i) => i + 1).filter(
-    (page) => session[`page${page}TimeVisible`] > 0
-  ).length;
+  const visibleItems = Array.from({ length: 10 }, (_, i) => i + 1).filter(
+    (i) => session[`item${i}TimeVisible`] > 0
+  );
 
   return (
     <>
       <div className="text-black flex items-center justify-between space-x-3 text-grayText">
         <div className="flex">
-          {session.case && (
-            <div
-              onClick={() =>
-                navigate(getCaseLink(session.case.type) + "/" + session.case.id)
-              }
-              className="flex items-center space-x-2 pe-4 w-[200px] min-w-0 hover:text-primary cursor-pointer"
-            >
-              <FaFileAlt className="text-gray-500 flex-shrink-0" />
-              <span className="overflow-hidden text-ellipsis whitespace-nowrap block">
-                {session.case.name}
-              </span>
-            </div>
-          )}
-
           <div className="flex items-center space-x-1 w-[80px]">
             <FaRegClock className="text-gray-500" />
             <span>{dayjs(session.createdAt).format("HH:mm")}</span>
@@ -104,12 +75,12 @@ function SessionRow(props: {
 
           {session.viewerName && (
             <div className="flex items-center space-x-1 w-[120px]">
-              <IoPersonCircleOutline className="text-gray-500  flex-shrink-0" />
-              <span className="text-nowrap">{session.viewerName}</span>
+              <IoPersonCircleOutline className="text-gray-500 flex-shrink-0" />
+              <span className="text-nowrap ">{session.viewerName}</span>
             </div>
           )}
 
-          {session.isNew && (
+          {!session.isNew && (
             <Chip
               size="sm"
               className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe] ms-4"
@@ -121,7 +92,7 @@ function SessionRow(props: {
           )}
         </div>
 
-        {visiblePagesCount > 1 ? (
+        {visibleItems.length > 0 ? (
           <IconButton
             aria-label="expand row"
             variant="plain"
@@ -138,19 +109,19 @@ function SessionRow(props: {
 
       {isOpen && (
         <div className="p-1">
-          <Table size="sm" aria-label="page times">
+          <Table size="sm" aria-label="item view times">
             <thead>
               <tr>
-                <th>Página</th>
+                <th>Item</th>
                 <th>Tempo de visualização</th>
               </tr>
             </thead>
             <tbody>
-              {Array.from({ length: 8 }, (_, i) => i + 1).map((page) =>
-                session[`page${page}TimeVisible`] > 0 ? (
-                  <tr key={`page${page}`}>
-                    <td>{pageTitles[page - 1]}</td>
-                    <td>{formatTime(session[`page${page}TimeVisible`])}</td>
+              {Array.from({ length: 10 }, (_, i) => i + 1).map((i) =>
+                session[`item${i}TimeVisible`] > 0 ? (
+                  <tr key={`item${i}`}>
+                    <td>{session[`item${i}Name`] || `Item ${i}`}</td>
+                    <td>{formatTime(session[`item${i}TimeVisible`])}</td>
                   </tr>
                 ) : null
               )}
@@ -162,13 +133,15 @@ function SessionRow(props: {
   );
 }
 
-interface SessionsTableProps {
-  sessions: Session[];
+interface PortfolioSessionsTableProps {
+  sessions: PortfolioSession[];
 }
 
-const SessionsTable: React.FC<SessionsTableProps> = ({ sessions }) => {
+const PortfolioSessionsTable: React.FC<PortfolioSessionsTableProps> = ({
+  sessions,
+}) => {
   const groupedSessions = groupSessionsByDate(sessions);
-  const [openSessionId, setOpenSessionId] = useState<number>();
+  const [openSessionId, setOpenSessionId] = useState<string | null>(null);
 
   return (
     <div>
@@ -177,12 +150,11 @@ const SessionsTable: React.FC<SessionsTableProps> = ({ sessions }) => {
           <h3 className="text-md font-bold pb-1 mb-2">{dateLabel}</h3>
           <div className="space-y-2 border-t border-border pt-2">
             {sessionList.map((session) => (
-              <SessionRow
+              <PortfolioSessionRow
                 key={session.id}
                 session={session}
                 openSessionId={openSessionId}
-                setOpenSessionId={(id) => setOpenSessionId(id)}
-                showName
+                setOpenSessionId={setOpenSessionId}
               />
             ))}
           </div>
@@ -197,4 +169,4 @@ const SessionsTable: React.FC<SessionsTableProps> = ({ sessions }) => {
   );
 };
 
-export default SessionsTable;
+export default PortfolioSessionsTable;

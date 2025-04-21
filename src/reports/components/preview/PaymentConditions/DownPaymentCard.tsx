@@ -43,7 +43,9 @@ export const DownPaymentCard = ({
   const [height, setHeight] = useState(initialHeight);
   const [isResizing, setIsResizing] = useState(false);
   const pageContext = usePageContext();
-  const isProposalRoute = pageContext.urlPathname.includes("/proposta/");
+  const isProposalRoute =
+    pageContext.urlPathname.includes("/proposta/") ||
+    pageContext.urlPathname.includes("/portfolio/");
 
   const debouncedHandleHeight = useMemo(
     () =>

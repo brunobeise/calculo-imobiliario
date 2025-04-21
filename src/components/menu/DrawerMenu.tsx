@@ -21,12 +21,19 @@ import { useMenu } from "./MenuContext";
 import { navigate } from "vike/client/router";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { GrMultiple } from "react-icons/gr";
 
 const menuItems = [
   { path: "/dashboard", label: "Dashboard", icon: <BiSolidDashboard /> },
   { path: "/cenarios", label: "Nova Proposta", icon: <FaFileCirclePlus /> },
 
   { path: "/propostas", label: "Propostas", icon: <FaFileAlt /> },
+  {
+    path: "/portfolios",
+    label: "Portfolios",
+    icon: <GrMultiple />,
+    requiresAdmin: true,
+  },
   {
     path: "/imobiliaria",
     label: "Imobiliária",
@@ -48,7 +55,11 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const pageContext = usePageContext();
   const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
 
-  if (!isAuthenticated || pageContext.urlPathname.includes("/proposta/"))
+  if (
+    !isAuthenticated ||
+    pageContext.urlPathname.includes("/proposta/") ||
+    pageContext.urlPathname.includes("/portfolio/")
+  )
     return null;
 
   return (
@@ -80,7 +91,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
           menuOpen || !isCaseMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center my-6 mb-10 flex-col">
+        <div className="flex items-center my-4  flex-col">
           <img className="w-[50px]" src={logo} />
           <span className="text-primary">
             Imob<span className="font-bold">Deal</span>

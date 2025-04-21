@@ -23,7 +23,9 @@ const ReinforcementsCard = ({
 }) => {
   const [height, setHeight] = useState(initialHeight);
   const pageContext = usePageContext();
-  const isProposalRoute = pageContext.urlPathname.includes("/proposta/");
+  const isProposalRoute =
+    pageContext.urlPathname.includes("/proposta/") ||
+    pageContext.urlPathname.includes("/portfolio/");
   const [isResizing, setIsResizing] = useState(false);
   const isOnlyMonthly = discharges.every((detail) => detail.type === "Mensal");
   const isOnlyAnnual = discharges.every((detail) => detail.type === "Anual");

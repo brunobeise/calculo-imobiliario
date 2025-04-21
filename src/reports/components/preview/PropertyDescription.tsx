@@ -16,12 +16,14 @@ import "yet-another-react-lightbox/plugins/thumbnails.css";
 import "yet-another-react-lightbox/styles.css";
 import { ColumnsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/columns.css";
+import { toBRL } from "@/lib/formatter";
 
 interface PropertyDescriptionProps {
-  configData: ReportData;
+  configData: Partial<ReportData>;
   color: string;
   secondary: string;
   photoViewer: boolean;
+  value?: number;
 }
 
 export default function PropertyDescription({
@@ -29,6 +31,7 @@ export default function PropertyDescription({
   configData,
   secondary,
   photoViewer = true,
+  value,
 }: PropertyDescriptionProps) {
   const [imageData, setImageData] = useState<
     { src: string; original: string; width: number; height: number }[]
@@ -73,6 +76,15 @@ export default function PropertyDescription({
           title={configData.propertyName}
         />
         <div className="grid grid-cols-2 gap-4 mb-4 text-lg">
+          {value && (
+            <span className="col-span-2">
+              Valor do imóvel:{" "}
+              <b style={{ color: color }} className="font-bold">
+                {toBRL(value)}
+              </b>
+            </span>
+          )}
+
           <div>
             {configData.bedrooms && (
               <p style={{ color: secondary }}>

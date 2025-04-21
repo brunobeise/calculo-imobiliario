@@ -19,7 +19,9 @@ const ConstructionInterestCard = ({
 }) => {
   const [height, setHeight] = useState(initialHeight);
   const pageContext = usePageContext();
-  const isProposalRoute = pageContext.urlPathname.includes("/proposta/");
+  const isProposalRoute =
+    pageContext.urlPathname.includes("/proposta/") ||
+    pageContext.urlPathname.includes("/portfolio/");
   const debouncedHandleHeight = useMemo(
     () =>
       debounce((height: number) => {

@@ -112,6 +112,8 @@ export default function FinancingPlanningReportSharedPage() {
   }, []);
 
   useEffect(() => {
+    if (requestName || !viewerName) return;
+
     const sessionTimer = setInterval(() => {
       sessionTimeRef.current += 1;
 
@@ -121,10 +123,14 @@ export default function FinancingPlanningReportSharedPage() {
     }, 1000);
 
     return () => clearInterval(sessionTimer);
-  }, []);
+  }, [requestName, viewerName]);
 
   const saveSessionData = useCallback(() => {
-    if (!socket?.current.connected || auth.isAuthenticated) {
+    if (
+      !socket?.current.connected ||
+      auth.isAuthenticated ||
+      (requestName && !viewerName)
+    ) {
       console.warn("Socket não conectado. Dados não enviados.");
       return;
     }

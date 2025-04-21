@@ -63,6 +63,12 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
     } else reset();
   }, [editChoose, reset, actualCase, setValue]);
 
+  useEffect(() => {
+    if (actualCase && duplicate) {
+      setValue("propertyName", actualCase?.propertyName || "");
+    } else reset();
+  }, [editChoose, duplicate, actualCase, setValue, reset]);
+
   const handleCreate: SubmitHandler<CaseFormData> = async (data) => {
     setLoading(true);
     try {
