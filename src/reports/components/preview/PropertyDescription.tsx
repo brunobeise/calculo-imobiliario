@@ -77,7 +77,7 @@ export default function PropertyDescription({
         />
         <div className="grid grid-cols-2 gap-4 mb-4 text-lg">
           {value && (
-            <span className="col-span-2">
+            <span style={{ color: secondary }} className="col-span-2">
               Valor do imóvel:{" "}
               <b style={{ color: color }} className="font-bold">
                 {toBRL(value)}

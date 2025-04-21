@@ -39,7 +39,8 @@ export default function PortfolioSharedPage() {
     localStorage.getItem("viewerName")
   );
 
-  // === Tracking ===
+  console.log(portfolioData.items[2].case.user);
+  
   const socket = useRef<Socket | null>(null);
   const sessionId = useRef<string>(nanoid(7));
   const sessionTime = useRef<number>(0);
@@ -122,18 +123,24 @@ export default function PortfolioSharedPage() {
   });
 
   useEffect(() => {
-    const updateSize = () => {
-      if (componentRef.current) {
-        const rect = componentRef.current.getBoundingClientRect();
-        const adjustedHeight =
-          window.innerWidth <= 768 ? rect.height * 0.58 : rect.height;
-        setDimensions({ width: rect.width, height: adjustedHeight });
-      }
-    };
+    if (!componentRef.current) return;
 
-    const timeout = setTimeout(updateSize, 100);
-    return () => clearTimeout(timeout);
-  }, [currentIndex]);
+    const observer = new ResizeObserver(() => {
+      const rect = componentRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const adjustedHeight =
+        window.innerWidth <= 768 ? rect.height * 0.58 : rect.height;
+
+      setDimensions({ width: rect.width, height: adjustedHeight });
+    });
+
+    observer.observe(componentRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [currentItem]); 
 
   const toggleMobileBar = () => setIsOpenMobile((prev) => !prev);
   const handleSelect = (index: number) => {
@@ -231,7 +238,7 @@ export default function PortfolioSharedPage() {
               headerType: portfolioData.user.realEstate?.headerType || 1,
             }}
             propertyData={currentItem.case?.propertyData}
-            user={currentItem.case?.user}
+            user={portfolioData.user}
             configData={{
               propertyName: currentItem.case?.propertyName || "",
               mainPhoto: currentItem.case?.mainPhoto || "",
@@ -265,7 +272,7 @@ export default function PortfolioSharedPage() {
               headerType: portfolioData.user.realEstate?.headerType || 1,
             }}
             propertyData={currentItem.case?.propertyData}
-            user={currentItem.case?.user}
+            user={portfolioData.user}
             configData={{
               propertyName: currentItem.case?.propertyName || "",
               mainPhoto: currentItem.case?.mainPhoto || "",

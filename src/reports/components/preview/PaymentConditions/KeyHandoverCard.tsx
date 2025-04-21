@@ -36,7 +36,7 @@ const KeyHandoverCard = ({
             <GiHouseKeys className="text-2xl" style={{ color }} />
           </h3>
 
-          <p style={{ color }} className="text-3xl font-bold mb-2">
+          <p style={{ color }} className="text-2xl font-bold mb-2">
             {toBRL(keyHandover.originalValue)}
           </p>
 

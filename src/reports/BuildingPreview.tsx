@@ -57,6 +57,13 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
             secondary={secondaryColor}
             configData={configData}
           />
+          <p
+            style={{ color: secondaryColor }}
+            className="text-xs my-4 flex items-center justify-center gap-1"
+          >
+            Feito com <span className="text-red-500">❤️</span> no{" "}
+            <strong>ImobDeal</strong>
+          </p>
         </div>
       </div>
     );
