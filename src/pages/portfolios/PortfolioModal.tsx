@@ -79,6 +79,8 @@ export default function PortfolioModal({
     name: "items",
   });
 
+  const isOverLimit = fields.length > 10;
+
   const proposals = useSelector((s: RootState) => s.proposals.myCases);
   const proposalsInitialLoading = useSelector(
     (s: RootState) => s.proposals.myCasesLoading
@@ -253,7 +255,12 @@ export default function PortfolioModal({
                 <h2 className="text-lg font-bold">Itens do Portfólio</h2>
                 <div
                   ref={portfolioDrop}
-                  className="flex flex-col gap-2 border border-dashed border-border rounded p-2 bg-gray-50 xl:h-full overflow-auto"
+                  className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 xl:h-full overflow-auto
+                  ${
+                    isOverLimit
+                      ? "border-dashed border-red"
+                      : "border-dashed border-border"
+                  }`}
                 >
                   {fields.length === 0 && (
                     <span className="text-gray text-sm text-center">
@@ -279,6 +286,12 @@ export default function PortfolioModal({
                     );
                   })}
                 </div>
+                {isOverLimit && (
+                  <div className="text-red text-xs text-center mt-2">
+                    Máximo de 10 itens permitidos. Remova algum para poder
+                    salvar.
+                  </div>
+                )}
               </div>
 
               {/* ---------- LISTAS EXTERNAS ---------- */}
@@ -363,9 +376,10 @@ export default function PortfolioModal({
                 portfolioId={portfolioId}
                 loading={loading}
                 handleDelete={handleDelete}
+                isOverLimit={isOverLimit}
               />
             ) : (
-              <FooterCreate loading={loading} />
+              <FooterCreate loading={loading} isOverLimit={isOverLimit} />
             )}
           </>
         )}
@@ -379,10 +393,12 @@ function FooterEdit({
   portfolioId,
   loading,
   handleDelete,
+  isOverLimit,
 }: {
   portfolioId: string;
   loading: boolean;
   handleDelete: () => void;
+  isOverLimit: boolean;
 }) {
   return (
     <div className="flex justify-between mt-6 pb-4 gap-2 px-7">
@@ -428,6 +444,7 @@ function FooterEdit({
           type="submit"
           color="primary"
           size="md"
+          disabled={isOverLimit}
         >
           Salvar Alterações
         </Button>
@@ -436,10 +453,22 @@ function FooterEdit({
   );
 }
 
-function FooterCreate({ loading }: { loading: boolean }) {
+function FooterCreate({
+  loading,
+  isOverLimit,
+}: {
+  loading: boolean;
+  isOverLimit: boolean;
+}) {
   return (
     <div className="flex justify-center mt-6 pb-4 gap-2">
-      <Button loading={loading} type="submit" color="primary" size="md">
+      <Button
+        disabled={isOverLimit}
+        loading={loading}
+        type="submit"
+        color="primary"
+        size="md"
+      >
         Criar Portfólio
       </Button>
     </div>
