@@ -3,7 +3,8 @@ import { PropertyData } from "@/propertyData/PropertyDataContext";
 import theme from "@/theme";
 import { SvgIcon } from "@mui/joy";
 import { useMediaQuery } from "@mui/system";
-import Xarrow, { anchorType, Xwrapper } from "react-xarrows";
+import { useLayoutEffect } from "react";
+import Xarrow, { anchorType, useXarrow, Xwrapper } from "react-xarrows";
 
 interface UnderstandFinancingProps {
   propertyData: PropertyData;
@@ -15,7 +16,7 @@ interface UnderstandFinancingProps {
 
 export default function UnderstandFinancing(props: UnderstandFinancingProps) {
   const { color, secondary, background, propertyData } = props;
-
+  const updateXarrow = useXarrow();
   const matchesXL = useMediaQuery(theme.breakpoints.up("xl"));
 
   const postionRight: anchorType = matchesXL
@@ -30,6 +31,11 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
   const postionBottom: anchorType = matchesXL
     ? "bottom"
     : { position: "top", offset: { x: 30, y: 95 } };
+
+  useLayoutEffect(() => {
+    const id = requestAnimationFrame(updateXarrow); 
+    return () => cancelAnimationFrame(id); 
+  }, [matchesXL, props.displayFinancingTime, propertyData, updateXarrow]);
 
   return (
     <div className="w-full px-4 mt-10 mb-10">
@@ -56,7 +62,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </svg>
             </SvgIcon>
           </div>
-           <span style={{ color }} className="text-md lg:text-xl font-bold">
+          <span style={{ color }} className="text-md lg:text-xl font-bold">
             {toBRL(propertyData.propertyValue)}
           </span>
           <span style={{ color: secondary }} className="mt-[-5px]">
@@ -84,7 +90,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </SvgIcon>
             </div>
 
-             <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold">
               {toBRL(propertyData.downPayment)}
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">
@@ -141,13 +147,12 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </svg>
             </SvgIcon>
           </div>
-           <span style={{ color }} className="text-md lg:text-xl font-bold">
+          <span style={{ color }} className="text-md lg:text-xl font-bold">
             {toBRL(
               propertyData.propertyValue -
-                propertyData?.discharges.filter(d => !d.isConstructionInterest).reduce(
-                  (acc, val) => acc + val.originalValue,
-                  0
-                ) -
+                propertyData?.discharges
+                  .filter((d) => !d.isConstructionInterest)
+                  .reduce((acc, val) => acc + val.originalValue, 0) -
                 propertyData.downPayment -
                 propertyData.subsidy
             )}
@@ -188,7 +193,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
                 </svg>
               </SvgIcon>
             </div>
-             <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold">
               {propertyData.financingMonths} meses
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">
@@ -251,7 +256,10 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
           ) : (
             <span style={{ color: secondary }}>parcelas de</span>
           )}
-           <span style={{ color }} className="text-md lg:text-xl font-bold mt-[-5px]">
+          <span
+            style={{ color }}
+            className="text-md lg:text-xl font-bold mt-[-5px]"
+          >
             {toBRL(propertyData.installmentValue)}
           </span>
         </div>
@@ -279,7 +287,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </SvgIcon>
             </div>
 
-             <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold">
               {toBRL(propertyData.downPayment)}
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">

@@ -5,14 +5,11 @@ import { useData } from "vike-react/useData";
 import { Head } from "vike-react/Head";
 import { io, Socket } from "socket.io-client";
 import { nanoid } from "nanoid";
-
 import FinancingPlanningReportPreview from "@/reports/FinancingPlanningReportPreview";
 import DirectFinancingReportPreview from "@/reports/DirectFinancingReportPreview";
 import BuildingPreview from "@/reports/BuildingPreview";
 
 import { Portfolio } from "@/types/portfolioTypes";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
-import { TiThMenu } from "react-icons/ti";
 import { usePageContext } from "vike-react/usePageContext";
 import Dialog from "@/components/modals/Dialog";
 import { Button, Input } from "@mui/joy";
@@ -24,7 +21,6 @@ export default function PortfolioSharedPage() {
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isOpenMobile, setIsOpenMobile] = useState(false);
   const currentItem = portfolioData.items[currentIndex];
   const queryWhatsapp = pageContext.urlParsed.search.whatsapp;
 
@@ -39,8 +35,6 @@ export default function PortfolioSharedPage() {
     localStorage.getItem("viewerName")
   );
 
-  console.log(portfolioData.items[2].case.user);
-  
   const socket = useRef<Socket | null>(null);
   const sessionId = useRef<string>(nanoid(7));
   const sessionTime = useRef<number>(0);
@@ -140,12 +134,10 @@ export default function PortfolioSharedPage() {
     return () => {
       observer.disconnect();
     };
-  }, [currentItem]); 
+  }, [currentItem]);
 
-  const toggleMobileBar = () => setIsOpenMobile((prev) => !prev);
   const handleSelect = (index: number) => {
     setCurrentIndex(index);
-    if (window.innerWidth <= 768) setIsOpenMobile(false);
   };
 
   return (
@@ -154,52 +146,10 @@ export default function PortfolioSharedPage() {
         <title>{portfolioData.name}</title>
       </Head>
 
-      <div className="fixed top-1/2 left-[50%] translate-x-[-50%] z-10 w-[100mm] -translate-y-1/2 lg:hidden flex justify-between">
-        <div>
-          {currentIndex !== 0 ? (
-            <button
-              onClick={prev}
-              className="bg-white p-1 lg:p-2 rounded-full shadow hover:scale-105 transition border border-border"
-            >
-              <IoChevronBack />
-            </button>
-          ) : (
-            <div />
-          )}
-        </div>
-
-        <div>
-          {currentIndex !== portfolioData.items.length - 1 ? (
-            <button
-              onClick={next}
-              className="bg-white  p-1 lg:p-2 rounded-full shadow hover:scale-105 transition border border-border"
-            >
-              <IoChevronForward />
-            </button>
-          ) : (
-            <div />
-          )}
-        </div>
-      </div>
-
-      <div className="fixed top-8 left-2 z-30 lg:hidden">
-        <button
-          onClick={toggleMobileBar}
-          className="bg-whitefull px-3 py-2 rounded-lg shadow text-sm flex items-center gap-1"
-        >
-          {isOpenMobile ? <TiThMenu /> : <TiThMenu />}
-        </button>
-      </div>
-
       <div
         className={`
-        fixed z-20 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 md:flex
-        ${
-          isOpenMobile
-            ? "flex-row fixed shadow-lg z-21 mt-6 left-2 max-h-[85%] overflow-y-auto top-[50%] translate-y-[-50%]"
-            : "flex-row fixed shadow-lg z-21 mt-6 left-[50%] translate-x-[-140mm] max-h-[85%] overflow-y-auto top-0"
-        }
-      `}
+        fixed z-20 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 md:flex flex-row fixed shadow-lg z-21 mt-6 left-[50%] translate-x-[-140mm] max-h-[85%] overflow-y-auto top-0
+        `}
       >
         {portfolioData.items.map((item, index) => (
           <img
@@ -215,12 +165,27 @@ export default function PortfolioSharedPage() {
         ))}
       </div>
 
-      {isOpenMobile && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur z-10 md:hidden"
-          onClick={() => setIsOpenMobile(false)}
-        />
-      )}
+      {/* Barra inferior com scroll horizontal apenas no mobile */}
+      <div
+        className={`
+    fixed bottom-0 left-0 w-full bg-white/90 border-t border-2 z-20 p-2 overflow-x-auto
+    flex gap-2 md:hidden
+  `}
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
+        {portfolioData.items.map((item, index) => (
+          <img
+            key={index}
+            src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+            onClick={() => handleSelect(index)}
+            className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
+              index === currentIndex
+                ? "!outline outline-2 outline-primary border-white border"
+                : "opacity-70"
+            }`}
+          />
+        ))}
+      </div>
 
       <div
         {...swipeHandlers}
