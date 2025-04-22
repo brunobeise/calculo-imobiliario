@@ -12,6 +12,7 @@ import { fetchPortfolios } from "@/store/portfolioReducer";
 import { GrMultiple } from "react-icons/gr";
 import PortfolioCard from "./PortfolioCard";
 import PortfolioModal from "./PortfolioModal";
+import PortfolioIntroModal from "./PortfolioIntroModal";
 
 export default function MyPortfolios() {
   const dispatch = useDispatch<AppDispatch>();
@@ -152,6 +153,7 @@ export default function MyPortfolios() {
           })
         }
       />
+      <PortfolioIntroModal />
     </>
   );
 }

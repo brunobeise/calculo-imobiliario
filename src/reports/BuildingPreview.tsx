@@ -39,6 +39,7 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
           <UserSignature
             type={headerType || 1}
             userData={user}
+            title="Imóvel"
             desc={configData.propertyName}
             primaryColor={primaryColor}
             secondaryColor={secondaryColor}
