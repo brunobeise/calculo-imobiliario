@@ -32,7 +32,7 @@ const menuItems = [
     path: "/portfolios",
     label: "Portfolios",
     icon: <GrMultiple />,
-    requiresAdmin: true,
+    isNew: true,
   },
   {
     path: "/imobiliaria",
