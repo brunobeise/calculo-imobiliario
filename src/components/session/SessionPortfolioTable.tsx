@@ -80,7 +80,7 @@ function PortfolioSessionRow(props: {
             </div>
           )}
 
-          {!session.isNew && (
+          {session.isNew && (
             <Chip
               size="sm"
               className="!bg-[#e3effb] !text-[#1a6abe] border border-[#1a6abe] ms-4"

@@ -218,7 +218,7 @@ export default function PortfolioModal({
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         {loading ? (
-          <div className="w-[1100px] h-[684px]">
+          <div className="w-[1100px] h-[466px] xl:h-[556px]">
             <Spinner />
           </div>
         ) : (

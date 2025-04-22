@@ -12,7 +12,7 @@ const PortfolioCard = ({ portfolio }: { portfolio: Portfolio }) => {
     .filter(Boolean);
 
   const [sessionsModal, setSessionsModal] = useState(false);
-  const [hasNewSession, setHasNewSession] = useState(false);
+  const [hasNewSession, setHasNewSession] = useState(portfolio.hasNewSession);
 
   return (
     <div className="relative overflow-hidden min-h-[235px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] flex flex-col bg-white cursor-pointer hover:shadow-lg">
@@ -59,7 +59,7 @@ const PortfolioCard = ({ portfolio }: { portfolio: Portfolio }) => {
       </Tooltip>
 
       {hasNewSession && (
-        <FaExclamationCircle className="absolute top-[127px] !right-[44px] text-primary bg-white rounded-full border-[1px] border-white text-lg" />
+        <FaExclamationCircle className="absolute top-[127px] !right-[44px] text-primary bg-white rounded-full border-[1px] border-white text-lg  z-[11]" />
       )}
 
       <div className="mt-4 mb-2">
