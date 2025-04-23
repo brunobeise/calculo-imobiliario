@@ -90,15 +90,15 @@ export default function PortfolioModal({
   useEffect(() => {
     if (!open) return;
     const query = {
-      search: "", // tudo
+      search: search, // tudo
       sortDirection: "desc" as const,
       currentPage: 1,
       orderBy: "createdAt",
-      limit: 100, // traga bastante coisa
+      limit: 20, // traga bastante coisa
     };
     dispatch(fetchCases(query));
     dispatch(fetchBuildings(query));
-  }, [dispatch, open]);
+  }, [dispatch, open, search]);
 
   /* ---------- load portfolio for edição ---------- */
   useEffect(() => {
@@ -132,26 +132,14 @@ export default function PortfolioModal({
 
   /* ---------- derived filtered lists (UI‑only) ---------- */
   const filteredProposals = useMemo(() => {
-    const term = search.toLowerCase();
     const selectedIds = new Set(fields.map((f) => f.caseId));
-    return proposals.filter(
-      (p) =>
-        !selectedIds.has(p.id) &&
-        (p.name.toLowerCase().includes(term) ||
-          p.propertyName?.toLowerCase().includes(term))
-    );
-  }, [proposals, search, fields]);
+    return proposals.filter((p) => !selectedIds.has(p.id));
+  }, [proposals, fields]);
 
   const filteredBuildings = useMemo(() => {
-    const term = search.toLowerCase();
     const selectedIds = new Set(fields.map((f) => f.buildingId));
-    return buildings.filter(
-      (b) =>
-        !selectedIds.has(b.id) &&
-        (b.propertyName?.toLowerCase().includes(term) ||
-          b.address?.toLowerCase?.().includes(term))
-    );
-  }, [buildings, search, fields]);
+    return buildings.filter((b) => !selectedIds.has(b.id));
+  }, [buildings, fields]);
 
   /* ---------- dnd helpers ---------- */
   const [, portfolioDrop] = useDrop({
