@@ -135,10 +135,16 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
     // -------------------
     // TOTAL DE FINANCIAMENTO
     // -------------------
+
+    const totalDischarges = propertyData?.discharges
+      .filter((d) => !d.isConstructionInterest)
+      .reduce((acc, val) => {
+        return acc + val.originalValue;
+      }, 0);
+
     const totalFinancing = Math.round(
       propertyData.propertyValue -
-        downPaymentDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
-        reinforcementDischarges.reduce((sum, d) => sum + d.originalValue, 0) -
+        totalDischarges -
         propertyData.downPayment -
         propertyData.subsidy
     );
