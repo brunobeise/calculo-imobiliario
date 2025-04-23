@@ -15,6 +15,8 @@ import SearchInput from "@/components/inputs/SearchInput";
 import PageStructure from "@/components/structure/PageStructure";
 import { navigate } from "vike/client/router";
 import BuildingCard from "./BuildingCard";
+import ImobziModal from "@/components/modals/ImobziModal";
+import { useAuth } from "@/auth";
 
 export default function Buildings() {
   const dispatch = useDispatch<AppDispatch>();
@@ -31,6 +33,7 @@ export default function Buildings() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(
     (localStorage.getItem("building-sortDirection") as "asc" | "desc") || "desc"
   );
+  const [imobziModal, setImobziModal] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -55,6 +58,8 @@ export default function Buildings() {
     localStorage.setItem("building-sortDirection", sortDirection);
   }, [sortDirection]);
 
+  const { user } = useAuth();
+
   const header = (
     <div className="flex items-center justify-between">
       <div className="flex items-center text-primary gap-2 text-2xl ms-4 mt-8 mb-3 w-[250px]">
@@ -78,12 +83,30 @@ export default function Buildings() {
             <Option value="LAND">Terreno</Option>
           </Select>
         </div>
-        <Button
-          onClick={() => navigate("/imoveis/novo")}
-          endDecorator={<FaPlusCircle />}
-        >
-          Novo Imóvel
-        </Button>
+
+        <div className="flex gap-4 items-end">
+          {user.imobzi && (
+            <Button
+              className="!mt-4"
+              variant="outlined"
+              onClick={() => setImobziModal(true)}
+              endDecorator={
+                <img
+                  className="w-7"
+                  src="https://play-lh.googleusercontent.com/D99YQI9BnlZXfwHApFEZVX50OaJYZ1UadsvxUA2itNoyjsQpGCdoZ61wGGz3rjspRvzU=w240-h480-rw"
+                />
+              }
+            >
+              Sincronizar com Imobzi
+            </Button>
+          )}
+          <Button
+            onClick={() => navigate("/imoveis/novo")}
+            endDecorator={<FaPlusCircle />}
+          >
+            Novo Imóvel
+          </Button>
+        </div>
       </div>
     </div>
   );
@@ -147,12 +170,15 @@ export default function Buildings() {
   );
 
   return (
-    <PageStructure
-      content={content}
-      loading={loading}
-      contentHeader={contentHeader}
-      header={header}
-      footer={footer}
-    />
+    <>
+      <PageStructure
+        content={content}
+        loading={loading}
+        contentHeader={contentHeader}
+        header={header}
+        footer={footer}
+      />
+      <ImobziModal open={imobziModal} onClose={() => setImobziModal(false)} />
+    </>
   );
 }

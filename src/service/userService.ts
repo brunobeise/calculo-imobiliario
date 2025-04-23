@@ -19,6 +19,7 @@ export const userService = {
       id: string;
       owner: boolean;
       admin: boolean;
+      imobzi: boolean;
     }>("/permissions");
     return response.data;
   },

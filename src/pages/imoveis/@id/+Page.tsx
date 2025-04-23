@@ -26,6 +26,7 @@ import { FaLink } from "react-icons/fa6";
 import ScrapModal from "@/pages/scrap/ScrapModal";
 import { useAuth } from "@/auth";
 import { toBRL } from "@/lib/formatter";
+import ImobziSingleImportModal from "@/components/modals/ImobziSingleModal";
 
 export default function Building() {
   const pageContext = usePageContext();
@@ -42,6 +43,7 @@ export default function Building() {
   const [initialData, setInitialData] = useState<Partial<Building> | undefined>(
     id === "novo" ? undefined : building
   );
+  const [imobziModal, setImobziModal] = useState(false);
 
   const newBuilding = id === "novo";
 
@@ -82,23 +84,41 @@ export default function Building() {
           {newBuilding ? "Novo Imóvel" : building?.propertyName}
         </h2>
       </div>
-      {!newBuilding && user.id === building?.creator?.id && (
-        <Button
-          onClick={() => setEdit(!edit)}
-          endDecorator={edit ? <FaEye /> : <FaPen />}
-        >
-          {edit ? "Visualizar Imóvel" : "Editar Imóvel"}
-        </Button>
-      )}
-      {newBuilding && (
-        <Button
-          className="!mt-4"
-          onClick={() => setScrapModal(true)}
-          endDecorator={<FaLink />}
-        >
-          Importar com link
-        </Button>
-      )}
+
+      <div className="flex gap-4">
+        {!newBuilding && user.id === building?.creator?.id && (
+          <Button
+            onClick={() => setEdit(!edit)}
+            endDecorator={edit ? <FaEye /> : <FaPen />}
+          >
+            {edit ? "Visualizar Imóvel" : "Editar Imóvel"}
+          </Button>
+        )}
+        {user.imobzi && newBuilding && (
+          <Button
+            className="!mt-4"
+            variant="outlined"
+            onClick={() => setImobziModal(true)}
+            endDecorator={
+              <img
+                className="w-7"
+                src="https://play-lh.googleusercontent.com/D99YQI9BnlZXfwHApFEZVX50OaJYZ1UadsvxUA2itNoyjsQpGCdoZ61wGGz3rjspRvzU=w240-h480-rw"
+              />
+            }
+          >
+            Importar do Imobzi
+          </Button>
+        )}
+        {newBuilding && (
+          <Button
+            className="!mt-4"
+            onClick={() => setScrapModal(true)}
+            endDecorator={<FaLink />}
+          >
+            Importar com link
+          </Button>
+        )}
+      </div>
     </div>
   );
 
@@ -127,7 +147,8 @@ export default function Building() {
             )}
             {building?.bedrooms && (
               <p>
-                <strong>Dormitórios:</strong> {building?.bedrooms} {building.suites ? `(${building.suites} suítes)` : ''}
+                <strong>Dormitórios:</strong> {building?.bedrooms}{" "}
+                {building.suites ? `(${building.suites} suítes)` : ""}
               </p>
             )}
             {building?.bathrooms && (
@@ -219,6 +240,11 @@ export default function Building() {
         open={scrapModal}
         onClose={() => setScrapModal(false)}
         onScrap={handleScrapResult}
+      />
+      <ImobziSingleImportModal
+        setBuilding={(item) => setInitialData(item)}
+        open={imobziModal}
+        onClose={() => setImobziModal(false)}
       />
     </>
   );

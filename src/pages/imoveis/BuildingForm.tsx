@@ -15,8 +15,11 @@ import { Button } from "@mui/joy";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import { useAuth } from "@/auth";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
+import { usePageContext } from "vike-react/usePageContext";
 
 export default function BuildingForm({ initialData, onSubmit }) {
+  const pageContext = usePageContext();
+  const { id } = pageContext.routeParams;
   const {
     control,
     handleSubmit,
@@ -179,7 +182,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
             rules={{
               required: "O nome do imóvel é obrigatório.",
               minLength: { value: 3, message: "Mínimo de 3 caracteres." },
-              maxLength: { value: 50, message: "Máximo de 50 caracteres." },
+              maxLength: { value: 100, message: "Máximo de 100 caracteres." },
             }}
             render={({ field }) => (
               <TextInput
@@ -348,8 +351,9 @@ export default function BuildingForm({ initialData, onSubmit }) {
           )}
         />
         {(user.owner || user.id === initialData?.creator?.id) &&
+          id !== "novo" &&
           initialData && (
-            <div className="ps-3">
+            <div className="ps-3 col-span-2 flex mt-5">
               <Button
                 onClick={() => setDeleteModal(true)}
                 endDecorator={<FaTrash />}

@@ -22,6 +22,7 @@ interface AuthContextType {
     id: string;
     owner: boolean;
     admin: boolean;
+    imobzi: boolean;
   };
 }
 
@@ -40,18 +41,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     id: string;
     owner: boolean;
     admin: boolean;
+    imobzi: boolean;
   }>(() => {
     if (token) {
       return {
         id: token.userId,
         owner: Cookies.get("owner") === "true",
         admin: Cookies.get("admin") === "true",
+        imobzi: Cookies.get("imobzi") === "true",
       };
     }
     return {
       id: "",
       owner: false,
       admin: false,
+      imobzi: false,
     };
   });
 
@@ -74,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(permissions);
         Cookies.set("owner", permissions.owner.toString());
         Cookies.set("admin", permissions.admin.toString());
-
+        Cookies.set("imobzi", permissions.imobzi.toString());
         dispatch(fetchRealEstateData()).unwrap();
       }
       return permissions;
