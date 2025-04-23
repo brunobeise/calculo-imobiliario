@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useDrop, useDrag, XYCoord } from "react-dnd";
 import { Proposal } from "@/types/proposalTypes";
@@ -94,7 +94,7 @@ export default function PortfolioModal({
       sortDirection: "desc" as const,
       currentPage: 1,
       orderBy: "createdAt",
-      limit: 20, // traga bastante coisa
+      limit: 100, // traga bastante coisa
     };
     dispatch(fetchCases(query));
     dispatch(fetchBuildings(query));
@@ -129,17 +129,6 @@ export default function PortfolioModal({
       setLoading(false);
     });
   }, [portfolioId, open, reset]);
-
-  /* ---------- derived filtered lists (UI‑only) ---------- */
-  const filteredProposals = useMemo(() => {
-    const selectedIds = new Set(fields.map((f) => f.caseId));
-    return proposals.filter((p) => !selectedIds.has(p.id));
-  }, [proposals, fields]);
-
-  const filteredBuildings = useMemo(() => {
-    const selectedIds = new Set(fields.map((f) => f.buildingId));
-    return buildings.filter((b) => !selectedIds.has(b.id));
-  }, [buildings, fields]);
 
   /* ---------- dnd helpers ---------- */
   const [, portfolioDrop] = useDrop({
@@ -322,7 +311,7 @@ export default function PortfolioModal({
                           <Spinner />
                         </div>
                       ) : (
-                        filteredProposals.map((p) => (
+                        proposals.map((p) => (
                           <ItemCard
                             key={p.id}
                             data={p}
@@ -345,7 +334,7 @@ export default function PortfolioModal({
                       ref={buildingsRemoveDrop}
                       className="flex flex-col gap-2 px-2 py-2 overflow-y-auto  h-[264px] xl:h-[354px] !border !border-dashed !border-border"
                     >
-                      {filteredBuildings.map((b) => (
+                      {buildings.map((b) => (
                         <ItemCard
                           key={b.id}
                           data={b}
