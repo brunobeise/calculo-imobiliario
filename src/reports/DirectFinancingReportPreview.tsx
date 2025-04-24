@@ -184,6 +184,9 @@ const DirectFinancingReportPreview = forwardRef<
                 hasBankFinancing={false}
                 handlePaymentConditionsConfig={handlePaymentConditionsConfig}
                 config={configData.reportConfig.paymentConditionsConfig}
+                description={
+                  configData.reportConfig.paymentConditionsDescription
+                }
               />
               {isAdvancedMode && (
                 <ProjectionReturn

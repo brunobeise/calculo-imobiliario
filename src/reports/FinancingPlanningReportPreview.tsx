@@ -187,6 +187,9 @@ const FinancingPlanningReportPreview = forwardRef<
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
                 config={configData.reportConfig.paymentConditionsConfig}
+                description={
+                  configData.reportConfig.paymentConditionsDescription
+                }
               />
               {isAdvancedMode && (
                 <ProjectionReturn

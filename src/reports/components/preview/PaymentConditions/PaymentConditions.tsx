@@ -11,6 +11,7 @@ import InstallmentPlanCard from "./InstallmentPlanCard";
 import KeyHandoverCard from "./KeyHandoverCard";
 import ConstructionInterestCard from "./ConstructionInterestCard";
 import ReinforcementsCard from "./ReinforcementsCard";
+import { SimpleViewer } from "@/components/tiptap-templates/simple/simple-viewer";
 
 interface PaymentConditionsProps {
   color: string;
@@ -34,6 +35,7 @@ interface PaymentConditionsProps {
     reinforcementsHeight: number;
     contructionInterestHeight: number;
   }) => void;
+  description: string;
 }
 
 const PaymentConditions: React.FC<PaymentConditionsProps> = ({
@@ -48,6 +50,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
   highlightSumPaymentsValues,
   config,
   handlePaymentConditionsConfig,
+  description,
 }) => {
   const { discharges, initialDate, downPayment, financingFees } = propertyData;
 
@@ -604,6 +607,10 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
           ))}
         </div>
       )}
+
+      <div className="px-4">
+        <SimpleViewer html={description} />
+      </div>
     </div>
   );
 };

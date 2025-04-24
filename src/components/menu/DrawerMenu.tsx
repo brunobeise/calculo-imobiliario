@@ -189,7 +189,8 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                       {icon}
                     </ListItemDecorator>
                     <Typography
-                      className={`font-bold !text-[1rem]  !ms-[-15px] ${
+                      level="h4"
+                      className={`!font-bold !text-[1rem] !font-sans  !ms-[-15px] ${
                         pageContext.urlPathname === path
                           ? "!text-primary"
                           : "!text-grayScale-600"

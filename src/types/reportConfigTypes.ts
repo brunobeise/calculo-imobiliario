@@ -15,4 +15,5 @@ export interface ReportConfig {
     reinforcementsHeight: number;
     contructionInterestHeight: number;
   };
+  paymentConditionsDescription: string;
 }

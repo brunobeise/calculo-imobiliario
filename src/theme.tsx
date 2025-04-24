@@ -12,6 +12,8 @@ const theme = extendTheme({
       },
     },
   },
+  cssVarPrefix: "joy",
+
   colorSchemes: {
     light: {
       palette: {

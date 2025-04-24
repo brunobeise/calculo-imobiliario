@@ -13,6 +13,10 @@ export default defineConfig({
     },
   },
 
+  define: {
+    global: "globalThis", 
+  },
+
   ssr: {
     noExternal: [
       "@mui/joy",

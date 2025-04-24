@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { FaHome } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { FaImage } from "react-icons/fa6";
+import { MdNoteAlt } from "react-icons/md";
 
 const menuItems = [
   { id: "property", label: "Imóvel", icon: <FaHome className="text-xl" /> },
@@ -10,6 +11,11 @@ const menuItems = [
     id: "config",
     label: "Config.",
     icon: <FaGear className="text-xl" />,
+  },
+  {
+    id: "notes",
+    label: "Notas",
+    icon: <MdNoteAlt className="text-2xl" />,
   },
 ];
 

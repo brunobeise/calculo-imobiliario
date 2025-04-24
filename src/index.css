@@ -1,3 +1,6 @@
+@import "./lib/styles/_keyframe-animations.scss";
+@import "./lib/styles/_variables.scss";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,8 +15,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "Rawline Bold", sans-serif;
+}
+
+h3,
+h4 {
+  font-family: "Rawline Medium", sans-serif;
 }
 
 .font-bold {
@@ -54,6 +67,22 @@ strong {
 
 .scrollbar::-webkit-scrollbar-track {
   background: transparent; /* Remove o fundo do track */
+}
+
+.rendered-html * {
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.rendered-html p {
+  margin: 0 0 1rem;
+}
+
+.rendered-html img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
 }
 
 @layer base {
