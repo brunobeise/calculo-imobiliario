@@ -86,7 +86,9 @@ export default function PortfolioModal({
     (s: RootState) => s.proposals.myCasesLoading
   );
   const buildings = useSelector((s: RootState) => s.building.buildings);
-
+  const searchLoading = useSelector(
+    (s: RootState) => s.building.loading || s.proposals.myCasesLoading
+  );
   useEffect(() => {
     if (!open) return;
     const query = {
@@ -116,8 +118,6 @@ export default function PortfolioModal({
     }
     setLoading(true);
     portfolioService.getPortfolioById(portfolioId).then((data) => {
-      console.log(data);
-
       reset({
         name: data.name,
         clientName: data.clientName,
@@ -145,19 +145,23 @@ export default function PortfolioModal({
 
   const addItem = (d: Proposal | Building) => {
     const id = `${d.id}-${Date.now()}`;
+    const now = new Date().toISOString();
+
     if ("name" in d) {
       append({
         id,
         portfolioId: "",
         caseId: d.id,
-        addedAt: new Date().toISOString(),
+        addedAt: now,
+        case: d,
       });
     } else {
       append({
         id,
         portfolioId: "",
         buildingId: d.id,
-        addedAt: new Date().toISOString(),
+        addedAt: now,
+        building: d,
       });
     }
   };
@@ -175,6 +179,7 @@ export default function PortfolioModal({
     setLoading(false);
     reload();
     onClose();
+    setSearch("");
   };
 
   const handleDelete = async () => {
@@ -183,13 +188,17 @@ export default function PortfolioModal({
     setLoading(false);
     reload();
     onClose();
+    setSearch("");
   };
 
   /* ---------- render ---------- */
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+        setSearch("");
+      }}
       title={portfolioId ? "Editar Portfolio" : "Criar Portfolio"}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -247,7 +256,7 @@ export default function PortfolioModal({
                     return (
                       <ItemCard
                         key={item.id}
-                        data={item.buildingId ? item.building : item.case}
+                        data={item.building || item.case}
                         draggable
                         index={idx}
                         moveItem={move}
@@ -299,7 +308,7 @@ export default function PortfolioModal({
                       ref={proposalsRemoveDrop}
                       className="flex flex-col gap-2 px-2 py-2 overflow-y-auto h-[264px] xl:h-[354px] relative  !border !border-dashed !border-border"
                     >
-                      {proposalsInitialLoading ? (
+                      {proposalsInitialLoading || searchLoading ? (
                         <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
                           <Spinner />
                         </div>
@@ -497,11 +506,16 @@ function ItemCard({
   const internalRef = useDragDropItem(index, moveItem ?? (() => {}));
   const [, dragRef] = useDrag({
     type: "EXTERNAL_ITEM",
-    item: {
-      data,
-      source: "name" in data ? "proposal" : "building",
+    item: () => {
+      if (!data) return { data: null, source: "unknown" };
+      return {
+        data,
+        source: "name" in data ? "proposal" : "building",
+      };
     },
   });
+
+  if (!data) return "data undefiend";
 
   const ref = draggable ? internalRef : dragRef;
   const isSelectable = !draggable && !!onAdd;
