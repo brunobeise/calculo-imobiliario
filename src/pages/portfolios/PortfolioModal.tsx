@@ -90,11 +90,11 @@ export default function PortfolioModal({
   useEffect(() => {
     if (!open) return;
     const query = {
-      search: search, // tudo
+      search: search,
       sortDirection: "desc" as const,
       currentPage: 1,
       orderBy: "createdAt",
-      limit: 100, // traga bastante coisa
+      limit: 100,
     };
     dispatch(fetchCases(query));
     dispatch(fetchBuildings(query));
@@ -116,15 +116,14 @@ export default function PortfolioModal({
     }
     setLoading(true);
     portfolioService.getPortfolioById(portfolioId).then((data) => {
+      console.log(data);
+
       reset({
         name: data.name,
         clientName: data.clientName,
         description: data.description,
         requestName: data.requestName,
-        items: data.items.map((i: any) => ({
-          ...i,
-          addedAt: new Date(i.addedAt).toISOString(),
-        })),
+        items: data.items,
       });
       setLoading(false);
     });
@@ -245,21 +244,15 @@ export default function PortfolioModal({
                     </span>
                   )}
                   {fields.map((item, idx) => {
-                    const src =
-                      item.caseId != null
-                        ? proposals.find((p) => p.id === item.caseId)
-                        : buildings.find((b) => b.id === item.buildingId);
                     return (
-                      src && (
-                        <ItemCard
-                          key={item.id}
-                          data={src}
-                          draggable
-                          index={idx}
-                          moveItem={move}
-                          onRemove={() => remove(idx)}
-                        />
-                      )
+                      <ItemCard
+                        key={item.id}
+                        data={item.buildingId ? item.building : item.case}
+                        draggable
+                        index={idx}
+                        moveItem={move}
+                        onRemove={() => remove(idx)}
+                      />
                     );
                   })}
                 </div>
