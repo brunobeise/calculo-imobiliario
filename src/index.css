@@ -69,22 +69,6 @@ strong {
   background: transparent; /* Remove o fundo do track */
 }
 
-.rendered-html * {
-  line-height: 1.6;
-  margin-bottom: 0.75rem;
-}
-
-.rendered-html p {
-  margin: 0 0 1rem;
-}
-
-.rendered-html img {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  margin: 1rem auto;
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -110,4 +94,10 @@ strong {
 }
 
 @layer components {
+}
+
+html,
+body {
+  height: 100%;
+  overflow-y: auto !important;
 }
