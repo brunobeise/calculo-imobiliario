@@ -86,7 +86,7 @@ export default function Building() {
       </div>
 
       <div className="flex gap-4">
-        {!newBuilding && user.id === building?.creator?.id && (
+        {!newBuilding && (
           <Button
             onClick={() => setEdit(!edit)}
             endDecorator={edit ? <FaEye /> : <FaPen />}
