@@ -9,11 +9,14 @@ export interface ReportConfig {
   pageViewMap: boolean[];
   highlightSumPaymentsValues: boolean;
   displaySummary: boolean;
-  paymentConditionsConfig: {
-    order: string[];
-    downPaymentHeight: number;
-    reinforcementsHeight: number;
-    contructionInterestHeight: number;
-  };
+  PaymentConditionsConfig: PaymentConditionsConfig;
   paymentConditionsDescription: string;
+}
+
+export interface PaymentConditionsConfig {
+  order: string[];
+  downPaymentHeight: number;
+  reinforcementsHeight: number;
+  constructionInterestHeight: number;
+  downPaymentCustomType: string;
 }

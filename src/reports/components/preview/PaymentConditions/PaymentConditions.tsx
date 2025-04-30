@@ -27,13 +27,13 @@ interface PaymentConditionsProps {
     order: string[];
     downPaymentHeight: number;
     reinforcementsHeight: number;
-    contructionInterestHeight: number;
+    constructionInterestHeight: number;
   };
   handlePaymentConditionsConfig?: (payload: {
     order: string[];
     downPaymentHeight: number;
     reinforcementsHeight: number;
-    contructionInterestHeight: number;
+    constructionInterestHeight: number;
   }) => void;
   description: string;
 }
@@ -431,6 +431,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         propertyData={propertyData}
         separateDocumentation={separateDocumentation}
         id={"downPayment"}
+        key={"downPayment"}
         index={config.order.findIndex((c) => c === "downPayment")}
         moveCard={moveCard}
         initialHeight={config.downPaymentHeight}
@@ -445,6 +446,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         propertyData={propertyData}
         separateDocumentation={separateDocumentation}
         id={"financingFees"}
+        key={"financingFees"}
         index={config.order.findIndex((c) => c === "financingFees")}
         moveCard={moveCard}
       />
@@ -456,6 +458,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         totalFinancing={totalFinancing}
         propertyData={propertyData}
         id={"financing"}
+        key={"financing"}
         index={config.order.findIndex((c) => c === "financing")}
         moveCard={moveCard}
       />
@@ -469,6 +472,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         totalInstallmentPlan={totalInstallmentPlan}
         totalInstallmentPlanParts={totalInstallmentPlanParts}
         id={"installments"}
+        key={"installments"}
         index={config.order.findIndex((c) => c === "installments")}
         moveCard={moveCard}
       />
@@ -493,15 +497,17 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         discharges={discharges}
         constructionInterestDetails={constructionInterestDetails}
         id={"constructionInterest"}
+        key={"constructionInterest"}
         index={config.order.findIndex((c) => c === "constructionInterest")}
         moveCard={moveCard}
-        initialHeight={config.contructionInterestHeight}
+        initialHeight={config.constructionInterestHeight}
         handleHeight={handleHeight}
       />
     ),
     reinforcements: (
       <ReinforcementsCard
         id={"reinforcements"}
+        key={"reinforcements"}
         index={config.order.findIndex((c) => c === "reinforcements")}
         moveCard={moveCard}
         color={color}

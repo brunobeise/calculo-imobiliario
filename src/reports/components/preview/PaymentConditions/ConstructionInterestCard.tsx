@@ -25,7 +25,7 @@ const ConstructionInterestCard = ({
   const debouncedHandleHeight = useMemo(
     () =>
       debounce((height: number) => {
-        handleHeight("contructionInterestHeight", height);
+        handleHeight("constructionInterestHeight", height);
       }, 200),
     [handleHeight]
   );

@@ -5,6 +5,7 @@ import {
   ListItemDecorator,
   Radio,
   RadioGroup,
+  Typography,
 } from "@mui/joy";
 import { FaCalculator } from "react-icons/fa6";
 import { LuBox } from "react-icons/lu";
@@ -21,22 +22,38 @@ export default function ConfigSection({
   configData,
   onChange,
 }: ConfigSectionProps) {
+  const { reportConfig } = configData;
+
   const handlePageViewToggle = (index: number, checked: boolean) => {
-    const newMap = [...configData.reportConfig.pageViewMap];
+    const newMap = [...reportConfig.pageViewMap];
     newMap[index] = checked;
     onChange({
       ...configData,
       reportConfig: {
-        ...configData.reportConfig,
+        ...reportConfig,
         pageViewMap: newMap,
       },
     });
   };
 
+  // const handleDownPaymentTypeChange = (value: string | null) => {
+  //   onChange({
+  //     ...configData,
+  //     reportConfig: {
+  //       ...reportConfig,
+  //       PaymentConditionsConfig: {
+  //         ...reportConfig.PaymentConditionsConfig,
+  //         downPaymentCustomType: value || "",
+  //       },
+  //     },
+  //   });
+  // };
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-5">
       <h5 className="font-bold text-xl">Configurações</h5>
 
+      {/* SUBTIPO */}
       <RadioGroup
         aria-label="subType"
         name="subType"
@@ -45,7 +62,7 @@ export default function ConfigSection({
       >
         <List
           orientation="horizontal"
-          className="!grid !grid-cols-2 !mb-5"
+          className="!grid !grid-cols-2"
           sx={{
             "--List-gap": "0.5rem",
             "--ListItem-paddingY": "1rem",
@@ -82,108 +99,123 @@ export default function ConfigSection({
       </RadioGroup>
 
       {configData.subType !== "Simplificado" && (
-        <div className="grid grid-cols-1 gap-y-5 mb-5">
-          {[
-            "Introdução",
-            "Pagamento e retorno esperado",
-            "Cálculo do investimento",
-            "Divisão do capital",
-            "Conversão para valor presente",
-            "Reinvestimento em Renda Fixa",
-            "Análise Gráfica Detalhada",
-            "Descrição do imóvel",
-          ].map((label, index) => (
-            <BooleanInput
-              key={label}
-              label={label}
-              checked={!!configData.reportConfig.pageViewMap[index]}
-              onChange={(v) => handlePageViewToggle(index, v.target.checked)}
-            />
-          ))}
+        <>
+          <Typography level="title-md">Exibição de Páginas</Typography>
+          <div className="grid grid-cols-1 gap-y-3">
+            {[
+              "Introdução",
+              "Pagamento e retorno esperado",
+              "Cálculo do investimento",
+              "Divisão do capital",
+              "Conversão para valor presente",
+              "Reinvestimento em Renda Fixa",
+              "Análise Gráfica Detalhada",
+              "Descrição do imóvel",
+            ].map((label, index) => (
+              <BooleanInput
+                key={label}
+                label={label}
+                checked={!!reportConfig.pageViewMap[index]}
+                onChange={(v) => handlePageViewToggle(index, v.target.checked)}
+              />
+            ))}
+          </div>
           <Divider />
-        </div>
+        </>
       )}
 
-      <div className="grid grid-cols-1 gap-y-5">
+      <Typography level="title-md">Condição de Pagamento</Typography>
+      <div className="grid grid-cols-1 gap-y-4">
+        {/* <Select
+          value={
+            reportConfig?.PaymentConditionsConfig?.downPaymentCustomType ?? ""
+          }
+          onChange={(_, value) => handleDownPaymentTypeChange(value ?? "")}
+          placeholder="Tipo de entrada"
+        >
+          <Option value="">Padrão</Option>
+          <Option value="parcelamento_com_sinal">Parcelamento com sinal</Option>
+        </Select> */}
         <BooleanInputSwitch
-          label="Separar Documentação"
-          checked={configData.reportConfig?.separateDocumentation}
+          label="Exibir soma dos pagamentos"
+          checked={reportConfig.highlightSumPaymentsValues}
           onChange={(v) =>
             onChange({
               ...configData,
               reportConfig: {
-                ...configData.reportConfig,
+                ...reportConfig,
+                highlightSumPaymentsValues: v,
+              },
+            })
+          }
+        />
+        <BooleanInputSwitch
+          label="Separar Documentação"
+          checked={reportConfig.separateDocumentation}
+          onChange={(v) =>
+            onChange({
+              ...configData,
+              reportConfig: {
+                ...reportConfig,
                 separateDocumentation: v,
               },
             })
           }
         />
-
         <BooleanInputSwitch
           label="Agrupar Parcelas Mensais"
-          checked={configData.reportConfig?.groupMonthlyInstallments}
+          checked={reportConfig.groupMonthlyInstallments}
           onChange={(v) =>
             onChange({
               ...configData,
               reportConfig: {
-                ...configData.reportConfig,
+                ...reportConfig,
                 groupMonthlyInstallments: v,
               },
             })
           }
         />
+      </div>
 
+      <Divider />
+
+      <Typography level="title-md">Configurações Gerais</Typography>
+      <div className="grid grid-cols-1 gap-y-4">
         <BooleanInputSwitch
           label="Exibir Tempo de Financiamento"
-          checked={configData.reportConfig?.displayFinancingTime}
+          checked={reportConfig.displayFinancingTime}
           onChange={(v) =>
             onChange({
               ...configData,
               reportConfig: {
-                ...configData.reportConfig,
+                ...reportConfig,
                 displayFinancingTime: v,
               },
             })
           }
         />
-
         <BooleanInputSwitch
           label="Visualizador de Fotos"
-          checked={configData.reportConfig?.photoViewer}
+          checked={reportConfig.photoViewer}
           onChange={(v) =>
             onChange({
               ...configData,
               reportConfig: {
-                ...configData.reportConfig,
+                ...reportConfig,
                 photoViewer: v,
               },
             })
           }
         />
-
         <BooleanInputSwitch
           label="Solicitar Nome"
-          checked={configData.reportConfig?.requestName}
+          checked={reportConfig.requestName}
           onChange={(v) =>
             onChange({
               ...configData,
               reportConfig: {
-                ...configData.reportConfig,
+                ...reportConfig,
                 requestName: v,
-              },
-            })
-          }
-        />
-
-        <BooleanInputSwitch
-          label="Exibir soma dos pagamentos"
-          checked={configData.reportConfig?.highlightSumPaymentsValues}
-          onChange={(v) =>
-            onChange({
-              ...configData,
-              reportConfig: {
-                ...configData.reportConfig,
-                highlightSumPaymentsValues: v,
               },
             })
           }
@@ -192,12 +224,12 @@ export default function ConfigSection({
         {configData.subType === "Avançado" && (
           <BooleanInputSwitch
             label="Mostrar Sumário"
-            checked={configData.reportConfig?.displaySummary}
+            checked={reportConfig.displaySummary}
             onChange={(v) =>
               onChange({
                 ...configData,
                 reportConfig: {
-                  ...configData.reportConfig,
+                  ...reportConfig,
                   displaySummary: v,
                 },
               })
@@ -205,6 +237,8 @@ export default function ConfigSection({
           />
         )}
       </div>
+
+      <Divider />
     </div>
   );
 }

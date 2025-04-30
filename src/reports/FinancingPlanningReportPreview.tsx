@@ -25,7 +25,7 @@ interface FinancingPlanningReportPreviewProps {
     order: string[];
     downPaymentHeight: number;
     reinforcementsHeight: number;
-    contructionInterestHeight: number;
+    constructionInterestHeight: number;
   }) => void;
   propertyData?: PropertyData;
   user?: User;
@@ -186,7 +186,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 propertyData={propertyData}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
-                config={configData.reportConfig.paymentConditionsConfig}
+                config={configData.reportConfig.PaymentConditionsConfig}
                 description={
                   configData.reportConfig.paymentConditionsDescription
                 }

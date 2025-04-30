@@ -41,7 +41,7 @@ interface DirectFinancingReportPreviewProps {
     order: string[];
     downPaymentHeight: number;
     reinforcementsHeight: number;
-    contructionInterestHeight: number;
+    constructionInterestHeight: number;
   }) => void;
 }
 
@@ -183,7 +183,7 @@ const DirectFinancingReportPreview = forwardRef<
                 secondary={custom.secondaryColor}
                 hasBankFinancing={false}
                 handlePaymentConditionsConfig={handlePaymentConditionsConfig}
-                config={configData.reportConfig.paymentConditionsConfig}
+                config={configData.reportConfig.PaymentConditionsConfig}
                 description={
                   configData.reportConfig.paymentConditionsDescription
                 }

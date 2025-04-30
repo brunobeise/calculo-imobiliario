@@ -7,7 +7,10 @@ import ReportMenu from "./reportConfig/ReportMenu";
 import SessionsDrawer from "@/components/session/SessionsDrawer";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
 import DirectFinancingReportPreview from "./DirectFinancingReportPreview";
-import { ReportConfig } from "@/types/reportConfigTypes";
+import {
+  PaymentConditionsConfig,
+  ReportConfig,
+} from "@/types/reportConfigTypes";
 import PropertySection from "./reportConfig/PropertySection";
 import ConfigSection from "./reportConfig/ConfigSection";
 import ImagesSection from "./reportConfig/ImagesSection";
@@ -79,17 +82,12 @@ export default function ReportPreview({
 
   const [activeItem, setActiveItem] = useState("property");
 
-  const handlePaymentConditionsConfig = (payload: {
-    order: string[];
-    downPaymentHeight: number;
-    reinforcementsHeight: number;
-    contructionInterestHeight: number;
-  }) => {
+  const handlePaymentConditionsConfig = (payload: PaymentConditionsConfig) => {
     onChange({
       ...configData,
       reportConfig: {
         ...configData.reportConfig,
-        paymentConditionsConfig: payload,
+        PaymentConditionsConfig: payload,
       },
     });
   };
