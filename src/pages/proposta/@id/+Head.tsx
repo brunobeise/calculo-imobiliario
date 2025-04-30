@@ -15,8 +15,8 @@ export function Head() {
     proposalData.user.photo ||
     "https://example.com/default-image.jpg";
 
-  const description = proposalData.description
-    ? proposalData.description
+  const description = proposalData.subtitle
+    ? proposalData.subtitle
     : `Confira o planejamento financeiro personalizado de ${proposalData.user.fullName}, com detalhes completos sobre a proposta.`;
 
   const url = `https://app.imobdeal.com.br/proposta/${proposalData.id}`;
@@ -54,7 +54,12 @@ export function Head() {
       <link rel="author" href={proposalData.user.linkedin} />
       <link rel="canonical" href={url} />
 
-      <link rel="preload" as="image" href={proposalData.mainPhoto} type="image/webp" />
+      <link
+        rel="preload"
+        as="image"
+        href={proposalData.mainPhoto}
+        type="image/webp"
+      />
     </>
   );
 }
