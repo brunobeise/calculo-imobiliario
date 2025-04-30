@@ -69,7 +69,7 @@ export default function PropertyDescription({
   return (
     <div>
       <div className="px-12 pt-6 mb-6">
-        <strong style={{ color, fontFamily: configData.propertyNameFont }} className="text-3xl">
+        <strong style={{ color, fontFamily: configData.propertyNameFont }} className="text-2xl my-4">
           {configData.propertyName}
         </strong>
         {configData.description && (
