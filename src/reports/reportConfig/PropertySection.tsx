@@ -3,6 +3,7 @@ import LinkBuildingButton from "@/components/shared/VinculateBuildingButton";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import ItemListInput from "@/components/inputs/ItemListInput";
 import { ReportData } from "../ReportPreview";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 
 interface PropertySectionProps {
   configData: ReportData;
@@ -28,6 +29,7 @@ export default function PropertySection({
             mainPhoto: building.mainPhoto,
             description: building.description,
             propertyName: building.propertyName,
+            propertyNameFont: building.propertyNameFont,
             additionalPhotos: building.additionalPhotos,
             features: building.features,
             suites: building.suites,
@@ -57,6 +59,30 @@ export default function PropertySection({
         </FormControl>
 
         <FormControl className="col-span-2">
+          <FormLabel htmlFor="subtitle">Subtítulo</FormLabel>
+          <Textarea
+            id="subtitle"
+            value={configData.subtitle}
+            minRows={2}
+            onChange={(e) => {
+              onChange({ ...configData, subtitle: e.target.value });
+            }}
+          />
+        </FormControl>
+
+        <div className="col-span-2">
+          <div className="flex flex-col gap-2">
+            <FormLabel>Descrição</FormLabel>
+            <SimpleEditor
+              content={configData.description}
+              onUpdate={(newHtml) =>
+                onChange({ ...configData, description: newHtml })
+              }
+            />
+          </div>
+        </div>
+
+        <FormControl className="col-span-2">
           <CurrencyInput
             infoTooltip=""
             noHeight
@@ -64,17 +90,6 @@ export default function PropertySection({
             value={configData.value}
             onChange={(e) =>
               onChange({ ...configData, value: Number(e.target.value) })
-            }
-          />
-        </FormControl>
-
-        <FormControl className="col-span-2">
-          <FormLabel htmlFor="description">Descrição</FormLabel>
-          <Textarea
-            id="description"
-            value={configData.description}
-            onChange={(e) =>
-              onChange({ ...configData, description: e.target.value })
             }
           />
         </FormControl>

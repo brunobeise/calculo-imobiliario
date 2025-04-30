@@ -87,14 +87,14 @@ export default function FinancingPlanning(): JSX.Element {
 
     if (
       actualCase.mainPhoto &&
-      !actualCase.mainPhoto.includes("res.cloudinary.com")
+      !actualCase.mainPhoto.includes("https://")
     ) {
       uploadMainPhoto = await uploadImage(actualCase.mainPhoto);
     }
 
     const uploadAdditionalPhotos = await Promise.all(
       actualCase.additionalPhotos.map(async (photo) => {
-        if (photo && !photo.includes("res.cloudinary.com")) {
+        if (photo && !photo.includes("https://")) {
           const uploadedPhoto = await uploadImage(photo);
           return uploadedPhoto;
         }

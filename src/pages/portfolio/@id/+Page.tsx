@@ -206,8 +206,10 @@ export default function PortfolioSharedPage() {
             user={portfolioData.user}
             configData={{
               propertyName: currentItem.case?.propertyName || "",
+              propertyNameFont: currentItem.case.propertyNameFont,
               mainPhoto: currentItem.case?.mainPhoto || "",
               description: currentItem.case?.description || "",
+              subtitle: currentItem.building.subtitle,
               additionalPhotos: currentItem.case?.additionalPhotos,
               features: currentItem.case?.features,
               bedrooms: currentItem.case?.bedrooms,
@@ -241,7 +243,9 @@ export default function PortfolioSharedPage() {
             configData={{
               propertyName: currentItem.case?.propertyName || "",
               mainPhoto: currentItem.case?.mainPhoto || "",
+              propertyNameFont: currentItem.case.propertyNameFont,
               description: currentItem.case?.description || "",
+              subtitle: currentItem.building.subtitle,
               additionalPhotos: currentItem.case?.additionalPhotos,
               features: currentItem.case?.features,
               bedrooms: currentItem.case?.bedrooms,
@@ -270,8 +274,10 @@ export default function PortfolioSharedPage() {
             headerType={portfolioData.user.realEstate?.headerType || 1}
             configData={{
               propertyName: currentItem.building.propertyName,
+              propertyNameFont: currentItem.building.propertyNameFont,
               mainPhoto: currentItem.building.mainPhoto,
               description: currentItem.building.description,
+              subtitle: currentItem.building.subtitle,
               additionalPhotos: currentItem.building.additionalPhotos,
               features: currentItem.building.features,
               address: currentItem.building.address,

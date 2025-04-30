@@ -1,9 +1,11 @@
 export interface Building {
   id: string;
   propertyName: string;
+  propertyNameFont?: string;
   category: string;
   mainPhoto?: string;
   description?: string;
+  subtitle?: string;
   additionalPhotos?: string[];
   features?: string[];
   bedrooms?: string;

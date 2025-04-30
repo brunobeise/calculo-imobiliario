@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   FaBuilding,
   FaPlusCircle,
@@ -17,6 +17,8 @@ import { navigate } from "vike/client/router";
 import BuildingCard from "./BuildingCard";
 import ImobziModal from "@/components/modals/ImobziModal";
 import { useAuth } from "@/auth";
+import CurrencyInput from "@/components/inputs/CurrencyInput";
+import debounce from "lodash.debounce";
 
 export default function Buildings() {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,12 +36,31 @@ export default function Buildings() {
     (localStorage.getItem("building-sortDirection") as "asc" | "desc") || "desc"
   );
   const [imobziModal, setImobziModal] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
+  const [minPriceInput, setMinPriceInput] = useState<number>();
+  const [maxPriceInput, setMaxPriceInput] = useState<number>();
+  const [minPrice, setMinPrice] = useState<number>();
+  const [maxPrice, setMaxPrice] = useState<number>();
+
+  const debounceSetPrices = useMemo(
+    () =>
+      debounce((min: number | undefined, max: number | undefined) => {
+        setMinPrice(min && min > 0 ? min : undefined);
+        setMaxPrice(max && max > 0 ? max : undefined);
+        setCurrentPage(1);
+      }, 500),
+    []
+  );
+
+  useEffect(() => {
+    debounceSetPrices(minPriceInput, maxPriceInput);
+  }, [minPriceInput, maxPriceInput, debounceSetPrices]);
 
   const [limit, setLimit] = useState(10);
   useEffect(() => {
     const queryParams = {
+      minPrice,
+      maxPrice,
       search,
       category,
       sortDirection,
@@ -48,7 +69,17 @@ export default function Buildings() {
       limit,
     };
     dispatch(fetchBuildings(queryParams));
-  }, [dispatch, search, category, sortDirection, currentPage, orderBy, limit]);
+  }, [
+    dispatch,
+    search,
+    category,
+    sortDirection,
+    currentPage,
+    orderBy,
+    limit,
+    minPrice,
+    maxPrice,
+  ]);
 
   useEffect(() => {
     localStorage.setItem("building-orderBy", orderBy);
@@ -120,6 +151,22 @@ export default function Buildings() {
         handleDebounce={(v) => setSearch(v)}
       />
       <div className="flex items-center gap-3">
+        <div className="flex gap-3">
+          <FormLabel className="!text-[0.8rem]">Filtrar por preço:</FormLabel>
+          <CurrencyInput
+            noHeight
+            onChange={(v) => setMinPriceInput(Number(v.target.value))}
+            placeholder="Preço mínimo"
+            value={minPriceInput}
+          />
+          <CurrencyInput
+            noHeight
+            onChange={(v) => setMaxPriceInput(Number(v.target.value))}
+            placeholder="Preço máximo"
+            value={maxPriceInput}
+          />
+        </div>
+
         <div className="flex gap-2">
           <FormLabel className="!text-[0.8rem]">Ordenar por:</FormLabel>
           <Select
@@ -130,6 +177,7 @@ export default function Buildings() {
           >
             <Option value="propertyName">Nome</Option>
             <Option value="createdAt">Data</Option>
+            <Option value="value">Preço</Option>
           </Select>
         </div>
         <span className="cursor-pointer">

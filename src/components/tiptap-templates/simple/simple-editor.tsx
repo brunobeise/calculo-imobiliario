@@ -35,6 +35,8 @@ import { HighlightPopover } from "@/components/tiptap-ui/highlight-popover";
 import { LinkPopover } from "@/components/tiptap-ui/link-popover";
 
 import "@/components/tiptap-templates/simple/simple-editor.scss";
+import { FontFamily } from "@/components/tiptap-extension/font-family";
+import { FontSelect } from "@/components/inputs/FontSelect";
 
 // Nova função de upload adaptada para Cloudinary
 export const uploadImage = async (file: File): Promise<string | undefined> => {
@@ -90,6 +92,8 @@ export function SimpleEditor({ content, onUpdate }: SimpleEditorProps) {
         upload: uploadImage,
         onError: (err) => console.error("Erro ao subir imagem", err),
       }),
+      FontFamily,
+      
     ],
     content,
     onUpdate({ editor }) {
@@ -114,7 +118,7 @@ export function SimpleEditor({ content, onUpdate }: SimpleEditorProps) {
 
   return (
     <EditorContext.Provider value={{ editor }}>
-      <div className="rounded-md border border-gray-300 bg-white ">
+      <div className="rounded-md border border-border bg-white ">
         <Toolbar className="flex flex-wrap gap-2 rounded-t-md border-b border-gray-200 bg-gray-50 px-2 py-1">
           <ToolbarGroup>
             <UndoRedoButton action="undo" />
@@ -136,6 +140,11 @@ export function SimpleEditor({ content, onUpdate }: SimpleEditorProps) {
             <MarkButton type="subscript" />
             <HighlightPopover />
             <LinkPopover />
+            <FontSelect
+              onChange={(font) => {
+                editor?.chain().focus().setFontFamily(font).run();
+              }}
+            />
             <input
               type="color"
               title="Cor do texto"

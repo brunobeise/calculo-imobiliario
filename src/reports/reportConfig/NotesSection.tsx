@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { ReportData } from "../ReportPreview";
-import _ from "lodash"; // ou você pode usar um custom debounce
+import _ from "lodash"; 
 import { FormLabel } from "@mui/joy";
 
 interface NotesSectionProps {
@@ -17,12 +17,10 @@ export default function NotesSection({
     configData.reportConfig?.paymentConditionsDescription || ""
   );
 
-  // Atualiza localmente quando o config externo mudar
   useEffect(() => {
     setHtml(configData.reportConfig?.paymentConditionsDescription || "");
   }, [configData.reportConfig?.paymentConditionsDescription]);
 
-  // Debounce do envio para o pai (evita lag por atualização imediata)
   const debouncedOnChange = useRef(
     _.debounce((html: string) => {
       onChange({

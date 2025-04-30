@@ -16,7 +16,9 @@ import NotesSection from "./reportConfig/NotesSection";
 export interface ReportData {
   mainPhoto: string;
   description: string;
+  subtitle: string;
   propertyName: string;
+  propertyNameFont: string;
   additionalPhotos: string[];
   features: string[];
   suites?: string;
@@ -56,7 +58,9 @@ export default function ReportPreview({
   const configData: ReportData = {
     mainPhoto: proposal.mainPhoto || "",
     description: proposal.description || "",
+    subtitle: proposal.subtitle || "",
     propertyName: proposal.propertyName || "",
+    propertyNameFont: proposal.propertyNameFont,
     additionalPhotos: proposal.additionalPhotos || [],
     features: proposal.features || [],
     suites: proposal.suites || "",

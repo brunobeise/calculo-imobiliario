@@ -6,7 +6,7 @@ import { FaLock } from "react-icons/fa";
 import { FaUnlock } from "react-icons/fa";
 
 interface CurrencyInputProps {
-  label: string;
+  label?: string;
   id?: string;
   value: number | string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -18,6 +18,7 @@ interface CurrencyInputProps {
   setLock?: (value: boolean) => void;
   noHeight?: boolean;
   extraButton?: ReactNode;
+  placeholder?: string;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -33,6 +34,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   setLock,
   noHeight,
   extraButton,
+  placeholder,
 }) => {
   return (
     <div className={wrapperClassName}>
@@ -49,11 +51,13 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
             onClick={() => setLock && setLock(false)}
           />
         )}
-        <FormLabel htmlFor={id}>{label}</FormLabel>
+        {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
+
         {infoTooltip && <InfoTooltip text={infoTooltip} />}
       </div>
 
       <Input
+        placeholder={placeholder}
         id={id}
         value={value}
         onChange={onChange}

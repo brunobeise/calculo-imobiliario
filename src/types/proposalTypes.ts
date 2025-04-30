@@ -13,8 +13,10 @@ export interface Proposal {
   shared: boolean;
   status: string;
   propertyName?: string;
+  propertyNameFont?: string;
   mainPhoto?: string;
   description?: string;
+  subtitle: string;
   additionalPhotos: string[];
   features: string[];
   suites?: string;

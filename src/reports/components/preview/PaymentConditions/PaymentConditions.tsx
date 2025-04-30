@@ -608,7 +608,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         </div>
       )}
 
-      <div className="px-4">
+      <div className="px-4 mt-4">
         <SimpleViewer html={description} />
       </div>
     </div>

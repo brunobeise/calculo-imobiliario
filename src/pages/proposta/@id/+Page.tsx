@@ -210,8 +210,10 @@ export default function FinancingPlanningReportSharedPage() {
             user={proposalData.user}
             configData={{
               propertyName: proposalData.propertyName || "",
+              propertyNameFont: proposalData.propertyNameFont,
               mainPhoto: proposalData.mainPhoto || "",
               description: proposalData.description || "",
+              subtitle: proposalData.subtitle || "",
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
               address: proposalData.address,
@@ -252,8 +254,10 @@ export default function FinancingPlanningReportSharedPage() {
             user={proposalData.user}
             configData={{
               propertyName: proposalData.propertyName || "",
+              propertyNameFont: proposalData.propertyNameFont,
               mainPhoto: proposalData.mainPhoto || "",
               description: proposalData.description || "",
+              subtitle: proposalData.subtitle || "",
               additionalPhotos: proposalData.additionalPhotos,
               features: proposalData.features,
               bedrooms: proposalData.bedrooms,

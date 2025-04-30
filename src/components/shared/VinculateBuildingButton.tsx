@@ -1,10 +1,4 @@
-import {
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Modal,
-  ModalDialog,
-} from "@mui/joy";
+import { Divider } from "@mui/joy";
 import { useState, useEffect } from "react";
 import {
   FaBuilding,
@@ -25,6 +19,7 @@ import { PageLoading } from "../Loading";
 import { Building } from "@/types/buildingTypes";
 import { FaTrash } from "react-icons/fa6";
 import { buildingService } from "@/service/buildingService";
+import Dialog from "../modals/Dialog";
 
 interface LinkBuildingButtonProps {
   onLink: (data: Building) => void;
@@ -47,7 +42,6 @@ export default function LinkBuildingButton({
   const buildings = useSelector((state: RootState) => state.building.buildings);
   const loading = useSelector((state: RootState) => state.building.loading);
   const lastPage = useSelector((state: RootState) => state.building.lastPage);
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [orderBy, setOrderBy] = useState(
@@ -59,6 +53,12 @@ export default function LinkBuildingButton({
   const [currentPage, setCurrentPage] = useState(1);
 
   const [syncLoading, setSyncLoading] = useState(false);
+
+  const handleLink = async (id: string) => {
+    setOpen(false);
+    const data = await buildingService.getBuildingById(id);
+    onLink(data);
+  };
 
   useEffect(() => {
     if (open) {
@@ -75,7 +75,7 @@ export default function LinkBuildingButton({
   }, [dispatch, search, category, sortDirection, currentPage, orderBy, open]);
 
   const contentHeader = (
-    <DialogTitle className="flex justify-between items-center">
+    <div className="flex justify-between items-center w-full pe-10">
       <div className="text-[1rem] flex items-center">
         <FaBuilding className="me-1" /> Vincular imóvel
       </div>
@@ -107,7 +107,7 @@ export default function LinkBuildingButton({
           )}
         </span>
       </div>
-    </DialogTitle>
+    </div>
   );
 
   const content = (
@@ -116,7 +116,7 @@ export default function LinkBuildingButton({
         <BuildingCard
           onLink={(data) => {
             setOpen(false);
-            onLink(data);
+            handleLink(data);
           }}
           key={building.id}
           building={building}
@@ -148,6 +148,7 @@ export default function LinkBuildingButton({
   const handleSync = async () => {
     setSyncLoading(true);
     const buildingData = await buildingService.getBuildingById(buildingId);
+
     onLink(buildingData);
     setSyncLoading(false);
   };
@@ -205,16 +206,12 @@ export default function LinkBuildingButton({
         )}
       </div>
 
-      <Modal role="alertdialog" open={open} onClose={() => setOpen(false)}>
-        <ModalDialog variant="outlined">
-          {contentHeader}
+      <Dialog title={contentHeader} open={open} onClose={() => setOpen(false)}>
+        <Divider />
 
-          <Divider />
-
-          <DialogContent className="w-[1400px]">{content}</DialogContent>
-          {footer}
-        </ModalDialog>
-      </Modal>
+        <div className="w-[1220px] py-5">{content}</div>
+        {footer}
+      </Dialog>
     </>
   );
 }

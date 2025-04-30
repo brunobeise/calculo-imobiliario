@@ -33,8 +33,8 @@ export const BuildingCategorySelect = ({
   
 
   return control && name ? (
-    <FormControl error={!!error} className="p-3">
-      <div className="">
+    <FormControl error={!!error}>
+      <div>
         <FormLabel>Categoria do Imóvel</FormLabel>
         <Controller
           name={name}

@@ -1,51 +1,81 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm, Controller } from "react-hook-form";
-import PictureInput from "@/components/inputs/PictureInput";
-import TextInput from "@/components/inputs/TextInput";
-import ItemListInput from "@/components/inputs/ItemListInput";
-import FloatingButtonList from "@/components/shared/FloatingButtonList";
-import { FaSave, FaTrash } from "react-icons/fa";
 import { Building } from "@/types/buildingTypes";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { uploadImage } from "@/lib/imgur";
-import { BuildingCategorySelect } from "@/components/inputs/BuildingCategorySelect";
-import { Button } from "@mui/joy";
-import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 import { useAuth } from "@/auth";
-import CurrencyInput from "@/components/inputs/CurrencyInput";
 import { usePageContext } from "vike-react/usePageContext";
 
-export default function BuildingForm({ initialData, onSubmit }) {
+import {
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  Input,
+  Button,
+  Textarea,
+} from "@mui/joy";
+import PictureInput from "@/components/inputs/PictureInput";
+import ItemListInput from "@/components/inputs/ItemListInput";
+import FloatingButtonList from "@/components/shared/FloatingButtonList";
+import { BuildingCategorySelect } from "@/components/inputs/BuildingCategorySelect";
+import CurrencyInput from "@/components/inputs/CurrencyInput";
+import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import { FaSave, FaTrash } from "react-icons/fa";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import { FontSelect } from "@/components/inputs/FontSelect";
+
+interface BuildingFormProps {
+  initialData: Partial<Building>;
+  onSubmit: (building: Partial<Building>) => void;
+  onUpdate: (building: Partial<Building>) => void;
+}
+
+export default function BuildingForm({
+  initialData,
+  onSubmit,
+  onUpdate,
+}: BuildingFormProps) {
   const pageContext = usePageContext();
   const { id } = pageContext.routeParams;
+
   const {
     control,
+    register,
     handleSubmit,
     setValue,
-    formState: { errors },
     watch,
+    getValues,
+    formState: { errors },
   } = useForm<Partial<Building>>({
     defaultValues: initialData || {
-      mainPhoto: "",
+      mainPhoto: undefined,
       additionalPhotos: [],
       propertyName: "",
-      description: "",
+      value: undefined,
       address: "",
+      description: "",
+      subtitle: "",
+      features: [],
+      bedrooms: "",
       suites: "",
       bathrooms: "",
       parkingSpaces: "",
       builtArea: "",
       landArea: "",
       cod: "",
-      features: [],
-      value: undefined,
     },
   });
 
+  const { user } = useAuth();
   const [saveLoading, setSaveLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+
+  const handleUpdate = () => {
+    if (onUpdate) {
+      onUpdate(getValues());
+    }
+  };
 
   useEffect(() => {
     if (initialData) {
@@ -57,31 +87,25 @@ export default function BuildingForm({ initialData, onSubmit }) {
     }
   }, [initialData, setValue]);
 
-  const { user } = useAuth();
-
   const submitHandler = async (data) => {
     setSaveLoading(true);
 
     let uploadMainPhoto = data.mainPhoto;
-
-    if (data.mainPhoto && !data.mainPhoto.includes("res.cloudinary.com")) {
+    if (data.mainPhoto && !data.mainPhoto.includes("https://")) {
       uploadMainPhoto = await uploadImage(data.mainPhoto);
     }
 
     const uploadAdditionalPhotos = await Promise.all(
       data.additionalPhotos.map(async (photo) => {
-        if (photo && !photo.includes("res.cloudinary.com")) {
-          const uploadedPhoto = await uploadImage(photo);
-          return uploadedPhoto;
+        if (photo && !photo.includes("https://")) {
+          return await uploadImage(photo);
         }
         return photo;
       })
     );
 
-    const { screenshot, photos, amenities, ...building } = data;
-
     onSubmit({
-      ...building,
+      ...data,
       mainPhoto: uploadMainPhoto,
       additionalPhotos: uploadAdditionalPhotos,
     });
@@ -91,7 +115,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
 
   const handleDelete = async () => {
     onSubmit({
-      id: initialData.id,
+      id: initialData?.id,
       isArchived: true,
     });
   };
@@ -100,18 +124,18 @@ export default function BuildingForm({ initialData, onSubmit }) {
   const additionalPhotos = watch("additionalPhotos");
 
   const handleDrop = (image: string, source: string) => {
-    if (source === "Foto Principal do Imóvel") {
+    if (source === "Foto Principal") {
       setValue("additionalPhotos", [...additionalPhotos, mainPhoto]);
       setValue("mainPhoto", "");
-    } else if (source === "Fotos Adicionais do Imóvel") {
+      handleUpdate();
+    } else if (source === "Fotos Adicionais") {
       const newAdditionalPhotos = additionalPhotos.filter(
         (img) => img !== image
       );
-      if (mainPhoto) {
-        newAdditionalPhotos.push(mainPhoto);
-      }
+      if (mainPhoto) newAdditionalPhotos.push(mainPhoto);
       setValue("mainPhoto", image);
       setValue("additionalPhotos", newAdditionalPhotos);
+      handleUpdate();
     }
   };
 
@@ -120,7 +144,7 @@ export default function BuildingForm({ initialData, onSubmit }) {
     saveLoading;
 
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="flex gap-10">
+    <form onSubmit={handleSubmit(submitHandler)} className="">
       <FloatingButtonList
         buttons={[
           {
@@ -130,18 +154,20 @@ export default function BuildingForm({ initialData, onSubmit }) {
           },
         ]}
       />
+
       <div className="flex-1 flex flex-col gap-5">
         <Controller
           name="mainPhoto"
           control={control}
-          rules={{
-            required: "A imagem principal é obrigatória.",
-          }}
+          rules={{ required: "A foto principal é obrigatória" }}
           render={({ field }) => (
             <PictureInput
-              label="Foto Principal do Imóvel"
+              label="Foto Principal"
               value={[field.value]}
-              onChange={(v) => setValue("mainPhoto", v)}
+              onChange={(v) => {
+                setValue("mainPhoto", v);
+                handleUpdate();
+              }}
               error={errors.mainPhoto?.message}
               onDrop={(image, source) => handleDrop(image, source)}
             />
@@ -152,71 +178,127 @@ export default function BuildingForm({ initialData, onSubmit }) {
           control={control}
           render={({ field }) => (
             <PictureInput
-              label="Fotos Adicionais do Imóvel"
+              label="Fotos Adicionais"
               multiple
               value={field.value}
-              onChange={(v) => setValue("additionalPhotos", v.split(","))}
+              onChange={(v) => {
+                console.log(v);
+
+                setValue("additionalPhotos", v.split(","));
+                handleUpdate();
+              }}
               onDrop={(image, source) => handleDrop(image, source)}
-            />
-          )}
-        />
-        <Controller
-          name="features"
-          control={control}
-          render={({ field }) => (
-            <ItemListInput
-              {...field}
-              label="Características do Imóvel"
-              items={field.value}
-              onChange={(v) => setValue("features", v)}
             />
           )}
         />
       </div>
 
-      <div className="flex-1 grid grid-cols-2 gap-2 h-min">
+      <div className="flex-1 grid grid-cols-2 gap-5 mt-5">
         <div className="col-span-2">
-          <Controller
-            name="propertyName"
-            control={control}
-            rules={{
-              required: "O nome do imóvel é obrigatório.",
-              minLength: { value: 3, message: "Mínimo de 3 caracteres." },
-              maxLength: { value: 100, message: "Máximo de 100 caracteres." },
-            }}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                label="Nome do Imóvel"
-                onChange={(v) => setValue("propertyName", v)}
-                error={errors.propertyName?.message}
-              />
+          <FormControl error={!!errors[id]}>
+            <FormLabel htmlFor={id}>Nome: *</FormLabel>
+            <Input
+              id="propertyName"
+              slotProps={{
+                input: {
+                  style: {
+                    fontFamily: watch("propertyNameFont"),
+                  },
+                },
+              }}
+              placeholder={`Digite o nome do imóvel`}
+              {...register("propertyName")}
+              onChange={(e) => {
+                register("propertyName").onChange(e);
+                handleUpdate();
+              }}
+              endDecorator={
+                <FontSelect
+                  control={control}
+                  error={errors.propertyNameFont}
+                  name={"propertyNameFont"}
+                  onChange={() => handleUpdate()}
+                />
+              }
+            />
+            {errors[id] && (
+              <FormHelperText>{errors[id].message}</FormHelperText>
             )}
-          />
+          </FormControl>
         </div>
+
         <div className="col-span-2">
           <Controller
             name="value"
             control={control}
-            rules={{
-              minLength: { value: 3, message: "Mínimo de 3 caracteres." },
-              maxLength: { value: 50, message: "Máximo de 50 caracteres." },
-            }}
             render={({ field }) => (
-              <div className="ps-3 pe-3">
+              <FormControl error={!!errors.value}>
+                <FormLabel htmlFor="value">Valor</FormLabel>
                 <CurrencyInput
+                  noHeight
                   {...field}
-                  label="Valor do Imóvel"
+                  label=""
                   onChange={(v) => {
-                    Number(v.target.value) > 0
-                      ? setValue("value", Number(v.target.value))
-                      : setValue("value", null);
+                    const value = Number(v.target.value);
+                    setValue("value", value > 0 ? value : null);
+                    handleUpdate();
+                  }}
+                />
+                {errors.value && (
+                  <FormHelperText>{errors.value.message}</FormHelperText>
+                )}
+              </FormControl>
+            )}
+          />
+        </div>
+
+        <InputField
+          id="address"
+          label="Endereço *"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+          required
+        />
+
+        <div className="col-span-2">
+          <FormControl error={!!errors.subtitle}>
+            <FormLabel htmlFor="subtitle">Subtítulo</FormLabel>
+            <Textarea
+              id="subtitle"
+              minRows={2}
+              placeholder="Digite um subtítulo"
+              {...register("subtitle")}
+              onChange={(e) => {
+                setValue("subtitle", e.target.value);
+                handleUpdate();
+              }}
+            />
+            {errors.subtitle && (
+              <FormHelperText>{errors.subtitle.message}</FormHelperText>
+            )}
+          </FormControl>
+        </div>
+
+        <div className="col-span-2">
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <div className="flex flex-col gap-2">
+                <FormLabel>Descrição</FormLabel>
+                <SimpleEditor
+                  content={field.value}
+                  onUpdate={(newHtml) => {
+                    setValue("description", newHtml);
+                    handleUpdate();
                   }}
                 />
               </div>
             )}
           />
         </div>
+
         <div className="col-span-2">
           <BuildingCategorySelect
             control={control}
@@ -224,153 +306,127 @@ export default function BuildingForm({ initialData, onSubmit }) {
             error={errors.category}
           />
         </div>
+
+        <InputField
+          id="bedrooms"
+          label="Dormitórios"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+        <InputField
+          id="suites"
+          label="Suítes"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+        <InputField
+          id="bathrooms"
+          label="Banheiros"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+        <InputField
+          id="parkingSpaces"
+          label="Vagas"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+        <InputField
+          id="builtArea"
+          label="Área Construída (m²)"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+        <InputField
+          id="landArea"
+          label="Área Terreno (m²)"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+
+        <InputField
+          id="cod"
+          label="Código"
+          register={register}
+          errors={errors}
+          onChange={handleUpdate}
+        />
+
         <div className="col-span-2">
           <Controller
-            name="description"
+            name="features"
             control={control}
-            rules={{
-              maxLength: { value: 200, message: "Máximo de 200 caracteres." },
-            }}
             render={({ field }) => (
-              <TextInput
+              <ItemListInput
                 {...field}
-                isTextarea
-                label="Descrição do Imóvel"
-                onChange={(v) => setValue("description", v)}
-                error={errors.description?.message}
+                label="Características"
+                items={field.value}
+                onChange={(v) => {
+                  setValue("features", v);
+                  handleUpdate();
+                }}
               />
             )}
           />
         </div>
-        <div className="col-span-2">
-          <Controller
-            name="address"
-            control={control}
-            rules={{
-              required: "O endereço é obrigatório.",
-              minLength: { value: 5, message: "Mínimo de 5 caracteres." },
-              maxLength: { value: 100, message: "Máximo de 100 caracteres." },
-            }}
-            render={({ field }) => (
-              <TextInput
-                {...field}
-                label="Endereço do Imóvel"
-                onChange={(v) => setValue("address", v)}
-                error={errors.address?.message}
-              />
-            )}
-          />
-        </div>
-        <Controller
-          name="bedrooms"
-          control={control}
-          rules={{}}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Número de Quartos"
-              onChange={(v) => setValue("bedrooms", v)}
-              error={errors.suites?.message}
-            />
-          )}
-        />
-        <Controller
-          name="suites"
-          control={control}
-          rules={{}}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Número de Suites"
-              onChange={(v) => setValue("suites", v)}
-              error={errors.suites?.message}
-            />
-          )}
-        />
-        <Controller
-          name="bathrooms"
-          control={control}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Número de Banheiros"
-              onChange={(v) => setValue("bathrooms", v)}
-              error={errors.bathrooms?.message}
-            />
-          )}
-        />
-        <Controller
-          name="parkingSpaces"
-          control={control}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Número de Vagas"
-              onChange={(v) => setValue("parkingSpaces", v)}
-              error={errors.parkingSpaces?.message}
-            />
-          )}
-        />
-        <Controller
-          name="builtArea"
-          control={control}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Área Construída (m²)"
-              onChange={(v) => setValue("builtArea", v)}
-              error={errors.builtArea?.message}
-            />
-          )}
-        />
-        <Controller
-          name="landArea"
-          control={control}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Área do Terreno (m²)"
-              onChange={(v) => setValue("landArea", v)}
-              error={errors.landArea?.message}
-            />
-          )}
-        />
-        <Controller
-          name="cod"
-          control={control}
-          rules={{
-            maxLength: { value: 20, message: "Máximo de 20 caracteres." },
-          }}
-          render={({ field }) => (
-            <TextInput
-              {...field}
-              label="Código do Imóvel"
-              onChange={(v) => setValue("cod", v)}
-              error={errors.cod?.message}
-            />
-          )}
-        />
         {(user.owner || user.id === initialData?.creator?.id) &&
-          id !== "novo" &&
-          initialData && (
-            <div className="ps-3 col-span-2 flex mt-5">
+          id !== "novo" && (
+            <div className="col-span-2 flex justify-start pt-5">
               <Button
                 onClick={() => setDeleteModal(true)}
-                endDecorator={<FaTrash />}
                 color="danger"
+                endDecorator={<FaTrash />}
               >
                 Excluir
               </Button>
             </div>
           )}
       </div>
+
       <ConfirmationModal
         open={deleteModal}
         onClose={() => setDeleteModal(false)}
-        content="Deseja excluir permanentemente esse imóvel?"
+        content="Deseja excluir permanentemente este imóvel?"
         onOk={handleDelete}
         okLoading={createLoading}
       />
     </form>
+  );
+}
+
+// Subcomponente genérico
+function InputField({
+  id,
+  label,
+  register,
+  errors,
+  onChange,
+  required = false,
+}) {
+  return (
+    <div className="col-span-2">
+      <FormControl error={!!errors[id]}>
+        <FormLabel htmlFor={id}>{label}</FormLabel>
+        <Input
+          id={id}
+          placeholder={`Digite ${label.toLowerCase()}`}
+          {...register(
+            id,
+            required ? { required: `${label} é obrigatório` } : {}
+          )}
+          onChange={(e) => {
+            register(id).onChange(e);
+            if (onChange) onChange();
+          }}
+        />
+        {errors[id] && <FormHelperText>{errors[id].message}</FormHelperText>}
+      </FormControl>
+    </div>
   );
 }

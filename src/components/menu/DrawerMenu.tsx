@@ -124,7 +124,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
             </div>
             <Typography className="!ms-3 !text-[0.96rem] flex-1">
               {userData?.fullName ? (
-                <p
+                <span
                   className={`font-bold ${
                     pageContext.urlPathname === "/usuario"
                       ? "!text-primary"
@@ -132,7 +132,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
                   }`}
                 >{`${userData.fullName.split(" ")[0]} ${
                   userData.fullName.split(" ").slice(-1)[0]
-                }`}</p>
+                }`}</span>
               ) : (
                 <Skeleton variant="text" width={100} className="font-bold" />
               )}

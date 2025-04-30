@@ -2,14 +2,14 @@ import React from "react";
 
 interface ImageWithOverlayProps {
   mainPhoto: string;
-  description: string;
+  subtitle: string;
   overlayHeight?: number;
   className?: string;
 }
 
 const ImageWithOverlay: React.FC<ImageWithOverlayProps> = ({
   mainPhoto,
-  description,
+  subtitle,
   overlayHeight = 150,
   className = "",
 }) => {
@@ -28,7 +28,7 @@ const ImageWithOverlay: React.FC<ImageWithOverlayProps> = ({
         style={{ height: `${overlayHeight}px` }}
       >
         <p className="whitespace-pre-wrap break-words text-white text-xl !text-white">
-          {description}
+          {subtitle}
         </p>
       </div>
     </div>

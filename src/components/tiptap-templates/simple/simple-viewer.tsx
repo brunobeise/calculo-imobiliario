@@ -12,6 +12,7 @@ import { Subscript } from "@tiptap/extension-subscript";
 import ImageResize from "tiptap-extension-resize-image";
 import { useEffect } from "react";
 import "@/components/tiptap-templates/simple/simple-editor.scss";
+import { FontFamily } from "@/components/tiptap-extension/font-family";
 
 interface SimpleViewerProps {
   html: string;
@@ -33,6 +34,7 @@ export function SimpleViewer({ html }: SimpleViewerProps) {
       Subscript,
       TextStyle,
       Color.configure({ types: ["textStyle"] }),
+      FontFamily,
     ],
   });
 

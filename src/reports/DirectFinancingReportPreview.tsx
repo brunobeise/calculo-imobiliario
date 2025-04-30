@@ -135,7 +135,7 @@ const DirectFinancingReportPreview = forwardRef<
               />
               <ImageWithOverlay
                 mainPhoto={configData.mainPhoto}
-                description={configData.description}
+                subtitle={configData.subtitle}
                 overlayHeight={200}
                 className="h-[460px]"
               />

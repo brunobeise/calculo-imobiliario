@@ -47,12 +47,12 @@ strong {
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-thumb-color, #a0aec0); /* Cor personalizada */
-  border-radius: 9999px; /* Faz o scroll redondo */
+  background-color: var(--scroll-thumb-color, #a0aec0);
+  border-radius: 9999px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scroll-thumb-color, #a0aec0); /* Mesma cor no hover */
+  background-color: var(--scroll-thumb-color, #a0aec0);
 }
 
 .scrollbar::-webkit-scrollbar {
@@ -60,13 +60,13 @@ strong {
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  height: 50px; /* Altura mínima do thumb */
+  height: 50px;
   background-color: var(--scroll-thumb-color, #a0aec0);
-  border-radius: 9999px; /* Faz o thumb redondo */
+  border-radius: 9999px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  background: transparent; /* Remove o fundo do track */
+  background: transparent;
 }
 
 @layer base {

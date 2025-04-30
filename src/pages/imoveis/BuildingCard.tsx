@@ -2,55 +2,17 @@ import { Typography, Divider, Button } from "@mui/joy";
 import { Building } from "@/types/buildingTypes";
 import { FaMapMarkerAlt, FaBed, FaBath } from "react-icons/fa";
 import { BiSolidCarGarage } from "react-icons/bi";
-import { SlSizeFullscreen } from "react-icons/sl";
-import { GiHammerNails } from "react-icons/gi";
 import { navigate } from "vike/client/router";
-import { FaHouse } from "react-icons/fa6";
-import { MdApartment } from "react-icons/md";
-import { HiBuildingStorefront } from "react-icons/hi2";
-import { MdTerrain } from "react-icons/md";
+import { toBRL } from "@/lib/formatter";
 
 const BuildingCard = ({
   building,
   onLink,
 }: {
   building: Building;
-  onLink?: (data: Building) => void;
+  onLink?: (id: string) => void;
+  linkLoading?: boolean;
 }) => {
-  const icon = () => {
-    if (building.category === "HOUSE")
-      return (
-        <>
-          <FaHouse />
-          <span>Casa</span>
-        </>
-      );
-
-    if (building.category === "APARTMENT")
-      return (
-        <>
-          <MdApartment />
-          <span>Apto.</span>
-        </>
-      );
-
-    if (building.category === "COMMERCIAL")
-      return (
-        <>
-          <HiBuildingStorefront />
-          <span>Comercial</span>
-        </>
-      );
-
-    if (building.category === "LAND")
-      return (
-        <>
-          <MdTerrain />
-          <span>Terreno</span>
-        </>
-      );
-  };
-
   return (
     <div
       onClick={() => {
@@ -73,7 +35,10 @@ const BuildingCard = ({
         >
           {building?.propertyName}
         </Typography>
-        <div className="text-sm text-grayText h-[40px]">
+        <Typography level="title-md" className="h-[20px]">
+          {Number(building.value) > 0 && toBRL(building.value)}
+        </Typography>
+        <div className="text-sm text-grayText h-[40px] mt-2">
           <div className="flex items-center mb-2">
             <div>
               <FaMapMarkerAlt size={12} className="mr-2" />
@@ -100,26 +65,11 @@ const BuildingCard = ({
         </div>
       </div>
 
-      <div className="flex items-center justify-center text-[0.8rem] gap-5">
-        <div className=" p-1 bg-white font-bold !text-grayText rounded-lg text-md flex items-center gap-2">
-          {icon()}
-        </div>
-        <div className="flex items-center gap-2 text-grayText">
-          <GiHammerNails />
-          <span className="font-bold !text-grayText">
-            {building.builtArea}m²
-          </span>
-        </div>
-        <div className="flex items-center gap-2 text-grayText">
-          <SlSizeFullscreen />
-          <span className="font-bold !text-grayText">
-            {building.landArea}m²
-          </span>
-        </div>
-      </div>
-
       {onLink && (
-        <Button onClick={() => onLink(building)} className="!absolute bottom-4 w-[220px] left-[50%] translate-x-[-50%]">
+        <Button
+          onClick={() => onLink(building.id)}
+          className="!absolute bottom-4 w-[220px] left-[50%] translate-x-[-50%]"
+        >
           Vincular
         </Button>
       )}

@@ -1,6 +1,4 @@
 import { ReportData } from "@/reports/ReportPreview";
-import SectionTitle from "./SectionTitle";
-import { BsHouse } from "react-icons/bs";
 import { FaCheckCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { FaBath, FaBed, FaCar, FaHammer } from "react-icons/fa6";
 import { SlSizeFullscreen } from "react-icons/sl";
@@ -17,6 +15,8 @@ import "yet-another-react-lightbox/styles.css";
 import { ColumnsPhotoAlbum } from "react-photo-album";
 import "react-photo-album/columns.css";
 import { toBRL } from "@/lib/formatter";
+import { FaSackDollar } from "react-icons/fa6";
+import { SimpleViewer } from "@/components/tiptap-templates/simple/simple-viewer";
 
 interface PropertyDescriptionProps {
   configData: Partial<ReportData>;
@@ -69,63 +69,70 @@ export default function PropertyDescription({
   return (
     <div>
       <div className="px-12 pt-6 mb-6">
-        <SectionTitle
-          color={color}
-          secondary={secondary}
-          icon={<BsHouse />}
-          title={configData.propertyName}
-        />
+        <strong style={{ color, fontFamily: configData.propertyNameFont }} className="text-3xl">
+          {configData.propertyName}
+        </strong>
+        {configData.description && (
+          <div style={{ color }} className="my-6 mb-8">
+            <SimpleViewer html={configData.description} />
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-4 mb-4 text-lg">
           {value && (
-            <span style={{ color: secondary }} className="col-span-2">
-              Valor do imóvel:{" "}
-              <b style={{ color: color }} className="font-bold">
-                {toBRL(value)}
-              </b>
+            <span style={{ color: color }} className="col-span-2">
+              <FaSackDollar style={{ color }} className="inline mb-2 me-2" />
+              <strong> Valor do imóvel: </strong>
+              <strong style={{ color: secondary }}>{toBRL(value)}</strong>
             </span>
           )}
 
           <div>
             {configData.bedrooms && (
               <p style={{ color: secondary }}>
-                <FaBed className="inline mb-2 me-2" />
-                <strong>Dormitórios:</strong>{" "}
-                <strong style={{ color }}> {configData.bedrooms} </strong>
-                <span className="text-md" style={{ color }}>
+                <FaBed style={{ color }} className="inline mb-2 me-2" />
+                <strong style={{ color }}> Dormitórios:</strong>{" "}
+                <strong> {configData.bedrooms} </strong>
+                <span className="text-md">
                   {" "}
                   {configData.suites &&
+                    Number(configData.suites) > 0 &&
                     `(${configData.suites} suíte${
                       Number(configData.suites) > 1 ? "s" : ""
                     })`}
                 </span>
               </p>
             )}
-            {configData.bathrooms && (
+            {configData.bathrooms && Number(configData.bathrooms) > 0 && (
               <p style={{ color: secondary }}>
-                <FaBath className="inline mb-2 me-2" />
-                <strong>Banheiros:</strong>{" "}
-                <strong style={{ color }}> {configData.bathrooms} </strong>
+                <FaBath style={{ color }} className="inline mb-2 me-2" />
+                <strong style={{ color }}> Banheiros:</strong>{" "}
+                <strong> {configData.bathrooms} </strong>
               </p>
             )}
-            {configData.parkingSpaces && (
+            {configData.parkingSpaces &&
+              Number(configData.parkingSpaces) > 0 && (
+                <p style={{ color: secondary }}>
+                  <FaCar style={{ color }} className="inline mb-2 me-2" />
+                  <strong style={{ color }}> Vagas:</strong>{" "}
+                  <strong> {configData.parkingSpaces} </strong>
+                </p>
+              )}
+            {configData.builtArea && Number(configData.builtArea) > 0 && (
               <p style={{ color: secondary }}>
-                <FaCar className="inline mb-2 me-2" />
-                <strong>Vagas:</strong>{" "}
-                <strong style={{ color }}> {configData.parkingSpaces} </strong>
+                <FaHammer style={{ color }} className="inline mb-2 me-2" />
+                <strong style={{ color }}> Área construída:</strong>{" "}
+                <strong>{configData.builtArea}m² </strong>
               </p>
             )}
-            {configData.builtArea && (
+            {configData.landArea && Number(configData.landArea) > 0 && (
               <p style={{ color: secondary }}>
-                <FaHammer className="inline mb-2 me-2" />
-                <strong>Área construída:</strong>{" "}
-                <strong style={{ color }}>{configData.builtArea}m² </strong>
-              </p>
-            )}
-            {configData.landArea && (
-              <p style={{ color: secondary }}>
-                <SlSizeFullscreen className="inline mb-2 me-2" />
-                <strong>Área do terreno:</strong>{" "}
-                <strong style={{ color }}>{configData.landArea}m²</strong>
+                <SlSizeFullscreen
+                  style={{ color }}
+                  className="inline mb-2 me-2"
+                />
+                <strong style={{ color }}> Área do terreno:</strong>{" "}
+                <strong>{configData.landArea}m²</strong>
               </p>
             )}
           </div>
@@ -135,8 +142,8 @@ export default function PropertyDescription({
                 style={{ color: secondary }}
                 className="flex items-center mb-2"
               >
-                <FaMapMarkerAlt size={16} className="mr-2" />
-                <strong>Localização</strong>
+                <FaMapMarkerAlt style={{ color }} size={16} className="mr-2" />
+                <strong style={{ color }}>Localização</strong>
               </div>
               <p style={{ color: secondary }}>{configData.address}</p>
             </div>

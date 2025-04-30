@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import "../index.css";
 import "@/assets/fonts/font.css";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -47,6 +47,7 @@ import { WebSocketProvider } from "@/Socket";
 import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseData";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import WebFont from "webfontloader";
 
 export { Layout };
 
@@ -58,6 +59,38 @@ function Layout({ children }: { children: ReactNode }) {
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname.includes("onboarding") ||
     pageContext.urlPathname === "/";
+
+  WebFont.load({
+    google: {
+      families: [
+        "Poppins",
+        "Roboto",
+        "Montserrat",
+        "Playfair Display",
+        "Merriweather",
+        "Lora",
+        "Raleway",
+        "Libre Baskerville",
+        "Bebas Neue",
+        "Great Vibes",
+        "DM Serif Display",
+        "Cinzel",
+        "Cormorant Garamond",
+        "Abril Fatface",
+        "Bodoni Moda",
+        "Oswald",
+        "Dancing Script",
+        "Allura",
+        "Pacifico",
+        "Satisfy",
+        "Parisienne",
+        "Yeseva One",
+        "Alex Brush",
+        "Italianno",
+        "Courgette",
+      ],
+    },
+  });
 
   return (
     <CssVarsProvider theme={theme}>

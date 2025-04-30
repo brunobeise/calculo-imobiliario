@@ -11,7 +11,8 @@ interface BuildingPreviewProps {
   secondaryColor: string;
   backgroundColor: string;
   configData: Partial<ReportData>;
-  user: User;
+  user?: User;
+  preview?: boolean;
 }
 
 const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
@@ -23,31 +24,39 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
       primaryColor,
       secondaryColor,
       user,
+      preview,
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     return (
       <div
         ref={ref}
-        className={`lg:max-w-[210mm] !min-w-[675px] w-full shadow absolute scale-[0.58] xl:scale-100 top-0 left-[50%] xl:left-[50%] translate-x-[-50%]`}
+        className={`${
+          !preview
+            ? "lg:max-w-[210mm] !min-w-[675px] w-full shadow absolute scale-[0.58] xl:scale-100 top-0 left-[50%] xl:left-[50%] translate-x-[-50%]"
+            : ""
+        }`}
         style={{
           transformOrigin: "top center",
           backgroundColor: backgroundColor,
         }}
       >
         <div className="flex flex-col items-center w-full !m-0 overflow-x-hidden">
-          <UserSignature
-            type={headerType || 1}
-            userData={user}
-            title="Imóvel"
-            desc={configData.propertyName}
-            primaryColor={primaryColor}
-            secondaryColor={secondaryColor}
-            backgroundColor={backgroundColor}
-          />
+          {user && (
+            <UserSignature
+              type={headerType || 1}
+              userData={user}
+              title="Imóvel"
+              desc={configData.propertyName}
+              primaryColor={primaryColor}
+              secondaryColor={secondaryColor}
+              backgroundColor={backgroundColor}
+            />
+          )}
+
           <ImageWithOverlay
             mainPhoto={configData.mainPhoto}
-            description={configData.description}
+            subtitle={configData.subtitle}
             overlayHeight={200}
             className="h-[460px]"
           />
