@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import "../index.css";
 import "@/assets/fonts/font.css";
 import ChartDataLabels from "chartjs-plugin-datalabels";
