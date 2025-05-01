@@ -128,7 +128,7 @@ export const DownPaymentCard = ({
                         (acc, val) =>
                           val.isDownPayment ? acc + val.originalValue : 0,
                         0
-                      )
+                      ) + propertyData.downPayment
                     )}
                   </p>
                   <p style={{ color: secondary }} className="text-sm mb-2">

@@ -19,6 +19,9 @@ const InstallmentPlanCard = ({
     installmentPlanDetails[0]?.totalInstallments;
 
   if (totalInstallmentPlanParts === 0) return null;
+
+  const showDatePerLine = installmentPlanDetails.length > 1;
+
   return (
     <DraggableCard id={id} index={index} moveCard={moveCard} isResizing={false}>
       <div className="relative rounded-3xl break-inside-avoid">
@@ -56,20 +59,33 @@ const InstallmentPlanCard = ({
                       {!onlyMonthlyInstallments && (
                         <ul style={{ color: secondary }} className="ml-1">
                           <li>
-                            • Parcelas mensais ({detail.totalInstallments}
-                            x):{" "}
+                            • Parcelas mensais ({detail.totalInstallments}x):{" "}
                             <strong style={{ color }}>
                               {toBRL(detail.amount)}
                             </strong>
+                            {showDatePerLine && (
+                              <span
+                                className="block text-xs mt-1"
+                                style={{ color: secondary }}
+                              >
+                                Início:{" "}
+                                <span style={{ color }}>{detail.date}</span>
+                              </span>
+                            )}
                           </li>
                         </ul>
                       )}
                     </>
                   ) : (
                     <>
-                      <span style={{ color }}>
-                        {i + 1}) {detail.date}
-                      </span>
+                      {showDatePerLine && (
+                        <span
+                          className="block text-sm font-medium mb-1"
+                          style={{ color }}
+                        >
+                          {detail.date}
+                        </span>
+                      )}
                       <ul style={{ color: secondary }} className="ml-1">
                         {detail.parts?.map((part, j) => (
                           <li key={j}>

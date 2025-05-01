@@ -257,26 +257,35 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
 
     if (groupMonthlyInstallments) {
       // 1) Parcelas Mensais
-      const monthlyInstallments = installmentDischarges
+      const monthlyInstallmentsGrouped = installmentDischarges
         .filter((d) => d.type === "Mensal")
-        .reduce(
-          (acc, discharge) => {
-            acc.amount = discharge.originalValue; // soma sempre com o último valor
-            acc.totalInstallments += 1;
-            return acc;
-          },
-          {
-            date: computeDischargeDate(
-              initialDate,
-              installmentDischarges[0]?.month
-            ),
-            amount: 0,
-            totalInstallments: 0,
-          }
-        );
+        .reduce((acc, discharge) => {
+          const date = computeDischargeDate(
+            initialDate,
+            discharge.initialMonth
+          );
+          const key = `${discharge.originalValue}-${date}`;
+          let group = acc.find((g) => g.key === key);
 
-      if (monthlyInstallments.totalInstallments > 0) {
-        installmentPlanDetails.push(monthlyInstallments);
+          if (!group) {
+            group = {
+              key,
+              date,
+              amount: discharge.originalValue,
+              totalInstallments: 1,
+            };
+            acc.push(group);
+          } else {
+            group.totalInstallments += 1;
+          }
+
+          return acc;
+        }, [])
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ key, ...rest }) => rest);
+
+      if (monthlyInstallmentsGrouped.length > 0) {
+        installmentPlanDetails.push(...monthlyInstallmentsGrouped);
       }
 
       // 2) Parcelas que não são Mensais
