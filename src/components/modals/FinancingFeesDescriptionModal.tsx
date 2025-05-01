@@ -70,10 +70,7 @@ export default function FinancingFeesDescriptionModal({
       >
         <FormControl>
           <FormLabel>Número de parcelas</FormLabel>
-          <Input
-            type="number"
-            {...register("installments", { required: true, min: 1 })}
-          />
+          <Input type="number" {...register("installments", { min: 1 })} />
         </FormControl>
 
         <FormControl>

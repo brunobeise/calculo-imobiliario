@@ -274,7 +274,7 @@ export default function PropertyDataCard({
                 extraButton={
                   <CiCalculator2 className="cursor-pointer hover:opacity-90" />
                 }
-                valueAddon={propertyData.financingFeesDescription.split("-")[0]}
+                valueAddon={propertyData.financingFeesDescription?.split("-")[0]}
                 label="Documentação total:"
                 id="financingFees"
                 value={propertyData.financingFees}
@@ -449,7 +449,7 @@ export default function PropertyDataCard({
 
             {!isFieldHidden("financingFees") && (
               <CurrencyInput
-                valueAddon={propertyData.financingFeesDescription.split("-")[0]}
+                valueAddon={propertyData.financingFeesDescription?.split("-")[0]}
                 extraButton={
                   <CiCalculator2
                     onClick={() => setFinancingFeesDescriptionModal(true)}
