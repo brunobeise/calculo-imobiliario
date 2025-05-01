@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useMemo } from "react";
 import { LuCircleDollarSign } from "react-icons/lu";
 import dayjs from "dayjs";
@@ -12,6 +13,7 @@ import KeyHandoverCard from "./KeyHandoverCard";
 import ConstructionInterestCard from "./ConstructionInterestCard";
 import ReinforcementsCard from "./ReinforcementsCard";
 import { SimpleViewer } from "@/components/tiptap-templates/simple/simple-viewer";
+import { PaymentConditionsConfig } from "@/types/reportConfigTypes";
 
 interface PaymentConditionsProps {
   color: string;
@@ -23,18 +25,8 @@ interface PaymentConditionsProps {
   groupMonthlyInstallments: boolean;
   propertyValue?: number;
   highlightSumPaymentsValues: boolean;
-  config: {
-    order: string[];
-    downPaymentHeight: number;
-    reinforcementsHeight: number;
-    constructionInterestHeight: number;
-  };
-  handlePaymentConditionsConfig?: (payload: {
-    order: string[];
-    downPaymentHeight: number;
-    reinforcementsHeight: number;
-    constructionInterestHeight: number;
-  }) => void;
+  config: PaymentConditionsConfig;
+  handlePaymentConditionsConfig?: (payload: PaymentConditionsConfig) => void;
   description: string;
 }
 
@@ -436,6 +428,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         moveCard={moveCard}
         initialHeight={config.downPaymentHeight}
         handleHeight={handleHeight}
+        type={config.downPaymentCustomType}
       />
     ),
     financingFees: (

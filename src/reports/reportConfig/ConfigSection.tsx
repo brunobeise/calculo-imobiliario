@@ -1,10 +1,14 @@
 import {
   Divider,
+  FormControl,
+  FormLabel,
   List,
   ListItem,
   ListItemDecorator,
+  Option,
   Radio,
   RadioGroup,
+  Select,
   Typography,
 } from "@mui/joy";
 import { FaCalculator } from "react-icons/fa6";
@@ -36,18 +40,18 @@ export default function ConfigSection({
     });
   };
 
-  // const handleDownPaymentTypeChange = (value: string | null) => {
-  //   onChange({
-  //     ...configData,
-  //     reportConfig: {
-  //       ...reportConfig,
-  //       PaymentConditionsConfig: {
-  //         ...reportConfig.PaymentConditionsConfig,
-  //         downPaymentCustomType: value || "",
-  //       },
-  //     },
-  //   });
-  // };
+  const handleDownPaymentTypeChange = (value: string | null) => {
+    onChange({
+      ...configData,
+      reportConfig: {
+        ...reportConfig,
+        PaymentConditionsConfig: {
+          ...reportConfig.PaymentConditionsConfig,
+          downPaymentCustomType: value || "",
+        },
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -125,17 +129,20 @@ export default function ConfigSection({
       )}
 
       <Typography level="title-md">Condição de Pagamento</Typography>
-      <div className="grid grid-cols-1 gap-y-4">
-        {/* <Select
-          value={
-            reportConfig?.PaymentConditionsConfig?.downPaymentCustomType ?? ""
-          }
-          onChange={(_, value) => handleDownPaymentTypeChange(value ?? "")}
-          placeholder="Tipo de entrada"
-        >
-          <Option value="">Padrão</Option>
-          <Option value="parcelamento_com_sinal">Parcelamento com sinal</Option>
-        </Select> */}
+      <div className="flex flex-col gap-4">
+        <FormControl>
+          <FormLabel>Tipo de entrada:</FormLabel>
+          <Select
+            value={
+              reportConfig?.PaymentConditionsConfig?.downPaymentCustomType ?? ""
+            }
+            onChange={(_, value) => handleDownPaymentTypeChange(value ?? "")}
+            placeholder="Tipo de entrada"
+          >
+            <Option value="">Padrão</Option>
+            <Option value="signal">Parcelamento com sinal</Option>
+          </Select>
+        </FormControl>
         <BooleanInputSwitch
           label="Exibir soma dos pagamentos"
           checked={reportConfig.highlightSumPaymentsValues}

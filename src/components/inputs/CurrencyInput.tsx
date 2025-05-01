@@ -19,6 +19,7 @@ interface CurrencyInputProps {
   noHeight?: boolean;
   extraButton?: ReactNode;
   placeholder?: string;
+  valueAddon?: string;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -35,6 +36,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   noHeight,
   extraButton,
   placeholder,
+  valueAddon,
 }) => {
   return (
     <div className={wrapperClassName}>
@@ -70,7 +72,14 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
         }}
         required={required}
         readOnly={disabled}
-        endDecorator={extraButton}
+        endDecorator={
+          <>
+            {valueAddon && (
+              <span className="text-xs text-gray me-2 ">({valueAddon})</span>
+            )}
+            {extraButton}
+          </>
+        }
       />
     </div>
   );

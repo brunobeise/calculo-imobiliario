@@ -22,6 +22,8 @@ import DatePicker from "@/components/inputs/DatePickerInput";
 import dayjs from "dayjs";
 import { FaCalculator } from "react-icons/fa";
 import InstallmentSimulationModal from "@/components/modals/InstallmentSimulationModal";
+import { CiCalculator2 } from "react-icons/ci";
+import FinancingFeesDescriptionModal from "@/components/modals/FinancingFeesDescriptionModal";
 
 interface PropertyDataCardProps {
   hideFields?: string[];
@@ -39,6 +41,8 @@ export default function PropertyDataCard({
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
     useState(false);
   const [installmentSimulator, setInstallmentSimulator] = useState(false);
+  const [financingFeesDescriptionModal, setFinancingFeesDescriptionModal] =
+    useState(false);
 
   const handleChangeBoolean = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.checked;
@@ -267,6 +271,10 @@ export default function PropertyDataCard({
 
             {!isFieldHidden("financingFees2") && (
               <CurrencyInput
+                extraButton={
+                  <CiCalculator2 className="cursor-pointer hover:opacity-90" />
+                }
+                valueAddon={propertyData.financingFeesDescription.split("-")[0]}
                 label="Documentação total:"
                 id="financingFees"
                 value={propertyData.financingFees}
@@ -441,6 +449,13 @@ export default function PropertyDataCard({
 
             {!isFieldHidden("financingFees") && (
               <CurrencyInput
+                valueAddon={propertyData.financingFeesDescription.split("-")[0]}
+                extraButton={
+                  <CiCalculator2
+                    onClick={() => setFinancingFeesDescriptionModal(true)}
+                    className="cursor-pointer hover:opacity-90"
+                  />
+                }
                 label="Documentação total:"
                 id="financingFees"
                 value={propertyData.financingFees}
@@ -689,6 +704,13 @@ export default function PropertyDataCard({
           onSimulate={(v) => setPropertyData("installmentValue", v)}
         />
       )}
+
+      <FinancingFeesDescriptionModal
+        open={financingFeesDescriptionModal}
+        onClose={() => setFinancingFeesDescriptionModal(false)}
+        onSubmit={(v) => setPropertyData("financingFeesDescription", v)}
+        value={propertyData.financingFeesDescription}
+      />
     </form>
   );
 }

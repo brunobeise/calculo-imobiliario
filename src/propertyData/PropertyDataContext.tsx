@@ -36,6 +36,7 @@ export type PropertyData = {
   cdi?: number;
   amortizationType: "SAC" | "PRICE";
   considerCapitalGainsTax: boolean;
+  financingFeesDescription: string;
 };
 
 export type PropertyDataContextType = {
