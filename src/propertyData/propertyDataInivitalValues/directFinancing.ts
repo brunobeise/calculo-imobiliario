@@ -1323,6 +1323,7 @@ const data = {
   brokerageFee: 0,
   interestRate: 0,
   financingFees: 0,
+  financingFeesDescription: "",
   investTheRest: true,
   propertyValue: 1250000,
   PVDiscountRate: 8,
