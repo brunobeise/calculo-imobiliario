@@ -85,22 +85,20 @@ export default function FinancingPlanning(): JSX.Element {
 
     let uploadMainPhoto = actualCase.mainPhoto;
 
-    if (
-      actualCase.mainPhoto &&
-      !actualCase.mainPhoto.includes("https://")
-    ) {
+    if (actualCase.mainPhoto && !actualCase.mainPhoto.startsWith("https://")) {
       uploadMainPhoto = await uploadImage(actualCase.mainPhoto);
     }
 
     const uploadAdditionalPhotos = await Promise.all(
       actualCase.additionalPhotos.map(async (photo) => {
-        if (photo && !photo.includes("https://")) {
+        if (photo && !photo.startsWith("https://")) {
           const uploadedPhoto = await uploadImage(photo);
           return uploadedPhoto;
         }
         return photo;
       })
     );
+
     try {
       await caseService.updateCase(actualCase.id, {
         ...actualCase,
@@ -129,7 +127,7 @@ export default function FinancingPlanning(): JSX.Element {
           setCaseFormModal(true);
         }
       },
-      icon: id ? <RiEdit2Fill/> : <FaSave />,
+      icon: id ? <RiEdit2Fill /> : <FaSave />,
       tooltip: id ? "Editar" : "Salvar",
     },
 

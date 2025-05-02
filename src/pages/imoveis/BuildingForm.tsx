@@ -91,13 +91,13 @@ export default function BuildingForm({
     setSaveLoading(true);
 
     let uploadMainPhoto = data.mainPhoto;
-    if (data.mainPhoto && !data.mainPhoto.includes("https://")) {
+    if (data.mainPhoto && !data.mainPhoto.startsWith("https://")) {
       uploadMainPhoto = await uploadImage(data.mainPhoto);
     }
 
     const uploadAdditionalPhotos = await Promise.all(
       data.additionalPhotos.map(async (photo) => {
-        if (photo && !photo.includes("https://")) {
+        if (photo && !photo.startsWith("https://")) {
           return await uploadImage(photo);
         }
         return photo;

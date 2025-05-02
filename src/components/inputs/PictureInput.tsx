@@ -108,7 +108,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
         }
         return URL.createObjectURL(file);
       })
-      .filter(Boolean);
+      .filter((src) => src && src.trim() !== "");
 
     const newSrcs = multiple ? [...fileSrcs, ...srcs] : srcs;
 
@@ -145,7 +145,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
   };
 
   useEffect(() => {
-    setFileSrcs(value);
+    setFileSrcs(value.filter((v) => v && v.trim() !== ""));
   }, [value]);
 
   return (
@@ -158,7 +158,7 @@ export const PictureInput: React.FC<PictureInputProps> = ({
 
       {fileSrcs.filter(Boolean).length > 1 ? (
         <div className="flex flex-wrap gap-2 border border-border p-4 ">
-          {fileSrcs.map((src, index) => (
+          {fileSrcs.filter(Boolean).map((src, index) => (
             <DraggableImage
               key={index}
               src={src}
