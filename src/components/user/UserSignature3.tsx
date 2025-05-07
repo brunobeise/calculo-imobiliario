@@ -42,7 +42,8 @@ export default function UserSignature3(props: UserSignatureProps) {
               {props.title || "Plano de Aquisição"}
             </Typography>
             <p className="text-md font-light">
-              por <strong>{data.fullName}</strong> CRECI {data.creci}
+              por <strong>{data.fullName}</strong>{" "}
+              {data.creci && <> CRECI {data.creci}</>}
             </p>
           </div>
 

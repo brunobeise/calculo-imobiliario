@@ -76,7 +76,9 @@ export default function UserSignature2(props: UserSignatureProps) {
             ></div>
             <span className="text-sm">
               <strong>{data.fullName?.toUpperCase()} </strong>{" "}
-              <span className="ms-2 font-light">CRECI {data.creci}</span>
+              {data.creci && (
+                <span className="ms-2 font-light">CRECI {data.creci}</span>
+              )}
               <span className="ms-2">
                 {data.whatsapp ? (
                   <a
