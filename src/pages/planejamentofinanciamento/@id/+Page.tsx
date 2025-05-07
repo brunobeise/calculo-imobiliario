@@ -180,7 +180,9 @@ export default function FinancingPlanning(): JSX.Element {
           proposal={actualCase}
         />
       ) : (
-        <div className={`${actualCase ? "relative" : "relative mt-5"}`}>
+        <div
+          className={`mt-[100px] ${actualCase ? "relative" : "relative mt-5"}`}
+        >
           <CaseSubTypeSelect
             subType={subType}
             onChange={(value) => {
