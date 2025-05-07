@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { ReportData } from "../ReportPreview";
-import _ from "lodash"; 
+import _ from "lodash";
 import { FormLabel } from "@mui/joy";
 
 interface NotesSectionProps {
@@ -39,11 +39,13 @@ export default function NotesSection({
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <h5 className="text-xl font-bold text-blue-900 mb-5">Notas</h5>
+    <div className="w-full">
+      <div className="flex flex-col gap-4">
+        <h5 className="text-xl font-bold mb-5">Notas</h5>
 
-      <FormLabel>Condição de pagamento:</FormLabel>
-      <SimpleEditor content={html} onUpdate={handleEditorUpdate} />
+        <FormLabel>Condição de pagamento:</FormLabel>
+        <SimpleEditor content={html} onUpdate={handleEditorUpdate} />
+      </div>
     </div>
   );
 }

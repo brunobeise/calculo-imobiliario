@@ -144,7 +144,7 @@ const CaseFormModal: React.FC<CaseFormModalProps> = ({
 
   return (
     <Dialog
-      title={editChoose ? "Editar estudo" : "Novo estudo"}
+      title={editChoose ? "Editar proposta" : "Nova proposta"}
       open={open}
       onClose={onClose}
       actions={

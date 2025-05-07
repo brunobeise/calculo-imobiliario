@@ -1,83 +1,97 @@
 import React from "react";
-import {
-  Divider,
-  Button,
-  Tooltip,
-  Tabs,
-  TabList,
-  tabClasses,
-  Tab,
-} from "@mui/joy";
+import { Button, Tooltip, Tabs, TabList, tabClasses, Tab } from "@mui/joy";
 import { FaBook, FaFile } from "react-icons/fa";
 import { MdRestartAlt } from "react-icons/md";
 import StatusTag from "@/components/shared/CaseStatusTag";
 import { getCaseTitle } from "@/lib/maps";
 import { Proposal } from "@/types/proposalTypes";
 import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from "vike/client/router";
 
 interface CaseHeaderProps {
   actualCase?: Proposal;
   setActualCase: React.Dispatch<React.SetStateAction<Proposal | undefined>>;
-  report: boolean;
-  setReport: React.Dispatch<React.SetStateAction<boolean>>;
   onRestart: () => void;
 }
 
 const CaseHeader: React.FC<CaseHeaderProps> = ({
   actualCase,
   setActualCase,
-  report,
-  setReport,
   onRestart,
 }) => {
   const pageContext = usePageContext();
+  const { urlParsed } = pageContext;
+
+  const tabParam = urlParsed.search.tab as string | undefined;
+  const [report, setReport] = React.useState(tabParam !== "case");
+
+  const handleTabChange = async (isReport: boolean) => {
+    setReport(isReport);
+
+    const searchParams = new URLSearchParams(urlParsed.search);
+    searchParams.set("tab", isReport ? "report" : "case");
+
+    const newUrl = `${urlParsed.pathname}?${searchParams.toString()}`;
+
+    await navigate(newUrl, { overwriteLastHistoryEntry: true });
+  };
 
   return (
-    <div className="bg-whitefull relative">
-      <RestartButton onRestart={onRestart} />
-      {actualCase && <TabsComponent report={report} setReport={setReport} />}
+    <div className="bg-whitefull absolute w-full z-[10] h-[80px] border-b border-border">
+      <div className="hidden md:block">
+        <RestartButton onRestart={onRestart} />
+      </div>
+
+      {actualCase && (
+        <TabsComponent report={report} onTabChange={handleTabChange} />
+      )}
       <div className={actualCase ? "h-[85px]" : "h-[50px]"}>
-        <div className="flex justify-center items-center h-full">
-          <div className="flex flex-col items-center gap-2">
+        <div className="flex justify-center md:items-center h-full">
+          <div className="flex flex-col items-center gap-1">
             {actualCase ? (
               <>
-                <h1 className="scroll-m-20 text-xl text-primary text-center">
+                <h1 className="scroll-m-20 text-sm md:text-xl text-primary text-center">
                   {actualCase.name}
                   {actualCase.propertyName && " - "}
                   {actualCase.propertyName}
                 </h1>
-                <StatusTag
-                  status={actualCase.status}
-                  id={actualCase.id}
-                  enableEdit
-                  onChange={(status) =>
-                    setActualCase((prev) => prev && { ...prev, status })
-                  }
-                />
+                <div className="hidden md:block">
+                  <StatusTag
+                    status={actualCase.status}
+                    id={actualCase.id}
+                    enableEdit
+                    onChange={(status) =>
+                      setActualCase((prev) => prev && { ...prev, status })
+                    }
+                  />
+                </div>
               </>
             ) : (
               <h1 className="scroll-m-20 text-xl text-primary text-center mt-2">
-                {getCaseTitle(pageContext.urlPathname.split("/")[1])}
+                {getCaseTitle(urlParsed.pathname.split("/")[1])}
               </h1>
             )}
           </div>
         </div>
       </div>
-      <Divider className="!mt-3" />
     </div>
   );
 };
+
 interface TabsComponentProps {
   report: boolean;
-  setReport: React.Dispatch<React.SetStateAction<boolean>>;
+  onTabChange: (isReport: boolean) => void;
 }
 
-const TabsComponent: React.FC<TabsComponentProps> = ({ report, setReport }) => (
+const TabsComponent: React.FC<TabsComponentProps> = ({
+  report,
+  onTabChange,
+}) => (
   <Tabs
-    defaultValue={report ? "report" : "case"}
+    value={report ? "report" : "case"}
     aria-label="tabs"
     sx={{ bgcolor: "transparent" }}
-    className="!absolute !right-[2rem] top-[2rem]"
+    className="!absolute !right-[2rem] top-[50%] translate-y-[-50%]"
   >
     <TabList
       disableUnderline
@@ -88,21 +102,20 @@ const TabsComponent: React.FC<TabsComponentProps> = ({ report, setReport }) => (
         borderRadius: "xl",
         bgcolor: "transparent",
         [`& .${tabClasses.root}[aria-selected="true"]`]: {
-          boxShadow: "sm",
           bgcolor: "background.surface",
         },
       }}
     >
-      <div onClick={() => setReport(false)}>
+      <div onClick={() => onTabChange(false)}>
         <Tab className="!text-primary" value="case">
           <FaBook className="text-sm" />{" "}
-          <span className="font-bold"> Estudo </span>
+          <span className="font-bold">Estudo</span>
         </Tab>
       </div>
-      <div onClick={() => setReport(true)}>
+      <div onClick={() => onTabChange(true)}>
         <Tab className="!text-primary" value="report">
           <FaFile className="text-sm" />{" "}
-          <span className="font-bold">Proposta </span>
+          <span className="font-bold">Proposta</span>
         </Tab>
       </div>
     </TabList>

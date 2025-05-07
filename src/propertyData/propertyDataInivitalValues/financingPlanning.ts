@@ -31,6 +31,8 @@ const data = {
   cdi: undefined,
   amortizationType: "PRICE",
   considerCapitalGainsTax: false,
+  appraisalValue: undefined,
+  financingQuota: undefined,
 } as PropertyData;
 
 export default data;

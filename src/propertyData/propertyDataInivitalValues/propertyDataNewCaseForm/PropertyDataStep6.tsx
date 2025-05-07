@@ -43,7 +43,6 @@ export default function PropertyDataStep6({
             value={form.annualYieldRate}
             onChange={(v) => {
               setForm("annualYieldRate", Number(v.target.value));
-              setForm("PVDiscontRate", Number(v.target.value));
             }}
           />
         )}

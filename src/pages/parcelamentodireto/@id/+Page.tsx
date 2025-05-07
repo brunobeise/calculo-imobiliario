@@ -12,7 +12,6 @@ import TablePropertyAppreciation from "@/components/tables/TablePropertyApprecia
 import { FaExternalLinkAlt, FaSave } from "react-icons/fa";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
-import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import NewCase from "../../../components/newCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import { caseService } from "@/service/caseService";
@@ -27,13 +26,13 @@ import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
 import ReportPreview from "@/reports/ReportPreview";
 import { RiEdit2Fill } from "react-icons/ri";
+import PropertyDataCards from "@/propertyData/propertyDataCards/PropertyDataCards";
 
 export default function DirectFinancing(): JSX.Element {
   const pageContext = usePageContext();
   const { id } = pageContext.routeParams;
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
-  const [report, setReport] = useState<boolean>(false);
   const { caseData, setCaseData } = useContext(caseDataContext);
   const [newCase, setNewCase] = useState<boolean>(!id);
   const [caseFormModal, setCaseFormModal] = useState<boolean>(false);
@@ -150,57 +149,8 @@ export default function DirectFinancing(): JSX.Element {
   ];
 
   const subType = actualCase ? actualCase?.subType : newProposalSubType;
-
-  const hideFields =
-    subType === "Avançado"
-      ? [
-          "inCashFees",
-          "personalBalance",
-          "rentMonthlyYieldRate",
-          "initialFinancingMonth2",
-          "initialDate2",
-          "installmentValue",
-          "installmentValueTax",
-          "interestRate",
-          "amortizationType",
-          "initialFinancingMonth",
-          "totalFinanced",
-          "outstandingBalance",
-          "financingMonths",
-          "dischargesControl",
-          "financingFees2",
-          "financingFeesDate2",
-          "subsidy2",
-        ]
-      : [
-          "initialRentMonth",
-          "initialRentValue",
-          "interestRate",
-          "inCashFees",
-          "financingMonths",
-          "ownResource",
-          "subsidy",
-          "subsidy2",
-          "initialFinancingMonth2",
-          "initialDate",
-          "installmentValue",
-          "installmentValueTax",
-          "outstandingBalance",
-          "installmentValueTax",
-          "initialFinancingMonth",
-          "installmentValueTax",
-          "interestRate",
-          "amortizationType",
-          "initialFinancingMonth",
-          "totalFinanced",
-          "outstandingBalance",
-          "financingMonths",
-          "dischargesControl",
-          "financingFees",
-          "financingFeesDate",
-        ];
-
-  const hideSheets = subType === "Avançado" ? [] : ["appreciation"];
+  const tabParam = pageContext.urlParsed.search.tab as string | undefined;
+  const isReportTab = tabParam !== "case";
 
   if (newCase)
     return (
@@ -219,21 +169,18 @@ export default function DirectFinancing(): JSX.Element {
       <CaseHeader
         actualCase={actualCase}
         setActualCase={setActualCase}
-        report={report}
-        setReport={setReport}
         onRestart={handleRestart}
       />
 
-      {report && actualCase ? (
+      {isReportTab && actualCase ? (
         <ReportPreview
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
-          onClose={() => setReport(false)}
           propertyData={propertyData}
           context="directFinancing"
           proposal={actualCase}
         />
       ) : (
-        <div className={`${actualCase ? "relative" : "relative mt-5"}`}>
+        <div className={`mt-[100px] ${actualCase ? "relative" : "relative mt-5"}`}>
           <CaseSubTypeSelect
             subType={subType}
             onChange={(value) => {
@@ -244,15 +191,8 @@ export default function DirectFinancing(): JSX.Element {
               }
             }}
           />
-          <PropertyDataCard
-            titles={
-              actualCase?.subType === "Simplificado"
-                ? ["Custos e Valores do Imóvel", "Fluxo de Pagamento"]
-                : ["Dados do imóvel e Parcelamento", "Fluxo de Pagamento"]
-            }
-            hideSheets={hideSheets}
-            hideFields={hideFields}
-          />
+          <PropertyDataCards mode="directFinancing" type={subType} />
+
           {subType === "Avançado" && (
             <div className="w-full text-center ">
               <div className="grid grid-cols-12 gap-3 justify-center mt-5 mb-5 px-5">

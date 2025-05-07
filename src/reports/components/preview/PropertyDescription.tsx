@@ -61,7 +61,7 @@ export default function PropertyDescription({
       setImageData(updatedImages);
     };
 
-    if (configData.additionalPhotos.length > 0) {
+    if (configData.additionalPhotos?.length > 0) {
       fetchImageSizes();
     }
   }, [configData.additionalPhotos]);
@@ -154,7 +154,7 @@ export default function PropertyDescription({
 
         {configData.features.length > 0 && (
           <div className="text-lg">
-            <strong style={{ color: secondary }} className="block mb-3">
+            <strong style={{ color }} className="block mb-3">
               Características
             </strong>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-sm">
@@ -173,7 +173,7 @@ export default function PropertyDescription({
           </div>
         )}
       </div>
-      {imageData.length > 0 && configData.additionalPhotos.length > 1 && (
+      {imageData.length > 0 && configData.additionalPhotos?.length > 1 && (
         <div className="my-4">
           <ColumnsPhotoAlbum
             photos={imageData}

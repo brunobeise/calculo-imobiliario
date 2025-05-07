@@ -1339,6 +1339,8 @@ const data = {
   rentMonthlyYieldRate: 0.8,
   considerCapitalGainsTax: false,
   propertyAppreciationRate: 10,
+  appraisalValue: undefined,
+  financingQuota: undefined,
 } as PropertyData;
 
 export default data;

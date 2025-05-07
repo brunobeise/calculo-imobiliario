@@ -25,7 +25,7 @@ export default function MyCases({ myCases, loading, onSearch }: MyCasesProps) {
         handleDebounce={(e) => onSearch(e)}
         endDecorator={<FaSearch className="text-gray" />}
       />
-      <Card className="w-[500px] h-[400px] shadow-lg overflow-y-auto">
+      <Card className="w-[320px] md:w-[500px] h-[400px] shadow-lg overflow-y-auto">
         {myCases.length > 0 ? (
           myCases.map((c) => (
             <a

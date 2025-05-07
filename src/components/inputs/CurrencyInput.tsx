@@ -12,6 +12,7 @@ interface CurrencyInputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
+  opacity?: boolean;
   wrapperClassName?: string;
   infoTooltip?: string;
   lock?: boolean;
@@ -20,6 +21,7 @@ interface CurrencyInputProps {
   extraButton?: ReactNode;
   placeholder?: string;
   valueAddon?: string;
+  error?: boolean;
 }
 
 const CurrencyInput: React.FC<CurrencyInputProps> = ({
@@ -29,6 +31,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   onChange,
   required = true,
   disabled = false,
+  opacity = false,
   wrapperClassName,
   infoTooltip,
   lock,
@@ -37,9 +40,10 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   extraButton,
   placeholder,
   valueAddon,
+  error = false,
 }) => {
   return (
-    <div className={wrapperClassName}>
+    <div className={`${wrapperClassName} ${opacity ? "opacity-50" : ""}`}>
       <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
         {lock === false && (
           <FaLock
@@ -59,6 +63,8 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
       </div>
 
       <Input
+        error={error}
+        className={`${error ? "border" : ""}`}
         placeholder={placeholder}
         id={id}
         value={value}
@@ -75,7 +81,11 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
         endDecorator={
           <>
             {valueAddon && (
-              <span className="text-xs text-gray me-2 ">({valueAddon})</span>
+              <span
+                className={`text-xs me-2 ${error ? "text-red" : " text-gray"}`}
+              >
+                ({valueAddon})
+              </span>
             )}
             {extraButton}
           </>

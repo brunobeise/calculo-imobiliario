@@ -40,7 +40,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="relative h-[40px]">
+    <div className="relative h-[40px] flex flex-col">
       <div className="flex justify-center items-center space-x-2 mt-4">
         {totalPages !== 0 && currentPage !== 1 && (
           <button
@@ -86,7 +86,7 @@ const Pagination = ({
         )}
       </div>
       {onLimitChange && totalPages !== 0 && (
-        <div className="absolute right-0 top-0 flex gap-2">
+        <div className="hidden md:block absolute right-0 top-0 flex gap-2">
           <FormLabel>Limite:</FormLabel>
           <Select
             value={limit}

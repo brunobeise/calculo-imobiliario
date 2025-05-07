@@ -21,7 +21,7 @@ import { useState } from "react";
 import { Proposal } from "@/types/proposalTypes";
 import StatusTag from "@/components/shared/CaseStatusTag";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-import DuplicateCaseModal from "./DuplicateCaseModal";
+import DuplicateCaseModal from "../../components/modals/DuplicateCaseModal";
 import CaseSessionsModal from "@/components/session/SessionsModal";
 import { notify } from "@/notify";
 import { navigate } from "vike/client/router";

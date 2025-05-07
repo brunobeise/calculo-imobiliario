@@ -152,6 +152,7 @@ export default function NewCase(props: NewCaseProps) {
               props.setSubType(v);
               props.setNewCase(false);
             } else if (context === "manual") {
+              props.setSubType(v);
               v === "Simplificado"
                 ? setContext("newSimplificatedCase")
                 : setContext("newAdvancedCase");

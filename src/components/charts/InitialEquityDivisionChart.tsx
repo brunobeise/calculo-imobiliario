@@ -1,10 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toBRL } from "@/lib/formatter";
 import { Pie } from "react-chartjs-2";
-import { Chart, registerables } from "chart.js";
 import "chartjs-plugin-datalabels";
 import chroma from "chroma-js";
-Chart.register(...registerables);
 
 interface InitialEquityDivisionChartProps {
   labels: string[];
@@ -15,7 +13,7 @@ interface InitialEquityDivisionChartProps {
 export default function InitialEquityDivisionChart({
   labels = [],
   values = [],
-  color,
+  color = "#3498db",
 }: InitialEquityDivisionChartProps) {
   const filteredData = values.reduce(
     (acc, value, index) => {

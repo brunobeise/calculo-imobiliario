@@ -244,7 +244,7 @@ export default function MyCases() {
   }
 
   const header = (
-    <div className="flex justify-between ">
+    <div className="flex justify-between flex-wrap">
       <div
         onClick={() => setCasesContextDropdown(!casesContextDropdown)}
         className="cursor-pointer flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative"
@@ -273,8 +273,8 @@ export default function MyCases() {
 
         {casesContextDropdown && <CasesContextSelect />}
       </div>
-      <div className="flex gap-5 items-end">
-        <div className="flex items-center gap-5 text-xl mb-1 mr-5">
+      <div className="ms-4 mt-4 md:mt-0 md:ms-0 flex gap-5 items-end flex-wrap">
+        <div className="hidden md:flex items-center gap-5 text-xl mb-1 mr-5">
           <IoGrid
             onClick={() => setShowMode("cards")}
             className={` cursor-pointer ${
@@ -342,7 +342,7 @@ export default function MyCases() {
   );
 
   const contentHeader = (
-    <div className={"flex justify-between"}>
+    <div className={"flex justify-between flex-wrap gap-4 md:gap-0"}>
       <div className="flex gap-5 items-end">
         <SearchInput
           placeholder="Pesquisar"
@@ -399,7 +399,7 @@ export default function MyCases() {
   const content = (
     <>
       {showMode === "cards" && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
           {data.map((proposal) => (
             <CaseCard
               adminCase={casesContext === "adminCases"}

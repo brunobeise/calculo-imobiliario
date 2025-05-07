@@ -63,12 +63,12 @@ export default function Dashbaord() {
   }
 
   const header = (
-    <div className="flex justify-between items-center ">
+    <div className="flex justify-between items-center flex-wrap">
       <div className="flex items-center text-primary gap-2 text-2xl ms-4 mt-8 mb-3 w-[250px]">
         <BiSolidDashboard className="text-xl" />
         <h2 className="font-bold">Dashboard</h2>
       </div>
-      <div className="flex gap-5">
+      <div className="flex gap-5 flex-wrap ms-3 md:ms-0">
         {user.admin && (
           <div className="mb-1">
             <RealEstateSelect

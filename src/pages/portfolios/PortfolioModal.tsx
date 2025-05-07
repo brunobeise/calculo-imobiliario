@@ -56,7 +56,6 @@ export default function PortfolioModal({
   const [type, setType] = useState<"proposals" | "buildings">("proposals");
   const [search, setSearch] = useState("");
 
-  /* ---------- form ---------- */
   const {
     control,
     handleSubmit,
@@ -102,7 +101,6 @@ export default function PortfolioModal({
     dispatch(fetchBuildings(query));
   }, [dispatch, open, search]);
 
-  /* ---------- load portfolio for edição ---------- */
   useEffect(() => {
     if (!portfolioId || !open) {
       setTimeout(() => {
@@ -113,7 +111,6 @@ export default function PortfolioModal({
           items: [],
         });
       }, 300);
-
       return;
     }
     setLoading(true);
@@ -129,7 +126,6 @@ export default function PortfolioModal({
     });
   }, [portfolioId, open, reset]);
 
-  /* ---------- dnd helpers ---------- */
   const [, portfolioDrop] = useDrop({
     accept: "EXTERNAL_ITEM",
     drop: (item: { data: Proposal | Building }) => addItem(item.data),
@@ -146,7 +142,6 @@ export default function PortfolioModal({
   const addItem = (d: Proposal | Building) => {
     const id = `${d.id}-${Date.now()}`;
     const now = new Date().toISOString();
-
     if ("name" in d) {
       append({
         id,
@@ -166,7 +161,6 @@ export default function PortfolioModal({
     }
   };
 
-  /* ---------- submit/delete ---------- */
   const onSubmit = async (data: CreatePortfolio) => {
     setLoading(true);
     const payload = {
@@ -191,7 +185,6 @@ export default function PortfolioModal({
     setSearch("");
   };
 
-  /* ---------- render ---------- */
   return (
     <Dialog
       open={open}
@@ -203,164 +196,148 @@ export default function PortfolioModal({
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         {loading ? (
-          <div className="w-[1100px] h-[466px] xl:h-[556px]">
+          <div className="w-full md:w-[1100px] h-[466px] xl:h-[556px]">
             <Spinner />
           </div>
         ) : (
-          <>
-            <div className="flex gap-4 px-4 pb-4 w-[1100px] h-[390px] xl:h-[480px]">
-              {/* ---------- PREVIEW ---------- */}
-              <div className="w-1/3 bg-gray-50 rounded p-4">
-                <h2 className="text-lg font-bold mb-4">Pré-visualização</h2>
-                <FormControl error={!!errors.name} className="mb-3">
-                  <FormLabel>Nome</FormLabel>
-                  <Input
-                    {...register("name", { required: "Campo obrigatório" })}
-                  />
-                  {errors.name && (
-                    <FormHelperText>{errors.name.message}</FormHelperText>
-                  )}
-                </FormControl>
-                <FormControl error={!!errors.clientName} className="mb-3">
-                  <FormLabel>Cliente</FormLabel>
-                  <Input {...register("clientName")} />
-                </FormControl>
-                <div className="mt-5">
-                  <BooleanInputSwitch
-                    label="Solicitar Nome"
-                    checked={watch("requestName")}
-                    onChange={(v) => setValue("requestName", v)}
-                    infoTooltip="Quando ativado, ao abrir o link será exibida uma caixa para o usuário digitar seu nome antes de visualizar a proposta. Essa informação será solicitada apenas uma vez. Recomendado para quando o link será enviado para mais de uma pessoa, permitindo identificar quem visualizou."
-                  />
-                </div>
+          <div className="flex flex-col md:flex-row gap-4 px-4 pb-4 w-full md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
+            <div className="w-full md:w-1/3 bg-gray-50 rounded p-4 mb-4 md:mb-0">
+              <FormControl error={!!errors.name} className="mb-3">
+                <FormLabel>Nome</FormLabel>
+                <Input
+                  {...register("name", { required: "Campo obrigatório" })}
+                />
+                {errors.name && (
+                  <FormHelperText>{errors.name.message}</FormHelperText>
+                )}
+              </FormControl>
+              <FormControl error={!!errors.clientName} className="mb-3">
+                <FormLabel>Cliente</FormLabel>
+                <Input {...register("clientName")} />
+              </FormControl>
+              <div className="mt-5">
+                <BooleanInputSwitch
+                  label="Solicitar Nome"
+                  checked={watch("requestName")}
+                  onChange={(v) => setValue("requestName", v)}
+                  infoTooltip="Quando ativado, ao abrir o link será exibida uma caixa para o usuário digitar seu nome antes de visualizar a proposta. Essa informação será solicitada apenas uma vez. Recomendado para quando o link será enviado para mais de uma pessoa, permitindo identificar quem visualizou."
+                />
               </div>
+            </div>
 
-              {/* ---------- ITENS DO PORTFÓLIO ---------- */}
-              <div className="w-1/3 flex flex-col gap-3">
-                <h2 className="text-lg font-bold">Itens do Portfólio</h2>
-                <div
-                  ref={portfolioDrop}
-                  className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 xl:h-full overflow-auto
+            <div className="w-full md:w-1/3 flex flex-col gap-3 mb-4 md:mb-0">
+              <h2 className="text-lg font-bold">Itens do Portfólio</h2>
+              <div
+                ref={portfolioDrop}
+                className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
                   ${
                     isOverLimit
                       ? "border-dashed border-red"
                       : "border-dashed border-border"
                   }`}
-                >
-                  {fields.length === 0 && (
-                    <span className="text-gray text-sm text-center">
-                      Arraste aqui as propostas ou imóveis
-                    </span>
-                  )}
-                  {fields.map((item, idx) => {
-                    return (
-                      <ItemCard
-                        key={item.id}
-                        data={item.building || item.case}
-                        draggable
-                        index={idx}
-                        moveItem={move}
-                        onRemove={() => remove(idx)}
-                      />
-                    );
-                  })}
-                </div>
-                {isOverLimit && (
-                  <div className="text-red text-xs text-center mt-2">
-                    Máximo de 10 itens permitidos. Remova algum para poder
-                    salvar.
-                  </div>
+              >
+                {fields.length === 0 && (
+                  <span className="text-gray text-sm text-center">
+                    Arraste aqui as propostas ou imóveis
+                  </span>
                 )}
+                {fields.map((item, idx) => (
+                  <ItemCard
+                    key={item.id}
+                    data={item.building || item.case}
+                    draggable
+                    index={idx}
+                    moveItem={move}
+                    onRemove={() => remove(idx)}
+                  />
+                ))}
               </div>
-
-              {/* ---------- LISTAS EXTERNAS ---------- */}
-              <div className="w-1/3 flex flex-col">
-                <Tabs
-                  value={type}
-                  onChange={(_, v: "buildings" | "proposals") => setType(v)}
-                >
-                  <TabList
-                    sx={{
-                      justifyContent: "center",
-                      bgcolor: "transparent",
-                      [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                        bgcolor: "background.surface",
-                      },
-                    }}
-                  >
-                    <Tab value="proposals">
-                      <FaFileAlt className="text-sm" /> Propostas
-                    </Tab>
-                    <Tab value="buildings">
-                      <FaBuilding className="text-sm" /> Imóveis
-                    </Tab>
-                  </TabList>
-
-                  {/* ---------- PROPOSTAS ---------- */}
-                  <TabPanel className="!p-0 !py-4 " value="proposals">
-                    <SearchInput
-                      placeholder="Buscar Propostas"
-                      className="my-2 mb-3"
-                      debounceTimeout={500}
-                      handleDebounce={setSearch}
-                    />
-                    <div
-                      ref={proposalsRemoveDrop}
-                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto h-[264px] xl:h-[354px] relative  !border !border-dashed !border-border"
-                    >
-                      {proposalsInitialLoading || searchLoading ? (
-                        <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
-                          <Spinner />
-                        </div>
-                      ) : (
-                        proposals.map((p) => (
-                          <ItemCard
-                            key={p.id}
-                            data={p}
-                            onAdd={() => addItem(p)}
-                          />
-                        ))
-                      )}
-                    </div>
-                  </TabPanel>
-
-                  {/* ---------- IMÓVEIS ---------- */}
-                  <TabPanel className="!p-0 !py-4" value="buildings">
-                    <SearchInput
-                      placeholder="Buscar Imóveis"
-                      className="my-2 mb-3"
-                      debounceTimeout={500}
-                      handleDebounce={setSearch}
-                    />
-                    <div
-                      ref={buildingsRemoveDrop}
-                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto  h-[264px] xl:h-[354px] !border !border-dashed !border-border"
-                    >
-                      {buildings.map((b) => (
-                        <ItemCard
-                          key={b.id}
-                          data={b}
-                          onAdd={() => addItem(b)}
-                        />
-                      ))}
-                    </div>
-                  </TabPanel>
-                </Tabs>
-              </div>
+              {isOverLimit && (
+                <div className="text-red text-xs text-center mt-2">
+                  Máximo de 10 itens permitidos. Remova algum para poder salvar.
+                </div>
+              )}
             </div>
 
-            {/* ---------- FOOTER ---------- */}
-            {portfolioId ? (
-              <FooterEdit
-                portfolioId={portfolioId}
-                loading={loading}
-                handleDelete={handleDelete}
-                isOverLimit={isOverLimit}
-              />
-            ) : (
-              <FooterCreate loading={loading} isOverLimit={isOverLimit} />
-            )}
-          </>
+            <div className="w-full md:w-1/3 flex flex-col">
+              <Tabs
+                value={type}
+                onChange={(_, v: "buildings" | "proposals") => setType(v)}
+              >
+                <TabList
+                  sx={{
+                    justifyContent: "center",
+                    bgcolor: "transparent",
+                    [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                      bgcolor: "background.surface",
+                    },
+                  }}
+                >
+                  <Tab value="proposals">
+                    <FaFileAlt className="text-sm" /> Propostas
+                  </Tab>
+                  <Tab value="buildings">
+                    <FaBuilding className="text-sm" /> Imóveis
+                  </Tab>
+                </TabList>
+
+                <TabPanel className="!p-0 !py-4 " value="proposals">
+                  <SearchInput
+                    placeholder="Buscar Propostas"
+                    className="my-2 mb-3"
+                    debounceTimeout={500}
+                    handleDebounce={setSearch}
+                  />
+                  <div
+                    ref={proposalsRemoveDrop}
+                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto relative !border !border-dashed !border-border h-[264px] xl:h-[354px]"
+                  >
+                    {proposalsInitialLoading || searchLoading ? (
+                      <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
+                        <Spinner />
+                      </div>
+                    ) : (
+                      proposals.map((p) => (
+                        <ItemCard
+                          key={p.id}
+                          data={p}
+                          onAdd={() => addItem(p)}
+                        />
+                      ))
+                    )}
+                  </div>
+                </TabPanel>
+
+                <TabPanel className="!p-0 !py-4" value="buildings">
+                  <SearchInput
+                    placeholder="Buscar Imóveis"
+                    className="my-2 mb-3"
+                    debounceTimeout={500}
+                    handleDebounce={setSearch}
+                  />
+                  <div
+                    ref={buildingsRemoveDrop}
+                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto !border !border-dashed !border-border h-[264px] xl:h-[354px]"
+                  >
+                    {buildings.map((b) => (
+                      <ItemCard key={b.id} data={b} onAdd={() => addItem(b)} />
+                    ))}
+                  </div>
+                </TabPanel>
+              </Tabs>
+            </div>
+          </div>
+        )}
+
+        {portfolioId ? (
+          <FooterEdit
+            portfolioId={portfolioId}
+            loading={loading}
+            handleDelete={handleDelete}
+            isOverLimit={isOverLimit}
+          />
+        ) : (
+          <FooterCreate loading={loading} isOverLimit={isOverLimit} />
         )}
       </form>
     </Dialog>
@@ -380,7 +357,7 @@ function FooterEdit({
   isOverLimit: boolean;
 }) {
   return (
-    <div className="flex justify-between mt-6 pb-4 gap-2 px-7">
+    <div className="flex justify-between mt-6 pb-4 gap-2 px-7 flex-wrap">
       <Button
         endDecorator={<FaTrash />}
         loading={loading}
@@ -391,7 +368,7 @@ function FooterEdit({
       >
         Excluir
       </Button>
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         <Button
           endDecorator={<FaLink />}
           loading={loading}

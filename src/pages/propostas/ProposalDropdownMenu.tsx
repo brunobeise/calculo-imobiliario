@@ -13,7 +13,7 @@ import { caseService } from "@/service/caseService";
 import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { fetchCases } from "@/store/caseReducer";
-import DuplicateCaseModal from "./DuplicateCaseModal";
+import DuplicateCaseModal from "../../components/modals/DuplicateCaseModal";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 
 export default function ProposalDropdownMenu({

@@ -26,7 +26,7 @@ export default function SessionsDrawer({ caseId }: SessionsDrawerProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setOpen(window.innerWidth > 1600);
+      setOpen(window.innerWidth > 1800);
     };
 
     window.addEventListener("resize", handleResize);

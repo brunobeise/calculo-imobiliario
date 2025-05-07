@@ -87,6 +87,8 @@ export const DownPaymentCard = ({
     a.startDate.diff(b.startDate)
   );
 
+  console.log(propertyData.discharges.filter((d) => d.isDownPayment));
+
   return (
     <DraggableCard
       id={id}
@@ -126,7 +128,7 @@ export const DownPaymentCard = ({
                     {toBRL(
                       propertyData.discharges.reduce(
                         (acc, val) =>
-                          val.isDownPayment ? acc + val.originalValue : 0,
+                          val.isDownPayment ? acc + val.originalValue : acc,
                         0
                       ) + propertyData.downPayment
                     )}

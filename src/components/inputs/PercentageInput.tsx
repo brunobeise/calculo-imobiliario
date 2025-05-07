@@ -14,6 +14,8 @@ interface PercentageInputProps {
   infoTooltip?: string;
   noHeight?: boolean;
   placeholder?: string | number;
+  disabled?: boolean;
+  opacity?: boolean;
 }
 
 const PercentageInput: React.FC<PercentageInputProps> = ({
@@ -28,6 +30,8 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   infoTooltip,
   noHeight,
   placeholder,
+  disabled,
+  opacity,
 }) => {
   const [inputValue, setInputValue] = useState<string>(
     value !== undefined ? value.toString() : ""
@@ -35,11 +39,8 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
-
-    // Permite que o usuário apague ou insira valores parcialmente
     setInputValue(newValue);
 
-    // Apenas dispara onChange se o valor for um número válido
     const parsedValue = parseFloat(newValue);
     if (!isNaN(parsedValue)) {
       onChange({
@@ -52,13 +53,14 @@ const PercentageInput: React.FC<PercentageInputProps> = ({
   };
 
   return (
-    <div className={wrapperClassName}>
-      <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
+    <div className={`${wrapperClassName} ${opacity ? "opacity-50" : ""}`}>
+      <div className={`flex ${noHeight ? "" : "xl:h-[40px]"} items-center`}>
         <FormLabel htmlFor={id}>{label}</FormLabel>
         {infoTooltip && <InfoTooltip text={infoTooltip} />}
       </div>
 
       <Input
+        readOnly={disabled}
         placeholder={placeholder?.toString()}
         id={id}
         value={inputValue}

@@ -23,6 +23,7 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
 
   const [proposalChartFilter, setProposalChartFilter] =
     useState("last_6_months");
+
   useEffect(() => {
     dispatch(fetchOwnerDashboardData(props.realEstate));
     dispatch(fetchFeaturedUsers(props.realEstate));
@@ -39,7 +40,7 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
 
   return (
     <div className="p-3">
-      <div className="grid grid-cols-3 gap-10 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10">
         <DashboardPaper
           loading={data.activeUsers === undefined}
           value={data.activeUsers}
@@ -59,13 +60,17 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
           icon={<FaFileCircleCheck />}
         />
       </div>
-      <div className="grid grid-cols-3 gap-10 mt-5">
-        <div className="col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between">
-            <h2 className="text-lg font-bold mb-4">Propostas Geradas</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 mt-5">
+        <div className="col-span-1 md:col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
+            <h2 className="text-lg font-bold mb-2 md:mb-0">
+              Propostas Geradas
+            </h2>
             <Select
               value={proposalChartFilter}
               onChange={(_, v) => setProposalChartFilter(v || "")}
+              className="!min-w-[140px]"
             >
               <Option value="last_7_days">Últimos 7 dias</Option>
               <Option value="last_30_days">Últimos 30 dias</Option>
@@ -73,7 +78,7 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
               <Option value="last_6_months">Últimos 6 meses</Option>
               <Option value="last_year">Último ano</Option>
               <Option value="current_year">Esse ano</Option>
-              <Option value="all_time">Desde o início</Option>{" "}
+              <Option value="all_time">Desde o início</Option>
             </Select>
           </div>
 
@@ -89,7 +94,8 @@ export default function OwnerDashboard(props: OwnerDashboardProps) {
             showLegend={false}
           />
         </div>
-        <div>
+
+        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
           <DashboardRank
             loading={data.featuredUsersLoading}
             data={data.featuredUsers}

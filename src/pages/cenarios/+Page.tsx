@@ -6,7 +6,7 @@ import DirectFinancingImage from "@/assets/financiamentodireto.png";
 
 export default function Cenarios() {
   return (
-    <div className="w-full h-screen items-center flex flex-col justify-center">
+    <div className="w-full pb-12 md:pb-0 md:h-screen items-center flex flex-col justify-center">
       <div className="flex items-center mb-10 flex-col">
         <img className="w-[120px]" src={logo} />
         <span className="text-primary">
@@ -15,7 +15,7 @@ export default function Cenarios() {
       </div>
 
       <div className="w-full flex justify-center">
-        <div className="gap-12 uw:gap-12 flex justify-items-center">
+        <div className="gap-12 uw:gap-12 grid grid-cols-1 md:grid-cols-2">
           <CaseTypeCard
             title="Financiamento Bancário"
             link={"/planejamentofinanciamento"}

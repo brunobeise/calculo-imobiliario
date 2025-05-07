@@ -64,7 +64,7 @@ export default function RealEstateCases({
           />
         </div>
       </div>
-      <Card className="shadow-lg col-span-2 w-[500px]">
+      <Card className="shadow-lg col-span-2 w-[320px] md:w-[500px]">
         <div className="h-[380px] overflow-y-auto">
           {realEstateCases.length > 0 ? (
             <>

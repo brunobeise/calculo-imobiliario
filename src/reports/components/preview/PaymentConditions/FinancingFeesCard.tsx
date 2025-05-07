@@ -39,9 +39,9 @@ const FinancingFeesCard = ({
         <p style={{ color }} className="text-2xl font-bold">
           {toBRL(financingFees)}
         </p>
-        <div className="max-h-[400px] overflow-y-auto scrollbar mt-4 text-sm">
+        <div className="max-h-[400px] overflow-y-auto text-sm">
           {installmentsPart && (
-            <p className="font-medium" style={{ color: secondary }}>
+            <p className="font-medium mt-2" style={{ color: secondary }}>
               {installmentsPart}
             </p>
           )}

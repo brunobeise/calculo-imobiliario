@@ -48,6 +48,7 @@ import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseDa
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import WebFont from "webfontloader";
+import MobileBottomMenu from "@/components/menu/MobileMenu";
 
 export { Layout };
 
@@ -117,12 +118,13 @@ function Layout({ children }: { children: ReactNode }) {
                     <MenuProvider>
                       <div className="flex">
                         {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
+                        <MobileBottomMenu />
                         <div
                           className={`flex flex-col w-full ${
                             !isCaseMenuRoute &&
                             !pageContext.urlPathname.includes("/proposta/") &&
                             !pageContext.urlPathname.includes("/portfolio/")
-                              ? "ms-[210px]"
+                              ? "pb-10 md:pb-0 md:ms-[210px]"
                               : ""
                           }`}
                         >

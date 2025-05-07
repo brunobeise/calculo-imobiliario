@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { AiFillFileText } from "react-icons/ai";
-
 import {
   fetchLastSessions,
   fetchUserDashboardData,
@@ -13,7 +12,6 @@ import {
   fetchUserProposalsSubTypeChart,
   fetchUserProposalsTypeChart,
 } from "@/store/dashboard/userDashboardReducer";
-
 import SessionsTable from "@/components/session/SessionTable";
 import { LineChart } from "@/components/charts/shared/LineChart";
 import { Option, Select, Skeleton } from "@mui/joy";
@@ -68,7 +66,7 @@ export default function UserDashboard(props: UserDashboardProps) {
 
   return (
     <div className="p-3">
-      <div className="grid grid-cols-3 gap-10 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10">
         <DashboardPaper
           loading={data.inProgressProposals === undefined}
           value={data.inProgressProposals}
@@ -88,12 +86,11 @@ export default function UserDashboard(props: UserDashboardProps) {
           icon={<FaFileCircleCheck />}
         />
       </div>
-      <div className="grid grid-cols-3 gap-10 gap-y-5 mt-5">
-        <div className="col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between">
-            <h2 className="text-lg font-bold mb-4">Últimas Sessões</h2>
-          </div>
-          <div className="overflow-y-auto max-h-[420px] pe-5">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 mt-5">
+        <div className="col-span-1 md:col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+          <h2 className="text-lg font-bold mb-4">Últimas Sessões</h2>
+          <div className="overflow-y-auto max-h-[420px] pe-3">
             {data.lastSessionsLoading ? (
               <Skeleton
                 variant="rectangular"
@@ -106,54 +103,46 @@ export default function UserDashboard(props: UserDashboardProps) {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold mb-4">Propostas por Tipo</h2>
+        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Propostas por Tipo</h2>
             <Select
               value={proposalTypeChartFilter}
               onChange={(_, v) => setProposalTypeChartFilter(v || "")}
-              className="!min-w-[170px]"
+              className="!min-w-[140px]"
             >
-              <Option value="last_7_days">Últimos 7 dias</Option>
-              <Option value="last_30_days">Últimos 30 dias</Option>
-              <Option value="last_3_months">Últimos 3 meses</Option>
-              <Option value="last_6_months">Últimos 6 meses</Option>
-              <Option value="last_year">Último ano</Option>
+              <Option value="last_7_days">7 dias</Option>
+              <Option value="last_30_days">30 dias</Option>
+              <Option value="last_3_months">3 meses</Option>
+              <Option value="last_6_months">6 meses</Option>
+              <Option value="last_year">Ano passado</Option>
               <Option value="current_year">Esse ano</Option>
-              <Option value="all_time">Desde o início</Option>
+              <Option value="all_time">Tudo</Option>
             </Select>
           </div>
-
-          <div className="py-5">
-            <DonutChart
-              width={300}
-              labels={data.proposalTypeChart.labels.map((label) =>
-                getCaseTitle(label)
-              )}
-              datasets={[
-                {
-                  data: data.proposalTypeChart.values,
-                },
-              ]}
-              tooltipFormatter={(value) => `Propostas: ${value}`}
-            />
-          </div>
+          <DonutChart
+            width={300}
+            labels={data.proposalTypeChart.labels.map(getCaseTitle)}
+            datasets={[{ data: data.proposalTypeChart.values }]}
+            tooltipFormatter={(value) => `Propostas: ${value}`}
+          />
         </div>
-        <div className="col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between">
-            <h2 className="text-lg font-bold mb-4">Propostas Geradas</h2>
+
+        <div className="col-span-1 md:col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+          <div className="flex justify-between mb-4">
+            <h2 className="text-lg font-bold">Propostas Geradas</h2>
             <Select
               value={proposalChartFilter}
               onChange={(_, v) => setProposalChartFilter(v || "")}
-              className="!min-w-[170px]"
+              className="!min-w-[140px]"
             >
-              <Option value="last_7_days">Últimos 7 dias</Option>
-              <Option value="last_30_days">Últimos 30 dias</Option>
-              <Option value="last_3_months">Últimos 3 meses</Option>
-              <Option value="last_6_months">Últimos 6 meses</Option>
-              <Option value="last_year">Último ano</Option>
+              <Option value="last_7_days">7 dias</Option>
+              <Option value="last_30_days">30 dias</Option>
+              <Option value="last_3_months">3 meses</Option>
+              <Option value="last_6_months">6 meses</Option>
+              <Option value="last_year">Ano passado</Option>
               <Option value="current_year">Esse ano</Option>
-              <Option value="all_time">Desde o início</Option>{" "}
+              <Option value="all_time">Tudo</Option>
             </Select>
           </div>
           {data.proposalChartLoading && !data.proposalsChart ? (
@@ -166,46 +155,36 @@ export default function UserDashboard(props: UserDashboardProps) {
             <LineChart
               height={100}
               labels={data.proposalsChart.labels}
-              datasets={[
-                {
-                  data: data.proposalsChart.values,
-                },
-              ]}
+              datasets={[{ data: data.proposalsChart.values }]}
               tooltipFormatter={(value) => `Propostas: ${value}`}
               showLegend={false}
             />
           )}
         </div>
-        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 text-white p-7 shadow-lg rounded-lg">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-bold mb-4">Nível das Propostas</h2>
+
+        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Nível das Propostas</h2>
             <Select
               value={proposalSubTypeChartFilter}
               onChange={(_, v) => setProposalSubTypeChartFilter(v || "")}
-              className="!min-w-[180px]"
+              className="!min-w-[140px]"
             >
-              <Option value="last_7_days">Últimos 7 dias</Option>
-              <Option value="last_30_days">Últimos 30 dias</Option>
-              <Option value="last_3_months">Últimos 3 meses</Option>
-              <Option value="last_6_months">Últimos 6 meses</Option>
-              <Option value="last_year">Último ano</Option>
+              <Option value="last_7_days">7 dias</Option>
+              <Option value="last_30_days">30 dias</Option>
+              <Option value="last_3_months">3 meses</Option>
+              <Option value="last_6_months">6 meses</Option>
+              <Option value="last_year">Ano passado</Option>
               <Option value="current_year">Esse ano</Option>
-              <Option value="all_time">Desde o início</Option>
+              <Option value="all_time">Tudo</Option>
             </Select>
           </div>
-
-          <div className="py-5 relative">
-            <DonutChart
-              width={300}
-              labels={data.proposalSubTypeChart.labels}
-              datasets={[
-                {
-                  data: data.proposalSubTypeChart.values,
-                },
-              ]}
-              tooltipFormatter={(value) => `Propostas: ${value}`}
-            />
-          </div>
+          <DonutChart
+            width={300}
+            labels={data.proposalSubTypeChart.labels}
+            datasets={[{ data: data.proposalSubTypeChart.values }]}
+            tooltipFormatter={(value) => `Propostas: ${value}`}
+          />
         </div>
       </div>
     </div>

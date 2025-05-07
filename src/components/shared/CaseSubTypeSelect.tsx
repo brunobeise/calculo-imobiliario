@@ -8,7 +8,10 @@ interface CaseSubTypeSelectProps {
   onChange: (value: string) => void;
 }
 
-const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({ subType, onChange }) => {
+const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({
+  subType,
+  onChange,
+}) => {
   return (
     <div className="flex justify-center mt-5">
       <RadioGroup
@@ -20,7 +23,7 @@ const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({ subType, onChange
       >
         <List
           orientation="horizontal"
-          className="!grid !grid-cols-2 !px-4 !max-w-[600px]"
+          className="!grid !grid-cols-2 md:!px-3 !max-w-[600px]"
           sx={{
             "--List-gap": "0.5rem",
             "--ListItem-paddingY": "1rem",

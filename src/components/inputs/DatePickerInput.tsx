@@ -11,6 +11,7 @@ interface DatePickerProps {
   noHeight?: boolean;
   width?: string;
   disabled?: boolean;
+  opacity?: boolean;
 }
 
 const months = [
@@ -36,6 +37,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   noHeight,
   width = "100%",
   disabled = false,
+  opacity = false,
 }) => {
   const initialMonth = defaultValue
     ? dayjs(defaultValue, "MM/YYYY").month()
@@ -100,7 +102,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   }, [showModal]);
 
   return (
-    <div className="relative">
+    <div className={`relative ${opacity ? "opacity-50" : ""}`}>
       <div className={`flex ${noHeight ? "" : "h-[40px]"} items-center`}>
         <FormLabel htmlFor={id}>{label}</FormLabel>
       </div>
@@ -109,7 +111,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           disabled={disabled}
           style={{ width: width }}
           type="text"
-          value={disabled ? "" : inputValue}
+          value={inputValue}
           readOnly
           endDecorator={
             <div onClick={toggleModal} className="cursor-pointer text-grayText">

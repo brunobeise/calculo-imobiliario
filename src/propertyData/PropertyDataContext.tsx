@@ -37,6 +37,8 @@ export type PropertyData = {
   amortizationType: "SAC" | "PRICE";
   considerCapitalGainsTax: boolean;
   financingFeesDescription: string;
+  appraisalValue?: number;
+  financingQuota?: number;
 };
 
 export type PropertyDataContextType = {

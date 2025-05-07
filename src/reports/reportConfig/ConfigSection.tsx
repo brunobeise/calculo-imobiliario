@@ -72,6 +72,7 @@ export default function ConfigSection({
             "--ListItem-paddingY": "1rem",
             "--ListItem-radius": "8px",
             "--ListItemDecorator-size": "32px",
+            textWrap: 'nowrap'
           }}
         >
           {["Simplificado", "Avançado"].map((label, i) => (

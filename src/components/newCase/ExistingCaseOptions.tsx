@@ -19,7 +19,7 @@ export function ExistingCaseOptions({
   hasLastCase,
 }: ExistingCaseOptionsProps) {
   return (
-    <Card className="w-[500px] shadow-lg ">
+    <Card className="w-[320px] md:w-[500px] shadow-lg ">
       <ContextSelectorButton
         icon={<FaFilePen />}
         onClick={() => setContext("myCases")}

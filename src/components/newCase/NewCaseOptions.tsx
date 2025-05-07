@@ -9,7 +9,7 @@ interface NewCaseOptionsProps {
 
 export default function NewCaseOptions({ setContext }: NewCaseOptionsProps) {
   return (
-    <Card className="w-[500px] shadow-lg ">
+    <Card className="w-[320px] md:w-[500px] shadow-lg ">
       <ContextSelectorButton
         onClick={() => setContext("new")}
         title="Novo"

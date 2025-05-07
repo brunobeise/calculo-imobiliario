@@ -9,7 +9,7 @@ interface SubTypeOptionsProps {
 
 export default function SubTypeOptions({ onSelect }: SubTypeOptionsProps) {
   return (
-    <Card className="w-[500px] shadow-lg ">
+    <Card className="w-[320px] md:w-[500px] shadow-lg ">
       <ContextSelectorButton
         onClick={() => onSelect("Simplificado")}
         title="Simplificado"

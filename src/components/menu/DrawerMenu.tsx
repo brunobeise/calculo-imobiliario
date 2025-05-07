@@ -66,7 +66,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
     <>
       {isCaseMenu && (
         <Button
-          className="!absolute translate-x-[10px] translate-y-[10px] !bg-[#f0f0f0] !text-primary h-min z-[2]"
+          className="!hidden md:!block !absolute translate-x-[10px] translate-y-[10px] !bg-whitefull !text-primary h-min z-[100]"
           onClick={() => {
             toggleMenu(true);
             toggleBackdrop(true);
@@ -87,7 +87,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
       )}
 
       <div
-        className={`w-[210px] z-[100] fixed top-0 left-0 h-full bg-whitefull text-primary transform transition-transform ${
+        className={`hidden md:block w-[210px] z-[100] fixed top-0 left-0 h-full bg-whitefull text-primary transform transition-transform ${
           menuOpen || !isCaseMenu ? "translate-x-0" : "-translate-x-full"
         }`}
       >

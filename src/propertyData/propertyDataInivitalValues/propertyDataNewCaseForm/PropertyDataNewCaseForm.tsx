@@ -104,9 +104,12 @@ export default function PropertyDataNewCaseForm({
       );
   };
 
+  console.log(form.annualYieldRate);
+  
+
   return (
     <div className="flex items-center gap-10">
-      <div className="flex flex-col items-start gap-5">
+      <div className="hidden md:flex flex-col items-start gap-5">
         <Button
           onClick={() => finish()}
           startDecorator={<IoIosArrowRoundBack className="text-xl" />}
@@ -147,7 +150,7 @@ export default function PropertyDataNewCaseForm({
         </Stepper>
       </div>
 
-      <Card className="w-[500px] shadow-lg p-4 flex flex-col justify-between h-[540px] overflow-y-auto">
+      <Card className="w-[320px] md:w-[500px] shadow-lg p-4 flex flex-col justify-between h-[540px] overflow-y-auto">
         <form className="flex-grow">
           {isAdvancedMode ? (
             <>

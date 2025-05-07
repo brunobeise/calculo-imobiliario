@@ -41,7 +41,6 @@ export interface ReportData {
 interface ReportPreviewProps {
   propertyData: PropertyData;
   proposal: Proposal;
-  onClose: () => void;
   onChange: (configData: ReportData) => void;
   context: "financingPlanning" | "directFinancing";
 }
@@ -96,9 +95,9 @@ export default function ReportPreview({
     context === "directFinancing" ? (
       <DirectFinancingReportPreview
         custom={{
-          backgroundColor: realEstateData?.backgroundColor || "",
-          primaryColor: realEstateData?.primaryColor || "",
-          secondaryColor: realEstateData?.secondaryColor || "",
+          backgroundColor: realEstateData?.backgroundColor,
+          primaryColor: realEstateData?.primaryColor,
+          secondaryColor: realEstateData?.secondaryColor,
           headerType: realEstateData?.headerType || 1,
         }}
         preview
@@ -111,9 +110,9 @@ export default function ReportPreview({
     ) : (
       <FinancingPlanningReportPreview
         custom={{
-          backgroundColor: realEstateData?.backgroundColor || "",
-          primaryColor: realEstateData?.primaryColor || "",
-          secondaryColor: realEstateData?.secondaryColor || "",
+          backgroundColor: realEstateData?.backgroundColor,
+          primaryColor: realEstateData?.primaryColor,
+          secondaryColor: realEstateData?.secondaryColor,
           headerType: realEstateData?.headerType || 1,
         }}
         preview
@@ -140,12 +139,14 @@ export default function ReportPreview({
   };
 
   return (
-    <div className="h-screen pb-10 overflow-auto">
-      <div className="flex gap-5 w-full relative justify-between pr-8 xl:pr-0">
+    <div className="pb-10 overflow-auto pt-[80px] h-full">
+      <div className="gap-5 w-full relative pr-8 xl:pr-0">
         <ReportMenu activeItem={activeItem} onSelectItem={setActiveItem}>
           {renderSection()}
         </ReportMenu>
-        <div className="mt-5 pr-4">{renderPreview()}</div>
+        <div className="mt-5 absolute left-[600px] uw:left-[50%] uw:translate-x-[-50%]">
+          {renderPreview()}
+        </div>
         <div className="hidden xl:block w-[420px] uw:w-[520px]" />
         <SessionsDrawer caseId={proposal.id} />
       </div>

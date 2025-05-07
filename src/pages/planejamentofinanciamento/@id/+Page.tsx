@@ -13,7 +13,6 @@ import { FaExternalLinkAlt, FaSave } from "react-icons/fa";
 import { RiEdit2Fill } from "react-icons/ri";
 import DetailedTable from "./DetailedTable";
 import Conclusion from "./Conclusion";
-import PropertyDataCard from "@/propertyData/ProperyDataCard";
 import NewCase from "../../../components/newCase";
 import FloatingButtonList from "@/components/shared/FloatingButtonList";
 import { caseService } from "@/service/caseService";
@@ -28,7 +27,7 @@ import { uploadImage } from "@/lib/imgur";
 import CaseHeader from "@/components/shared/CaseHeader";
 import CaseSubTypeSelect from "@/components/shared/CaseSubTypeSelect";
 import ReportPreview from "@/reports/ReportPreview";
-
+import PropertyDataCards from "@/propertyData/propertyDataCards/PropertyDataCards";
 
 export default function FinancingPlanning(): JSX.Element {
   const pageContext = usePageContext();
@@ -36,7 +35,6 @@ export default function FinancingPlanning(): JSX.Element {
 
   const { propertyData, setMultiplePropertyData } =
     useContext(propertyDataContext);
-  const [report, setReport] = useState<boolean>(false);
   const { caseData, setCaseData } = useContext(caseDataContext);
   const [newCase, setNewCase] = useState<boolean>(!id);
   const [caseFormModal, setCaseFormModal] = useState<boolean>(false);
@@ -154,37 +152,6 @@ export default function FinancingPlanning(): JSX.Element {
 
   const subType = actualCase ? actualCase?.subType : newProposalSubType;
 
-  const hideFields =
-    subType === "Avançado"
-      ? [
-          "inCashFees",
-          "personalBalance",
-          "rentMonthlyYieldRate",
-          "initialFinancingMonth2",
-          "initialDate2",
-          "dischargesControl2",
-          "financingFees2",
-          "financingFeesDate2",
-          "subsidy2",
-        ]
-      : [
-          "initialRentMonth",
-          "initialRentValue",
-          "interestRate",
-          "inCashFees",
-          "ownResource",
-          "subsidy",
-          "initialDate",
-          "outstandingBalance",
-          "installmentValueTax",
-          "initialFinancingMonth",
-          "dischargesControl2",
-          "financingFees2",
-          "financingFeesDate2",
-        ];
-
-  const hideSheets = subType === "Avançado" ? [] : ["appreciation"];
-
   if (newCase)
     return (
       <NewCase
@@ -194,23 +161,22 @@ export default function FinancingPlanning(): JSX.Element {
     );
 
   if (getCaseLoading || !propertyData) return <GlobalLoading />;
+  const tabParam = pageContext.urlParsed.search.tab as string | undefined;
+  const isReportTab = tabParam !== "case";
 
   return (
-    <div className="bg-background min-h-screen">
+    <div className="bg-background min-h-screen pb-10 md:pb-0">
       <CaseHeader
         actualCase={actualCase}
         setActualCase={setActualCase}
-        report={report}
-        setReport={setReport}
         onRestart={handleRestart}
       />
 
-      {report && actualCase ? (
+      {isReportTab && actualCase ? (
         <ReportPreview
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
-          onClose={() => setReport(false)}
           propertyData={propertyData}
-          context="financingPlanning"
+          context="directFinancing"
           proposal={actualCase}
         />
       ) : (
@@ -225,15 +191,7 @@ export default function FinancingPlanning(): JSX.Element {
               }
             }}
           />
-          <PropertyDataCard
-            titles={
-              actualCase?.subType === "Simplificado"
-                ? ["Fluxo de pagamento"]
-                : []
-            }
-            hideSheets={hideSheets}
-            hideFields={hideFields}
-          />
+          <PropertyDataCards mode="financingPlanning" type={subType} />
           {subType === "Avançado" && (
             <div className="w-full text-center ">
               <div className="grid grid-cols-12 gap-3 justify-center mt-5 mb-5 px-5">

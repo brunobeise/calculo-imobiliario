@@ -12,7 +12,7 @@ interface PageStructureProps {
 
 export default function PageStructure(props: PageStructureProps) {
   return (
-    <div className="bg-background p-4 flex flex-col h-screen overflow-y-hidden">
+    <div className="bg-background p-4 flex flex-col md:h-screen overflow-y-auto md:overflow-y-hidden">
       <div>{props.header}</div>
       <div
         className={`bg-whitefull mt-6 rounded-lg p-5 flex flex-col h-full overflow-hidden relative ${

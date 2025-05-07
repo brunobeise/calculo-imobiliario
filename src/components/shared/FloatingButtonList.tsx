@@ -18,7 +18,7 @@ export default function FloatingButtonList({
   buttons,
 }: FloatingButtonListProps) {
   return (
-    <div className="fixed bottom-4 right-4 z-10 flex flex-col gap-4">
+    <div className="fixed bottom-4 right-4 z-10 flex flex-col gap-4 mb-10 md:mb-0">
       {buttons.map((button, index) => (
         <div key={index}>
           {button.href ? (

@@ -215,7 +215,6 @@ export default function PropertyDataDischargesControl({
       });
     }
 
-
     if (editDischargeIndex !== null) {
       const original = propertyData.discharges[editDischargeIndex];
       const filtered = propertyData.discharges.filter(
@@ -342,12 +341,12 @@ export default function PropertyDataDischargesControl({
       <Divider />
       {propertyData.discharges.length > 0 && (
         <div className={`overflow-y-auto max-h-[100%]`}>
-          <Table variant="outlined" stickyHeader>
+          <Table size="sm" variant="outlined" stickyHeader>
             <thead>
               <tr>
                 <th className="!bg-grayScale-100">Tipo</th>
                 <th className="!bg-grayScale-100">Modelo</th>
-                <th className="!bg-grayScale-100">Parcelas</th>
+                <th className="!bg-grayScale-100 w-[58px]">Parcelas</th>
                 <th className="!bg-grayScale-100">Valor</th>
                 <th className="w-[80px] !bg-grayScale-100"></th>
               </tr>
@@ -356,8 +355,10 @@ export default function PropertyDataDischargesControl({
               {groupDischarges(propertyData.discharges || []).map(
                 (item, index) => (
                   <tr key={index}>
-                    <td>{item.type}</td>
                     <td>
+                      {item.type.includes("Chaves") ? "Chaves" : item.type}
+                    </td>
+                    <td className="text-nowrap w-[58px]">
                       {item.isConstructionInterest
                         ? "Evolução de Obra"
                         : item.isDownPayment
@@ -368,7 +369,9 @@ export default function PropertyDataDischargesControl({
                     </td>
 
                     <td>{item.count}x</td>
-                    <td>{toBRL(item.originalValue)}</td>
+                    <td className="text-nowrap ">
+                      {toBRL(item.originalValue)}
+                    </td>
                     <td className="flex justify-end items-center gap-2 w-[80px]">
                       <FaPen
                         className="cursor-pointer text-grayScale-700 hover:opacity-90"
@@ -644,8 +647,8 @@ export default function PropertyDataDischargesControl({
                 {watch("dischargeType") === "key-handover" && (
                   <small className="text-gray-500 text-grayText col-span-2">
                     Você pode corrigir o valor da entrega das chaves até a data
-                    selecionada informando uma taxa. Deixe em branco para
-                    usar o valor atual, sem correção:
+                    selecionada informando uma taxa. Deixe em branco para usar o
+                    valor atual, sem correção:
                   </small>
                 )}
                 <FormControl error={!!errors.indexType}>

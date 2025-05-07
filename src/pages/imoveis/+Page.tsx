@@ -92,13 +92,13 @@ export default function Buildings() {
   const { user } = useAuth();
 
   const header = (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between flex-wrap">
       <div className="flex items-center text-primary gap-2 text-2xl ms-4 mt-8 mb-3 w-[250px]">
         <FaBuilding className="text-xl" />
         <h2 className="font-bold">Imóveis</h2>
       </div>
 
-      <div className="flex gap-5 items-end">
+      <div className="flex gap-5 items-end flex-wrap">
         <div className="flex flex-col gap-2">
           <FormLabel htmlFor="building-category-select">Categoria:</FormLabel>
           <Select
@@ -143,15 +143,15 @@ export default function Buildings() {
   );
 
   const contentHeader = (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center flex-wrap gap-4 md:gap-0">
       <SearchInput
         placeholder="Pesquisar"
         className="w-[300px]"
         debounceTimeout={500}
         handleDebounce={(v) => setSearch(v)}
       />
-      <div className="flex items-center gap-3">
-        <div className="flex gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex gap-3 flex-wrap">
           <FormLabel className="!text-[0.8rem]">Filtrar por preço:</FormLabel>
           <CurrencyInput
             noHeight
@@ -193,7 +193,7 @@ export default function Buildings() {
 
   const content = (
     <>
-      <div className="grid grid-cols-2 lg:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 uw:grid-cols-8 gap-6 p-2 pe-4">
         {buildings.map((building) => (
           <BuildingCard building={building} />
         ))}
