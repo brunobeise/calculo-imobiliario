@@ -176,7 +176,7 @@ export default function FinancingPlanning(): JSX.Element {
         <ReportPreview
           onChange={(data) => setActualCase({ ...actualCase, ...data })}
           propertyData={propertyData}
-          context="directFinancing"
+          context="financingPlanning"
           proposal={actualCase}
         />
       ) : (
