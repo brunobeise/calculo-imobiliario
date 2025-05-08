@@ -1,10 +1,7 @@
 import { Spinner } from "@/components/Loading";
 import { IconButton, Typography, Divider } from "@mui/joy";
 import { useEffect, useState } from "react";
-import {
-  IoIosArrowBack,
-  IoIosArrowForward,
-} from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { Session } from "@/types/sessionTypes";
@@ -26,12 +23,13 @@ export default function SessionsDrawer({ caseId }: SessionsDrawerProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setOpen(window.innerWidth > 1800);
+      setOpen(window.innerWidth > 1920);
     };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [window.innerWidth]);
 
   useEffect(() => {
     if (open) {

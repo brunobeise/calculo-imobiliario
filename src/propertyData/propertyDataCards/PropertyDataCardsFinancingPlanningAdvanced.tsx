@@ -93,7 +93,7 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
 
           <div className="col-span-3">
             <FormLabel className={"h-[40px]"}>
-              Cota máxima do financiamento
+              Cota máxima financiamento
             </FormLabel>
             <Input
               id="financingMonths"
