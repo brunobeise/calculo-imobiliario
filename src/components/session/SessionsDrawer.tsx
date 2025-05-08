@@ -14,7 +14,7 @@ interface SessionsDrawerProps {
 
 export default function SessionsDrawer({ caseId }: SessionsDrawerProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const [open, setOpen] = useState(() => window.innerWidth > 1600);
+  const [open, setOpen] = useState(() => window.innerWidth >= 1920);
   const [sessions, setSessions] = useState<Session[]>([]);
 
   const loading = useSelector(
@@ -23,12 +23,11 @@ export default function SessionsDrawer({ caseId }: SessionsDrawerProps) {
 
   useEffect(() => {
     const handleResize = () => {
-      setOpen(window.innerWidth > 1920);
+      setOpen(window.innerWidth >= 1920);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.innerWidth]);
 
   useEffect(() => {
