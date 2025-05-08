@@ -65,7 +65,7 @@ const config: Config = {
         md: "768px",
         lg: "1024px",
         xl: "1400px",
-        uw: "1920px",
+        uw: "1921px",
       },
     },
   },
