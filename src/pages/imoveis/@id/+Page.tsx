@@ -11,13 +11,13 @@ import { usePageContext } from "vike-react/usePageContext";
 import { useAuth } from "@/auth";
 import BuildingForm from "../BuildingForm";
 import ScrapModal from "@/pages/scrap/ScrapModal";
-import ImobziSingleImportModal from "@/components/modals/ImobziSingleModal";
 import { Button } from "@mui/joy";
 import { FaArrowLeft, FaLink } from "react-icons/fa";
 import { navigate } from "vike/client/router";
 import { Building } from "@/types/buildingTypes";
 import BuildingPreview from "@/reports/BuildingPreview";
 import { buildingService } from "@/service/buildingService";
+import IntegrationSingleImportModal from "@/components/modals/IntegrationSingleModal";
 
 export default function BuildingPage() {
   const pageContext = usePageContext();
@@ -27,7 +27,7 @@ export default function BuildingPage() {
   const [loading, setLoading] = useState(false);
 
   const [scrapModal, setScrapModal] = useState(false);
-  const [imobziModal, setImobziModal] = useState(false);
+  const [integrationModal, setIntegrationModal] = useState(false);
   const [building, setBuilding] = useState<Partial<Building>>();
   const newBuilding = id === "novo";
 
@@ -80,7 +80,7 @@ export default function BuildingPage() {
           {user.imobzi && (
             <Button
               variant="outlined"
-              onClick={() => setImobziModal(true)}
+              onClick={() => setIntegrationModal(true)}
               endDecorator={
                 <img
                   className="w-7"
@@ -89,6 +89,20 @@ export default function BuildingPage() {
               }
             >
               Importar do Imobzi
+            </Button>
+          )}
+          {user.jetimob && (
+            <Button
+              variant="outlined"
+              onClick={() => setIntegrationModal(true)}
+              endDecorator={
+                <img
+                  className="w-5"
+                  src="https://avatars.githubusercontent.com/u/60930335?s=280&v=4"
+                />
+              }
+            >
+              Importar do Jetimob
             </Button>
           )}
           <Button
@@ -156,10 +170,10 @@ export default function BuildingPage() {
         onClose={() => setScrapModal(false)}
         onScrap={handleScrapResult}
       />
-      <ImobziSingleImportModal
+      <IntegrationSingleImportModal
         setBuilding={(item) => setBuilding(item)}
-        open={imobziModal}
-        onClose={() => setImobziModal(false)}
+        open={integrationModal}
+        onClose={() => setIntegrationModal(false)}
       />
     </>
   );

@@ -15,7 +15,7 @@ import SearchInput from "@/components/inputs/SearchInput";
 import PageStructure from "@/components/structure/PageStructure";
 import { navigate } from "vike/client/router";
 import BuildingCard from "./BuildingCard";
-import ImobziModal from "@/components/modals/ImobziModal";
+import IntegrationModal from "@/components/modals/IntegrationModal";
 import { useAuth } from "@/auth";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import debounce from "lodash.debounce";
@@ -35,7 +35,7 @@ export default function Buildings() {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">(
     (localStorage.getItem("building-sortDirection") as "asc" | "desc") || "desc"
   );
-  const [imobziModal, setImobziModal] = useState(false);
+  const [integrationModal, setIntegrationModal] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [minPriceInput, setMinPriceInput] = useState<number>();
   const [maxPriceInput, setMaxPriceInput] = useState<number>();
@@ -120,7 +120,7 @@ export default function Buildings() {
             <Button
               className="!mt-4"
               variant="outlined"
-              onClick={() => setImobziModal(true)}
+              onClick={() => setIntegrationModal(true)}
               endDecorator={
                 <img
                   className="w-7"
@@ -129,6 +129,21 @@ export default function Buildings() {
               }
             >
               Sincronizar com Imobzi
+            </Button>
+          )}
+          {user.jetimob && (
+            <Button
+              className="!mt-4"
+              variant="outlined"
+              onClick={() => setIntegrationModal(true)}
+              endDecorator={
+                <img
+                  className="w-5"
+                  src="https://avatars.githubusercontent.com/u/60930335?s=280&v=4"
+                />
+              }
+            >
+              Sincronizar com Jetimob
             </Button>
           )}
           <Button
@@ -226,7 +241,10 @@ export default function Buildings() {
         header={header}
         footer={footer}
       />
-      <ImobziModal open={imobziModal} onClose={() => setImobziModal(false)} />
+      <IntegrationModal
+        open={integrationModal}
+        onClose={() => setIntegrationModal(false)}
+      />
     </>
   );
 }

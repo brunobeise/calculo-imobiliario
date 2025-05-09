@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import dayjs from "dayjs";
 import { FormLabel, Input } from "@mui/joy";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaRegCalendar } from "react-icons/fa6";
 
 interface DatePickerProps {
   onChange: (date: string) => void;
@@ -115,7 +115,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           readOnly
           endDecorator={
             <div onClick={toggleModal} className="cursor-pointer text-grayText">
-              <FaCalendarAlt />
+              <FaRegCalendar />
             </div>
           }
         />

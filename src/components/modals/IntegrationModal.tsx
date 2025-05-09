@@ -5,7 +5,7 @@ import { Spinner } from "../Loading";
 import { useAuth } from "@/auth";
 import { Typography, Button } from "@mui/joy";
 
-interface ImobziModalProps {
+interface IntegrationModalProps {
   open: boolean;
   onClose: () => void;
 }
@@ -15,13 +15,18 @@ interface SyncMessage {
   image?: string;
   done?: boolean;
   error?: string;
+  propertyNames?: string[];
 }
 
-export default function ImobziModal({ open, onClose }: ImobziModalProps) {
+export default function IntegrationModal({
+  open,
+  onClose,
+}: IntegrationModalProps) {
   const [currentMessage, setCurrentMessage] = useState<SyncMessage | null>(
     null
   );
   const [infoMessages, setInfoMessages] = useState<string[]>([]);
+  const [propertyNames, setPropertyNames] = useState<string[]>([]);
   const [isSyncing, setIsSyncing] = useState(false);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuth();
@@ -40,6 +45,10 @@ export default function ImobziModal({ open, onClose }: ImobziModalProps) {
     });
 
     socket.on("sync:progress", (data: SyncMessage) => {
+      if (data.propertyNames) {
+        setPropertyNames(data.propertyNames);
+      }
+
       if (
         data.step.includes("encontrados") ||
         data.step.includes("finalizada")
@@ -64,9 +73,10 @@ export default function ImobziModal({ open, onClose }: ImobziModalProps) {
     if (socketRef.current && auth.user?.id) {
       setInfoMessages([]);
       setCurrentMessage(null);
+      setPropertyNames([]);
       setIsSyncing(true);
       socketRef.current.emit("joinSync", auth.user.id);
-      socketRef.current.emit("startSync", auth.user.id); // precisa estar implementado no backend
+      socketRef.current.emit("startSync", auth.user.id);
     }
   };
 
@@ -74,18 +84,18 @@ export default function ImobziModal({ open, onClose }: ImobziModalProps) {
     <Dialog
       open={open}
       onClose={onClose}
-      title="Importar do Imobzi"
+      title={`Importar do ${auth.user.imobzi ? "Imobzi" : "Jetimob"}`}
       width={600}
     >
       <div className="p-4 flex flex-col gap-4 min-h-[280px] h-[400px] w-[500px] overflow-y-auto justify-center">
         {infoMessages.map((msg, idx) => (
-          <div key={idx} className="text-sm text-grayText font-medium mb-10">
+          <div key={idx} className="text-sm text-grayText font-medium">
             ✅ {msg}
           </div>
         ))}
 
         {currentMessage && (
-          <div className="flex flex-col items-center gap-3 text-sm min-h-[200px]">
+          <div className="flex flex-col items-center gap-3 text-sm">
             {currentMessage.image && (
               <img
                 src={currentMessage.image}
@@ -99,21 +109,38 @@ export default function ImobziModal({ open, onClose }: ImobziModalProps) {
 
         {isSyncing && <Spinner />}
 
-        {!isSyncing && (
-          <Button
-            onClick={handleStartSync}
-            color="primary"
-            variant="solid"
-            size="md"
-            className=""
-          >
-            Iniciar sincronização
-          </Button>
+        {!isSyncing && propertyNames.length > 0 && (
+          <div className="mt-4">
+            <Typography level="title-sm" className="mb-2">
+              🏡 Imóveis sincronizados:
+            </Typography>
+            <ul className="list-disc list-inside text-sm max-h-40 overflow-y-auto">
+              {propertyNames.map((name, idx) => (
+                <li key={idx}>{name}</li>
+              ))}
+            </ul>
+          </div>
         )}
 
-        <small className="text-gray mt-2 text-center">
-          *O Imobzi limita 2 requisições por segundo
-        </small>
+        <Button
+          onClick={
+            isSyncing
+              ? undefined
+              : isSyncing === false && propertyNames.length > 0
+              ? onClose
+              : handleStartSync
+          }
+          color={isSyncing ? "neutral" : "primary"}
+          variant="solid"
+          size="md"
+          disabled={isSyncing}
+        >
+          {isSyncing
+            ? "Sincronizando..."
+            : propertyNames.length > 0
+            ? "Concluir"
+            : "Iniciar sincronização"}
+        </Button>
       </div>
     </Dialog>
   );

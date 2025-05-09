@@ -23,6 +23,7 @@ interface AuthContextType {
     owner: boolean;
     admin: boolean;
     imobzi: boolean;
+    jetimob: boolean;
   };
 }
 
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     owner: boolean;
     admin: boolean;
     imobzi: boolean;
+    jetimob: boolean;
   }>(() => {
     if (token) {
       return {
@@ -49,6 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         owner: Cookies.get("owner") === "true",
         admin: Cookies.get("admin") === "true",
         imobzi: Cookies.get("imobzi") === "true",
+        jetimob: Cookies.get("jetimob") === "true",
       };
     }
     return {
@@ -56,6 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       owner: false,
       admin: false,
       imobzi: false,
+      jetimob: false,
     };
   });
 

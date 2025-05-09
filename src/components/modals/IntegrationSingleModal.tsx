@@ -6,17 +6,17 @@ import { integrationService } from "@/service/integrationService";
 import { Spinner } from "../Loading";
 import { Building } from "@/types/buildingTypes";
 
-interface ImobziSingleImportModalProps {
+interface IntegrationSingleImportModalProps {
   open: boolean;
   onClose: () => void;
   setBuilding: (building: Building) => void;
 }
 
-export default function ImobziSingleImportModal({
+export default function IntegrationSingleImportModal({
   open,
   onClose,
   setBuilding,
-}: ImobziSingleImportModalProps) {
+}: IntegrationSingleImportModalProps) {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{

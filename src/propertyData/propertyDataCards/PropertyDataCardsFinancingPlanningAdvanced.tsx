@@ -13,10 +13,9 @@ import {
   Slider,
   Tooltip,
 } from "@mui/joy";
-import { CiCalculator2 } from "react-icons/ci";
+import { AiFillCalculator } from "react-icons/ai";
 import dayjs from "dayjs";
 import PropertyDataDischargesControl from "../PropertyDataDischargesControl";
-import { FaCalculator } from "react-icons/fa6";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { PropertyDataCardsProps } from "./PropertyDataCards";
 import BooleanInput from "@/components/inputs/BooleanInput";
@@ -251,7 +250,7 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
                 title="Simular valor da parcela"
               >
                 <div>
-                  <FaCalculator
+                  <AiFillCalculator
                     onClick={() => setInstallmentSimulator(true)}
                     className="cursor-pointer text-grayText"
                   />
@@ -277,7 +276,7 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
               handleChangeNumber("financingFees", v.target.value)
             }
             extraButton={
-              <CiCalculator2
+              <AiFillCalculator
                 onClick={() => setFinancingFeesDescriptionModal(true)}
                 className="cursor-pointer hover:opacity-90"
               />
