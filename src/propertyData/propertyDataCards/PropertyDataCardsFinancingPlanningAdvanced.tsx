@@ -32,8 +32,10 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
   setInstallmentValueCalculatorLock,
   setInstallmentSimulator,
   setFinancingFeesDescriptionModal,
+  setFinancingCorrectionModal,
   taxValue,
   handleChangeBoolean,
+  baseFinanced,
 }: PropertyDataCardsProps) {
   return (
     <form className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -276,10 +278,20 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
               handleChangeNumber("financingFees", v.target.value)
             }
             extraButton={
-              <AiFillCalculator
-                onClick={() => setFinancingFeesDescriptionModal(true)}
-                className="cursor-pointer hover:opacity-90"
-              />
+              <Tooltip
+                sx={{ maxWidth: "280px" }}
+                size="md"
+                arrow
+                direction="rtl"
+                title="Parcelar documentação"
+              >
+                <div>
+                  <AiFillCalculator
+                    onClick={() => setFinancingFeesDescriptionModal(true)}
+                    className="cursor-pointer hover:opacity-90"
+                  />
+                </div>
+              </Tooltip>
             }
           />
 
@@ -323,13 +335,29 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
               id="totalFinanced"
               value={totalFinanced}
               onChange={() => {}}
+              extraButton={
+                <Tooltip
+                  sx={{ maxWidth: "280px" }}
+                  size="md"
+                  arrow
+                  direction="rtl"
+                  title="Corrigir o total financiado"
+                >
+                  <div>
+                    <AiFillCalculator
+                      onClick={() => setFinancingCorrectionModal(true)}
+                      className="cursor-pointer hover:opacity-90"
+                    />
+                  </div>
+                </Tooltip>
+              }
               error={
                 (propertyData.financingQuota > 0 &&
                   propertyData.appraisalValue > 0 &&
                   (propertyData.appraisalValue * propertyData.financingQuota) /
                     100 <
-                    totalFinanced) ||
-                totalFinanced < 0
+                    baseFinanced) ||
+                baseFinanced < 0
               }
             />
           </div>
@@ -350,7 +378,7 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
           {propertyData.financingQuota > 0 &&
             propertyData.appraisalValue > 0 &&
             (propertyData.appraisalValue * propertyData.financingQuota) / 100 <
-              totalFinanced && (
+              baseFinanced && (
               <FormHelperText className="!text-red md:col-span-2">
                 O valor máximo a ser financiado é de{" "}
                 {toBRL(
@@ -360,7 +388,7 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
                 <br />
                 Aumente o recurso próprio em pelo menos{" "}
                 {toBRL(
-                  totalFinanced -
+                  baseFinanced -
                     (propertyData.appraisalValue *
                       propertyData.financingQuota) /
                       100

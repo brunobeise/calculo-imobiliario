@@ -8,6 +8,10 @@ import InstallmentSimulationModal from "@/components/modals/InstallmentSimulatio
 import FinancingFeesDescriptionModal from "@/components/modals/FinancingFeesDescriptionModal";
 import PropertyDataCardsDirectFinancingSimple from "./PropertyDataCardsDirectFinancingSimple";
 import PropertyDataCardsDirectFinancingAdvanced from "./PropertyDataCardsDirectFinancingAdvanced";
+import FinancingCorrectionModal, {
+  FinancingCorrectionModalSubmit,
+} from "@/components/modals/FinancingCorrectionModal";
+import dayjs from "dayjs";
 
 export interface PropertyDataCardsProps {
   propertyData: PropertyData;
@@ -25,10 +29,13 @@ export interface PropertyDataCardsProps {
   setFinancingFeesDescriptionModal: React.Dispatch<
     React.SetStateAction<boolean>
   >;
+  financingCorrectionModal: boolean;
+  setFinancingCorrectionModal: React.Dispatch<React.SetStateAction<boolean>>;
   handleChangeBoolean: (event: any) => void;
   handleChangeNumber: (id: string, value: string) => void;
   totalDischarges: number;
   totalFinanced: number;
+  baseFinanced: number;
   taxValue: number;
 }
 
@@ -44,6 +51,8 @@ export default function PropertyDataCards({
     useState(false);
   const [installmentSimulator, setInstallmentSimulator] = useState(false);
   const [financingFeesDescriptionModal, setFinancingFeesDescriptionModal] =
+    useState(false);
+  const [financingCorrectionModal, setFinancingCorrectionModal] =
     useState(false);
 
   const handleChangeBoolean = (event) => {
@@ -63,11 +72,22 @@ export default function PropertyDataCards({
       .reduce((acc, val) => acc + val.originalValue, 0);
   }, [propertyData]);
 
-  const totalFinanced =
+  const baseFinanced =
     (propertyData?.propertyValue || 0) -
     (propertyData?.downPayment || 0) -
     (totalDischarges || 0) -
     (propertyData?.subsidy || 0);
+
+  const monthlyRate = (propertyData?.financingCorrectionRate || 0) / 100;
+  const months =
+    dayjs(propertyData.initialFinancingMonth, "MM/YYYY").diff(
+      dayjs(propertyData.initialDate, "MM/YYYY"),
+      "month"
+    ) - 1;
+
+  const totalFinanced = parseFloat(
+    (baseFinanced * Math.pow(1 + monthlyRate, months)).toFixed(2)
+  );
 
   useEffect(() => {
     if (!propertyData) return;
@@ -128,10 +148,13 @@ export default function PropertyDataCards({
     setInstallmentSimulator,
     financingFeesDescriptionModal,
     setFinancingFeesDescriptionModal,
+    financingCorrectionModal,
+    setFinancingCorrectionModal,
     handleChangeBoolean,
     handleChangeNumber,
     totalDischarges,
     totalFinanced,
+    baseFinanced,
     taxValue,
   };
 
@@ -152,11 +175,11 @@ export default function PropertyDataCards({
 
   return (
     <>
-      {" "}
       <div className="md:px-10 mt-4">{Cards}</div>
       <InstallmentSimulationModal
         onClose={() => setInstallmentSimulator(false)}
         open={installmentSimulator}
+        totalFinanced={totalFinanced}
         onSimulate={(v) => setPropertyData("installmentValue", v)}
       />
       <FinancingFeesDescriptionModal
@@ -164,6 +187,19 @@ export default function PropertyDataCards({
         onClose={() => setFinancingFeesDescriptionModal(false)}
         onSubmit={(v) => setPropertyData("financingFeesDescription", v)}
         value={propertyData.financingFeesDescription}
+      />
+      <FinancingCorrectionModal
+        studyDate={propertyData.initialDate}
+        startDate={propertyData.initialFinancingMonth}
+        totalfinanced={baseFinanced}
+        value={propertyData.financingCorrectionRate}
+        open={financingCorrectionModal}
+        onClose={() => setFinancingCorrectionModal(false)}
+        onSubmit={(v: FinancingCorrectionModalSubmit) => {
+          handleChangeNumber("financingCorrectionRate", v.monthlyRate);
+          setPropertyData("financingCorrectionDescription", v.description);
+        }}
+        description={propertyData.financingCorrectionDescription}
       />
     </>
   );

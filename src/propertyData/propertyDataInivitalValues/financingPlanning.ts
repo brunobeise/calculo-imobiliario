@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { PropertyData } from "../PropertyDataContext";
 
-const data = {
+const data: PropertyData = {
   propertyValue: 500000,
   downPayment: 125000,
   subsidy: 0,
@@ -32,7 +32,8 @@ const data = {
   amortizationType: "PRICE",
   considerCapitalGainsTax: false,
   appraisalValue: undefined,
-  financingQuota: undefined,
-} as PropertyData;
+  financingCorrectionRate: undefined,
+  financingQuota: 80,
+};
 
 export default data;

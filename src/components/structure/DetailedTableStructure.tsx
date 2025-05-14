@@ -58,7 +58,7 @@ const DetailedTableComponent: React.FC<DetailedTableComponentProps> = ({
                 {filteredColumns.map((col, index) => (
                   <th
                     key={index}
-                    style={index === 0 ? { width: "80px" } : undefined}
+                    style={index === 0 ? { width: "100px" } : undefined}
                   >
                     <Tooltip title={col.title} arrow>
                       <span>{col.title}</span>

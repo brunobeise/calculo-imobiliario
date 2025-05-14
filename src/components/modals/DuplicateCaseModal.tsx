@@ -9,8 +9,6 @@ interface DuplicateCaseModalProps {
 export default function DuplicateCaseModal(props: DuplicateCaseModalProps) {
   const { data, onClose } = props;
 
-  console.log(data);
-
   if (!data) return null;
   return (
     <CaseFormModal

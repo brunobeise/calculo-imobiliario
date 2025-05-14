@@ -12,13 +12,12 @@ import {
   Slider,
   Tooltip,
 } from "@mui/joy";
-import { CiCalculator2 } from "react-icons/ci";
 import dayjs from "dayjs";
 import PropertyDataDischargesControl from "../PropertyDataDischargesControl";
-import { FaCalculator } from "react-icons/fa6";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { PropertyDataCardsProps } from "./PropertyDataCards";
 import { toBRL } from "@/lib/formatter";
+import { AiFillCalculator } from "react-icons/ai";
 
 export default function PropertyDataCardsFinancingPlanningSimple({
   propertyData,
@@ -31,6 +30,7 @@ export default function PropertyDataCardsFinancingPlanningSimple({
   setInstallmentSimulator,
   setFinancingFeesDescriptionModal,
   taxValue,
+  setFinancingCorrectionModal,
 }: PropertyDataCardsProps) {
   return (
     <form className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -211,9 +211,9 @@ export default function PropertyDataCardsFinancingPlanningSimple({
                 title="Simular valor da parcela"
               >
                 <div>
-                  <FaCalculator
+                  <AiFillCalculator
                     onClick={() => setInstallmentSimulator(true)}
-                    className="cursor-pointer text-grayText"
+                    className="cursor-pointer hover:opacity-90"
                   />
                 </div>
               </Tooltip>
@@ -236,6 +236,22 @@ export default function PropertyDataCardsFinancingPlanningSimple({
               id="totalFinanced"
               value={totalFinanced}
               onChange={() => {}}
+              extraButton={
+                <Tooltip
+                  sx={{ maxWidth: "280px" }}
+                  size="md"
+                  arrow
+                  direction="rtl"
+                  title="Corrigir o total financiado"
+                >
+                  <div>
+                    <AiFillCalculator
+                      onClick={() => setFinancingCorrectionModal(true)}
+                      className="cursor-pointer hover:opacity-90"
+                    />
+                  </div>
+                </Tooltip>
+              }
               error={
                 (propertyData.financingQuota > 0 &&
                   propertyData.appraisalValue > 0 &&
@@ -276,10 +292,12 @@ export default function PropertyDataCardsFinancingPlanningSimple({
               handleChangeNumber("financingFees", v.target.value)
             }
             extraButton={
-              <CiCalculator2
-                onClick={() => setFinancingFeesDescriptionModal(true)}
-                className="cursor-pointer hover:opacity-90"
-              />
+              <Tooltip title="Parcelar documentação">
+                <AiFillCalculator
+                  onClick={() => setFinancingFeesDescriptionModal(true)}
+                  className="cursor-pointer hover:opacity-90"
+                />
+              </Tooltip>
             }
           />
 

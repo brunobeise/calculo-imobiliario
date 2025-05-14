@@ -28,6 +28,7 @@ export default function PropertySection({
             ...configData,
             mainPhoto: building.mainPhoto,
             description: building.description,
+            subtitle: building.subtitle,
             propertyName: building.propertyName,
             propertyNameFont: building.propertyNameFont,
             additionalPhotos: building.additionalPhotos,

@@ -11,7 +11,6 @@ import dayjs from "dayjs";
 export function calcCaseData(propertyData: PropertyData) {
   const detailedTable = calcDetailedTable(propertyData);
 
-
   const isFinancingFeesInitial =
     propertyData.financingFeesDate === propertyData.initialDate;
 
@@ -204,21 +203,31 @@ export function calcDetailedTable(propertyData: PropertyData) {
   const totalMonths = propertyData.financingMonths;
 
   // Amortização fixa do SAC (valor principal / número de meses)
+
+  const baseFinanced =
+    (propertyData.propertyValue || 0) -
+    (propertyData.downPayment || 0) -
+    (totalInvestmentDischarges || 0) -
+    (propertyData.subsidy || 0);
+
+  // Aplica correção com taxa mensal composta
+  const monthlyRate = (propertyData.financingCorrectionRate || 0) / 100;
+  const months =
+    dayjs(propertyData.initialFinancingMonth, "MM/YYYY").diff(
+      dayjs(propertyData.initialDate, "MM/YYYY"),
+      "month"
+    ) - 1;
+
+  const totalFinanced = parseFloat(
+    (baseFinanced * Math.pow(1 + monthlyRate, months)).toFixed(2)
+  );
+
   const amortizationFixed =
-    propertyData.amortizationType === "SAC"
-      ? (propertyData.propertyValue -
-          propertyData.downPayment -
-          totalInvestmentDischarges -
-          propertyData.subsidy) /
-        totalMonths
-      : 0;
+    propertyData.amortizationType === "SAC" ? totalFinanced / totalMonths : 0;
 
   // Saldo devedor inicial (PRICE ou SAC)
   let outstandingBalance = calcOutstandingBalance(
-    propertyData.propertyValue -
-      propertyData.downPayment -
-      totalInvestmentDischarges -
-      propertyData.subsidy,
+    totalFinanced,
     propertyData.interestRate,
     propertyData.financingMonths,
     0
@@ -275,10 +284,7 @@ export function calcDetailedTable(propertyData: PropertyData) {
         installmentValue = propertyData.installmentValue;
         // Atualiza o saldo devedor conforme a progressão do mês (quantas parcelas já pagas?)
         outstandingBalance = calcOutstandingBalance(
-          propertyData.propertyValue -
-            propertyData.downPayment -
-            totalInvestmentDischarges -
-            propertyData.subsidy,
+          totalFinanced,
           propertyData.interestRate,
           propertyData.financingMonths,
           month

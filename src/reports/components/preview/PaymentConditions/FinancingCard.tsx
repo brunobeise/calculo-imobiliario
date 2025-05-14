@@ -1,6 +1,17 @@
 import dayjs from "dayjs";
 import { toBRL } from "@/lib/formatter";
 import { DraggableCard } from "./DraggableCard";
+import { PropertyData } from "@/propertyData/PropertyDataContext";
+
+interface FinancingCardProps {
+  color: string;
+  secondary: string;
+  totalFinancing: number;
+  propertyData: PropertyData;
+  id: string;
+  index: number;
+  moveCard: (dragIndex: unknown, hoverIndex: unknown) => void;
+}
 
 const FinancingCard = ({
   color,
@@ -10,18 +21,38 @@ const FinancingCard = ({
   id,
   index,
   moveCard,
-}) => {
+}: FinancingCardProps) => {
   if (totalFinancing < 0 || !propertyData.installmentValue) return null;
+
+  const baseFinanced =
+    (propertyData?.propertyValue || 0) -
+    (propertyData?.downPayment || 0) -
+    (propertyData?.discharges?.reduce?.(
+      (acc, val) => acc + val.originalValue,
+      0
+    ) || 0) -
+    (propertyData?.subsidy || 0);
+
+  const hasCorrectionRate = Number(propertyData?.financingCorrectionRate) > 0;
+
   return (
     <DraggableCard id={id} index={index} moveCard={moveCard} isResizing={false}>
       <div className="rounded-3xl p-4 border h-min break-inside-avoid">
         <h3 style={{ color }} className="text-xl mb-2">
           Financiamento
         </h3>
-        <p style={{ color }} className="text-2xl font-bold mb-4">
-          {toBRL(totalFinancing)}
+
+        <p className="text-2xl font-bold" style={{ color }}>
+          {toBRL(baseFinanced)}
         </p>
-        <ul className="list-none space-y-2 text-sm">
+
+        {hasCorrectionRate && (
+          <i className="text-xs mb-4" style={{ color: secondary }}>
+            {propertyData.financingCorrectionDescription}
+          </i>
+        )}
+
+        <ul className="list-none space-y-2 text-sm mt-4">
           <li>
             <span style={{ color: secondary }} className="text-sm">
               Início:{" "}
@@ -36,8 +67,8 @@ const FinancingCard = ({
             <span style={{ color: secondary }} className="text-sm">
               Parcelas mensais:{" "}
             </span>
-            <strong>{toBRL(propertyData.installmentValue)}</strong>
-            {propertyData.amortizationType === "SAC" ? "(decrescente)" : ""}
+            <strong>{toBRL(propertyData.installmentValue)}</strong>{" "}
+            {propertyData.amortizationType === "SAC" && "(decrescente)"}
           </li>
         </ul>
       </div>

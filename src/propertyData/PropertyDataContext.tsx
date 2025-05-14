@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, createContext, useState } from "react";
 import { Discharge } from "./PropertyDataDischargesControl";
+import defaultPropertyData from "./propertyDataInivitalValues/financingPlanning"
 
 export const propertyDataContext = createContext<PropertyDataContextType>({
   propertyData: undefined,
@@ -39,6 +41,8 @@ export type PropertyData = {
   financingFeesDescription: string;
   appraisalValue?: number;
   financingQuota?: number;
+  financingCorrectionRate?: number;
+  financingCorrectionDescription?: string;
 };
 
 export type PropertyDataContextType = {
@@ -66,11 +70,25 @@ export const PropertyDataProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const expectedFields = Object.keys(
+    defaultPropertyData
+  ) as (keyof PropertyData)[];
+
   const setMultiplePropertyData = (values: Partial<PropertyData>) => {
     setPropertyDataState((prevState) => {
+      const baseState = prevState ?? ({} as PropertyData);
+
+      const normalizedValues: Partial<PropertyData> = {};
+
+      for (const key of expectedFields) {
+        (normalizedValues[key] as any) = (
+          key in values ? values[key] : undefined
+        ) as PropertyData[typeof key];
+      }
+
       return {
-        ...prevState,
-        ...values,
+        ...baseState,
+        ...normalizedValues,
       };
     });
   };
