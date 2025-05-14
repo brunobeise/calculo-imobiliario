@@ -36,7 +36,7 @@ export default function PropertyDataStep4({
       )}
 
       <div className="flex flex-col gap-5">
-        {!simplificated && type === 'financingPlanning' && (
+        {!simplificated && type === "financingPlanning" && (
           <div className="grid grid-cols-2 gap-5">
             <PercentageInput
               infoTooltip="Percentual nominal dos juros aplicados ao financiamento."
@@ -138,6 +138,12 @@ export default function PropertyDataStep4({
         )}
       </div>
       <InstallmentSimulationModal
+        totalFinanced={
+          form.propertyValue -
+          form.discharges.reduce((acc, val) => acc + val.originalValue, 0) -
+          form.downPayment -
+          (form.subsidy || 0)
+        }
         onClose={() => setInstallmentSimulator(false)}
         open={installmentSimulator}
         onSimulate={(v) => setForm("installmentValue", v)}
