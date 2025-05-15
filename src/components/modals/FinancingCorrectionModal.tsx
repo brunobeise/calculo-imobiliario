@@ -80,10 +80,7 @@ export default function FinancingCorrectionModal({
     const correction =
       totalfinanced * Math.pow(1 + rateDecimal, months) - totalfinanced;
 
-    setValue(
-      "correctedTotal",
-      parseFloat(totalfinanced + correction.toString())
-    );
+    setValue("correctedTotal", totalfinanced + correction);
   }, [
     open,
     reset,
@@ -110,10 +107,7 @@ export default function FinancingCorrectionModal({
       const correction =
         totalfinanced * Math.pow(1 + rateDecimal, months) - totalfinanced;
 
-      setValue(
-        "correctedTotal",
-        parseFloat((totalfinanced + correction).toString())
-      );
+      setValue("correctedTotal", totalfinanced + correction);
 
       const formattedRate = watchRate.toString().replace(".", ",");
 
