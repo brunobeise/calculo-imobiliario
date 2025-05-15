@@ -28,7 +28,8 @@ const FinancingCard = ({
     (propertyData?.propertyValue || 0) -
     (propertyData?.downPayment || 0) -
     (propertyData?.discharges?.reduce?.(
-      (acc, val) => acc + val.originalValue,
+      (acc, val) =>
+        !val.isConstructionInterest ? acc + val.originalValue : acc,
       0
     ) || 0) -
     (propertyData?.subsidy || 0);
