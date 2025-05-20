@@ -3,6 +3,13 @@
 import { Portfolio } from "@/types/portfolioTypes";
 import { useData } from "vike-react/useData";
 
+function stripHtml(html: string): string {
+  if (!html) return "";
+  const tmp = document.createElement("div");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+}
+
 export function Head() {
   const portfolioData = useData<Portfolio>();
 
@@ -26,7 +33,7 @@ export function Head() {
       ? item.case.description ||
         `Veja todos os detalhes da proposta "${item.case.name}" preparada por ${portfolioData.user.fullName}.`
       : isSingleBuilding
-      ? item.building.description ||
+      ? stripHtml(item.building.description ?? "") ||
         `Confira as informações completas do imóvel "${
           item.building.propertyName || "sem nome"
         }", selecionado por ${portfolioData.user.fullName}.`
