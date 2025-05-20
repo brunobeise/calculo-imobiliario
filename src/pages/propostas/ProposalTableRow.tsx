@@ -17,12 +17,10 @@ const CaseTableRow = ({
   data,
   realEstateCase,
   adminCase,
-  handleDelete,
 }: {
   data: Proposal;
   realEstateCase?: boolean;
   adminCase?: boolean;
-  handleDelete: (id: string) => void;
 }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [sessionsModal, setSessionsModal] = useState(false);
@@ -108,12 +106,7 @@ const CaseTableRow = ({
 
       <td>{dayjs(proposal.createdAt).format("DD/MM/YYYY")}</td>
       <td>
-        <ProposalDropdownMenu
-          onDelete={handleDelete}
-          size="small"
-          proposal={proposal}
-          inTop={false}
-        />
+        <ProposalDropdownMenu size="small" proposal={proposal} inTop={false} />
       </td>
 
       <DuplicateCaseModal
@@ -121,7 +114,7 @@ const CaseTableRow = ({
         onClose={() => setDuplicateCase(undefined)}
       />
       <ConfirmationModal
-        content="Deseja realmente excluir esse estudo?"
+        content="Deseja realmente excluir essa proposta?"
         open={deleteModal}
         onClose={() => setDeleteModal(false)}
         onOk={() => {}}

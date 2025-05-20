@@ -390,8 +390,6 @@ export default function MyCases() {
             )}
           </span>
         )}
-
-     
       </div>
     </div>
   );
