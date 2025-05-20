@@ -37,7 +37,7 @@ export default function MyPortfolios() {
   useEffect(() => {
     const query = new URLSearchParams({
       search,
-      currentPage: currentPage.toString(),
+      page: currentPage.toString(),
       limit: limit.toString(),
       orderBy,
       sortDirection,
@@ -124,7 +124,7 @@ export default function MyPortfolios() {
     <Pagination
       currentPage={currentPage}
       onPageChange={setCurrentPage}
-      totalPages={1}
+      totalPages={portfolios?.meta?.lastPage}
       onLimitChange={setLimit}
       limit={limit}
     />

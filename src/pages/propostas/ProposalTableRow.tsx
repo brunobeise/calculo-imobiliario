@@ -1,21 +1,6 @@
 /* eslint-disable no-unexpected-multiline */
-import {
-  Dropdown,
-  Menu,
-  MenuButton,
-  MenuItem,
-  Tooltip,
-  Typography,
-} from "@mui/joy";
-import {
-  FaEllipsisV,
-  FaLink,
-  FaTrash,
-  FaExternalLinkAlt,
-  FaRegEye,
-  FaExclamationCircle,
-} from "react-icons/fa";
-import { IoDuplicate } from "react-icons/io5";
+import { Tooltip, Typography } from "@mui/joy";
+import { FaRegEye, FaExclamationCircle } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Proposal } from "@/types/proposalTypes";
@@ -23,20 +8,21 @@ import StatusTag from "@/components/shared/CaseStatusTag";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import DuplicateCaseModal from "../../components/modals/DuplicateCaseModal";
 import CaseSessionsModal from "@/components/session/SessionsModal";
-import { notify } from "@/notify";
 import { navigate } from "vike/client/router";
-import { FaMagnifyingGlass } from "react-icons/fa6";
 import { getCaseLink } from "@/lib/maps";
 import { IoHomeOutline } from "react-icons/io5";
+import ProposalDropdownMenu from "./ProposalDropdownMenu";
 
 const CaseTableRow = ({
   data,
   realEstateCase,
   adminCase,
+  handleDelete,
 }: {
   data: Proposal;
   realEstateCase?: boolean;
   adminCase?: boolean;
+  handleDelete: (id: string) => void;
 }) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [sessionsModal, setSessionsModal] = useState(false);
@@ -122,60 +108,12 @@ const CaseTableRow = ({
 
       <td>{dayjs(proposal.createdAt).format("DD/MM/YYYY")}</td>
       <td>
-        <Dropdown>
-          <MenuButton
-            onClick={(e) => e.stopPropagation()}
-            variant="plain"
-            size="sm"
-          >
-            <FaEllipsisV />
-          </MenuButton>
-          <Menu size="sm">
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setSessionsModal(true);
-              }}
-            >
-              <FaMagnifyingGlass className="mr-2" /> Ver Sessões
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(`/proposta/${proposal.id}`, "_blank");
-              }}
-            >
-              <FaExternalLinkAlt className="mr-2" /> Abrir Proposta
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                navigator.clipboard.writeText(
-                  `https://app.imobdeal.com.br/proposta/${proposal.id}`
-                );
-                notify("info", "Link copiado para o clipboard");
-              }}
-            >
-              <FaLink className="mr-2" /> Copiar Link
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setDuplicateCase(proposal);
-              }}
-            >
-              <IoDuplicate className="mr-2" /> Duplicar
-            </MenuItem>
-            <MenuItem
-              onClick={(e) => {
-                e.stopPropagation();
-                setDeleteModal(true);
-              }}
-            >
-              <FaTrash className="mr-2" /> Excluir
-            </MenuItem>
-          </Menu>
-        </Dropdown>
+        <ProposalDropdownMenu
+          onDelete={handleDelete}
+          size="small"
+          proposal={proposal}
+          inTop={false}
+        />
       </td>
 
       <DuplicateCaseModal

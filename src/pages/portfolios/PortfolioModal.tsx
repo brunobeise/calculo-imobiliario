@@ -64,6 +64,8 @@ export default function PortfolioModal({
     formState: { errors },
     setValue,
     watch,
+    setError,
+    clearErrors,
   } = useForm<CreatePortfolio>({
     defaultValues: {
       name: "",
@@ -159,20 +161,35 @@ export default function PortfolioModal({
         building: d,
       });
     }
+    clearErrors("items");
   };
 
   const onSubmit = async (data: CreatePortfolio) => {
+    if (!data.items || data.items.length === 0) {
+      setError("items", {
+        type: "manual",
+        message: "Adicione ao menos 1 item ao portfólio.",
+      });
+      return;
+    }
+
+    clearErrors("items");
+
     setLoading(true);
     const payload = {
       ...data,
       items: data.items.map((i, idx) => ({ ...i, position: idx })),
     };
-    portfolioId
-      ? await portfolioService.updatePortfolio(portfolioId, payload)
-      : await portfolioService.createPortfolio(payload);
+
+    if (portfolioId) {
+      await portfolioService.updatePortfolio(portfolioId, payload);
+    } else {
+      await portfolioService.createPortfolio(payload);
+      onClose();
+    }
+
     setLoading(false);
     reload();
-    onClose();
     setSearch("");
   };
 
@@ -196,7 +213,7 @@ export default function PortfolioModal({
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         {loading ? (
-          <div className="w-full md:w-[1100px] h-[466px] xl:h-[556px]">
+          <div className="md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
             <Spinner />
           </div>
         ) : (
@@ -230,11 +247,13 @@ export default function PortfolioModal({
               <div
                 ref={portfolioDrop}
                 className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
-                  ${
-                    isOverLimit
-                      ? "border-dashed border-red"
-                      : "border-dashed border-border"
-                  }`}
+      ${
+        isOverLimit
+          ? "border-red"
+          : errors.items
+          ? "border-red"
+          : "border-dashed border-border"
+      }`}
               >
                 {fields.length === 0 && (
                   <span className="text-gray text-sm text-center">
@@ -252,6 +271,13 @@ export default function PortfolioModal({
                   />
                 ))}
               </div>
+
+              {errors.items && (
+                <span className="text-red text-sm mt-1 text-center">
+                  {errors.items.message?.toString()}
+                </span>
+              )}
+
               {isOverLimit && (
                 <div className="text-red text-xs text-center mt-2">
                   Máximo de 10 itens permitidos. Remova algum para poder salvar.
@@ -357,7 +383,11 @@ function FooterEdit({
   isOverLimit: boolean;
 }) {
   return (
-    <div className="flex justify-between mt-6 pb-4 gap-2 px-7 flex-wrap">
+    <div
+      className={`flex justify-between mt-6 pb-4 gap-2 px-7 flex-wrap ${
+        loading ? "invisible" : ""
+      }`}
+    >
       <Button
         endDecorator={<FaTrash />}
         loading={loading}

@@ -6,18 +6,38 @@ import { useData } from "vike-react/useData";
 export function Head() {
   const portfolioData = useData<Portfolio>();
 
-  const title = portfolioData.clientName
-    ? `Portfólio de ${portfolioData.clientName}`
+  const item = portfolioData.items.length === 1 ? portfolioData.items[0] : null;
+
+  const isSingleCase = item?.case;
+  const isSingleBuilding = item?.building;
+
+  const title = item
+    ? isSingleCase
+      ? `Proposta: ${item.case.propertyName}`
+      : isSingleBuilding
+      ? `Imóvel em destaque: ${item.building.propertyName || "sem nome"}`
+      : `Portfólio personalizado - ${portfolioData.user.fullName}`
+    : portfolioData.clientName
+    ? `Portfólio para ${portfolioData.clientName}`
     : `Portfólio personalizado - ${portfolioData.user.fullName}`;
 
-  const image =
-    portfolioData.items[0]?.case?.mainPhoto ||
-    portfolioData.items[0]?.building?.mainPhoto ||
-    portfolioData.user.photo;
+  const description = item
+    ? isSingleCase
+      ? item.case.description ||
+        `Veja todos os detalhes da proposta "${item.case.name}" preparada por ${portfolioData.user.fullName}.`
+      : isSingleBuilding
+      ? item.building.description ||
+        `Confira as informações completas do imóvel "${
+          item.building.propertyName || "sem nome"
+        }", selecionado por ${portfolioData.user.fullName}.`
+      : portfolioData.description
+    : portfolioData.description ||
+      `Confira o portfólio completo preparado por ${portfolioData.user.fullName}, com imóveis e propostas personalizadas.`;
 
-  const description = portfolioData.description
-    ? portfolioData.description
-    : `Confira o portfólio completo preparado por ${portfolioData.user.fullName}, com imóveis e propostas personalizadas.`;
+  const image =
+    item?.case?.mainPhoto ||
+    item?.building?.mainPhoto ||
+    portfolioData.user.photo;
 
   const url = `https://app.imobdeal.com.br/portfolio/${portfolioData.id}`;
   const author = portfolioData.user.fullName;

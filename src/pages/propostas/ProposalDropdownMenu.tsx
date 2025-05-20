@@ -21,11 +21,13 @@ export default function ProposalDropdownMenu({
   realEstateCase = false,
   size = "large",
   onDelete,
+  inTop = true,
 }: {
   proposal: Proposal;
   realEstateCase?: boolean;
   size?: "small" | "large";
   onDelete?: (id: string) => void;
+  inTop?: boolean;
 }) {
   const [duplicateCase, setDuplicateCase] = useState<Proposal | undefined>();
   const [deleteModal, setDeleteModal] = useState(false);
@@ -55,9 +57,9 @@ export default function ProposalDropdownMenu({
             variant="solid"
             onClick={(event) => event.stopPropagation()}
             size="sm"
-            className={
-              "!absolute !top-1 !right-1 !px-0 !text-grayScale-400 hover:!text-grayScale-700 border !border-none !bg-whitefull rounded-full shadow-none "
-            }
+            className={`${
+              inTop ? "!absolute !top-1 !right-1" : ""
+            }  !px-0 !text-grayScale-400 hover:!text-grayScale-700 border !border-none !bg-whitefull rounded-full shadow-none `}
           >
             <FaEllipsisV />
           </MenuButton>

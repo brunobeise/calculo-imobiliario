@@ -146,46 +146,49 @@ export default function PortfolioSharedPage() {
         <title>{portfolioData.name}</title>
       </Head>
 
-      <div
-        className={`
+      {portfolioData.items.length > 1 && (
+        <div
+          className={`
         fixed z-20 backdrop-blur-md p-2 rounded-xl flex flex-col gap-2 md:flex flex-row fixed shadow-lg z-21 mt-6 left-[50%] translate-x-[-140mm] max-h-[85%] overflow-y-auto top-0
         `}
-      >
-        {portfolioData.items.map((item, index) => (
-          <img
-            src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
-            key={index}
-            onClick={() => handleSelect(index)}
-            className={`overflow-hidden flex max-w-[220px] object-cover w-20 h-16 flex-shrink-0 rounded-lg cursor-pointer hover:opacity-90 ${
-              index === currentIndex
-                ? "!text-primary border-3 border-white outline-white outline"
-                : "text-grayScale-400 hover:text-grayScale-500"
-            }`}
-          />
-        ))}
-      </div>
+        >
+          {portfolioData.items.map((item, index) => (
+            <img
+              src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+              key={index}
+              onClick={() => handleSelect(index)}
+              className={`overflow-hidden flex max-w-[220px] object-cover w-20 h-16 flex-shrink-0 rounded-lg cursor-pointer hover:opacity-90 ${
+                index === currentIndex
+                  ? "!text-primary border-3 border-white outline-white outline"
+                  : "text-grayScale-400 hover:text-grayScale-500"
+              }`}
+            />
+          ))}
+        </div>
+      )}
 
-      {/* Barra inferior com scroll horizontal apenas no mobile */}
-      <div
-        className={`
+      {portfolioData.items.length > 1 && (
+        <div
+          className={`
     fixed bottom-0 left-0 w-full bg-white/90 border-t border-2 z-20 p-2 overflow-x-auto
     flex gap-2 md:hidden
   `}
-        style={{ WebkitOverflowScrolling: "touch" }}
-      >
-        {portfolioData.items.map((item, index) => (
-          <img
-            key={index}
-            src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
-            onClick={() => handleSelect(index)}
-            className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
-              index === currentIndex
-                ? "!outline outline-2 outline-primary border-white border"
-                : "opacity-70"
-            }`}
-          />
-        ))}
-      </div>
+          style={{ WebkitOverflowScrolling: "touch" }}
+        >
+          {portfolioData.items.map((item, index) => (
+            <img
+              key={index}
+              src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+              onClick={() => handleSelect(index)}
+              className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
+                index === currentIndex
+                  ? "!outline outline-2 outline-primary border-white border"
+                  : "opacity-70"
+              }`}
+            />
+          ))}
+        </div>
+      )}
 
       <div
         {...swipeHandlers}
