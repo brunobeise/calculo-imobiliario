@@ -3,14 +3,13 @@
 import { Portfolio } from "@/types/portfolioTypes";
 import { useData } from "vike-react/useData";
 
-function stripHtml(html: string): string {
-  if (!html) return "";
-  const tmp = document.createElement("div");
-  tmp.innerHTML = html;
-  return tmp.textContent || tmp.innerText || "";
-}
-
 export function Head() {
+  function stripHtmlSSR(html: string): string {
+    return html
+      .replace(/<[^>]+>/g, "")
+      .replace(/&nbsp;/g, " ")
+      .trim();
+  }
   const portfolioData = useData<Portfolio>();
 
   const item = portfolioData.items.length === 1 ? portfolioData.items[0] : null;
@@ -33,7 +32,7 @@ export function Head() {
       ? item.case.description ||
         `Veja todos os detalhes da proposta "${item.case.name}" preparada por ${portfolioData.user.fullName}.`
       : isSingleBuilding
-      ? stripHtml(item.building.description ?? "") ||
+      ? stripHtmlSSR(item.building.description ?? "") ||
         `Confira as informações completas do imóvel "${
           item.building.propertyName || "sem nome"
         }", selecionado por ${portfolioData.user.fullName}.`
