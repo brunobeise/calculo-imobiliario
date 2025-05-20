@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from "react";
-import { useSwipeable } from "react-swipeable";
 import { useData } from "vike-react/useData";
 import { Head } from "vike-react/Head";
 import { io, Socket } from "socket.io-client";
@@ -99,23 +98,6 @@ export default function PortfolioSharedPage() {
     socket.current.emit("track_portfolio_session_data", dataToSend);
   };
 
-  // === Layout ===
-  const next = () => {
-    if (currentIndex < portfolioData.items.length - 1)
-      setCurrentIndex(currentIndex + 1);
-  };
-
-  const prev = () => {
-    if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
-  };
-
-  const swipeHandlers = useSwipeable({
-    onSwipedLeft: next,
-    onSwipedRight: prev,
-    trackMouse: true,
-    preventScrollOnSwipe: true,
-  });
-
   useEffect(() => {
     if (!componentRef.current) return;
 
@@ -170,8 +152,8 @@ export default function PortfolioSharedPage() {
       {portfolioData.items.length > 1 && (
         <div
           className={`
-    fixed bottom-0 left-0 w-full bg-white/90 border-t border-2 z-20 p-2 overflow-x-auto
-    flex gap-2 md:hidden
+    fixed bottom-0 left-0 w-full bg-white z-20 p-2 overflow-x-auto
+    flex gap-2 md:hidden justify-evenly
   `}
           style={{ WebkitOverflowScrolling: "touch" }}
         >
@@ -182,8 +164,8 @@ export default function PortfolioSharedPage() {
               onClick={() => handleSelect(index)}
               className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
                 index === currentIndex
-                  ? "!outline outline-2 outline-primary border-white border"
-                  : "opacity-70"
+                  ? "!outline outline-b outline-1 outline-primary border-white border"
+                  : "opacity-50"
               }`}
             />
           ))}
@@ -191,7 +173,6 @@ export default function PortfolioSharedPage() {
       )}
 
       <div
-        {...swipeHandlers}
         className="relative w-full !min-h-full lg:bg-[#525659]"
         style={{ height: `${dimensions.height}px` }}
       >

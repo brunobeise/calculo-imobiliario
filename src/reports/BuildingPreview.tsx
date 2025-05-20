@@ -4,6 +4,7 @@ import PropertyDescription from "./components/preview/PropertyDescription";
 import { ReportData } from "./ReportPreview";
 import { User } from "@/types/userTypes";
 import { ForwardedRef, forwardRef } from "react";
+import { usePageContext } from "vike-react/usePageContext";
 
 interface BuildingPreviewProps {
   headerType: number;
@@ -28,6 +29,7 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
+    const pageContext = usePageContext();
     return (
       <div
         ref={ref}
@@ -75,6 +77,9 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
             <strong>ImobDeal</strong>
           </p>
         </div>
+        {pageContext.urlPathname.includes("/portfolio/") && (
+          <div className="md:hidden h-[140px]" />
+        )}
       </div>
     );
   }

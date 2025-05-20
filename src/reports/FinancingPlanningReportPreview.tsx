@@ -18,6 +18,7 @@ import ConsideredData from "./components/preview/ConsideredData";
 import DetailChartAnalysis from "./components/preview/DetailChartAnalysis";
 import { ReportData } from "./ReportPreview";
 import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
+import { usePageContext } from "vike-react/usePageContext";
 
 interface FinancingPlanningReportPreviewProps {
   configData: ReportData;
@@ -70,6 +71,7 @@ const FinancingPlanningReportPreview = forwardRef<
 
     ref
   ) => {
+    const pageContext = usePageContext();
     if (!propertyData) return null;
 
     if (!configData.reportConfig.pageViewMap) return null;
@@ -317,6 +319,9 @@ const FinancingPlanningReportPreview = forwardRef<
             <strong>ImobDeal</strong>
           </p>
         </div>
+        {pageContext.urlPathname.includes("/portfolio/") && (
+          <div className="md:hidden h-[140px]" />
+        )}
       </div>
     );
   }

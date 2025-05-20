@@ -17,6 +17,7 @@ import DetailChartAnalysis from "./components/preview/DetailChartAnalysis";
 import { calcCaseData } from "@/pages/parcelamentodireto/@id/Calculator";
 import { ReportData } from "./ReportPreview";
 import CalculationTable from "./components/preview/CalculationTable";
+import { usePageContext } from "vike-react/usePageContext";
 
 interface DirectFinancingReportPreviewProps {
   configData: ReportData;
@@ -68,6 +69,7 @@ const DirectFinancingReportPreview = forwardRef<
     }: DirectFinancingReportPreviewProps,
     ref
   ) => {
+    const pageContext = usePageContext();
     if (!propertyData) return null;
 
     const caseData = calcCaseData(propertyData);
@@ -301,6 +303,9 @@ const DirectFinancingReportPreview = forwardRef<
             <strong>ImobDeal</strong>
           </p>
         </div>
+        {pageContext.urlPathname.includes("/portfolio/") && (
+          <div className="md:hidden h-[140px]" />
+        )}
       </div>
     );
   }
