@@ -17,13 +17,7 @@ export function Head() {
   const isSingleCase = item?.case;
   const isSingleBuilding = item?.building;
 
-  const title = item
-    ? isSingleCase
-      ? `Proposta: ${item.case.propertyName}`
-      : isSingleBuilding
-      ? `Imóvel em destaque: ${item.building.propertyName || "sem nome"}`
-      : `Portfólio personalizado - ${portfolioData.user.fullName}`
-    : portfolioData.clientName
+  const title = portfolioData.clientName
     ? `Portfólio para ${portfolioData.clientName}`
     : `Portfólio personalizado - ${portfolioData.user.fullName}`;
 
