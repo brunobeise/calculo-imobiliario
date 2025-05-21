@@ -87,7 +87,7 @@ export const DownPaymentCard = ({
     a.startDate.diff(b.startDate)
   );
 
-  console.log(propertyData.discharges.filter((d) => d.isDownPayment));
+  console.log(entryDetails.filter((d) => d.description));
 
   return (
     <DraggableCard
@@ -162,7 +162,7 @@ export const DownPaymentCard = ({
                   <ul className="list-none space-y-2 mt-2">
                     {entryDetails.map((detail, i) => (
                       <li key={i} className="text-sm">
-                        <span>{`${i + 1}) ${detail.date}`}</span>
+                        <span className="block text-sm font-medium mb-1">{detail.date}</span>
                         <ul>
                           <li style={{ color: secondary }}>
                             • {detail.partLabel}{" "}
@@ -208,19 +208,21 @@ export const DownPaymentCard = ({
                                   </strong>
                                 </li>
                               )}
-                            {entryDetails
-                              .filter((d) => d.description)
-                              .map((detail, i) => (
-                                <li key={i} style={{ color: secondary }}>
-                                  • {detail.description}{" "}
-                                  <strong style={{ color }}>
-                                    {detail.amount}
-                                  </strong>
-                                </li>
-                              ))}
                           </ul>
                         </>
                       )}
+                      {entryDetails
+                        .filter((d) => d.description)
+                        .map((detail, i) => (
+                          <li
+                            className="text-sm"
+                            key={i}
+                            style={{ color: secondary }}
+                          >
+                            • {detail.description}: <br />{" "}
+                            <strong style={{ color }}>{detail.amount}</strong>
+                          </li>
+                        ))}
 
                       {entryDetails.map((detail, i) => {
                         const isDocumentationDate =
@@ -239,7 +241,7 @@ export const DownPaymentCard = ({
 
                         return (
                           <li key={i} className="text-sm">
-                            <span>{`${i + 1}) ${detail.date}`}</span>
+                            <span className="block text-sm font-medium mb-1">{`${detail.date}`}</span>
                             <ul>
                               <li style={{ color: secondary }}>
                                 • {detail.partLabel}{" "}
