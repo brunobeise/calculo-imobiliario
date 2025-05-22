@@ -21,11 +21,39 @@ export default function MyPortfolios() {
   );
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [orderBy, setOrderBy] = useState("createdAt");
   const [portfolioModal, setPortfolioModal] = useState(false);
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+
   const [editPortfolioModal, setEditPortfolioModal] = useState<string>();
+
+  const [limit, setLimit] = useState<number>(() => {
+    const stored = localStorage.getItem("portfolio-limit");
+    return stored ? JSON.parse(stored) : 10;
+  });
+
+  const [orderBy, setOrderBy] = useState(() => {
+    const stored = localStorage.getItem("portfolio-orderBy");
+    return stored ? JSON.parse(stored) : "createdAt";
+  });
+
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">(() => {
+    const stored = localStorage.getItem("portfolio-sortDirection");
+    return stored ? JSON.parse(stored) : "desc";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("portfolio-limit", JSON.stringify(limit));
+  }, [limit]);
+
+  useEffect(() => {
+    localStorage.setItem("portfolio-orderBy", JSON.stringify(orderBy));
+  }, [orderBy]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "portfolio-sortDirection",
+      JSON.stringify(sortDirection)
+    );
+  }, [sortDirection]);
 
   const fetchData = useCallback(
     (params) => {
@@ -144,13 +172,15 @@ export default function MyPortfolios() {
         open={portfolioModal}
         portfolioId={editPortfolioModal}
         reload={() =>
-          fetchData({
-            search,
-            currentPage: currentPage.toString(),
-            limit: limit.toString(),
-            orderBy,
-            sortDirection,
-          })
+          fetchData(
+            new URLSearchParams({
+              search,
+              page: currentPage.toString(),
+              limit: limit.toString(),
+              orderBy,
+              sortDirection,
+            }).toString()
+          )
         }
       />
       <PortfolioIntroModal />

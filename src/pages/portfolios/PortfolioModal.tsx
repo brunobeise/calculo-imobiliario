@@ -27,7 +27,7 @@ import {
   FaSave,
 } from "react-icons/fa";
 import { FaLink, FaTrash } from "react-icons/fa6";
-import { IoHomeOutline } from "react-icons/io5";
+import { IoDuplicate, IoHomeOutline } from "react-icons/io5";
 import Dialog from "@/components/modals/Dialog";
 import dayjs from "dayjs";
 import { fetchCases } from "@/store/caseReducer";
@@ -37,6 +37,7 @@ import SearchInput from "@/components/inputs/SearchInput";
 import { portfolioService } from "@/service/portfolioService";
 import { notify } from "@/notify";
 import BooleanInputSwitch from "@/components/inputs/SwitchInput";
+import { DuplicatePortfolioModal } from "./DuplicatePortfolioModal";
 
 interface Props {
   portfolioId?: string;
@@ -55,6 +56,7 @@ export default function PortfolioModal({
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<"proposals" | "buildings">("proposals");
   const [search, setSearch] = useState("");
+  const [duplicateOpen, setDuplicateOpen] = useState(false);
 
   const {
     control,
@@ -203,50 +205,81 @@ export default function PortfolioModal({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={() => {
-        onClose();
-        setSearch("");
-      }}
-      title={portfolioId ? "Editar Portfolio" : "Criar Portfolio"}
-    >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {loading ? (
-          <div className="md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
-            <Spinner />
-          </div>
-        ) : (
-          <div className="flex flex-col md:flex-row gap-4 px-4 pb-4 w-full md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
-            <div className="w-full md:w-1/3 bg-gray-50 rounded p-4 mb-4 md:mb-0">
-              <FormControl error={!!errors.name} className="mb-3">
-                <FormLabel>Nome</FormLabel>
-                <Input
-                  {...register("name", { required: "Campo obrigatório" })}
-                />
-                {errors.name && (
-                  <FormHelperText>{errors.name.message}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl error={!!errors.clientName} className="mb-3">
-                <FormLabel>Cliente</FormLabel>
-                <Input {...register("clientName")} />
-              </FormControl>
-              <div className="mt-5">
-                <BooleanInputSwitch
-                  label="Solicitar Nome"
-                  checked={watch("requestName")}
-                  onChange={(v) => setValue("requestName", v)}
-                  infoTooltip="Quando ativado, ao abrir o link será exibida uma caixa para o usuário digitar seu nome antes de visualizar a proposta. Essa informação será solicitada apenas uma vez. Recomendado para quando o link será enviado para mais de uma pessoa, permitindo identificar quem visualizou."
-                />
-              </div>
-            </div>
+    <>
+      <DuplicatePortfolioModal
+        open={duplicateOpen}
+        onClose={() => setDuplicateOpen(false)}
+        defaultValues={{
+          name: watch("name") + " (Cópia)",
+          clientName: watch("clientName"),
+          requestName: watch("requestName"),
+        }}
+        onConfirm={async (d) => {
+          setLoading(true);
+          await portfolioService.createPortfolio(
+            {
+              name: d.name,
+              clientName: d.clientName,
+              requestName: d.requestName,
+              items: fields.map((i, idx) => ({
+                ...i,
+                position: idx,
+                id: `${i.id}-${Date.now()}`,
+              })),
+            },
+            "Portfólio duplicado com sucesso."
+          );
+          setLoading(false);
+          setDuplicateOpen(false);
+          onClose()
+          reload();
+        }}
+      />
 
-            <div className="w-full md:w-1/3 flex flex-col gap-3 mb-4 md:mb-0">
-              <h2 className="text-lg font-bold">Itens do Portfólio</h2>
-              <div
-                ref={portfolioDrop}
-                className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
+      <Dialog
+        open={open}
+        onClose={() => {
+          onClose();
+          setSearch("");
+        }}
+        title={portfolioId ? "Editar Portfolio" : "Criar Portfolio"}
+      >
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {loading ? (
+            <div className="md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex flex-col md:flex-row gap-4 px-4 pb-4 w-full md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
+              <div className="w-full md:w-1/3 bg-gray-50 rounded p-4 mb-4 md:mb-0">
+                <FormControl error={!!errors.name} className="mb-3">
+                  <FormLabel>Nome</FormLabel>
+                  <Input
+                    {...register("name", { required: "Campo obrigatório" })}
+                  />
+                  {errors.name && (
+                    <FormHelperText>{errors.name.message}</FormHelperText>
+                  )}
+                </FormControl>
+                <FormControl error={!!errors.clientName} className="mb-3">
+                  <FormLabel>Cliente</FormLabel>
+                  <Input {...register("clientName")} />
+                </FormControl>
+                <div className="mt-5">
+                  <BooleanInputSwitch
+                    label="Solicitar Nome"
+                    checked={watch("requestName")}
+                    onChange={(v) => setValue("requestName", v)}
+                    infoTooltip="Quando ativado, ao abrir o link será exibida uma caixa para o usuário digitar seu nome antes de visualizar a proposta. Essa informação será solicitada apenas uma vez. Recomendado para quando o link será enviado para mais de uma pessoa, permitindo identificar quem visualizou."
+                  />
+                </div>
+              </div>
+
+              <div className="w-full md:w-1/3 flex flex-col gap-3 mb-4 md:mb-0">
+                <h2 className="text-lg font-bold">Itens do Portfólio</h2>
+                <div
+                  ref={portfolioDrop}
+                  className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
       ${
         isOverLimit
           ? "border-red"
@@ -254,119 +287,126 @@ export default function PortfolioModal({
           ? "border-red"
           : "border-dashed border-border"
       }`}
-              >
-                {fields.length === 0 && (
-                  <span className="text-gray text-sm text-center">
-                    Arraste aqui as propostas ou imóveis
+                >
+                  {fields.length === 0 && (
+                    <span className="text-gray text-sm text-center">
+                      Arraste aqui as propostas ou imóveis
+                    </span>
+                  )}
+                  {fields.map((item, idx) => (
+                    <ItemCard
+                      key={item.id}
+                      data={item.building || item.case}
+                      draggable
+                      index={idx}
+                      moveItem={move}
+                      onRemove={() => remove(idx)}
+                    />
+                  ))}
+                </div>
+
+                {errors.items && (
+                  <span className="text-red text-sm mt-1 text-center">
+                    {errors.items.message?.toString()}
                   </span>
                 )}
-                {fields.map((item, idx) => (
-                  <ItemCard
-                    key={item.id}
-                    data={item.building || item.case}
-                    draggable
-                    index={idx}
-                    moveItem={move}
-                    onRemove={() => remove(idx)}
-                  />
-                ))}
+
+                {isOverLimit && (
+                  <div className="text-red text-xs text-center mt-2">
+                    Máximo de 10 itens permitidos. Remova algum para poder
+                    salvar.
+                  </div>
+                )}
               </div>
 
-              {errors.items && (
-                <span className="text-red text-sm mt-1 text-center">
-                  {errors.items.message?.toString()}
-                </span>
-              )}
-
-              {isOverLimit && (
-                <div className="text-red text-xs text-center mt-2">
-                  Máximo de 10 itens permitidos. Remova algum para poder salvar.
-                </div>
-              )}
-            </div>
-
-            <div className="w-full md:w-1/3 flex flex-col">
-              <Tabs
-                value={type}
-                onChange={(_, v: "buildings" | "proposals") => setType(v)}
-              >
-                <TabList
-                  sx={{
-                    justifyContent: "center",
-                    bgcolor: "transparent",
-                    [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                      bgcolor: "background.surface",
-                    },
-                  }}
+              <div className="w-full md:w-1/3 flex flex-col">
+                <Tabs
+                  value={type}
+                  onChange={(_, v: "buildings" | "proposals") => setType(v)}
                 >
-                  <Tab value="proposals">
-                    <FaFileAlt className="text-sm" /> Propostas
-                  </Tab>
-                  <Tab value="buildings">
-                    <FaBuilding className="text-sm" /> Imóveis
-                  </Tab>
-                </TabList>
-
-                <TabPanel className="!p-0 !py-4 " value="proposals">
-                  <SearchInput
-                    placeholder="Buscar Propostas"
-                    className="my-2 mb-3"
-                    debounceTimeout={500}
-                    handleDebounce={setSearch}
-                  />
-                  <div
-                    ref={proposalsRemoveDrop}
-                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto relative !border !border-dashed !border-border h-[264px] xl:h-[354px]"
+                  <TabList
+                    sx={{
+                      justifyContent: "center",
+                      bgcolor: "transparent",
+                      [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                        bgcolor: "background.surface",
+                      },
+                    }}
                   >
-                    {proposalsInitialLoading || searchLoading ? (
-                      <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
-                        <Spinner />
-                      </div>
-                    ) : (
-                      proposals.map((p) => (
+                    <Tab value="proposals">
+                      <FaFileAlt className="text-sm" /> Propostas
+                    </Tab>
+                    <Tab value="buildings">
+                      <FaBuilding className="text-sm" /> Imóveis
+                    </Tab>
+                  </TabList>
+
+                  <TabPanel className="!p-0 !py-4 " value="proposals">
+                    <SearchInput
+                      placeholder="Buscar Propostas"
+                      className="my-2 mb-3"
+                      debounceTimeout={500}
+                      handleDebounce={setSearch}
+                    />
+                    <div
+                      ref={proposalsRemoveDrop}
+                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto relative !border !border-dashed !border-border h-[264px] xl:h-[354px]"
+                    >
+                      {proposalsInitialLoading || searchLoading ? (
+                        <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        proposals.map((p) => (
+                          <ItemCard
+                            key={p.id}
+                            data={p}
+                            onAdd={() => addItem(p)}
+                          />
+                        ))
+                      )}
+                    </div>
+                  </TabPanel>
+
+                  <TabPanel className="!p-0 !py-4" value="buildings">
+                    <SearchInput
+                      placeholder="Buscar Imóveis"
+                      className="my-2 mb-3"
+                      debounceTimeout={500}
+                      handleDebounce={setSearch}
+                    />
+                    <div
+                      ref={buildingsRemoveDrop}
+                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto !border !border-dashed !border-border h-[264px] xl:h-[354px]"
+                    >
+                      {buildings.map((b) => (
                         <ItemCard
-                          key={p.id}
-                          data={p}
-                          onAdd={() => addItem(p)}
+                          key={b.id}
+                          data={b}
+                          onAdd={() => addItem(b)}
                         />
-                      ))
-                    )}
-                  </div>
-                </TabPanel>
-
-                <TabPanel className="!p-0 !py-4" value="buildings">
-                  <SearchInput
-                    placeholder="Buscar Imóveis"
-                    className="my-2 mb-3"
-                    debounceTimeout={500}
-                    handleDebounce={setSearch}
-                  />
-                  <div
-                    ref={buildingsRemoveDrop}
-                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto !border !border-dashed !border-border h-[264px] xl:h-[354px]"
-                  >
-                    {buildings.map((b) => (
-                      <ItemCard key={b.id} data={b} onAdd={() => addItem(b)} />
-                    ))}
-                  </div>
-                </TabPanel>
-              </Tabs>
+                      ))}
+                    </div>
+                  </TabPanel>
+                </Tabs>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {portfolioId ? (
-          <FooterEdit
-            portfolioId={portfolioId}
-            loading={loading}
-            handleDelete={handleDelete}
-            isOverLimit={isOverLimit}
-          />
-        ) : (
-          <FooterCreate loading={loading} isOverLimit={isOverLimit} />
-        )}
-      </form>
-    </Dialog>
+          {portfolioId ? (
+            <FooterEdit
+              portfolioId={portfolioId}
+              loading={loading}
+              handleDelete={handleDelete}
+              isOverLimit={isOverLimit}
+              setDuplicateOpen={() => setDuplicateOpen(true)}
+            />
+          ) : (
+            <FooterCreate loading={loading} isOverLimit={isOverLimit} />
+          )}
+        </form>
+      </Dialog>
+    </>
   );
 }
 
@@ -376,11 +416,13 @@ function FooterEdit({
   loading,
   handleDelete,
   isOverLimit,
+  setDuplicateOpen,
 }: {
   portfolioId: string;
   loading: boolean;
   handleDelete: () => void;
   isOverLimit: boolean;
+  setDuplicateOpen: () => void;
 }) {
   return (
     <div
@@ -399,6 +441,16 @@ function FooterEdit({
         Excluir
       </Button>
       <div className="flex gap-4 flex-wrap">
+        <Button
+          endDecorator={<IoDuplicate />}
+          loading={loading}
+          type="button"
+          variant="outlined"
+          size="md"
+          onClick={setDuplicateOpen}
+        >
+          Duplicar
+        </Button>
         <Button
           endDecorator={<FaLink />}
           loading={loading}
@@ -522,7 +574,7 @@ function ItemCard({
     },
   });
 
-  if (!data) return "data undefiend";
+  if (!data) return null;
 
   const ref = draggable ? internalRef : dragRef;
   const isSelectable = !draggable && !!onAdd;

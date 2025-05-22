@@ -7,10 +7,10 @@ import { PaginatedResult } from "@/store/store";
 import { Portfolio, PortfolioItem } from "@/types/portfolioTypes";
 
 export const portfolioService = {
-  async createPortfolio(data: Partial<Portfolio>) {
+  async createPortfolio(data: Partial<Portfolio>, message?: string) {
     try {
       const response = await api.post("/portfolios", data);
-      notify("success", "Portfólio criado com sucesso!");
+      notify("success", message || "Portfólio criado com sucesso!");
       return response.data;
     } catch (error: any) {
       handleApiError(error, "Erro ao criar portfólio.");
