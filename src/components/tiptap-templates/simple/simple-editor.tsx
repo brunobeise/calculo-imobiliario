@@ -82,7 +82,7 @@ export function SimpleEditor({ content, onUpdate }: SimpleEditorProps) {
       Subscript,
       Selection,
       TrailingNode,
-      Link.configure({ openOnClick: false }),
+      Link.configure({ openOnClick: true,  }),
       TextStyle,
       Color.configure({ types: ["textStyle"] }),
       ImageUploadNode.configure({

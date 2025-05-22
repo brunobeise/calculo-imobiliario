@@ -72,3 +72,12 @@ body {
     padding: 1rem 1.5rem;
   }
 }
+
+.ProseMirror a {
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
