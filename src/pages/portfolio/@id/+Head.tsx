@@ -36,8 +36,7 @@ export function Head() {
 
   const image =
     item?.case?.mainPhoto ||
-    item?.building?.mainPhoto ||
-    portfolioData.user.photo;
+    item?.building?.mainPhoto
 
   const url = `https://app.imobdeal.com.br/portfolio/${portfolioData.id}`;
   const author = portfolioData.user.fullName;
