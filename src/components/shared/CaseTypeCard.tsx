@@ -4,6 +4,7 @@ interface CaseCardProps {
   desc: string;
   comingSoon?: boolean;
   link: string;
+  onClick: () => void;
 }
 
 export default function CaseTypeCard({
@@ -11,10 +12,11 @@ export default function CaseTypeCard({
   image,
   desc,
   comingSoon = false,
-  link,
+  onClick,
 }: CaseCardProps) {
-  const cardContent = (
+  return (
     <div
+      onClick={onClick}
       className={`relative overflow-hidden min-w-[260px] max-w-[260px]  h-[420px] bg-white rounded-[10px] duration-300 pt-5 ${
         comingSoon
           ? "border-[#bebebe] border-2"
@@ -47,6 +49,4 @@ export default function CaseTypeCard({
       )}
     </div>
   );
-
-  return comingSoon ? cardContent : <a href={link}>{cardContent}</a>;
 }

@@ -3,7 +3,6 @@ import { Typography, Tooltip } from "@mui/joy";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { Proposal } from "@/types/proposalTypes";
-import { getCaseLink } from "@/lib/maps";
 import CaseSessionsModal from "../../components/session/SessionsModal";
 import { useMenu } from "@/components/menu/MenuContext";
 import { FaRegEye } from "react-icons/fa";
@@ -36,17 +35,7 @@ const CaseCard = ({
           if (!realEstateCase) {
             toggleMenu(false);
             toggleBackdrop(false);
-            navigate(`${getCaseLink(proposal.type)}/${proposal.id}`);
-          } else {
-            localStorage.setItem(
-              "financingPlanningPropertyData",
-              JSON.stringify(proposal.propertyData)
-            );
-            toggleMenu(false);
-            toggleBackdrop(false);
-            const url = getCaseLink(proposal.type) + "/?newCase=false";
-
-            navigate(url);
+            navigate(`/propostas/${proposal.id}`);
           }
         }}
         className={`relative overflow-hidden min-h-[260px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] pb-10 flex flex-col 

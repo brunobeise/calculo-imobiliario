@@ -1,31 +1,31 @@
 import { FormControl, FormLabel, Input, Textarea } from "@mui/joy";
-import LinkBuildingButton from "@/components/shared/VinculateBuildingButton";
 import CurrencyInput from "@/components/inputs/CurrencyInput";
 import ItemListInput from "@/components/inputs/ItemListInput";
-import { ReportData } from "../ReportPreview";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
+import VinculateBuildingButton from "@/components/shared/VinculateBuildingButton";
+import { Proposal } from "@/types/proposalTypes";
 
 interface PropertySectionProps {
-  configData: ReportData;
-  onChange: (data: ReportData) => void;
+  proposal: Proposal;
+  onChange: (data: Proposal) => void;
 }
 
 export default function PropertySection({
-  configData,
+  proposal,
   onChange,
 }: PropertySectionProps) {
   return (
     <div className="flex flex-col gap-5">
       <h5 className="font-bold text-xl">Imóvel</h5>
 
-      <LinkBuildingButton
-        buildingId={configData.buildingId}
-        buildingName={configData.propertyName}
-        buildingPhoto={configData.mainPhoto}
-        onUnlink={() => onChange({ ...configData, buildingId: null })}
+      <VinculateBuildingButton
+        buildingId={proposal.buildingId}
+        buildingName={proposal.propertyName}
+        buildingPhoto={proposal.mainPhoto}
+        onUnlink={() => onChange({ ...proposal, buildingId: null })}
         onLink={(building) => {
           onChange({
-            ...configData,
+            ...proposal,
             mainPhoto: building.mainPhoto,
             description: building.description,
             subtitle: building.subtitle,
@@ -52,9 +52,9 @@ export default function PropertySection({
           <FormLabel htmlFor="propertyName">Nome</FormLabel>
           <Input
             id="propertyName"
-            value={configData.propertyName}
+            value={proposal.propertyName}
             onChange={(e) =>
-              onChange({ ...configData, propertyName: e.target.value })
+              onChange({ ...proposal, propertyName: e.target.value })
             }
           />
         </FormControl>
@@ -63,10 +63,10 @@ export default function PropertySection({
           <FormLabel htmlFor="subtitle">Subtítulo</FormLabel>
           <Textarea
             id="subtitle"
-            value={configData.subtitle}
+            value={proposal.subtitle}
             minRows={2}
             onChange={(e) => {
-              onChange({ ...configData, subtitle: e.target.value });
+              onChange({ ...proposal, subtitle: e.target.value });
             }}
           />
         </FormControl>
@@ -75,9 +75,9 @@ export default function PropertySection({
           <div className="flex flex-col gap-2">
             <FormLabel>Descrição</FormLabel>
             <SimpleEditor
-              content={configData.description}
+              content={proposal.description}
               onUpdate={(newHtml) =>
-                onChange({ ...configData, description: newHtml })
+                onChange({ ...proposal, description: newHtml })
               }
             />
           </div>
@@ -88,9 +88,9 @@ export default function PropertySection({
             infoTooltip=""
             noHeight
             label="Valor Original"
-            value={configData.value}
+            value={proposal.value}
             onChange={(e) =>
-              onChange({ ...configData, value: Number(e.target.value) })
+              onChange({ ...proposal, value: Number(e.target.value) })
             }
           />
         </FormControl>
@@ -99,10 +99,8 @@ export default function PropertySection({
           <FormLabel htmlFor="address">Endereço</FormLabel>
           <Input
             id="address"
-            value={configData.address}
-            onChange={(e) =>
-              onChange({ ...configData, address: e.target.value })
-            }
+            value={proposal.address}
+            onChange={(e) => onChange({ ...proposal, address: e.target.value })}
           />
         </FormControl>
 
@@ -110,9 +108,9 @@ export default function PropertySection({
           <FormLabel htmlFor="bedrooms">Quartos</FormLabel>
           <Input
             id="bedrooms"
-            value={configData.bedrooms}
+            value={proposal.bedrooms}
             onChange={(e) =>
-              onChange({ ...configData, bedrooms: e.target.value })
+              onChange({ ...proposal, bedrooms: e.target.value })
             }
           />
         </FormControl>
@@ -121,10 +119,8 @@ export default function PropertySection({
           <FormLabel htmlFor="suites">Suítes</FormLabel>
           <Input
             id="suites"
-            value={configData.suites}
-            onChange={(e) =>
-              onChange({ ...configData, suites: e.target.value })
-            }
+            value={proposal.suites}
+            onChange={(e) => onChange({ ...proposal, suites: e.target.value })}
           />
         </FormControl>
 
@@ -132,9 +128,9 @@ export default function PropertySection({
           <FormLabel htmlFor="bathrooms">Banheiros</FormLabel>
           <Input
             id="bathrooms"
-            value={configData.bathrooms}
+            value={proposal.bathrooms}
             onChange={(e) =>
-              onChange({ ...configData, bathrooms: e.target.value })
+              onChange({ ...proposal, bathrooms: e.target.value })
             }
           />
         </FormControl>
@@ -143,9 +139,9 @@ export default function PropertySection({
           <FormLabel htmlFor="parkingSpaces">Vagas</FormLabel>
           <Input
             id="parkingSpaces"
-            value={configData.parkingSpaces}
+            value={proposal.parkingSpaces}
             onChange={(e) =>
-              onChange({ ...configData, parkingSpaces: e.target.value })
+              onChange({ ...proposal, parkingSpaces: e.target.value })
             }
           />
         </FormControl>
@@ -154,9 +150,9 @@ export default function PropertySection({
           <FormLabel htmlFor="builtArea">Área Construída (m²)</FormLabel>
           <Input
             id="builtArea"
-            value={configData.builtArea}
+            value={proposal.builtArea}
             onChange={(e) =>
-              onChange({ ...configData, builtArea: e.target.value })
+              onChange({ ...proposal, builtArea: e.target.value })
             }
           />
         </FormControl>
@@ -165,9 +161,9 @@ export default function PropertySection({
           <FormLabel htmlFor="landArea">Área do Terreno (m²)</FormLabel>
           <Input
             id="landArea"
-            value={configData.landArea}
+            value={proposal.landArea}
             onChange={(e) =>
-              onChange({ ...configData, landArea: e.target.value })
+              onChange({ ...proposal, landArea: e.target.value })
             }
           />
         </FormControl>
@@ -175,8 +171,8 @@ export default function PropertySection({
 
       <ItemListInput
         label="Características"
-        items={configData.features}
-        onChange={(items) => onChange({ ...configData, features: items })}
+        items={proposal.features}
+        onChange={(items) => onChange({ ...proposal, features: items })}
       />
     </div>
   );

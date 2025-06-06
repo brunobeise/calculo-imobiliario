@@ -1,17 +1,18 @@
 import UserSignature from "@/components/user/UserSignature";
 import ImageWithOverlay from "./components/preview/ImageWithOverlary";
 import PropertyDescription from "./components/preview/PropertyDescription";
-import { ReportData } from "./ReportPreview";
 import { User } from "@/types/userTypes";
 import { ForwardedRef, forwardRef } from "react";
 import { usePageContext } from "vike-react/usePageContext";
+import { Proposal } from "@/types/proposalTypes";
+import { FaRegHeart } from "react-icons/fa";
 
 interface BuildingPreviewProps {
   headerType: number;
   primaryColor: string;
   secondaryColor: string;
   backgroundColor: string;
-  configData: Partial<ReportData>;
+  proposal: Partial<Proposal>;
   user?: User;
   preview?: boolean;
 }
@@ -19,7 +20,7 @@ interface BuildingPreviewProps {
 const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
   (
     {
-      configData,
+      proposal,
       backgroundColor,
       headerType,
       primaryColor,
@@ -49,7 +50,7 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
               type={headerType || 1}
               userData={user}
               title="Imóvel"
-              desc={configData.propertyName}
+              desc={proposal.propertyName}
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}
               backgroundColor={backgroundColor}
@@ -57,23 +58,23 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
           )}
 
           <ImageWithOverlay
-            mainPhoto={configData.mainPhoto}
-            subtitle={configData.subtitle}
+            mainPhoto={proposal.mainPhoto}
+            subtitle={proposal.subtitle}
             overlayHeight={200}
             className="h-[460px]"
           />
           <PropertyDescription
-            value={configData.value}
+            value={proposal.value}
             photoViewer={true}
             color={primaryColor}
             secondary={secondaryColor}
-            configData={configData}
+            proposal={proposal}
           />
           <p
             style={{ color: secondaryColor }}
-            className="text-xs my-4 flex items-center justify-center gap-1"
+            className="text-[0.7rem] opacity-70 my-4 flex items-center justify-center gap-1"
           >
-            Feito com <span className="text-red-500">❤️</span> no{" "}
+            Feito com <FaRegHeart className="text-[0.8rem]" /> no{" "}
             <strong>ImobDeal</strong>
           </p>
         </div>

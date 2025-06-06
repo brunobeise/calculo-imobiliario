@@ -16,12 +16,13 @@ import MonthlyReinvested from "./components/preview/MonthlyReinvested";
 import PropertyDescription from "./components/preview/PropertyDescription";
 import ConsideredData from "./components/preview/ConsideredData";
 import DetailChartAnalysis from "./components/preview/DetailChartAnalysis";
-import { ReportData } from "./ReportPreview";
-import { calcCaseData } from "@/pages/planejamentofinanciamento/@id/Calculator";
 import { usePageContext } from "vike-react/usePageContext";
+import { FaRegHeart } from "react-icons/fa";
+import { Proposal } from "@/types/proposalTypes";
+import { calcCaseData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
 
 interface FinancingPlanningReportPreviewProps {
-  configData: ReportData;
+  proposal: Proposal;
   handlePaymentConditionsConfig?: (payload: {
     order: string[];
     downPaymentHeight: number;
@@ -53,7 +54,7 @@ const FinancingPlanningReportPreview = forwardRef<
 >(
   (
     {
-      configData,
+      proposal,
       propertyData,
       user,
       preview,
@@ -74,19 +75,19 @@ const FinancingPlanningReportPreview = forwardRef<
     const pageContext = usePageContext();
     if (!propertyData) return null;
 
-    if (!configData.reportConfig.pageViewMap) return null;
+    if (!proposal.reportConfig.pageViewMap) return null;
     const caseData = calcCaseData(propertyData);
 
     const isPageViewActive = (index: number) => {
-      if (configData.subType === "Simplificado") return true;
+      if (proposal.subType === "Simplificado") return true;
 
       return (
-        index >= configData.reportConfig.pageViewMap?.length ||
-        configData.reportConfig.pageViewMap[index] === true
+        index >= proposal.reportConfig.pageViewMap?.length ||
+        proposal.reportConfig.pageViewMap[index] === true
       );
     };
 
-    const isAdvancedMode = configData.subType === "Avançado";
+    const isAdvancedMode = proposal.subType === "Avançado";
 
     const sections = [
       {
@@ -134,26 +135,26 @@ const FinancingPlanningReportPreview = forwardRef<
               <UserSignature
                 type={custom.headerType || 1}
                 userData={user}
-                desc={configData.propertyName}
+                desc={proposal.propertyName}
                 primaryColor={custom.primaryColor}
                 secondaryColor={custom.secondaryColor}
                 backgroundColor={custom.backgroundColor}
               />
               <ImageWithOverlay
-                mainPhoto={configData.mainPhoto}
-                subtitle={configData.subtitle}
+                mainPhoto={proposal.mainPhoto}
+                subtitle={proposal.subtitle}
                 overlayHeight={200}
                 className="h-[460px]"
               />
 
               <PropertyDescription
-                photoViewer={configData.reportConfig.photoViewer}
+                photoViewer={proposal.reportConfig.photoViewer}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
-                configData={configData}
+                proposal={proposal}
               />
 
-              {configData.reportConfig.displaySummary && isAdvancedMode && (
+              {proposal.reportConfig.displaySummary && isAdvancedMode && (
                 <Summary
                   secondary={custom.secondaryColor}
                   color={custom.primaryColor}
@@ -175,22 +176,22 @@ const FinancingPlanningReportPreview = forwardRef<
               <PaymentConditions
                 handlePaymentConditionsConfig={handlePaymentConditionsConfig}
                 highlightSumPaymentsValues={
-                  configData.reportConfig.highlightSumPaymentsValues
+                  proposal.reportConfig.highlightSumPaymentsValues
                 }
                 groupMonthlyInstallments={
-                  configData.reportConfig.groupMonthlyInstallments
+                  proposal.reportConfig.groupMonthlyInstallments
                 }
-                propertyValue={configData.value}
+                propertyValue={proposal.value}
                 separateDocumentation={
-                  configData.reportConfig.separateDocumentation
+                  proposal.reportConfig.separateDocumentation
                 }
                 isAdvancedMode={isAdvancedMode}
                 propertyData={propertyData}
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
-                config={configData.reportConfig.PaymentConditionsConfig}
+                config={proposal.reportConfig.PaymentConditionsConfig}
                 description={
-                  configData.reportConfig.paymentConditionsDescription
+                  proposal.reportConfig.paymentConditionsDescription
                 }
               />
               {isAdvancedMode && (
@@ -233,7 +234,7 @@ const FinancingPlanningReportPreview = forwardRef<
 
               <UnderstandFinancing
                 displayFinancingTime={
-                  configData.reportConfig.displayFinancingTime
+                  proposal.reportConfig.displayFinancingTime
                 }
                 background={custom.backgroundColor}
                 propertyData={propertyData}
@@ -313,9 +314,9 @@ const FinancingPlanningReportPreview = forwardRef<
 
           <p
             style={{ color: custom.secondaryColor }}
-            className="text-xs my-4 flex items-center justify-center gap-1"
+            className="text-[0.7rem] opacity-70 my-4 flex items-center justify-center gap-1"
           >
-            Feito com <span className="text-red-500">❤️</span> no{" "}
+            Feito com <FaRegHeart className="text-[0.8rem]" /> no{" "}
             <strong>ImobDeal</strong>
           </p>
         </div>

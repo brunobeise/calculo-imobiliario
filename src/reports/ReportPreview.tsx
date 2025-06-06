@@ -1,10 +1,9 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { Proposal } from "@/types/proposalTypes";
+import { Proposal, ProposalTypes } from "@/types/proposalTypes";
 import ReportMenu from "./reportConfig/ReportMenu";
-import SessionsDrawer from "@/components/session/SessionsDrawer";
 import FinancingPlanningReportPreview from "./FinancingPlanningReportPreview";
 import DirectFinancingReportPreview from "./DirectFinancingReportPreview";
 import {
@@ -16,83 +15,39 @@ import ConfigSection from "./reportConfig/ConfigSection";
 import ImagesSection from "./reportConfig/ImagesSection";
 import NotesSection from "./reportConfig/NotesSection";
 
-export interface ReportData {
-  mainPhoto: string;
-  description: string;
-  subtitle: string;
-  propertyName: string;
-  propertyNameFont: string;
-  additionalPhotos: string[];
-  features: string[];
-  suites?: string;
-  bathrooms?: string;
-  bedrooms?: string;
-  parkingSpaces?: string;
-  builtArea?: string;
-  landArea?: string;
-  address?: string;
-  cod?: string;
-  subType: string;
-  buildingId?: string;
-  value?: number;
-  reportConfig: ReportConfig;
-}
-
 interface ReportPreviewProps {
   propertyData: PropertyData;
   proposal: Proposal;
-  onChange: (configData: ReportData) => void;
-  context: "financingPlanning" | "directFinancing";
+  onChange: (proposal: Proposal) => void;
 }
 
 export default function ReportPreview({
   propertyData,
   proposal,
-  context,
   onChange,
 }: ReportPreviewProps) {
   const componentRef = useRef<HTMLDivElement>(null);
+  const [activeItem, setActiveItem] = useState("property");
   const userData = useSelector((state: RootState) => state.user.userData);
   const realEstateData = useSelector(
     (state: RootState) => state.realEstate.realEstateData
   );
 
-  const configData: ReportData = {
-    mainPhoto: proposal.mainPhoto || "",
-    description: proposal.description || "",
-    subtitle: proposal.subtitle || "",
-    propertyName: proposal.propertyName || "",
-    propertyNameFont: proposal.propertyNameFont,
-    additionalPhotos: proposal.additionalPhotos || [],
-    features: proposal.features || [],
-    suites: proposal.suites || "",
-    bathrooms: proposal.bathrooms || "",
-    bedrooms: proposal.bedrooms || "",
-    parkingSpaces: proposal.parkingSpaces || "",
-    builtArea: proposal.builtArea || "",
-    landArea: proposal.landArea || "",
-    address: proposal.address || "",
-    cod: proposal.cod || "",
-    subType: proposal.subType || "Simplificado",
-    buildingId: proposal.buildingId,
-    value: proposal.value,
-    reportConfig: proposal.reportConfig,
+  const handleUpdate = (values: Partial<Proposal>) => {
+    onChange({ ...proposal, ...values });
   };
 
-  const [activeItem, setActiveItem] = useState("property");
-
   const handlePaymentConditionsConfig = (payload: PaymentConditionsConfig) => {
-    onChange({
-      ...configData,
+    handleUpdate({
       reportConfig: {
-        ...configData.reportConfig,
+        ...proposal.reportConfig,
         PaymentConditionsConfig: payload,
-      },
+      } as ReportConfig,
     });
   };
 
   const renderPreview = () =>
-    context === "directFinancing" ? (
+    proposal.type === ProposalTypes.ParcelamentoDireto ? (
       <DirectFinancingReportPreview
         custom={{
           backgroundColor: realEstateData?.backgroundColor,
@@ -102,7 +57,7 @@ export default function ReportPreview({
         }}
         preview
         propertyData={propertyData}
-        configData={configData}
+        proposal={proposal}
         ref={componentRef}
         user={userData}
         handlePaymentConditionsConfig={handlePaymentConditionsConfig}
@@ -117,7 +72,7 @@ export default function ReportPreview({
         }}
         preview
         propertyData={propertyData}
-        configData={configData}
+        proposal={proposal}
         ref={componentRef}
         user={userData}
         handlePaymentConditionsConfig={handlePaymentConditionsConfig}
@@ -126,29 +81,58 @@ export default function ReportPreview({
 
   const renderSection = () => {
     if (activeItem === "property")
-      return <PropertySection configData={configData} onChange={onChange} />;
+      return <PropertySection proposal={proposal} onChange={handleUpdate} />;
 
     if (activeItem === "config")
-      return <ConfigSection configData={configData} onChange={onChange} />;
+      return <ConfigSection proposal={proposal} onChange={handleUpdate} />;
 
     if (activeItem === "images")
-      return <ImagesSection configData={configData} onChange={onChange} />;
+      return <ImagesSection proposal={proposal} onChange={handleUpdate} />;
 
     if (activeItem === "notes")
-      return <NotesSection configData={configData} onChange={onChange} />;
+      return <NotesSection proposal={proposal} onChange={handleUpdate} />;
   };
 
+  const placeholderRef = useRef<HTMLDivElement>(null);
+  const [placeholderWidth, setPlaceholderWidth] = useState(0);
+
+  useEffect(() => {
+    if (!placeholderRef.current) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === placeholderRef.current) {
+          const width = entry.contentRect.width;
+          setPlaceholderWidth(width);
+        }
+      }
+    });
+
+    resizeObserver.observe(placeholderRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   return (
-    <div className="pb-10 overflow-auto pt-[80px] h-full">
-      <div className="gap-5 w-full relative pr-8 xl:pr-0">
-        <ReportMenu activeItem={activeItem} onSelectItem={setActiveItem}>
-          {renderSection()}
-        </ReportMenu>
-        <div className="mt-5 absolute left-[600px] uw:left-[50%] uw:translate-x-[-50%]">
-          {renderPreview()}
+    <div className="flex justify-center">
+      <div className="flex flex-col md:flex-row gap-10 w-full max-w-[1800px] pe-10 pb-4">
+        <div
+          aria-hidden="true"
+          ref={placeholderRef}
+          className="hidden md:block flex-1 ps-[105px]"
+        >
+          <div ref={placeholderRef} className="w-full bg-green" />
         </div>
-        <div className="hidden xl:block w-[420px] uw:w-[520px]" />
-        <SessionsDrawer caseId={proposal.id} />
+        <div className="hidden md:block fixed flex-1 ">
+          <ReportMenu activeItem={activeItem} onSelectItem={setActiveItem}>
+            <div className="p-4 md:p-8" style={{ width: placeholderWidth }}>
+              {renderSection()}
+            </div>
+          </ReportMenu>
+        </div>
+        <div>{renderPreview()}</div>
       </div>
     </div>
   );

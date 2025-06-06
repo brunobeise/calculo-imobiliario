@@ -1,10 +1,10 @@
 import InitialEquityDivisionChart from "@/components/charts/InitialEquityDivisionChart";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 
 interface InitialDivisionChartsProps {
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
   propertyData: PropertyData;
   color: string;
   secondary: string;

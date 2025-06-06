@@ -1,4 +1,3 @@
-import { ReportData } from "@/reports/ReportPreview";
 import { FaCheckCircle, FaMapMarkerAlt } from "react-icons/fa";
 import { FaBath, FaBed, FaCar, FaHammer } from "react-icons/fa6";
 import { SlSizeFullscreen } from "react-icons/sl";
@@ -17,9 +16,10 @@ import "react-photo-album/columns.css";
 import { toBRL } from "@/lib/formatter";
 import { FaSackDollar } from "react-icons/fa6";
 import { SimpleViewer } from "@/components/tiptap-templates/simple/simple-viewer";
+import { Proposal } from "@/types/proposalTypes";
 
 interface PropertyDescriptionProps {
-  configData: Partial<ReportData>;
+  proposal: Partial<Proposal>;
   color: string;
   secondary: string;
   photoViewer: boolean;
@@ -28,7 +28,7 @@ interface PropertyDescriptionProps {
 
 export default function PropertyDescription({
   color,
-  configData,
+  proposal,
   secondary,
   photoViewer = true,
   value,
@@ -53,7 +53,7 @@ export default function PropertyDescription({
   useEffect(() => {
     const fetchImageSizes = async () => {
       const updatedImages = await Promise.all(
-        [...configData.additionalPhotos].map(async (image) => {
+        [...proposal.additionalPhotos].map(async (image) => {
           const { width, height } = await getImageSize(image);
           return { src: image, original: image, width, height };
         })
@@ -61,22 +61,22 @@ export default function PropertyDescription({
       setImageData(updatedImages);
     };
 
-    if (configData.additionalPhotos?.length > 0) {
+    if (proposal.additionalPhotos?.length > 0) {
       fetchImageSizes();
     }
-  }, [configData.additionalPhotos]);
+  }, [proposal.additionalPhotos]);
 
   return (
     <div>
       <div className="px-12 pt-6 mb-6">
         <div className="text-2xl mb-6">
-          <strong style={{ color, fontFamily: configData.propertyNameFont }}>
-            {configData.propertyName}
+          <strong style={{ color, fontFamily: proposal.propertyNameFont }}>
+            {proposal.propertyName}
           </strong>
         </div>
-        {configData.description && (
+        {proposal.description && (
           <div style={{ color }} className="my-6 mb-8">
-            <SimpleViewer html={configData.description} />
+            <SimpleViewer html={proposal.description} />
           </div>
         )}
 
@@ -90,55 +90,54 @@ export default function PropertyDescription({
           )}
 
           <div>
-            {configData.bedrooms && (
+            {proposal.bedrooms && (
               <p style={{ color: secondary }}>
                 <FaBed style={{ color }} className="inline mb-2 me-2" />
                 <strong style={{ color }}> Dormitórios:</strong>{" "}
-                <strong> {configData.bedrooms} </strong>
+                <strong> {proposal.bedrooms} </strong>
                 <span className="text-md">
                   {" "}
-                  {configData.suites &&
-                    Number(configData.suites) > 0 &&
-                    `(${configData.suites} suíte${
-                      Number(configData.suites) > 1 ? "s" : ""
+                  {proposal.suites &&
+                    Number(proposal.suites) > 0 &&
+                    `(${proposal.suites} suíte${
+                      Number(proposal.suites) > 1 ? "s" : ""
                     })`}
                 </span>
               </p>
             )}
-            {configData.bathrooms && Number(configData.bathrooms) > 0 && (
+            {proposal.bathrooms && Number(proposal.bathrooms) > 0 && (
               <p style={{ color: secondary }}>
                 <FaBath style={{ color }} className="inline mb-2 me-2" />
                 <strong style={{ color }}> Banheiros:</strong>{" "}
-                <strong> {configData.bathrooms} </strong>
+                <strong> {proposal.bathrooms} </strong>
               </p>
             )}
-            {configData.parkingSpaces &&
-              Number(configData.parkingSpaces) > 0 && (
-                <p style={{ color: secondary }}>
-                  <FaCar style={{ color }} className="inline mb-2 me-2" />
-                  <strong style={{ color }}> Vagas:</strong>{" "}
-                  <strong> {configData.parkingSpaces} </strong>
-                </p>
-              )}
-            {configData.builtArea && Number(configData.builtArea) > 0 && (
+            {proposal.parkingSpaces && Number(proposal.parkingSpaces) > 0 && (
+              <p style={{ color: secondary }}>
+                <FaCar style={{ color }} className="inline mb-2 me-2" />
+                <strong style={{ color }}> Vagas:</strong>{" "}
+                <strong> {proposal.parkingSpaces} </strong>
+              </p>
+            )}
+            {proposal.builtArea && Number(proposal.builtArea) > 0 && (
               <p style={{ color: secondary }}>
                 <FaHammer style={{ color }} className="inline mb-2 me-2" />
                 <strong style={{ color }}> Área construída:</strong>{" "}
-                <strong>{configData.builtArea}m² </strong>
+                <strong>{proposal.builtArea}m² </strong>
               </p>
             )}
-            {configData.landArea && Number(configData.landArea) > 0 && (
+            {proposal.landArea && Number(proposal.landArea) > 0 && (
               <p style={{ color: secondary }}>
                 <SlSizeFullscreen
                   style={{ color }}
                   className="inline mb-2 me-2"
                 />
                 <strong style={{ color }}> Área do terreno:</strong>{" "}
-                <strong>{configData.landArea}m²</strong>
+                <strong>{proposal.landArea}m²</strong>
               </p>
             )}
           </div>
-          {configData.address && (
+          {proposal.address && (
             <div className="text-lg">
               <div
                 style={{ color: secondary }}
@@ -147,18 +146,18 @@ export default function PropertyDescription({
                 <FaMapMarkerAlt style={{ color }} size={16} className="mr-2" />
                 <strong style={{ color }}>Localização</strong>
               </div>
-              <p style={{ color: secondary }}>{configData.address}</p>
+              <p style={{ color: secondary }}>{proposal.address}</p>
             </div>
           )}
         </div>
 
-        {configData.features.length > 0 && (
+        {proposal.features.length > 0 && (
           <div className="text-lg">
             <strong style={{ color }} className="block mb-3">
               Características
             </strong>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 text-sm">
-              {configData.features.map((feature, index) => (
+              {proposal.features.map((feature, index) => (
                 <div key={index} className="flex items-center">
                   <FaCheckCircle
                     style={{ color }}
@@ -173,7 +172,7 @@ export default function PropertyDescription({
           </div>
         )}
       </div>
-      {imageData.length > 0 && configData.additionalPhotos?.length > 1 && (
+      {imageData.length > 0 && proposal.additionalPhotos?.length > 1 && (
         <div className="my-4">
           <ColumnsPhotoAlbum
             photos={imageData}

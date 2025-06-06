@@ -138,11 +138,11 @@ function SessionRow(props: {
 
       {isOpen && (
         <div className="p-1">
-          <Table size="sm" aria-label="page times">
+          <Table aria-label="page times">
             <thead>
               <tr>
-                <th>Página</th>
-                <th>Tempo de visualização</th>
+                <th className="!bg-background">Página</th>
+                <th className="!bg-background">Tempo de visualização</th>
               </tr>
             </thead>
             <tbody>
@@ -190,7 +190,7 @@ const SessionsTable: React.FC<SessionsTableProps> = ({ sessions }) => {
       ))}
       {sessions.length === 0 && (
         <span className="text-center mt-10 text-grayText">
-          Nenhuma sessão até o momento
+          Nenhuma visualização até o momento
         </span>
       )}
     </div>

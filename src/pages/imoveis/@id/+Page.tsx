@@ -12,7 +12,7 @@ import { useAuth } from "@/auth";
 import BuildingForm from "../BuildingForm";
 import ScrapModal from "@/pages/scrap/ScrapModal";
 import { Button } from "@mui/joy";
-import { FaArrowLeft, FaLink } from "react-icons/fa";
+import { FaArrowLeft, FaLink, FaPlusCircle } from "react-icons/fa";
 import { navigate } from "vike/client/router";
 import { Building } from "@/types/buildingTypes";
 import BuildingPreview from "@/reports/BuildingPreview";
@@ -114,6 +114,9 @@ export default function BuildingPage() {
           </Button>
         </div>
       )}
+      {!newBuilding && (
+        <Button onClick={() => navigate(`/cenarios?buildingId=${building.id}`)} endDecorator={<FaPlusCircle />}>Criar Proposta</Button>
+      )}
     </div>
   );
 
@@ -135,7 +138,7 @@ export default function BuildingPage() {
               primaryColor=""
               secondaryColor=""
               headerType={1}
-              configData={{
+              proposal={{
                 propertyName: building.propertyName,
                 propertyNameFont: building.propertyNameFont,
                 mainPhoto: building.mainPhoto,

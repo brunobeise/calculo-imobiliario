@@ -1,4 +1,3 @@
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import SectionTitle from "./SectionTitle";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
@@ -6,18 +5,19 @@ import { toBRL } from "@/lib/formatter";
 import InfoItem from "./InfoItem";
 import { MonthlyInvestmentGrowthChart } from "@/components/charts/MonthlyInvestmentGrowthChart";
 import dayjs from "dayjs";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
 
 interface PresentValueProps {
   color: string;
   secondary: string;
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
   propertyData: PropertyData;
 }
 
 export default function PresentValue(props: PresentValueProps) {
   const isFinancingPlanningData = (
-    data: FinancingPlanningData | DirectFinancingData
+    data: FinancingPlanningData | DirectFinancingCaseData
   ): data is FinancingPlanningData => {
     return Array.isArray(data.detailedTable) && "breakEven" in data;
   };

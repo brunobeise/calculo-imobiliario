@@ -1,32 +1,32 @@
 import { useEffect, useRef, useState } from "react";
 import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
-import { ReportData } from "../ReportPreview";
 import _ from "lodash";
 import { FormLabel } from "@mui/joy";
+import { Proposal } from "@/types/proposalTypes";
 
 interface NotesSectionProps {
-  configData: ReportData;
-  onChange: (data: ReportData) => void;
+  proposal: Proposal;
+  onChange: (data: Proposal) => void;
 }
 
 export default function NotesSection({
-  configData,
+  proposal,
   onChange,
 }: NotesSectionProps) {
   const [html, setHtml] = useState(
-    configData.reportConfig?.paymentConditionsDescription || ""
+    proposal.reportConfig?.paymentConditionsDescription || ""
   );
 
   useEffect(() => {
-    setHtml(configData.reportConfig?.paymentConditionsDescription || "");
-  }, [configData.reportConfig?.paymentConditionsDescription]);
+    setHtml(proposal.reportConfig?.paymentConditionsDescription || "");
+  }, [proposal.reportConfig?.paymentConditionsDescription]);
 
   const debouncedOnChange = useRef(
     _.debounce((html: string) => {
       onChange({
-        ...configData,
+        ...proposal,
         reportConfig: {
-          ...configData.reportConfig,
+          ...proposal.reportConfig,
           paymentConditionsDescription: html,
         },
       });

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import Table from "@mui/joy/Table";
 import Sheet from "@mui/joy/Sheet";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { toBRL } from "@/lib/formatter";
-import { Tooltip } from "@mui/joy";
+import { Tooltip, Skeleton } from "@mui/joy";
 
 interface ColumnDefinition {
   title: string;
@@ -27,12 +27,49 @@ const DetailedTableComponent: React.FC<DetailedTableComponentProps> = ({
   const theme = useTheme();
   const matchesLG = useMediaQuery(theme.breakpoints.up("lg"));
 
+  const [showTable, setShowTable] = useState(false);
+
+  // Exibe skeleton por 1 segundo para evitar lag da renderização
+  useEffect(() => {
+    setShowTable(false);
+    const timeout = setTimeout(() => {
+      setShowTable(true);
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [rows]);
+
   const filteredColumns = useMemo(() => {
     return columns.filter((column) => {
       return rows.some((row) => row[column.dataIndex] !== 0);
     });
   }, [columns, rows]);
 
+  if (!showTable) {
+    // Skeleton completo simulando a tabela
+    return (
+      <div className="col-span-12 lg:px-2 bg-whitefull">
+        <h2 className="text-xl text-center font-bold my-2">Tabela Detalhada</h2>
+        <Sheet
+          sx={{
+            height: 720,
+            backgroundColor: "transparent",
+            overflowX: "auto",
+            padding: 2,
+          }}
+        >
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="100%"
+            height={700}
+            sx={{ borderRadius: 1 }}
+          />
+        </Sheet>
+      </div>
+    );
+  }
+
+  // Renderiza tabela real após 1s
   return (
     <div className="col-span-12 lg:px-2 bg-whitefull">
       <h2 className="text-xl text-center font-bold my-2">Tabela Detalhada</h2>
@@ -69,10 +106,7 @@ const DetailedTableComponent: React.FC<DetailedTableComponentProps> = ({
             </thead>
             <tbody>
               {rows.map((row, index) => (
-                <tr
-                  key={rowKey(row, index)}
-                  className="hover:bg-[#f6f6f6]" 
-                >
+                <tr key={rowKey(row, index)} className="hover:bg-[#f6f6f6]">
                   {filteredColumns.map((col, colIndex) => (
                     <td key={colIndex}>
                       {col.render

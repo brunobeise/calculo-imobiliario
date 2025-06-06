@@ -188,26 +188,7 @@ export default function PortfolioSharedPage() {
             }}
             propertyData={currentItem.case?.propertyData}
             user={portfolioData.user}
-            configData={{
-              propertyName: currentItem.case?.propertyName || "",
-              propertyNameFont: currentItem.case.propertyNameFont,
-              mainPhoto: currentItem.case?.mainPhoto || "",
-              description: currentItem.case?.description || "",
-              subtitle: currentItem.case.subtitle,
-              additionalPhotos: currentItem.case?.additionalPhotos,
-              features: currentItem.case?.features,
-              bedrooms: currentItem.case?.bedrooms,
-              reportConfig: currentItem.case?.reportConfig,
-              address: currentItem.case?.address,
-              bathrooms: currentItem.case?.bathrooms,
-              builtArea: currentItem.case?.builtArea,
-              cod: currentItem.case?.cod,
-              landArea: currentItem.case?.landArea,
-              parkingSpaces: currentItem.case?.parkingSpaces,
-              suites: currentItem.case?.suites,
-              subType: currentItem.case?.subType,
-              value: currentItem.case?.value,
-            }}
+            proposal={currentItem.case}
             ref={componentRef}
           />
         )}
@@ -224,26 +205,7 @@ export default function PortfolioSharedPage() {
             }}
             propertyData={currentItem.case?.propertyData}
             user={portfolioData.user}
-            configData={{
-              propertyName: currentItem.case?.propertyName || "",
-              mainPhoto: currentItem.case?.mainPhoto || "",
-              propertyNameFont: currentItem.case.propertyNameFont,
-              description: currentItem.case?.description || "",
-              subtitle: currentItem.case.subtitle,
-              additionalPhotos: currentItem.case?.additionalPhotos,
-              features: currentItem.case?.features,
-              bedrooms: currentItem.case?.bedrooms,
-              reportConfig: currentItem.case?.reportConfig,
-              address: currentItem.case?.address,
-              bathrooms: currentItem.case?.bathrooms,
-              builtArea: currentItem.case?.builtArea,
-              cod: currentItem.case?.cod,
-              landArea: currentItem.case?.landArea,
-              parkingSpaces: currentItem.case?.parkingSpaces,
-              suites: currentItem.case?.suites,
-              subType: currentItem.case?.subType,
-              value: currentItem.case?.value,
-            }}
+            proposal={currentItem.case}
             ref={componentRef}
           />
         )}
@@ -256,7 +218,7 @@ export default function PortfolioSharedPage() {
             primaryColor={portfolioData.user.realEstate?.primaryColor || ""}
             secondaryColor={portfolioData.user.realEstate?.secondaryColor}
             headerType={portfolioData.user.realEstate?.headerType || 1}
-            configData={{
+            proposal={{
               propertyName: currentItem.building.propertyName,
               propertyNameFont: currentItem.building.propertyNameFont,
               mainPhoto: currentItem.building.mainPhoto,

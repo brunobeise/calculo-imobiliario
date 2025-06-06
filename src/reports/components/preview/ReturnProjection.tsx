@@ -1,13 +1,13 @@
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import { toBRL } from "@/lib/formatter";
 import SectionTitle from "./SectionTitle";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
 
 interface ProjectionReturnProps {
   propertyData: PropertyData;
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
   color: string;
   secondary: string;
 }
@@ -21,7 +21,7 @@ export default function ProjectionReturn({
   const { totalProfit, totalProfitPercent } = caseData;
 
   const isFinancingPlanningData = (
-    data: FinancingPlanningData | DirectFinancingData
+    data: FinancingPlanningData | DirectFinancingCaseData
   ): data is FinancingPlanningData => {
     return Array.isArray(data.detailedTable) && "breakEven" in data;
   };

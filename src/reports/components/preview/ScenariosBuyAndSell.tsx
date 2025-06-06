@@ -1,13 +1,13 @@
 import { toBRL } from "@/lib/formatter";
 import ScenarioCard from "./ScenarioCard";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
 
 interface ScenariosBuyAndSellProps {
   color: string;
   secondary: string;
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
   propertyData: PropertyData;
 }
 
@@ -104,11 +104,11 @@ const ScenariosBuyAndSell: React.FC<ScenariosBuyAndSellProps> = ({
                 {toBRL(propertyData.downPayment + propertyData.financingFees)}*
               </span>
             </strong>
-            <div
-              style={{ backgroundColor: secondary }}
-              className="h-[2px] w-full my-2"
-            />
           </p>
+          <div
+            style={{ backgroundColor: secondary }}
+            className="h-[2px] w-full my-2"
+          />
         </div>
         <p className=" text-md lg:text-xl">
           <strong>

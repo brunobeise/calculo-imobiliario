@@ -31,8 +31,8 @@ const ReportMenu = ({
   children,
 }: ReportMenuProps) => {
   return (
-    <div className="flex flex-col md:flex-row gap-2 fixed h-screen pb-24 md:pb-0 w-full md:w-min">
-      <div className="flex md:flex-col p-4 gap-6 text-primary bg-transparent sticky top-0 left-0 md:h-[85vh] z-10 md:ms-4">
+    <div className="flex flex-col md:flex-row gap-2 md:pb-0 ">
+      <div className="flex md:flex-col px-4 gap-6 text-primary bg-transparent sticky top-0 left-0  z-10 md:ms-4">
         {menuItems.map((item) => (
           <div
             key={item.id}
@@ -54,7 +54,7 @@ const ReportMenu = ({
           </div>
         ))}
       </div>
-      <div className="flex-1 p-4 md:p-8 w-ful  bg-whitefull md:w-[460px] xxl:w-[520px] uw:w-[520px]  md:sticky top-5 md:mt-5 left-0 md:h-[85vh] z-10 shadow  overflow-y-auto">
+      <div className="flex-1  bg-whitefull z-10 shadow overflow-y-auto max-h-[88vh]">
         {children}
       </div>
     </div>

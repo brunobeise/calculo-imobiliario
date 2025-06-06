@@ -13,7 +13,7 @@ const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex justify-center mt-5">
+    <div className="flex justify-center">
       <RadioGroup
         aria-label="subType"
         sx={{ width: "600px" }}
@@ -23,7 +23,7 @@ const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({
       >
         <List
           orientation="horizontal"
-          className="!grid !grid-cols-2 md:!px-3 !max-w-[600px]"
+          className="!grid !grid-cols-2 !max-w-[600px]"
           sx={{
             "--List-gap": "0.5rem",
             "--ListItem-paddingY": "1rem",
@@ -33,7 +33,7 @@ const CaseSubTypeSelect: React.FC<CaseSubTypeSelectProps> = ({
         >
           {["Simplificado", "Avançado"].map((item, index) => (
             <ListItem
-              className="!bg-white"
+              className="!bg-whitefull"
               variant="outlined"
               key={item}
               sx={{ boxShadow: "sm" }}

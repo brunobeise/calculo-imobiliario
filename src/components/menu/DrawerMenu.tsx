@@ -19,9 +19,11 @@ import { useAuth } from "@/auth";
 import { usePageContext } from "vike-react/usePageContext";
 import { useMenu } from "./MenuContext";
 import { navigate } from "vike/client/router";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 import { GrMultiple } from "react-icons/gr";
+import { fetchUserData } from "@/store/userReducer";
+import { useEffect } from "react";
 
 const menuItems = [
   { path: "/dashboard", label: "Dashboard", icon: <BiSolidDashboard /> },
@@ -55,6 +57,13 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
   const pageContext = usePageContext();
   const { backdropVisible, menuOpen, toggleMenu, toggleBackdrop } = useMenu();
 
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    if (!userData && menuOpen) {
+      dispatch(fetchUserData());
+    }
+  }, [dispatch, menuOpen, userData]);
+
   if (
     !isAuthenticated ||
     pageContext.urlPathname.includes("/proposta/") ||
@@ -66,7 +75,7 @@ export default function DrawerMenu({ isCaseMenu }: { isCaseMenu: boolean }) {
     <>
       {isCaseMenu && (
         <Button
-          className="!hidden md:!block !absolute translate-x-[10px] translate-y-[10px] !bg-whitefull !text-primary h-min z-[100]"
+          className="!hidden md:!block !absolute translate-x-[10px] translate-y-[20px] !bg-whitefull !text-primary h-min z-[100]"
           onClick={() => {
             toggleMenu(true);
             toggleBackdrop(true);

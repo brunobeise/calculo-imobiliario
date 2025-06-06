@@ -24,6 +24,7 @@ interface AuthContextType {
     admin: boolean;
     imobzi: boolean;
     jetimob: boolean;
+    isAutonomous: boolean;
   };
 }
 
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     admin: boolean;
     imobzi: boolean;
     jetimob: boolean;
+    isAutonomous: boolean;
   }>(() => {
     if (token) {
       return {
@@ -52,6 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         admin: Cookies.get("admin") === "true",
         imobzi: Cookies.get("imobzi") === "true",
         jetimob: Cookies.get("jetimob") === "true",
+        isAutonomous: Cookies.get("isAutonomous") === "true",
       };
     }
     return {
@@ -60,6 +63,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       admin: false,
       imobzi: false,
       jetimob: false,
+      isAutonomous: false,
     };
   });
 
@@ -82,6 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(permissions);
         Cookies.set("owner", permissions.owner.toString());
         Cookies.set("admin", permissions.admin.toString());
+        Cookies.set("isAutonomous", permissions.isAutonomous.toString());
         Cookies.set("imobzi", permissions.imobzi.toString());
         dispatch(fetchRealEstateData()).unwrap();
       }

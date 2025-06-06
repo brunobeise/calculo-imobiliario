@@ -62,7 +62,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </svg>
             </SvgIcon>
           </div>
-          <span style={{ color }} className="text-md lg:text-xl font-bold">
+          <span style={{ color }} className="text-md lg:text-xl font-bold w-max">
             {toBRL(propertyData.propertyValue)}
           </span>
           <span style={{ color: secondary }} className="mt-[-5px]">
@@ -90,7 +90,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </SvgIcon>
             </div>
 
-            <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold w-max">
               {toBRL(propertyData.downPayment)}
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">
@@ -147,7 +147,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </svg>
             </SvgIcon>
           </div>
-          <span style={{ color }} className="text-md lg:text-xl font-bold">
+          <span style={{ color }} className="text-md lg:text-xl font-bold w-max w-max">
             {toBRL(
               propertyData.propertyValue -
                 propertyData?.discharges
@@ -163,7 +163,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
         </div>
 
         {props.displayFinancingTime && (
-          <div className="flex flex-col items-center w-[140px]">
+          <div className="flex flex-col items-center w-[140px] ">
             <div id="financing" className=" px-6 w-[100px] flex justify-center">
               <SvgIcon sx={{ color, fontSize: 60 }}>
                 <svg viewBox="0 0 186.02 185.99">
@@ -193,7 +193,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
                 </svg>
               </SvgIcon>
             </div>
-            <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold w-max">
               {propertyData.financingMonths} meses
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">
@@ -258,7 +258,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
           )}
           <span
             style={{ color }}
-            className="text-md lg:text-xl font-bold mt-[-5px]"
+            className="text-md lg:text-xl font-bold w-max mt-[-5px]"
           >
             {toBRL(propertyData.installmentValue)}
           </span>
@@ -287,7 +287,7 @@ export default function UnderstandFinancing(props: UnderstandFinancingProps) {
               </SvgIcon>
             </div>
 
-            <span style={{ color }} className="text-md lg:text-xl font-bold">
+            <span style={{ color }} className="text-md lg:text-xl font-bold w-max">
               {toBRL(propertyData.downPayment)}
             </span>
             <span style={{ color: secondary }} className="mt-[-5px]">

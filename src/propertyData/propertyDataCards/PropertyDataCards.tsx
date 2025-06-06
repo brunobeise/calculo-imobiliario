@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext, useEffect, useMemo, useState } from "react";
-import { propertyDataContext, PropertyData } from "../PropertyDataContext";
+import { useEffect, useMemo, useState } from "react";
+import { PropertyData } from "../PropertyDataContext";
 import { calcOutstandingBalance, calcInstallmentValue } from "@/lib/calcs";
 import PropertyDataCardsFinancingPlanningSimple from "./PropertyDataCardsFinancingPlanningSimple";
 import PropertyDataCardsFinancingPlanningAdvanced from "./PropertyDataCardsFinancingPlanningAdvanced";
@@ -12,6 +12,7 @@ import FinancingCorrectionModal, {
   FinancingCorrectionModalSubmit,
 } from "@/components/modals/FinancingCorrectionModal";
 import dayjs from "dayjs";
+import { ProposalTypes } from "@/types/proposalTypes";
 
 export interface PropertyDataCardsProps {
   propertyData: PropertyData;
@@ -42,11 +43,17 @@ export interface PropertyDataCardsProps {
 export default function PropertyDataCards({
   type,
   mode,
+  propertyData,
+  setPropertyData,
 }: {
   type: string;
   mode: string;
+  propertyData: PropertyData;
+  setPropertyData: (
+    field: keyof PropertyData,
+    value: PropertyData[keyof PropertyData]
+  ) => void;
 }) {
-  const { propertyData, setPropertyData } = useContext(propertyDataContext);
   const [installmentValueCalculatorLock, setInstallmentValueCalculatorLock] =
     useState(false);
   const [installmentSimulator, setInstallmentSimulator] = useState(false);
@@ -80,8 +87,8 @@ export default function PropertyDataCards({
 
   const monthlyRate = (propertyData?.financingCorrectionRate || 0) / 100;
   const months =
-    dayjs(propertyData.initialFinancingMonth, "MM/YYYY").diff(
-      dayjs(propertyData.initialDate, "MM/YYYY"),
+    dayjs(propertyData?.initialFinancingMonth, "MM/YYYY").diff(
+      dayjs(propertyData?.initialDate, "MM/YYYY"),
       "month"
     ) - 1;
 
@@ -159,23 +166,26 @@ export default function PropertyDataCards({
   };
 
   const Cards = useMemo(() => {
-    if (mode === "directFinancing" && type === "Avançado") {
+    if (mode === ProposalTypes.ParcelamentoDireto && type === "Avançado") {
       return <PropertyDataCardsDirectFinancingAdvanced {...sharedProps} />;
     }
-    if (mode === "directFinancing" && type === "Simplificado") {
+    if (mode === ProposalTypes.ParcelamentoDireto && type === "Simplificado") {
       return <PropertyDataCardsDirectFinancingSimple {...sharedProps} />;
     }
-    if (mode === "financingPlanning" && type === "Avançado") {
+    if (mode === ProposalTypes.FinancamentoBancário && type === "Avançado") {
       return <PropertyDataCardsFinancingPlanningAdvanced {...sharedProps} />;
     }
-    if (mode === "financingPlanning" && type === "Simplificado") {
+    if (
+      mode === ProposalTypes.FinancamentoBancário &&
+      type === "Simplificado"
+    ) {
       return <PropertyDataCardsFinancingPlanningSimple {...sharedProps} />;
     }
   }, [mode, sharedProps, type]);
 
   return (
     <>
-      <div className="md:px-10 mt-4">{Cards}</div>
+      <div className="md:px-10">{Cards}</div>
       <InstallmentSimulationModal
         onClose={() => setInstallmentSimulator(false)}
         open={installmentSimulator}
@@ -186,7 +196,7 @@ export default function PropertyDataCards({
         open={financingFeesDescriptionModal}
         onClose={() => setFinancingFeesDescriptionModal(false)}
         onSubmit={(v) => setPropertyData("financingFeesDescription", v)}
-        value={propertyData.financingFeesDescription}
+        value={propertyData?.financingFeesDescription}
       />
       <FinancingCorrectionModal
         studyDate={propertyData.initialDate}

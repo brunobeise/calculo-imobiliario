@@ -9,7 +9,7 @@ import { PaginatedResult } from "@/store/store";
 export const caseService = {
   async createCase(data: Partial<Proposal>) {
     try {
-      const response = await api.post("/cases", data);
+      const response = await api.post<Proposal>("/cases", data);
       notify("success", "Proposta criada com sucesso!");
       return response.data;
     } catch (error: any) {
@@ -17,12 +17,7 @@ export const caseService = {
     }
   },
 
-  async duplicateCase(params: {
-    id: string;
-    propertyName: string;
-    name: string;
-    shared: boolean;
-  }) {
+  async duplicateCase(params: { id: string; name: string; shared: boolean }) {
     try {
       const response = await api.post("/cases-duplicate", params);
       notify("success", "Proposta criada com sucesso!");
@@ -92,7 +87,11 @@ export const caseService = {
 
   async updateCase(caseId: string, data: Partial<Proposal>, alert?: string) {
     try {
-      const response = await api.put("/cases/" + caseId, data);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { sessions, ...dataWithoutSessions } = data;
+
+      const response = await api.put("/cases/" + caseId, dataWithoutSessions);
+
       if (alert && alert !== "disabled") {
         notify("success", alert);
       } else if (alert !== "disabled")

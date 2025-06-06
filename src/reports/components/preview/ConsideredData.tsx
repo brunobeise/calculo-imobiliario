@@ -1,6 +1,6 @@
 import { toBRL } from "@/lib/formatter";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import dayjs from "dayjs";
 
@@ -8,7 +8,7 @@ interface ConsideredDataProps {
   color: string;
   secondary: string;
   propertyData: PropertyData;
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
 }
 
 export default function ConsideredData(props: ConsideredDataProps) {

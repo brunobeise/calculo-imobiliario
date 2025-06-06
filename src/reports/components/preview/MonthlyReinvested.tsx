@@ -1,15 +1,15 @@
 import { toBRL } from "@/lib/formatter";
-import { FinancingPlanningData } from "@/pages/planejamentofinanciamento/@id/CaseData";
 import { PropertyData } from "@/propertyData/PropertyDataContext";
 import dayjs from "dayjs";
 import InfoItem from "./InfoItem";
 import { InvestmentAccumulationChart } from "@/components/charts/InvestmentAccumulationChart";
 import SectionTitle from "./SectionTitle";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
-import { DirectFinancingData } from "@/pages/parcelamentodireto/@id/CaseData";
+import { FinancingPlanningData } from "@/pages/propostas/@id/calculators/FinancingPlanningCalculator";
+import { DirectFinancingCaseData } from "@/pages/propostas/@id/calculators/DirectFinancingCalculator";
 
 interface MonthlyReinvestedProps {
-  caseData: FinancingPlanningData | DirectFinancingData;
+  caseData: FinancingPlanningData | DirectFinancingCaseData;
   propertyData: PropertyData;
   color: string;
   secondary: string;

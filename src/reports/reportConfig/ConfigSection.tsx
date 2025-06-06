@@ -15,24 +15,24 @@ import { FaCalculator } from "react-icons/fa6";
 import { LuBox } from "react-icons/lu";
 import BooleanInput from "@/components/inputs/BooleanInput";
 import BooleanInputSwitch from "@/components/inputs/SwitchInput";
-import { ReportData } from "../ReportPreview";
+import { Proposal } from "@/types/proposalTypes";
 
 interface ConfigSectionProps {
-  configData: ReportData;
-  onChange: (data: ReportData) => void;
+  proposal: Proposal;
+  onChange: (data: Proposal) => void;
 }
 
 export default function ConfigSection({
-  configData,
+  proposal,
   onChange,
 }: ConfigSectionProps) {
-  const { reportConfig } = configData;
+  const { reportConfig } = proposal;
 
   const handlePageViewToggle = (index: number, checked: boolean) => {
     const newMap = [...reportConfig.pageViewMap];
     newMap[index] = checked;
     onChange({
-      ...configData,
+      ...proposal,
       reportConfig: {
         ...reportConfig,
         pageViewMap: newMap,
@@ -42,7 +42,7 @@ export default function ConfigSection({
 
   const handleDownPaymentTypeChange = (value: string | null) => {
     onChange({
-      ...configData,
+      ...proposal,
       reportConfig: {
         ...reportConfig,
         PaymentConditionsConfig: {
@@ -61,8 +61,8 @@ export default function ConfigSection({
       <RadioGroup
         aria-label="subType"
         name="subType"
-        value={configData.subType}
-        onChange={(e) => onChange({ ...configData, subType: e.target.value })}
+        value={proposal.subType}
+        onChange={(e) => onChange({ ...proposal, subType: e.target.value })}
       >
         <List
           orientation="horizontal"
@@ -72,7 +72,7 @@ export default function ConfigSection({
             "--ListItem-paddingY": "1rem",
             "--ListItem-radius": "8px",
             "--ListItemDecorator-size": "32px",
-            textWrap: 'nowrap'
+            textWrap: "nowrap",
           }}
         >
           {["Simplificado", "Avançado"].map((label, i) => (
@@ -103,7 +103,7 @@ export default function ConfigSection({
         </List>
       </RadioGroup>
 
-      {configData.subType !== "Simplificado" && (
+      {proposal.subType !== "Simplificado" && (
         <>
           <Typography level="title-md">Exibição de Páginas</Typography>
           <div className="grid grid-cols-1 gap-y-3">
@@ -149,7 +149,7 @@ export default function ConfigSection({
           checked={reportConfig.highlightSumPaymentsValues}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 highlightSumPaymentsValues: v,
@@ -162,7 +162,7 @@ export default function ConfigSection({
           checked={reportConfig.separateDocumentation}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 separateDocumentation: v,
@@ -175,7 +175,7 @@ export default function ConfigSection({
           checked={reportConfig.groupMonthlyInstallments}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 groupMonthlyInstallments: v,
@@ -194,7 +194,7 @@ export default function ConfigSection({
           checked={reportConfig.displayFinancingTime}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 displayFinancingTime: v,
@@ -207,7 +207,7 @@ export default function ConfigSection({
           checked={reportConfig.photoViewer}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 photoViewer: v,
@@ -220,7 +220,7 @@ export default function ConfigSection({
           checked={reportConfig.requestName}
           onChange={(v) =>
             onChange({
-              ...configData,
+              ...proposal,
               reportConfig: {
                 ...reportConfig,
                 requestName: v,
@@ -229,13 +229,13 @@ export default function ConfigSection({
           }
         />
 
-        {configData.subType === "Avançado" && (
+        {proposal.subType === "Avançado" && (
           <BooleanInputSwitch
             label="Mostrar Sumário"
             checked={reportConfig.displaySummary}
             onChange={(v) =>
               onChange({
-                ...configData,
+                ...proposal,
                 reportConfig: {
                   ...reportConfig,
                   displaySummary: v,

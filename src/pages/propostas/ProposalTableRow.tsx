@@ -6,12 +6,12 @@ import { useState } from "react";
 import { Proposal } from "@/types/proposalTypes";
 import StatusTag from "@/components/shared/CaseStatusTag";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
-import DuplicateCaseModal from "../../components/modals/DuplicateCaseModal";
 import CaseSessionsModal from "@/components/session/SessionsModal";
 import { navigate } from "vike/client/router";
 import { getCaseLink } from "@/lib/maps";
 import { IoHomeOutline } from "react-icons/io5";
 import ProposalDropdownMenu from "./ProposalDropdownMenu";
+import ProposalFormModal from "@/components/modals/ProposalFormModal";
 
 const CaseTableRow = ({
   data,
@@ -109,8 +109,10 @@ const CaseTableRow = ({
         <ProposalDropdownMenu size="small" proposal={proposal} inTop={false} />
       </td>
 
-      <DuplicateCaseModal
-        data={duplicateCase}
+      <ProposalFormModal
+        duplicate
+        open={!!duplicateCase}
+        initialData={proposal}
         onClose={() => setDuplicateCase(undefined)}
       />
       <ConfirmationModal

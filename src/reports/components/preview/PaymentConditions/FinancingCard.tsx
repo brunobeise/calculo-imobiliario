@@ -11,6 +11,7 @@ interface FinancingCardProps {
   id: string;
   index: number;
   moveCard: (dragIndex: unknown, hoverIndex: unknown) => void;
+  hasBankFinancing: boolean;
 }
 
 const FinancingCard = ({
@@ -21,8 +22,10 @@ const FinancingCard = ({
   id,
   index,
   moveCard,
+  hasBankFinancing,
 }: FinancingCardProps) => {
-  if (totalFinancing < 0 || !propertyData.installmentValue) return null;
+  if (totalFinancing < 0 || !propertyData.installmentValue || !hasBankFinancing)
+    return null;
 
   const baseFinanced =
     (propertyData?.propertyValue || 0) -
@@ -59,7 +62,7 @@ const FinancingCard = ({
               Início:{" "}
             </span>
             <strong style={{ color }}>
-              {dayjs(propertyData.initialFinancingMonth, "MM/YYYY")
+              {dayjs(propertyData.initialFinancingMonth, "MM/ YYYY")
                 .format("MMMM [de] YYYY")
                 .replace(/^./, (match) => match.toUpperCase())}
             </strong>

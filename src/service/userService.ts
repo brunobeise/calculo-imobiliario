@@ -21,6 +21,7 @@ export const userService = {
       admin: boolean;
       imobzi: boolean;
       jetimob: boolean;
+      isAutonomous: boolean;
     }>("/permissions");
     return response.data;
   },

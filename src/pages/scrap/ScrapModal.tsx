@@ -73,8 +73,12 @@ export default function ScrapModal({
       setStatus("Finalizando...");
       setTimeout(() => {
         onClose();
-        onScrap({ ...result.data, features: result.data.features || [] });
-      }, 2000);
+        onScrap({
+          ...result.data,
+          features: result.data.features || [],
+          suites: result.data.suites.toString(),
+        });
+    }, 2000);
       setTimeout(() => {
         setStatus("");
       }, 3000);

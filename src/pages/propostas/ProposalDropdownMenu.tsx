@@ -13,8 +13,8 @@ import { caseService } from "@/service/caseService";
 import { AppDispatch } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { fetchCases } from "@/store/caseReducer";
-import DuplicateCaseModal from "../../components/modals/DuplicateCaseModal";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
+import ProposalFormModal from "@/components/modals/ProposalFormModal";
 
 export default function ProposalDropdownMenu({
   proposal,
@@ -29,7 +29,7 @@ export default function ProposalDropdownMenu({
   onDelete?: (id: string) => void;
   inTop?: boolean;
 }) {
-  const [duplicateCase, setDuplicateCase] = useState<Proposal | undefined>();
+  const [duplicateCase, setDuplicateCase] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -101,7 +101,7 @@ export default function ProposalDropdownMenu({
           <MenuItem
             onClick={(e) => {
               e.stopPropagation();
-              setDuplicateCase(proposal);
+              setDuplicateCase(true);
             }}
           >
             <IoDuplicate className="mr-2" /> Duplicar
@@ -120,8 +120,10 @@ export default function ProposalDropdownMenu({
         </Menu>
       </Dropdown>
 
-      <DuplicateCaseModal
-        data={duplicateCase}
+      <ProposalFormModal
+        duplicate
+        open={!!duplicateCase}
+        initialData={proposal}
         onClose={() => setDuplicateCase(undefined)}
       />
 

@@ -21,7 +21,7 @@ import { FaTrash } from "react-icons/fa6";
 import { buildingService } from "@/service/buildingService";
 import Dialog from "../modals/Dialog";
 
-interface LinkBuildingButtonProps {
+interface VinculateBuildingButtonProps {
   onLink: (data: Building) => void;
   onUnlink: () => void;
   buildingId?: string;
@@ -29,13 +29,13 @@ interface LinkBuildingButtonProps {
   buildingName?: string;
 }
 
-export default function LinkBuildingButton({
+export default function VinculateBuildingButton({
   onLink,
   onUnlink,
   buildingId,
   buildingPhoto,
   buildingName,
-}: LinkBuildingButtonProps) {
+}: VinculateBuildingButtonProps) {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();

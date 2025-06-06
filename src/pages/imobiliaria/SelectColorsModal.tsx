@@ -104,7 +104,7 @@ export default function SelectColorsModal(props: SelectHeaderTypeModalProps) {
                   caseData={calcCaseData(
                     getInitialValues("/planejamentofinanciamento")
                   )}
-                  configData={{
+                  proposal={{
                     mainPhoto:
                       "https://plantasdecasas.com/wp-content/uploads/2015/10/house_102_fix_800.jpg",
                     additionalPhotos: [],

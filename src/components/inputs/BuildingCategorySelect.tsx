@@ -14,6 +14,11 @@ export const categories = [
   { value: "HOTEL", label: "Hotel" },
   { value: "OFFICE", label: "Escritório" },
   { value: "SEMI_DETACHED", label: "Geminado" },
+  { value: "LOFT", label: "Loft" },
+  { value: "KITNET", label: "Kitnet" },
+  { value: "STUDIO", label: "Studio" },
+  { value: "STORE", label: "Loja" },
+  { value: "COMMERCIAL_ROOM", label: "Sala Comercial" },
 ];
 
 interface BuildingCategorySelectProps {
@@ -30,8 +35,6 @@ export const BuildingCategorySelect = ({
   onChange,
   value,
 }: BuildingCategorySelectProps) => {
-  
-
   return control && name ? (
     <FormControl error={!!error}>
       <div>

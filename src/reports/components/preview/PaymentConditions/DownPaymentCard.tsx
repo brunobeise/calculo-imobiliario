@@ -87,8 +87,6 @@ export const DownPaymentCard = ({
     a.startDate.diff(b.startDate)
   );
 
-  console.log(entryDetails.filter((d) => d.description));
-
   return (
     <DraggableCard
       id={id}
@@ -162,7 +160,9 @@ export const DownPaymentCard = ({
                   <ul className="list-none space-y-2 mt-2">
                     {entryDetails.map((detail, i) => (
                       <li key={i} className="text-sm">
-                        <span className="block text-sm font-medium mb-1">{detail.date}</span>
+                        <span className="block text-sm font-medium mb-1">
+                          {detail.date}
+                        </span>
                         <ul>
                           <li style={{ color: secondary }}>
                             • {detail.partLabel}{" "}

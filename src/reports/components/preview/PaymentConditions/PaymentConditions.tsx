@@ -463,6 +463,7 @@ const PaymentConditions: React.FC<PaymentConditionsProps> = ({
         key={"financing"}
         index={config.order.findIndex((c) => c === "financing")}
         moveCard={moveCard}
+        hasBankFinancing={hasBankFinancing}
       />
     ),
     installments: (

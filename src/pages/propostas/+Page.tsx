@@ -35,6 +35,7 @@ import StatusFilter from "@/components/shared/StatusFilter";
 import { useMenu } from "@/components/menu/MenuContext";
 import ProposalBoard from "./ProposalBoard";
 import { MdViewKanban } from "react-icons/md";
+import { ProposalTypes } from "@/types/proposalTypes";
 
 export default function MyCases() {
   const dispatch = useDispatch<AppDispatch>();
@@ -246,8 +247,10 @@ export default function MyCases() {
   const header = (
     <div className="flex justify-between flex-wrap">
       <div
-        onClick={() => setCasesContextDropdown(!casesContextDropdown)}
-        className="cursor-pointer flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative"
+        onClick={() =>
+          !user.isAutonomous && setCasesContextDropdown(!casesContextDropdown)
+        }
+        className={`${user.isAutonomous ? '' : 'cursor-pointer'} flex ms-4 items-center text-primary gap-2  text-xl mt-5 relative`}
       >
         {casesContext === "myCases" && <FaFileAlt className="text-xl" />}
         {casesContext === "realEstateCases" && (
@@ -255,21 +258,22 @@ export default function MyCases() {
         )}
         {casesContext === "adminCases" && <RiAdminFill className="text-md" />}
         <h2 className="font-bold text-nowrap">
-          {casesContext === "myCases" && "Minhas Propostas"}{" "}
+          {casesContext === "myCases" && user.isAutonomous ? "Propostas" : "Minhas Propostas"}{" "}
           {casesContext === "realEstateCases" && "Compartilhadas"}
           {casesContext === "adminCases" && "Admin"}
         </h2>
-        {!casesContextDropdown ? (
-          <FaCaretDown
-            onClick={() => setCasesContextDropdown(true)}
-            className="cursor-pointer text-[1.2rem]"
-          />
-        ) : (
-          <FaCaretUp
-            onClick={() => setCasesContextDropdown(false)}
-            className="cursor-pointer text-[1.2rem]"
-          />
-        )}
+        {!user.isAutonomous &&
+          (!casesContextDropdown ? (
+            <FaCaretDown
+              onClick={() => setCasesContextDropdown(true)}
+              className="cursor-pointer text-[1.2rem]"
+            />
+          ) : (
+            <FaCaretUp
+              onClick={() => setCasesContextDropdown(false)}
+              className="cursor-pointer text-[1.2rem]"
+            />
+          ))}
 
         {casesContextDropdown && <CasesContextSelect />}
       </div>
@@ -296,21 +300,7 @@ export default function MyCases() {
             />
           )}
         </div>
-        <div className="flex flex-col gap-2">
-          <FormLabel htmlFor="case-type-select">Tipo de proposta:</FormLabel>
-          <Select
-            onChange={(_, v) => setType(v || "")}
-            id="case-type-select"
-            className="w-[300px]"
-            defaultValue={type}
-          >
-            <Option value={""}>Todos</Option>
-            <Option value={"financingPlanning"}>
-              Planejamento de Financiamento
-            </Option>
-            <Option value={"directFinancing"}>Parcelamento Direto</Option>
-          </Select>
-        </div>
+
         {casesContext !== "realEstateCases" && (
           <>
             <DatePicker
@@ -343,25 +333,30 @@ export default function MyCases() {
 
   const contentHeader = (
     <div className={"flex justify-between flex-wrap gap-4 md:gap-0"}>
-      <div className="flex gap-5 items-end">
+      <div className="flex gap-5 items-end flex-wrap">
         <SearchInput
           placeholder="Pesquisar"
           className="w-[300px]"
           debounceTimeout={500}
           handleDebounce={(v) => setSearch(v)}
         />
+        <Select
+          onChange={(_, v) => setType(v || "")}
+          id="case-type-select"
+          className="w-[300px]"
+          defaultValue={type}
+        >
+          <Option value={""}>Todos</Option>
+          <Option value={ProposalTypes.FinancamentoBancário}>Financiamento Bancário</Option>
+          <Option value={ProposalTypes.ParcelamentoDireto}>Parcelamento Direto</Option>
+        </Select>
         {casesContext === "realEstateCases" && (
-          <div className="w-[300px]">
-            <CoWorkerSelect
-              placeholder="Filtrar por colega"
-              value={filterByUser}
-              onChange={(v) => setFilterByUser(v)}
-            />
-          </div>
+          <CoWorkerSelect
+            placeholder="Filtrar por colega"
+            value={filterByUser}
+            onChange={(v) => setFilterByUser(v)}
+          />
         )}
-      </div>
-
-      <div>
         <StatusFilter value={statuses} onChange={(v) => setStatuses(v)} />
       </div>
 

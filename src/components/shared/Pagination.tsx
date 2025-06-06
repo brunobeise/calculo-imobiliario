@@ -40,8 +40,8 @@ const Pagination = ({
   };
 
   return (
-    <div className="relative h-[40px] flex flex-col">
-      <div className="flex justify-center items-center space-x-2 mt-4">
+    <div className="relative h-[40px] flex flex-col ">
+      <div className="flex justify-center items-center space-x-2">
         {totalPages !== 0 && currentPage !== 1 && (
           <button
             className={`px-3 py-1 rounded-full  w-8 h-8 flex justify-center items-center bg-grayScale-100 hover:bg-grayScale-200`}

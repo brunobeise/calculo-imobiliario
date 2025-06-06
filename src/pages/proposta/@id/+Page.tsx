@@ -208,26 +208,7 @@ export default function FinancingPlanningReportSharedPage() {
             }}
             propertyData={proposalData?.propertyData}
             user={proposalData.user}
-            configData={{
-              propertyName: proposalData.propertyName || "",
-              propertyNameFont: proposalData.propertyNameFont,
-              mainPhoto: proposalData.mainPhoto || "",
-              description: proposalData.description || "",
-              subtitle: proposalData.subtitle || "",
-              additionalPhotos: proposalData.additionalPhotos,
-              features: proposalData.features,
-              address: proposalData.address,
-              bedrooms: proposalData.bedrooms,
-              bathrooms: proposalData.bathrooms,
-              builtArea: proposalData.builtArea,
-              cod: proposalData.cod,
-              landArea: proposalData.landArea,
-              parkingSpaces: proposalData.parkingSpaces,
-              suites: proposalData.suites,
-              subType: proposalData.subType,
-              reportConfig: proposalData.reportConfig,
-              value: proposalData.value,
-            }}
+            proposal={proposalData}
             ref={componentRef}
             page1Ref={page1Ref}
             page2Ref={page2Ref}
@@ -252,26 +233,7 @@ export default function FinancingPlanningReportSharedPage() {
             }}
             propertyData={proposalData?.propertyData}
             user={proposalData.user}
-            configData={{
-              propertyName: proposalData.propertyName || "",
-              propertyNameFont: proposalData.propertyNameFont,
-              mainPhoto: proposalData.mainPhoto || "",
-              description: proposalData.description || "",
-              subtitle: proposalData.subtitle || "",
-              additionalPhotos: proposalData.additionalPhotos,
-              features: proposalData.features,
-              bedrooms: proposalData.bedrooms,
-              reportConfig: proposalData.reportConfig,
-              address: proposalData.address,
-              bathrooms: proposalData.bathrooms,
-              builtArea: proposalData.builtArea,
-              cod: proposalData.cod,
-              landArea: proposalData.landArea,
-              parkingSpaces: proposalData.parkingSpaces,
-              suites: proposalData.suites,
-              subType: proposalData.subType,
-              value: proposalData.value,
-            }}
+            proposal={proposalData}
             ref={componentRef}
             page1Ref={page1Ref}
             page2Ref={page2Ref}

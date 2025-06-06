@@ -1,38 +1,38 @@
 import PictureInput from "@/components/inputs/PictureInput";
-import { ReportData } from "../ReportPreview";
+import { Proposal } from "@/types/proposalTypes";
 
 interface ImagesSectionProps {
-  configData: ReportData;
-  onChange: (data: ReportData) => void;
+  proposal: Proposal;
+  onChange: (data: Proposal) => void;
 }
 
 export default function ImagesSection({
-  configData,
+  proposal,
   onChange,
 }: ImagesSectionProps) {
   const handleDrop = (image: string, source: string) => {
     if (source === "Foto Principal") {
       const updatedAdditionalPhotos = [
-        ...configData.additionalPhotos,
-        configData.mainPhoto,
+        ...proposal.additionalPhotos,
+        proposal.mainPhoto,
       ].filter(Boolean);
 
       onChange({
-        ...configData,
+        ...proposal,
         mainPhoto: image,
         additionalPhotos: updatedAdditionalPhotos,
       });
     } else if (source === "Fotos Adicionais") {
-      const newAdditionalPhotos = configData.additionalPhotos.filter(
+      const newAdditionalPhotos = proposal.additionalPhotos.filter(
         (img) => img !== image
       );
 
-      if (configData.mainPhoto) {
-        newAdditionalPhotos.push(configData.mainPhoto);
+      if (proposal.mainPhoto) {
+        newAdditionalPhotos.push(proposal.mainPhoto);
       }
 
       onChange({
-        ...configData,
+        ...proposal,
         mainPhoto: image,
         additionalPhotos: newAdditionalPhotos,
       });
@@ -45,18 +45,18 @@ export default function ImagesSection({
 
       <PictureInput
         label="Foto Principal"
-        value={[configData.mainPhoto]}
-        onChange={(v) => onChange({ ...configData, mainPhoto: v })}
+        value={[proposal.mainPhoto]}
+        onChange={(v) => onChange({ ...proposal, mainPhoto: v })}
         onDrop={(image, source) => handleDrop(image, source)}
       />
 
       <PictureInput
         label="Fotos Adicionais"
         multiple
-        value={configData.additionalPhotos}
+        value={proposal.additionalPhotos}
         onChange={(v) =>
           onChange({
-            ...configData,
+            ...proposal,
             additionalPhotos: v.split(","),
           })
         }

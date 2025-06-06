@@ -39,3 +39,8 @@ export interface Proposal {
   };
   hasNewSession: boolean;
 }
+
+export enum ProposalTypes {
+  ParcelamentoDireto = "directFinancing",
+  FinancamentoBancário = "financingPlanning",
+}

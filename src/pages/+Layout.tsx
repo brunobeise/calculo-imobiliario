@@ -13,6 +13,8 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  BarElement,
+  BubbleController,
 } from "chart.js";
 ChartJS.register(
   CategoryScale,
@@ -24,7 +26,9 @@ ChartJS.register(
   Legend,
   ChartDataLabels,
   ArcElement,
-  annotationPlugin
+  annotationPlugin,
+  BarElement,
+  BubbleController
 );
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
@@ -33,7 +37,6 @@ import theme from "@/theme";
 import { AuthProvider } from "@/auth";
 import { PropertyDataProvider } from "@/propertyData/PropertyDataContext";
 import { Bounce, ToastContainer } from "react-toastify";
-import { FinancingPlanningCaseDataProvider } from "./planejamentofinanciamento/@id/CaseData";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
@@ -44,7 +47,6 @@ import { MenuProvider } from "@/components/menu/MenuContext";
 import DrawerMenu from "@/components/menu/DrawerMenu";
 import { usePageContext } from "vike-react/usePageContext";
 import { WebSocketProvider } from "@/Socket";
-import { DirectFinancingCaseDataProvider } from "./parcelamentodireto/@id/CaseData";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import WebFont from "webfontloader";
@@ -55,8 +57,7 @@ export { Layout };
 function Layout({ children }: { children: ReactNode }) {
   const pageContext = usePageContext();
   const isCaseMenuRoute =
-    pageContext.urlPathname.includes("planejamentofinanciamento") ||
-    pageContext.urlPathname.includes("parcelamentodireto") ||
+    pageContext.urlPathname.includes("/propostas/") ||
     pageContext.urlPathname.includes("cenarios") ||
     pageContext.urlPathname.includes("onboarding") ||
     pageContext.urlPathname === "/";
@@ -112,29 +113,25 @@ function Layout({ children }: { children: ReactNode }) {
         <AuthProvider>
           <WebSocketProvider>
             <PropertyDataProvider>
-              <FinancingPlanningCaseDataProvider>
-                <DirectFinancingCaseDataProvider>
-                  <DndProvider backend={HTML5Backend}>
-                    <MenuProvider>
-                      <div className="flex">
-                        {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
-                        <MobileBottomMenu />
-                        <div
-                          className={`flex flex-col w-full ${
-                            !isCaseMenuRoute &&
-                            !pageContext.urlPathname.includes("/proposta/") &&
-                            !pageContext.urlPathname.includes("/portfolio/")
-                              ? "pb-10 md:pb-0 md:ms-[210px]"
-                              : ""
-                          }`}
-                        >
-                          {children}
-                        </div>
-                      </div>
-                    </MenuProvider>
-                  </DndProvider>
-                </DirectFinancingCaseDataProvider>
-              </FinancingPlanningCaseDataProvider>
+              <DndProvider backend={HTML5Backend}>
+                <MenuProvider>
+                  <div className="flex">
+                    {<DrawerMenu isCaseMenu={isCaseMenuRoute} />}
+                    <MobileBottomMenu />
+                    <div
+                      className={`flex flex-col w-full ${
+                        !isCaseMenuRoute &&
+                        !pageContext.urlPathname.includes("/proposta/") &&
+                        !pageContext.urlPathname.includes("/portfolio/")
+                          ? "pb-10 md:pb-0 md:ms-[210px]"
+                          : ""
+                      }`}
+                    >
+                      {children}
+                    </div>
+                  </div>
+                </MenuProvider>
+              </DndProvider>
             </PropertyDataProvider>
           </WebSocketProvider>
         </AuthProvider>
