@@ -7,10 +7,11 @@ import { getComponentsBySubType } from "./ProposalComponentSelector";
 import { useProposal } from "./ProposalContext";
 import { handleSetProposalPropertyData } from "@/propertyData/propertyDataHelpers";
 import { caseService } from "@/service/caseService";
-import { Button } from "@mui/joy";
-import { FaSave } from "react-icons/fa";
 import isEqual from "lodash.isequal";
 import { SessionDashboard } from "@/components/session/SessionDashboard";
+import { uploadImage } from "@/lib/imgur";
+import { Button } from "@mui/joy";
+import { FaSave } from "react-icons/fa";
 
 export default function Page() {
   const { proposal, setProposal } = useProposal();
@@ -42,7 +43,26 @@ export default function Page() {
     setSaveLoading(true);
 
     try {
-      await caseService.updateCase(proposal.id, proposal);
+      let uploadMainPhoto = proposal.mainPhoto;
+      if (proposal.mainPhoto && !proposal.mainPhoto.startsWith("https://")) {
+        uploadMainPhoto = await uploadImage(proposal.mainPhoto);
+      }
+
+      const uploadAdditionalPhotos = await Promise.all(
+        proposal.additionalPhotos.map(async (photo) => {
+          if (photo && !photo.startsWith("https://")) {
+            return await uploadImage(photo);
+          }
+          return photo;
+        })
+      );
+
+      await caseService.updateCase(proposal.id, {
+        ...proposal,
+        mainPhoto: uploadMainPhoto,
+        additionalPhotos: uploadAdditionalPhotos,
+      });
+
       setIsDirty(false);
     } finally {
       setSaveLoading(false);
