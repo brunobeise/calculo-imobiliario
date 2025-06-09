@@ -29,10 +29,18 @@ const ReinforcementsCard = ({
   const [isResizing, setIsResizing] = useState(false);
   const isOnlyMonthly = discharges.every((detail) => detail.type === "Mensal");
   const isOnlyAnnual = discharges.every((detail) => detail.type === "Anual");
+  const isOnlySemiannual = discharges.every(
+    (detail) => detail.type === "Semestral"
+  );
+  const isOnlyBimonthly = discharges.every(
+    (detail) => detail.type === "Bimestral"
+  );
 
   let title = "Reforços";
   if (isOnlyMonthly) title = "Reforços Mensais";
   else if (isOnlyAnnual) title = "Reforços Anuais";
+  else if (isOnlySemiannual) title = "Reforços Semestrais";
+  else if (isOnlyBimonthly) title = "Reforços Bimestrais";
 
   const showSummaryFormat =
     groupMonthlyInstallments &&

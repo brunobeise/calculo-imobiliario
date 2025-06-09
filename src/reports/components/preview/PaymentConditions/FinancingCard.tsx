@@ -62,7 +62,7 @@ const FinancingCard = ({
               Início:{" "}
             </span>
             <strong style={{ color }}>
-              {dayjs(propertyData.initialFinancingMonth, "MM/ YYYY")
+              {dayjs(propertyData.initialFinancingMonth, "MM/YYYY")
                 .format("MMMM [de] YYYY")
                 .replace(/^./, (match) => match.toUpperCase())}
             </strong>

@@ -8,7 +8,6 @@ import StatusTag from "@/components/shared/CaseStatusTag";
 import ConfirmationModal from "@/components/modals/ConfirmationModal";
 import CaseSessionsModal from "@/components/session/SessionsModal";
 import { navigate } from "vike/client/router";
-import { getCaseLink } from "@/lib/maps";
 import { IoHomeOutline } from "react-icons/io5";
 import ProposalDropdownMenu from "./ProposalDropdownMenu";
 import ProposalFormModal from "@/components/modals/ProposalFormModal";
@@ -30,7 +29,7 @@ const CaseTableRow = ({
 
   return (
     <tr
-      onClick={() => navigate(`${getCaseLink(proposal.type)}/${proposal.id}`)}
+      onClick={() => navigate(`/propostas/${proposal.id}`)}
       className="cursor-pointer hover:bg-grayScale-50 h-24"
     >
       <td className="w-[300px]">

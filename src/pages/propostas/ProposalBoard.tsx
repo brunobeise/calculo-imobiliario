@@ -5,7 +5,6 @@ import { IoHomeOutline } from "react-icons/io5";
 import { FaExclamationCircle } from "react-icons/fa";
 import ProposalDropdownMenu from "./ProposalDropdownMenu";
 import { useMenu } from "@/components/menu/MenuContext";
-import { getCaseLink } from "@/lib/maps";
 import { navigate } from "vike/client/router";
 import { Tooltip } from "@mui/joy";
 import { FaRegEye } from "react-icons/fa";
@@ -44,7 +43,7 @@ function DraggableCard({
         onClick={() => {
           toggleMenu(false);
           toggleBackdrop(false);
-          navigate(`${getCaseLink(proposal.type)}/${proposal.id}`);
+          navigate(`/propostas/${proposal.id}`);
         }}
         ref={drag}
       >
