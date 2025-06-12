@@ -477,8 +477,8 @@ export default function PropertyDataCardsFinancingPlanningAdvanced({
             value={propertyData.annualYieldRate}
             infoTooltip="Taxa de retorno anual estimada ao investir o dinheiro no mercado financeiro, como poupança, ações ou fundos de investimento."
             onChange={(v) => {
-              handleChangeNumber("annualYieldRate", v.target.value);
               handleChangeNumber("PVDiscountRate", v.target.value);
+              handleChangeNumber("annualYieldRate", v.target.value);
             }}
             disabled={!propertyData.investTheRest}
             opacity={!propertyData.investTheRest}
