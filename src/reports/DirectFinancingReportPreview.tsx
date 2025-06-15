@@ -39,6 +39,7 @@ interface DirectFinancingReportPreviewProps {
   page6Ref?: React.RefObject<HTMLDivElement>;
   page7Ref?: React.RefObject<HTMLDivElement>;
   page8Ref?: React.RefObject<HTMLDivElement>;
+  title?: string;
   handlePaymentConditionsConfig?: (payload: {
     order: string[];
     downPaymentHeight: number;
@@ -67,6 +68,7 @@ const DirectFinancingReportPreview = forwardRef<
       page7Ref,
       page8Ref,
       custom,
+      title,
     }: DirectFinancingReportPreviewProps,
     ref
   ) => {
@@ -131,6 +133,7 @@ const DirectFinancingReportPreview = forwardRef<
               <UserSignature
                 type={custom.headerType || 1}
                 userData={user}
+                title={title}
                 desc={proposal.propertyName}
                 primaryColor={custom.primaryColor}
                 secondaryColor={custom.secondaryColor}

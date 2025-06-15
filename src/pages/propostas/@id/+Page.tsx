@@ -9,9 +9,8 @@ import { handleSetProposalPropertyData } from "@/propertyData/propertyDataHelper
 import { caseService } from "@/service/caseService";
 import isEqual from "lodash.isequal";
 import { SessionDashboard } from "@/components/session/SessionDashboard";
+import { FloatingSaveButton } from "@/components/shared/FloatingSaveButton";
 import { uploadImage } from "@/lib/imgur";
-import { Button } from "@mui/joy";
-import { FaSave } from "react-icons/fa";
 
 export default function Page() {
   const { proposal, setProposal } = useProposal();
@@ -183,29 +182,12 @@ export default function Page() {
         )}
       </AnimatePresence>
 
-      {/* Botão fixo de salvar */}
-      <AnimatePresence>
-        {isDirty && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ duration: 0.3 }}
-            className="fixed bottom-6 z-50 w-full flex justify-center"
-          >
-            <Button
-              endDecorator={<FaSave />}
-              onClick={handleSave}
-              type="button"
-              loading={saveLoading}
-              size="lg"
-              className="outline outline-2 outline-whitefull"
-            >
-              Salvar Alterações
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <FloatingSaveButton
+        isVisible={isDirty}
+        onClick={handleSave}
+        loading={saveLoading}
+        disabled={false}
+      />
     </div>
   );
 }

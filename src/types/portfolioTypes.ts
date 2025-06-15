@@ -16,6 +16,17 @@ export interface Portfolio {
   sessions: PortfolioSession[];
   hasNewSession?: boolean;
   requestName: boolean;
+  title?: string;
+  link?: string;
+  messageText?: string;
+  mainPhoto?: string;
+  itemNames: string[];
+
+  useThumbnailNames: boolean;
+  useCustomNames: boolean;
+  useShowNamePage: boolean;
+  useInfiniteScroll: boolean;
+
   _count?: {
     sessions: number;
   };
@@ -37,4 +48,5 @@ export interface CreatePortfolio {
   clientName?: string;
   items: PortfolioItem[];
   requestName: boolean;
+  mainPhoto: string;
 }

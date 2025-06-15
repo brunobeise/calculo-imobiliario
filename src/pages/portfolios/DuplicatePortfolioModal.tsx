@@ -7,12 +7,12 @@ import {
   Input,
 } from "@mui/joy";
 import Dialog from "@/components/modals/Dialog";
-import BooleanInputSwitch from "@/components/inputs/SwitchInput";
 import { useEffect } from "react";
 
 interface DuplicateModalProps {
   open: boolean;
   onClose: () => void;
+  loading?: boolean;
   onConfirm: (data: {
     name: string;
     clientName: string;
@@ -26,13 +26,12 @@ export function DuplicatePortfolioModal({
   onClose,
   onConfirm,
   defaultValues,
+  loading = false,
 }: DuplicateModalProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
     reset,
   } = useForm({
     defaultValues,
@@ -46,7 +45,11 @@ export function DuplicatePortfolioModal({
     <Dialog
       actions={
         <div className="flex justify-center w-full mt-4">
-          <Button onClick={handleSubmit(onConfirm)} type="submit">
+          <Button
+            loading={loading}
+            onClick={handleSubmit(onConfirm)}
+            type="submit"
+          >
             Confirmar
           </Button>
         </div>
@@ -68,13 +71,6 @@ export function DuplicatePortfolioModal({
           <FormLabel>Cliente</FormLabel>
           <Input {...register("clientName")} />
         </FormControl>
-        <div className="mt-2">
-          <BooleanInputSwitch
-            label="Solicitar Nome"
-            checked={watch("requestName")}
-            onChange={(v) => setValue("requestName", v)}
-          />
-        </div>
       </form>
     </Dialog>
   );

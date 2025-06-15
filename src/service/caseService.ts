@@ -104,15 +104,6 @@ export const caseService = {
     }
   },
 
-  async deleteCase(caseId: string) {
-    try {
-      await api.delete("/cases/" + caseId);
-      notify("success", "Proposta deletada com sucesso!");
-    } catch (error: any) {
-      handleApiError(error, "Erro ao deletar a proposta.");
-    }
-  },
-
   async getAllAdminCases(queryString: string) {
     try {
       const response = await api.get<PaginatedResult<Proposal>>(

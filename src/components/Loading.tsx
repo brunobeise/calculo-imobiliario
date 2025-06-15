@@ -38,3 +38,11 @@ export function Spinner() {
     </div>
   );
 }
+
+export function SpinnerCircular({ size = 30 }: { size: number }) {
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <Loading type="spin" color={"#103759"} width={size} height={size} />
+    </div>
+  );
+}

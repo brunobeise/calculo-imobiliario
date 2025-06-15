@@ -5,8 +5,15 @@ import { FaRegEye } from "react-icons/fa";
 import { useState } from "react";
 import { FaExclamationCircle } from "react-icons/fa";
 import PortfolioSessionsModal from "@/components/session/SessionPortfolioModal";
+import PortfolioCardDropdownMenu from "./PortfolioDropdownMenu";
 
-const PortfolioCard = ({ portfolio }: { portfolio: Portfolio }) => {
+const PortfolioCard = ({
+  portfolio,
+  reload,
+}: {
+  portfolio: Portfolio;
+  reload: () => void;
+}) => {
   const images = portfolio.items
     ?.map((item) => item.case?.mainPhoto || item.building?.mainPhoto)
     .filter(Boolean);
@@ -16,6 +23,8 @@ const PortfolioCard = ({ portfolio }: { portfolio: Portfolio }) => {
 
   return (
     <div className="relative overflow-hidden min-h-[235px] rounded-[12px] shadow-md duration-300 px-5 pt-[150px] flex flex-col bg-white cursor-pointer hover:shadow-lg">
+      <PortfolioCardDropdownMenu reload={reload} portfolio={portfolio} />
+
       <div className="absolute w-full top-0 left-0 h-[150px] overflow-hidden">
         <div className="absolute w-full top-0 left-0 h-[150px] flex overflow-hidden rounded-t-[12px]">
           {images.map((src, i) => (

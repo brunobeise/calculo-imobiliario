@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-
-ChartJS.register(ArcElement, Tooltip);
 
 interface DonutChartProps {
   labels: string[];
@@ -13,23 +10,41 @@ interface DonutChartProps {
   }[];
   tooltipFormatter?: (value: number) => string;
   width?: number;
-  absoluteLegends?: boolean;
+  datalabelsOptions?: Partial<any>;
 }
 
 export function DonutChart({
   labels,
   datasets,
   tooltipFormatter = (value) => `Propostas: ${value}`,
-  absoluteLegends = false,
   width,
+  datalabelsOptions,
 }: DonutChartProps) {
   const colors = datasets[0]?.backgroundColor || [
     "#002f57",
     "#004e93",
-    "#103759",
-    "#1e90ff",
-    "#00bfff",
+    "#0088b8",
+    "#008d9b",
+    "#008e78",
+    "#efdf00",
+    "#e28a07",
+    "#a9351b",
+    "#6b2a89",
   ];
+
+  const defaultDatalabels = {
+    color: "white" as const,
+    font: {
+      weight: "bold" as const,
+      size: 12,
+    },
+    display: (context: any) => {
+      const dataset = context.chart.data.datasets[0];
+      const total = dataset.data.reduce((a: number, b: number) => a + b, 0);
+      const percent = (context.dataset.data[context.dataIndex] / total) * 100;
+      return percent > 4;
+    },
+  };
 
   const options = {
     responsive: true,
@@ -38,11 +53,8 @@ export function DonutChart({
         display: false,
       },
       datalabels: {
-        color: "white" as const,
-        font: {
-          weight: "bold" as const,
-          size: 12,
-        },
+        ...defaultDatalabels,
+        ...datalabelsOptions,
       },
       tooltip: {
         callbacks: {
@@ -66,25 +78,22 @@ export function DonutChart({
   };
 
   return (
-    <div className={`flex flex-col items-center h-min`}>
-      <div>
-        <Doughnut width={width} options={options} data={data} />
-      </div>
-
+    <div className={`flex items-start h-min w-min relative`}>
       <div
-        className={`${
-          absoluteLegends ? "absolute" : "mt-5"
-        }  flex flex-col gap-x-8 gap-y-2 w-full text-primary text-nowrap`}
+        className={`flex flex-col gap-x-8 gap-y-2 w-full text-primary w-max max-w-[300px] me-10`}
       >
         {labels.map((label, index) => (
           <div key={index} className="flex items-center space-x-2">
             <span
-              className="w-4 h-4 rounded-full"
+              className="w-4 h-4 rounded-full flex-shrink-0 me-2"
               style={{ backgroundColor: colors[index] }}
             />
             <span className="text-gray-700 text-md font-medium">{label}</span>
           </div>
         ))}
+      </div>
+      <div>
+        <Doughnut width={width} options={options} data={data} />
       </div>
     </div>
   );

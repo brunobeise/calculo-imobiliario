@@ -17,26 +17,31 @@ export function Head() {
   const isSingleCase = item?.case;
   const isSingleBuilding = item?.building;
 
-  const title = portfolioData.clientName
-    ? `Portfólio para ${portfolioData.clientName}`
-    : `Portfólio personalizado - ${portfolioData.user.fullName}`;
+  const title =
+    portfolioData.title ||
+    (portfolioData.clientName
+      ? `Portfólio para ${portfolioData.clientName}`
+      : `Portfólio personalizado - ${portfolioData.user.fullName}`);
 
-  const description = item
-    ? isSingleCase
-      ? item.case.description ||
-        `Veja todos os detalhes da proposta "${item.case.name}" preparada por ${portfolioData.user.fullName}.`
-      : isSingleBuilding
-      ? stripHtmlSSR(item.building.description ?? "") ||
-        `Confira as informações completas do imóvel "${
-          item.building.propertyName || "sem nome"
-        }", selecionado por ${portfolioData.user.fullName}.`
-      : portfolioData.description
-    : portfolioData.description ||
-      `Confira o portfólio completo preparado por ${portfolioData.user.fullName}, com imóveis e propostas personalizadas.`;
+  const description =
+    portfolioData.description ||
+    (item
+      ? isSingleCase
+        ? item.case.description ||
+          `Veja todos os detalhes da proposta "${item.case.name}" preparada por ${portfolioData.user.fullName}.`
+        : isSingleBuilding
+        ? stripHtmlSSR(item.building.description ?? "") ||
+          `Confira as informações completas do imóvel "${
+            item.building.propertyName || "sem nome"
+          }", selecionado por ${portfolioData.user.fullName}.`
+        : portfolioData.description
+      : portfolioData.description ||
+        `Confira o portfólio completo preparado por ${portfolioData.user.fullName}, com imóveis e propostas personalizadas.`);
 
   const image =
+    portfolioData.mainPhoto ||
     portfolioData.items[0]?.case?.mainPhoto ||
-    portfolioData.items[0]?.building?.mainPhoto
+    portfolioData.items[0]?.building?.mainPhoto;
 
   const url = `https://app.imobdeal.com.br/portfolio/${portfolioData.id}`;
   const author = portfolioData.user.fullName;

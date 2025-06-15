@@ -46,6 +46,7 @@ interface FinancingPlanningReportPreviewProps {
   page6Ref?: React.RefObject<HTMLDivElement>;
   page7Ref?: React.RefObject<HTMLDivElement>;
   page8Ref?: React.RefObject<HTMLDivElement>;
+  title?: string;
 }
 
 const FinancingPlanningReportPreview = forwardRef<
@@ -68,6 +69,7 @@ const FinancingPlanningReportPreview = forwardRef<
       page7Ref,
       page8Ref,
       custom,
+      title,
     }: FinancingPlanningReportPreviewProps,
 
     ref
@@ -134,6 +136,7 @@ const FinancingPlanningReportPreview = forwardRef<
             <div ref={page1Ref} className="w-full">
               <UserSignature
                 type={custom.headerType || 1}
+                title={title}
                 userData={user}
                 desc={proposal.propertyName}
                 primaryColor={custom.primaryColor}
@@ -190,9 +193,7 @@ const FinancingPlanningReportPreview = forwardRef<
                 color={custom.primaryColor}
                 secondary={custom.secondaryColor}
                 config={proposal.reportConfig.PaymentConditionsConfig}
-                description={
-                  proposal.reportConfig.paymentConditionsDescription
-                }
+                description={proposal.reportConfig.paymentConditionsDescription}
               />
               {isAdvancedMode && (
                 <ProjectionReturn

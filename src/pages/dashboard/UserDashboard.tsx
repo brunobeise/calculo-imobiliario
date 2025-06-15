@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FaFileCircleCheck } from "react-icons/fa6";
 import DashboardPaper from "./DashboardPaper";
 import { FaFileAlt } from "react-icons/fa";
@@ -15,8 +16,6 @@ import {
 import SessionsTable from "@/components/session/SessionTable";
 import { LineChart } from "@/components/charts/shared/LineChart";
 import { Option, Select, Skeleton } from "@mui/joy";
-import { DonutChart } from "@/components/charts/shared/DonutChart";
-import { getCaseTitle } from "@/lib/maps";
 
 interface UserDashboardProps {
   userId?: string;
@@ -27,10 +26,8 @@ export default function UserDashboard(props: UserDashboardProps) {
   const data = useSelector((state: RootState) => state.userDashboard);
   const [proposalChartFilter, setProposalChartFilter] =
     useState("last_6_months");
-  const [proposalTypeChartFilter, setProposalTypeChartFilter] =
-    useState("last_6_months");
-  const [proposalSubTypeChartFilter, setProposalSubTypeChartFilter] =
-    useState("last_6_months");
+  const [proposalTypeChartFilter] = useState("last_6_months");
+  const [proposalSubTypeChartFilter] = useState("last_6_months");
 
   useEffect(() => {
     dispatch(fetchUserDashboardData(props.userId));
@@ -88,7 +85,7 @@ export default function UserDashboard(props: UserDashboardProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-10 mt-5">
-        <div className="col-span-1 md:col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+        <div className="col-span-1 md:col-span-3 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">Últimas Sessões</h2>
           <div className="overflow-y-auto max-h-[420px] pe-3">
             {data.lastSessionsLoading ? (
@@ -103,7 +100,7 @@ export default function UserDashboard(props: UserDashboardProps) {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+        {/* <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Propostas por Tipo</h2>
             <Select
@@ -121,14 +118,14 @@ export default function UserDashboard(props: UserDashboardProps) {
             </Select>
           </div>
           <DonutChart
-            width={300}
+            width={200}
             labels={data.proposalTypeChart.labels.map(getCaseTitle)}
             datasets={[{ data: data.proposalTypeChart.values }]}
             tooltipFormatter={(value) => `Propostas: ${value}`}
           />
-        </div>
+        </div> */}
 
-        <div className="col-span-1 md:col-span-2 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+        <div className="col-span-1 md:col-span-3 bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
           <div className="flex justify-between mb-4">
             <h2 className="text-lg font-bold">Propostas Geradas</h2>
             <Select
@@ -162,7 +159,7 @@ export default function UserDashboard(props: UserDashboardProps) {
           )}
         </div>
 
-        <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
+        {/* <div className="bg-gradient-to-r from-whitefull to-white border border-grayScale-200 p-5 shadow-lg rounded-lg">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-bold">Nível das Propostas</h2>
             <Select
@@ -185,7 +182,7 @@ export default function UserDashboard(props: UserDashboardProps) {
             datasets={[{ data: data.proposalSubTypeChart.values }]}
             tooltipFormatter={(value) => `Propostas: ${value}`}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

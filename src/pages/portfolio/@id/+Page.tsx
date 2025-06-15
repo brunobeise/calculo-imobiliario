@@ -20,7 +20,12 @@ export default function PortfolioSharedPage() {
   const componentRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showHeaderOnScroll, setShowHeaderOnScroll] = useState(false);
+
   const currentItem = portfolioData.items[currentIndex];
+  const currentTitle = portfolioData.useCustomNames
+    ? portfolioData.itemNames[currentIndex]
+    : undefined;
   const queryWhatsapp = pageContext.urlParsed.search.whatsapp;
 
   const [requestName, setRequestName] = useState(
@@ -90,8 +95,13 @@ export default function PortfolioSharedPage() {
     };
 
     portfolioData.items.forEach((item, index) => {
-      dataToSend[`item${index + 1}Name`] =
-        item.case?.name || item.building?.propertyName;
+      const customNamesEnabled = portfolioData.useCustomNames;
+      const nameToSend = customNamesEnabled
+        ? portfolioData.itemNames?.[index] ??
+          (item.case?.name || item.building?.propertyName)
+        : item.case?.name || item.building?.propertyName;
+
+      dataToSend[`item${index + 1}Name`] = nameToSend;
       dataToSend[`item${index + 1}TimeVisible`] = itemTimes.current[index];
     });
 
@@ -118,6 +128,23 @@ export default function PortfolioSharedPage() {
     };
   }, [currentItem]);
 
+  useEffect(() => {
+    const handleScroll = (event: Event) => {
+      const target = event.target as HTMLElement;
+      const scrollTop = target.scrollTop;
+      if (scrollTop > 100) setShowHeaderOnScroll(true);
+      else setShowHeaderOnScroll(false);
+    };
+
+    document.body.addEventListener("scroll", handleScroll);
+    document.documentElement.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.body.removeEventListener("scroll", handleScroll);
+      document.documentElement.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleSelect = (index: number) => {
     setCurrentIndex(index);
   };
@@ -135,16 +162,31 @@ export default function PortfolioSharedPage() {
         `}
         >
           {portfolioData.items.map((item, index) => (
-            <img
-              src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+            <div
               key={index}
               onClick={() => handleSelect(index)}
-              className={`overflow-hidden flex max-w-[220px] object-cover w-20 h-16 flex-shrink-0 rounded-lg cursor-pointer hover:opacity-90 ${
+              className={`relative cursor-pointer rounded-lg overflow-hidden max-w-[220px] flex-shrink-0 ${
                 index === currentIndex
-                  ? "!text-primary border-3 border-white outline-white outline"
-                  : "text-grayScale-400 hover:text-grayScale-500"
+                  ? "border-3 border-white outline-white outline"
+                  : ""
               }`}
-            />
+            >
+              <img
+                src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+                alt={item.case?.propertyName || item.building?.propertyName}
+                className="w-20 h-16 object-cover"
+                decoding="async"
+              />
+              {portfolioData.useThumbnailNames && (
+                <div className={`absolute bottom-0 w-full px-1 py-1 text-center ${portfolioData.useThumbnailNames ? " bg-black/70 h-full flex items-center justify-center" : ""}`}>
+                  <p className="text-white text-[0.6rem] select-none">
+                    {portfolioData.useCustomNames
+                      ? portfolioData.itemNames[index]
+                      : item.case?.propertyName || item.building?.propertyName}
+                  </p>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}
@@ -158,16 +200,35 @@ export default function PortfolioSharedPage() {
           style={{ WebkitOverflowScrolling: "touch" }}
         >
           {portfolioData.items.map((item, index) => (
-            <img
+            <div
               key={index}
-              src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
               onClick={() => handleSelect(index)}
-              className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
+              className={`relative cursor-pointer rounded-lg overflow-hidden max-w-[220px] flex-shrink-0 ${
                 index === currentIndex
-                  ? "!outline outline-b outline-1 outline-primary border-white border"
-                  : "opacity-50"
+                  ? "border-3 border-white outline-white outline"
+                  : ""
               }`}
-            />
+            >
+              <img
+                key={index}
+                src={item.case?.mainPhoto || item.building?.mainPhoto || ""}
+                onClick={() => handleSelect(index)}
+                className={`rounded-lg object-cover w-20 h-16 flex-shrink-0 cursor-pointer hover:opacity-90 ${
+                  index === currentIndex
+                    ? "!outline outline-b outline-1 outline-primary border-white border"
+                    : "opacity-50"
+                }`}
+              />
+              {portfolioData.useThumbnailNames && (
+                <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/100 to-transparent px-1 py-1">
+                  <p className="text-white text-[0.66rem] select-none text-center">
+                    {portfolioData.useCustomNames
+                      ? portfolioData.itemNames[index]
+                      : item.case?.propertyName || item.building?.propertyName}
+                  </p>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       )}
@@ -176,8 +237,24 @@ export default function PortfolioSharedPage() {
         className="relative w-full !min-h-full lg:bg-[#525659]"
         style={{ height: `${dimensions.height}px` }}
       >
+        {portfolioData.useShowNamePage && showHeaderOnScroll && (
+          <div
+            className="
+          max-w-[210mm] translate-x-[-50%] fixed top-0 left-[50%] w-full z-[30] pointer-events-none
+          bg-gradient-to-b from-black/85 to-transparent
+          p-2.5 !text-white text-lg select-none text-center h-[100px]
+        "
+          >
+            {portfolioData.useCustomNames
+              ? portfolioData.itemNames[currentIndex]
+              : currentItem.case?.propertyName ||
+                currentItem.building?.propertyName}
+          </div>
+        )}
+
         {currentItem.case?.type === "financingPlanning" && (
           <FinancingPlanningReportPreview
+            title={currentTitle}
             custom={{
               backgroundColor:
                 portfolioData.user.realEstate?.backgroundColor || "",
@@ -195,6 +272,7 @@ export default function PortfolioSharedPage() {
 
         {currentItem.case?.type === "directFinancing" && (
           <DirectFinancingReportPreview
+            title={currentTitle}
             custom={{
               backgroundColor:
                 portfolioData.user.realEstate?.backgroundColor || "",
@@ -215,6 +293,7 @@ export default function PortfolioSharedPage() {
             backgroundColor={
               portfolioData.user.realEstate?.backgroundColor || ""
             }
+            title={currentTitle}
             primaryColor={portfolioData.user.realEstate?.primaryColor || ""}
             secondaryColor={portfolioData.user.realEstate?.secondaryColor}
             headerType={portfolioData.user.realEstate?.headerType || 1}
@@ -242,6 +321,7 @@ export default function PortfolioSharedPage() {
           />
         )}
       </div>
+
       <Dialog
         actions={
           viewerName && (

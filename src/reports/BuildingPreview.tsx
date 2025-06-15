@@ -15,6 +15,7 @@ interface BuildingPreviewProps {
   proposal: Partial<Proposal>;
   user?: User;
   preview?: boolean;
+  title?: string;
 }
 
 const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
@@ -27,6 +28,7 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
       secondaryColor,
       user,
       preview,
+      title,
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
@@ -49,7 +51,7 @@ const BuildingPreview = forwardRef<HTMLDivElement, BuildingPreviewProps>(
             <UserSignature
               type={headerType || 1}
               userData={user}
-              title="Imóvel"
+              title={title || "Imóvel"}
               desc={proposal.propertyName}
               primaryColor={primaryColor}
               secondaryColor={secondaryColor}

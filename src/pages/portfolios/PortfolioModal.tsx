@@ -19,15 +19,8 @@ import {
   Tabs,
   tabClasses,
 } from "@mui/joy";
-import {
-  FaBuilding,
-  FaExchangeAlt,
-  FaExternalLinkAlt,
-  FaFileAlt,
-  FaSave,
-} from "react-icons/fa";
-import { FaLink, FaTrash } from "react-icons/fa6";
-import { IoDuplicate, IoHomeOutline } from "react-icons/io5";
+import { FaBuilding, FaExchangeAlt, FaFileAlt, FaSave } from "react-icons/fa";
+import { IoHomeOutline } from "react-icons/io5";
 import Dialog from "@/components/modals/Dialog";
 import dayjs from "dayjs";
 import { fetchCases } from "@/store/caseReducer";
@@ -35,15 +28,14 @@ import { fetchBuildings } from "@/store/buildingReducer";
 import { Spinner } from "@/components/Loading";
 import SearchInput from "@/components/inputs/SearchInput";
 import { portfolioService } from "@/service/portfolioService";
-import { notify } from "@/notify";
-import BooleanInputSwitch from "@/components/inputs/SwitchInput";
-import { DuplicatePortfolioModal } from "./DuplicatePortfolioModal";
+import { navigate } from "vike/client/router";
 
-interface Props {
+interface PortfolioModalProps {
   portfolioId?: string;
   open: boolean;
   onClose: () => void;
   reload: () => void;
+  showConfig?: boolean;
 }
 
 export default function PortfolioModal({
@@ -51,12 +43,12 @@ export default function PortfolioModal({
   onClose,
   portfolioId,
   reload,
-}: Props) {
+  showConfig = true,
+}: PortfolioModalProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [type, setType] = useState<"proposals" | "buildings">("proposals");
   const [search, setSearch] = useState("");
-  const [duplicateOpen, setDuplicateOpen] = useState(false);
 
   const {
     control,
@@ -64,8 +56,6 @@ export default function PortfolioModal({
     register,
     reset,
     formState: { errors },
-    setValue,
-    watch,
     setError,
     clearErrors,
   } = useForm<CreatePortfolio>({
@@ -99,7 +89,7 @@ export default function PortfolioModal({
       sortDirection: "desc" as const,
       currentPage: 1,
       orderBy: "createdAt",
-      limit: 100,
+      limit: 5,
     };
     dispatch(fetchCases(query));
     dispatch(fetchBuildings(query));
@@ -185,9 +175,11 @@ export default function PortfolioModal({
 
     if (portfolioId) {
       await portfolioService.updatePortfolio(portfolioId, payload);
-    } else {
-      await portfolioService.createPortfolio(payload);
       onClose();
+    } else {
+      onClose();
+      const result = await portfolioService.createPortfolio(payload);
+      navigate(`/portfolios/${result.id}`);
     }
 
     setLoading(false);
@@ -195,47 +187,8 @@ export default function PortfolioModal({
     setSearch("");
   };
 
-  const handleDelete = async () => {
-    setLoading(true);
-    await portfolioService.deletePortfolio(portfolioId);
-    setLoading(false);
-    reload();
-    onClose();
-    setSearch("");
-  };
-
   return (
     <>
-      <DuplicatePortfolioModal
-        open={duplicateOpen}
-        onClose={() => setDuplicateOpen(false)}
-        defaultValues={{
-          name: watch("name") + " (Cópia)",
-          clientName: watch("clientName"),
-          requestName: watch("requestName"),
-        }}
-        onConfirm={async (d) => {
-          setLoading(true);
-          await portfolioService.createPortfolio(
-            {
-              name: d.name,
-              clientName: d.clientName,
-              requestName: d.requestName,
-              items: fields.map((i, idx) => ({
-                ...i,
-                position: idx,
-                id: `${i.id}-${Date.now()}`,
-              })),
-            },
-            "Portfólio duplicado com sucesso."
-          );
-          setLoading(false);
-          setDuplicateOpen(false);
-          onClose()
-          reload();
-        }}
-      />
-
       <Dialog
         open={open}
         onClose={() => {
@@ -244,270 +197,175 @@ export default function PortfolioModal({
         }}
         title={portfolioId ? "Editar Portfolio" : "Criar Portfolio"}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {loading ? (
-            <div className="md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
-              <Spinner />
-            </div>
-          ) : (
-            <div className="flex flex-col md:flex-row gap-4 px-4 pb-4 w-full md:w-[1100px] h-auto md:h-[390px] xl:h-[480px]">
-              <div className="w-full md:w-1/3 bg-gray-50 rounded p-4 mb-4 md:mb-0">
-                <FormControl error={!!errors.name} className="mb-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="relative ">
+          <div className="flex grid grid-cols-2 md:flex-row gap-4 gap-y-0 px-4 pb-4 w-full md:w-[1100px] h-[66vh] overflow-y-auto">
+            {showConfig && (
+              <div className="w-full col-span-2 flex gap-5 mb-4">
+                <FormControl error={!!errors.name}>
                   <FormLabel>Nome</FormLabel>
                   <Input
+                    className="w-[320px]"
                     {...register("name", { required: "Campo obrigatório" })}
                   />
                   {errors.name && (
                     <FormHelperText>{errors.name.message}</FormHelperText>
                   )}
                 </FormControl>
-                <FormControl error={!!errors.clientName} className="mb-3">
+                <FormControl error={!!errors.clientName}>
                   <FormLabel>Cliente</FormLabel>
                   <Input {...register("clientName")} />
                 </FormControl>
-                <div className="mt-5">
-                  <BooleanInputSwitch
-                    label="Solicitar Nome"
-                    checked={watch("requestName")}
-                    onChange={(v) => setValue("requestName", v)}
-                    infoTooltip="Quando ativado, ao abrir o link será exibida uma caixa para o usuário digitar seu nome antes de visualizar a proposta. Essa informação será solicitada apenas uma vez. Recomendado para quando o link será enviado para mais de uma pessoa, permitindo identificar quem visualizou."
-                  />
-                </div>
               </div>
-
-              <div className="w-full md:w-1/3 flex flex-col gap-3 mb-4 md:mb-0">
-                <h2 className="text-lg font-bold">Itens do Portfólio</h2>
-                <div
-                  ref={portfolioDrop}
-                  className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
-      ${
-        isOverLimit
-          ? "border-red"
-          : errors.items
-          ? "border-red"
-          : "border-dashed border-border"
-      }`}
-                >
-                  {fields.length === 0 && (
-                    <span className="text-gray text-sm text-center">
-                      Arraste aqui as propostas ou imóveis
-                    </span>
-                  )}
-                  {fields.map((item, idx) => (
-                    <ItemCard
-                      key={item.id}
-                      data={item.building || item.case}
-                      draggable
-                      index={idx}
-                      moveItem={move}
-                      onRemove={() => remove(idx)}
-                    />
-                  ))}
-                </div>
-
-                {errors.items && (
-                  <span className="text-red text-sm mt-1 text-center">
-                    {errors.items.message?.toString()}
+            )}
+            <div className="w-full flex flex-col gap-3 mb-4 md:mb-0">
+              <h2 className="text-lg font-bold">Itens do Portfólio</h2>
+              <div
+                ref={portfolioDrop}
+                className={`flex flex-col gap-2 border rounded p-2 bg-gray-50 overflow-auto md:h-full
+                      ${
+                        isOverLimit
+                          ? "border-red"
+                          : errors.items
+                          ? "border-red"
+                          : "border-dashed border-border"
+                      }`}
+              >
+                {fields.length === 0 && (
+                  <span className="text-gray text-sm text-center">
+                    Arraste aqui as propostas ou imóveis
                   </span>
                 )}
-
-                {isOverLimit && (
-                  <div className="text-red text-xs text-center mt-2">
-                    Máximo de 10 itens permitidos. Remova algum para poder
-                    salvar.
-                  </div>
-                )}
+                {fields.map((item, idx) => (
+                  <ItemCard
+                    key={item.id}
+                    data={item.building || item.case}
+                    draggable
+                    index={idx}
+                    moveItem={move}
+                    onRemove={() => remove(idx)}
+                  />
+                ))}
               </div>
 
-              <div className="w-full md:w-1/3 flex flex-col">
-                <Tabs
-                  value={type}
-                  onChange={(_, v: "buildings" | "proposals") => setType(v)}
+              {errors.items && (
+                <span className="text-red text-sm mt-1 text-center">
+                  {errors.items.message?.toString()}
+                </span>
+              )}
+
+              {isOverLimit && (
+                <div className="text-red text-xs text-center mt-2">
+                  Máximo de 10 itens permitidos. Remova algum para poder salvar.
+                </div>
+              )}
+            </div>
+            <div className="w-full flex flex-col">
+              <Tabs
+                value={type}
+                onChange={(_, v: "buildings" | "proposals") => setType(v)}
+              >
+                <TabList
+                  sx={{
+                    justifyContent: "center",
+                    bgcolor: "transparent",
+                    [`& .${tabClasses.root}[aria-selected="true"]`]: {
+                      bgcolor: "background.surface",
+                    },
+                  }}
                 >
-                  <TabList
-                    sx={{
-                      justifyContent: "center",
-                      bgcolor: "transparent",
-                      [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                        bgcolor: "background.surface",
-                      },
-                    }}
+                  <Tab value="proposals">
+                    <FaFileAlt className="text-sm" /> Propostas
+                  </Tab>
+                  <Tab value="buildings">
+                    <FaBuilding className="text-sm" /> Imóveis
+                  </Tab>
+                </TabList>
+
+                <TabPanel className="!p-0 !py-4 " value="proposals">
+                  <SearchInput
+                    placeholder="Buscar Propostas"
+                    className="my-2 mb-3"
+                    debounceTimeout={500}
+                    handleDebounce={setSearch}
+                  />
+                  <div
+                    ref={proposalsRemoveDrop}
+                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto relative !border !border-dashed !border-border"
                   >
-                    <Tab value="proposals">
-                      <FaFileAlt className="text-sm" /> Propostas
-                    </Tab>
-                    <Tab value="buildings">
-                      <FaBuilding className="text-sm" /> Imóveis
-                    </Tab>
-                  </TabList>
-
-                  <TabPanel className="!p-0 !py-4 " value="proposals">
-                    <SearchInput
-                      placeholder="Buscar Propostas"
-                      className="my-2 mb-3"
-                      debounceTimeout={500}
-                      handleDebounce={setSearch}
-                    />
-                    <div
-                      ref={proposalsRemoveDrop}
-                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto relative !border !border-dashed !border-border h-[264px] xl:h-[354px]"
-                    >
-                      {proposalsInitialLoading || searchLoading ? (
-                        <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
-                          <Spinner />
-                        </div>
-                      ) : (
-                        proposals.map((p) => (
-                          <ItemCard
-                            key={p.id}
-                            data={p}
-                            onAdd={() => addItem(p)}
-                          />
-                        ))
-                      )}
-                    </div>
-                  </TabPanel>
-
-                  <TabPanel className="!p-0 !py-4" value="buildings">
-                    <SearchInput
-                      placeholder="Buscar Imóveis"
-                      className="my-2 mb-3"
-                      debounceTimeout={500}
-                      handleDebounce={setSearch}
-                    />
-                    <div
-                      ref={buildingsRemoveDrop}
-                      className="flex flex-col gap-2 px-2 py-2 overflow-y-auto !border !border-dashed !border-border h-[264px] xl:h-[354px]"
-                    >
-                      {buildings.map((b) => (
+                    {proposalsInitialLoading || searchLoading ? (
+                      <div className="absolute top-[50%] translate-x-[-50%] left-[50%]">
+                        <Spinner />
+                      </div>
+                    ) : (
+                      proposals.map((p) => (
                         <ItemCard
-                          key={b.id}
-                          data={b}
-                          onAdd={() => addItem(b)}
+                          key={p.id}
+                          data={p}
+                          onAdd={() => addItem(p)}
                         />
-                      ))}
-                    </div>
-                  </TabPanel>
-                </Tabs>
+                      ))
+                    )}
+                  </div>
+                </TabPanel>
+
+                <TabPanel className="!p-0 !py-4" value="buildings">
+                  <SearchInput
+                    placeholder="Buscar Imóveis"
+                    className="my-2 mb-3"
+                    debounceTimeout={500}
+                    handleDebounce={setSearch}
+                  />
+                  <div
+                    ref={buildingsRemoveDrop}
+                    className="flex flex-col gap-2 px-2 py-2 overflow-y-auto !border !border-dashed !border-border"
+                  >
+                    {buildings.map((b) => (
+                      <ItemCard key={b.id} data={b} onAdd={() => addItem(b)} />
+                    ))}
+                  </div>
+                </TabPanel>
+              </Tabs>
+            </div>
+          </div>
+
+          {loading && (
+            <div className="absolute top-0 left-0 w-full h-full z-[3] backdrop-blur flex items-center justify-center">
+              <div className="backdrop-blur-0">
+                <Spinner />
               </div>
             </div>
           )}
-
-          {portfolioId ? (
-            <FooterEdit
-              portfolioId={portfolioId}
-              loading={loading}
-              handleDelete={handleDelete}
-              isOverLimit={isOverLimit}
-              setDuplicateOpen={() => setDuplicateOpen(true)}
-            />
-          ) : (
-            <FooterCreate loading={loading} isOverLimit={isOverLimit} />
-          )}
+          <Footer
+            portfolioId={portfolioId}
+            loading={loading}
+            isOverLimit={isOverLimit}
+          />
         </form>
       </Dialog>
     </>
   );
 }
 
-/* =============== FOOTERS =============== */
-function FooterEdit({
+function Footer({
+  loading,
+  isOverLimit,
   portfolioId,
-  loading,
-  handleDelete,
-  isOverLimit,
-  setDuplicateOpen,
 }: {
+  loading: boolean;
+  isOverLimit: boolean;
   portfolioId: string;
-  loading: boolean;
-  handleDelete: () => void;
-  isOverLimit: boolean;
-  setDuplicateOpen: () => void;
 }) {
   return (
-    <div
-      className={`flex justify-between mt-6 pb-4 gap-2 px-7 flex-wrap ${
-        loading ? "invisible" : ""
-      }`}
-    >
-      <Button
-        endDecorator={<FaTrash />}
-        loading={loading}
-        onClick={handleDelete}
-        type="button"
-        color="danger"
-        size="md"
-      >
-        Excluir
-      </Button>
-      <div className="flex gap-4 flex-wrap">
-        <Button
-          endDecorator={<IoDuplicate />}
-          loading={loading}
-          type="button"
-          variant="outlined"
-          size="md"
-          onClick={setDuplicateOpen}
-        >
-          Duplicar
-        </Button>
-        <Button
-          endDecorator={<FaLink />}
-          loading={loading}
-          type="button"
-          variant="outlined"
-          size="md"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `https://app.imobdeal.com.br/portfolio/${portfolioId}`
-            );
-            notify("info", "Link copiado para o clipboard");
-          }}
-        >
-          Copiar Link
-        </Button>
-        <Button
-          endDecorator={<FaExternalLinkAlt />}
-          onClick={() => window.open(`/portfolio/${portfolioId}`, "_blank")}
-          loading={loading}
-          type="button"
-          variant="outlined"
-          size="md"
-        >
-          Ver Online
-        </Button>
-        <Button
-          endDecorator={<FaSave />}
-          loading={loading}
-          type="submit"
-          color="primary"
-          size="md"
-          disabled={isOverLimit}
-        >
-          Salvar Alterações
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function FooterCreate({
-  loading,
-  isOverLimit,
-}: {
-  loading: boolean;
-  isOverLimit: boolean;
-}) {
-  return (
-    <div className="flex justify-center mt-6 pb-4 gap-2">
+    <div className="flex justify-center mt-6 pb-4 gap-2 w-full">
       <Button
         disabled={isOverLimit}
         loading={loading}
         type="submit"
         color="primary"
         size="md"
+        endDecorator={portfolioId && <FaSave />}
       >
-        Criar Portfólio
+        {portfolioId ? "Salvar Alterações" : "Criar Portfólio"}
       </Button>
     </div>
   );

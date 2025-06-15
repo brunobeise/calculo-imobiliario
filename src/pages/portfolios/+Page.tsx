@@ -13,6 +13,7 @@ import { GrMultiple } from "react-icons/gr";
 import PortfolioCard from "./PortfolioCard";
 import PortfolioModal from "./PortfolioModal";
 import PortfolioIntroModal from "./PortfolioIntroModal";
+import { navigate } from "vike/client/router";
 
 export default function MyPortfolios() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,8 +23,6 @@ export default function MyPortfolios() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [portfolioModal, setPortfolioModal] = useState(false);
-
-  const [editPortfolioModal, setEditPortfolioModal] = useState<string>();
 
   const [limit, setLimit] = useState<number>(() => {
     const stored = localStorage.getItem("portfolio-limit");
@@ -73,6 +72,18 @@ export default function MyPortfolios() {
     fetchData(query);
   }, [search, currentPage, limit, orderBy, sortDirection, dispatch, fetchData]);
 
+  const onReload = () => {
+    fetchData(
+      new URLSearchParams({
+        search,
+        page: currentPage.toString(),
+        limit: limit.toString(),
+        orderBy,
+        sortDirection,
+      }).toString()
+    );
+  };
+
   const contentHeader = (
     <div className="flex gap-5 justify-between w-full flex-wrap">
       <SearchInput
@@ -110,11 +121,14 @@ export default function MyPortfolios() {
         {portfolios?.data.map((portfolio) => (
           <div
             onClick={() => {
-              setEditPortfolioModal(portfolio.id);
-              setPortfolioModal(true);
+              navigate("/portfolios/" + portfolio.id);
             }}
           >
-            <PortfolioCard key={portfolio.id} portfolio={portfolio} />
+            <PortfolioCard
+              reload={onReload}
+              key={portfolio.id}
+              portfolio={portfolio}
+            />
           </div>
         ))}
       </div>
@@ -136,10 +150,7 @@ export default function MyPortfolios() {
       <div className="mt-6">
         <Button
           className="text-nowrap "
-          onClick={() => {
-            setEditPortfolioModal("");
-            setPortfolioModal(true);
-          }}
+          onClick={() => setPortfolioModal(true)}
           endDecorator={<FaPlusCircle />}
         >
           Novo Portfolio
@@ -170,18 +181,7 @@ export default function MyPortfolios() {
       <PortfolioModal
         onClose={() => setPortfolioModal(false)}
         open={portfolioModal}
-        portfolioId={editPortfolioModal}
-        reload={() =>
-          fetchData(
-            new URLSearchParams({
-              search,
-              page: currentPage.toString(),
-              limit: limit.toString(),
-              orderBy,
-              sortDirection,
-            }).toString()
-          )
-        }
+        reload={onReload}
       />
       <PortfolioIntroModal />
     </>
