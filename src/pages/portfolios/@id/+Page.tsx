@@ -150,13 +150,7 @@ export default function PortfolioPage() {
     }
     clearErrors("items");
 
-    if (!data.link || data.link.trim() === "") {
-      setError("link", {
-        type: "manual",
-      });
-      return;
-    }
-
+  
     setSaveLoading(true);
 
     let uploadMainPhoto = data.mainPhoto;
